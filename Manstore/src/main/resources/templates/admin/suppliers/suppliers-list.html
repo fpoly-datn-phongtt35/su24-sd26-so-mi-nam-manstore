@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Danh Sách Nhà Cung Cấp</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Nhà Cung Cấp</a></li>
+                                    <li class="breadcrumb-item active">Danh Sách Nhà Cung Cấp</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+
+                    <!-- end row-->
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card" id="invoiceList">
+                                <div class="card-header border-0">
+                                    <div class="d-flex align-items-center">
+                                        <h5 class="card-title mb-0 flex-grow-1">Nhà Cung Cấp</h5>
+                                        <div class="flex-shrink-0">
+                                            <div class="d-flex gap-2 flex-wrap">
+                                                <button class="btn btn-danger btn-icon" id="remove-actions"
+                                                        onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i>
+                                                </button>
+                                                <a class="btn btn-primary w-100 add-btn"
+                                                   th:href="@{/admin/supplier/add}">
+                                                    Thêm Mới</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+                                    <form>
+                                        <div class="row g-3">
+                                            <div class="col-xxl-3 col-sm-12">
+                                                <div class="search-box">
+                                                    <input type="text" class="form-control search bg-light border-light"
+                                                           placeholder="Search..." id="search-input"
+                                                           onkeyup="searchSupplier()">
+                                                    <i class="ri-search-line search-icon"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end row-->
+                                    </form>
+                                </div>
+                                <div class="card-body">
+                                    <div>
+                                        <div class="gridjs-border-none mb-4">
+                                            <table class="table align-middle table-nowrap" id="invoiceTable">
+                                                <thead class="text-muted">
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Tên</th>
+                                                    <th>Email</th>
+                                                    <th>SĐT</th>
+                                                    <th>Địa Chỉ</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="list form-check-all" id="list_Supplier">
+
+                                                </tbody>
+                                            </table>
+                                            <div class="row">
+                                                <div class="col-lg-3"></div>
+                                                <div class="col-lg-1"></div>
+                                                <div class="col-lg-4">
+                                                    <nav aria-label="Page navigation example">
+                                                        <ul class="pagination justify-content-center" id="pagination">
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+                                                <div class="col-lg-3"></div>
+                                                <div class="col-lg-1"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal" tabindex="-1">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Chi Tiết Nhà Cung Cấp</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="" action="" class="my-form" method="post"
+                                                              th:object="${ncc}">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div class="row ">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-name-input">Tên Nhà
+                                                                                    Cung Cấp
+                                                                                </label>
+                                                                                <input type="text" class="form-control"
+                                                                                       id="supplier-name-input"
+                                                                                       th:name="ten" disabled>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <div class="mb-3">
+                                                                                    <label class="form-label"
+                                                                                           for="supplier-email-input">Email
+                                                                                    </label>
+                                                                                    <input type="text"
+                                                                                           class="form-control"
+                                                                                           id="supplier-email-input"
+                                                                                           th:name="email" disabled>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- end row -->
+
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-sdt-input">SDT
+                                                                                </label>
+                                                                                <input type="text" class="form-control"
+                                                                                       id="supplier-sdt-input"
+                                                                                       th:name="sdt" disabled>
+
+                                                                            </div>
+                                                                            <!--                                                    <div class="alert alert-danger" th:if="${errorCollections != null}" th:text="${errorCollections}"></div>-->
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-diachi-input">Địa
+                                                                                    Chỉ
+                                                                                </label>
+                                                                                <textarea type="text"
+                                                                                          class="form-control"
+                                                                                          id="supplier-diachi-input"
+                                                                                          th:name="diaChi"
+                                                                                          readonly></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--end row-->
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-mota-input">Mô Tả
+                                                                                </label>
+                                                                                <textarea type="text"
+                                                                                          class="form-control"
+                                                                                          id="supplier-mota-input"
+                                                                                          th:name="moTa" readonly
+                                                                                          style="height: 140px"></textarea>
+                                                                            </div>
+                                                                            <!--                                                    <div class="alert alert-danger" th:if="${errorCollections != null}" th:text="${errorCollections}"></div>-->
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-tt-input">Thông Tin
+                                                                                    Khác
+                                                                                </label>
+                                                                                <textarea type="text"
+                                                                                          class="form-control"
+                                                                                          id="supplier-tt-input"
+                                                                                          th:name="thongTinKhac"
+                                                                                          readonly></textarea>
+                                                                            </div>
+                                                                            <!--                                                    <div class="alert alert-danger" th:if="${errorCollections != null}" th:text="${errorCollections}"></div>-->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--end row-->
+                                                                    <!-- end col -->
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">
+                                                                        Đóng
+                                                                    </button>
+                                                                </div>
+                                                                <!-- end row -->
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--end modal -->
+                                        </div>
+                                        <div class="modal fade" id="myModal1" tabindex="-1">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Chi Tiết Nhà Cung Cấp</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="update-form" action="" class="my-form" method="post"
+                                                              th:object="${ncc}">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div class="row ">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-name1-input">Tên
+                                                                                    Nhà Cung Cấp
+                                                                                </label>
+                                                                                <input type="text" class="form-control"
+                                                                                       id="supplier-name1-input"
+                                                                                       th:name="ten">
+                                                                                <span id="errorName" class="text-danger"
+                                                                                      style="display:none;"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-email1-input">Email
+                                                                                </label>
+                                                                                <input type="text" class="form-control"
+                                                                                       id="supplier-email1-input"
+                                                                                       th:name="email">
+                                                                                <span id="errorEmail"
+                                                                                      class="text-danger"
+                                                                                      style="display:none;"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- end row -->
+
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-sdt1-input">SDT
+                                                                                </label>
+                                                                                <input type="text" class="form-control"
+                                                                                       id="supplier-sdt1-input"
+                                                                                       th:name="sdt">
+                                                                                <span id="errorPhone"
+                                                                                      class="text-danger"
+                                                                                      style="display:none;"></span>
+
+                                                                            </div>
+                                                                            <!--                                                    <div class="alert alert-danger" th:if="${errorCollections != null}" th:text="${errorCollections}"></div>-->
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-diachi1-input">Địa
+                                                                                    Chỉ
+                                                                                </label>
+                                                                                <textarea type="text"
+                                                                                          class="form-control"
+                                                                                          id="supplier-diachi1-input"
+                                                                                          th:name="diaChi"
+                                                                                ></textarea>
+                                                                                <span id="errorDiaChi"
+                                                                                      class="text-danger"
+                                                                                      style="display:none;"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--end row-->
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-mota1-input">Mô Tả
+                                                                                </label>
+                                                                                <textarea type="text"
+                                                                                          class="form-control"
+                                                                                          id="supplier-mota1-input"
+                                                                                          th:name="moTa"
+                                                                                          style="height: 140px"></textarea>
+                                                                                <span id="errorMoTa" class="text-danger"
+                                                                                      style="display:none;"></span>
+                                                                            </div>
+                                                                            <!--                                                    <div class="alert alert-danger" th:if="${errorCollections != null}" th:text="${errorCollections}"></div>-->
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="supplier-tt1-input">Thông
+                                                                                    tin Khác
+                                                                                </label>
+                                                                                <textarea type="text"
+                                                                                          class="form-control"
+                                                                                          id="supplier-tt1-input"
+                                                                                          th:name="thongTinKhac"
+                                                                                          style="height: 140px"></textarea>
+                                                                                <span id="errorTT" class="text-danger"
+                                                                                      style="display:none;"></span>
+                                                                            </div>
+
+                                                                            <!--                                                    <div class="alert alert-danger" th:if="${errorCollections != null}" th:text="${errorCollections}"></div>-->
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <!--end row-->
+                                                                    <!-- end col -->
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">
+                                                                        Đóng
+                                                                    </button>
+                                                                    <button type="button" class="btn btn-primary"
+                                                                            onclick="showConfirmPopup()">
+                                                                        Lưu
+                                                                    </button>
+                                                                </div>
+                                                                <!-- end row -->
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--end modal -->
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <!--end col-->
+                            </div>
+                            <!--end row-->
+
+                        </div><!-- container-fluid -->
+                    </div>
+                    <!-- End Page-content -->
+                </div>
+                <!-- end main content-->
+
+            </div>
+        </div>
+    </div>
+    <!-- END layout-wrapper -->
+    <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+    <div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+
+    var page;
+    var hasError;
+
+    window.onload = function () {
+        loadPage(0);
+        validName();
+        validEmail();
+        validDiaChi();
+        validMoTa()
+        validTT();
+        validPhone();
+    }
+    $('#myModal1').on('hidden.bs.modal', function (e) {
+        // Xóa các thông báo lỗi
+        document.getElementById('errorName').style.display = 'none';
+        document.getElementById('errorEmail').style.display = 'none';
+        document.getElementById('errorDiaChi').style.display = 'none';
+        document.getElementById('errorMoTa').style.display = 'none';
+        document.getElementById('errorTT').style.display = 'none';
+        document.getElementById('errorPhone').style.display = 'none';
+
+    });
+
+    function detailSuppliers(supplierId) {
+        fetch('/admin/supplier/detail/' + supplierId, {
+            method: 'GET'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            document.getElementById('supplier-name-input').value = data.ten;
+            document.getElementById('supplier-email-input').value = data.email;
+            document.getElementById('supplier-sdt-input').value = data.sdt;
+            document.getElementById('supplier-diachi-input').value = data.diaChi;
+            document.getElementById('supplier-mota-input').value = data.moTa;
+            document.getElementById('supplier-tt-input').value = data.thongTinKhac;
+            $('#myModal').modal('show');
+        })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function detailSuppliers1(supplierId) {
+        fetch('/admin/supplier/detail/' + supplierId, {
+            method: 'GET'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            document.getElementById('supplier-name1-input').value = data.ten;
+            document.getElementById('supplier-email1-input').value = data.email;
+            document.getElementById('supplier-sdt1-input').value = data.sdt;
+            document.getElementById('supplier-diachi1-input').value = data.diaChi;
+            document.getElementById('supplier-mota1-input').value = data.moTa;
+            document.getElementById('supplier-tt1-input').value = data.thongTinKhac;
+            document.getElementById('update-form').action = '/admin/supplier/update/' + supplierId;
+            $('#myModal1').modal('show');
+        })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function showConfirmPopup() {
+        if (!hasError) {
+            swal.fire({
+                title: "Bạn có muốn lưu các thay đổi không?",
+                showCancelButton: true,
+                confirmButtonText: "Có",
+                cancelButtonText: "Không"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('update-form').submit();
+                    loadPage(0);
+                }
+            });
+        } else {}
+    }
+
+    async function loadPage(pageNumber) {
+        var url = "/api/admin/supplier/page/" + pageNumber;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        page = pageNumber;
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            main += `<tr >
+                            <td scope="row">${i + 1}</td>
+                            <td scope="row">${list[i].ten}</td>
+                            <td scope="row">${list[i].email}</td>
+                            <td scope="row">${list[i].sdt}</td>
+                            <td class="text-wrap text-break" >${list[i].diaChi}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="detailSuppliers(${list[i].id})"
+                                    ><i class="ri-eye-2-line"></i></div>
+                                <div onclick="detailSuppliers1(${list[i].id})"
+                                         class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                </div>
+                            </td>
+                     </tr>`
+        }
+        document.getElementById("list_Supplier").innerHTML = main;
+        var currentPage = `<div class="pagination-wrap hstack gap-2">
+       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(0)"  >
+       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
+       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+      </div>`;
+        document.getElementById("pagination").innerHTML = currentPage;
+    }
+
+    async function searchSupplier(pageNumber) {
+        var keyword = document.getElementById("search-input").value.trim().toLowerCase();
+        var url;
+        console.log(keyword);
+        console.log(pageNumber);
+        pageNumber === undefined ? page = 0 : page = pageNumber;
+
+        if (pageNumber === undefined && keyword === '') {
+            loadPage(0);
+        } else if (pageNumber === undefined && keyword !== '') {
+            url = "/api/admin/supplier/page/search/" + 0 + "/" + keyword;
+            console.log(url);
+            console.log(1);
+        } else if (pageNumber !== undefined && keyword !== '') {
+            url = "/api/admin/supplier/page/search/" + pageNumber + "/" + keyword + "/";
+            console.log(url);
+            console.log(3);
+        }
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            main += `<tr >
+                            <td scope="row">${i + 1}</td>
+                            <td scope="row">${list[i].ten}</td>
+                            <td scope="row">${list[i].email}</td>
+                            <td scope="row">${list[i].sdt}</td>
+                            <td class="text-wrap text-break" >${list[i].diaChi}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="detailSuppliers(${list[i].id})"
+                                     class="ri-eye-line"></div>
+                                 </div>
+                            </td>
+                     </tr>`
+        }
+        document.getElementById("list_Supplier").innerHTML = main;
+        var currentPage = `<div class="pagination-wrap hstack gap-2">
+       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(0)"  >
+       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
+       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+      </div>`;
+        document.getElementById("pagination").innerHTML = currentPage;
+    }
+
+    function validName() {
+        var nameInput = document.getElementById('supplier-name1-input');
+        var errorName = document.getElementById('errorName');
+        nameInput.addEventListener('input', function () {
+            var name = nameInput.value.trim();
+            if (name === '') {
+                errorName.textContent = '* Vui lòng nhập tên Nhà Cung Cấp!';
+                errorName.style.display = 'block';
+                hasError = true;
+            } else {
+                errorName.style.display = 'none';
+                hasError = false;
+            }
+        });
+    }
+
+    function validEmail() {
+        var emailInput = document.getElementById('supplier-email1-input');
+        var errorEmail = document.getElementById('errorEmail');
+        emailInput.addEventListener('input', function () {
+            var email = emailInput.value.trim();
+            if (email === '') {
+                errorEmail.textContent = '* Vui lòng nhập email!';
+                errorEmail.style.display = 'block';
+                hasError = true;
+            } else if (!isValidEmail(email)) {
+                errorEmail.textContent = '* Vui lòng nhập đúng định dạng email!';
+                errorEmail.style.display = 'block';
+                hasError = true;
+            } else {
+                errorEmail.style.display = 'none';
+                hasError = false;
+            }
+        });
+    }
+
+    function validPhone() {
+        var emailInput = document.getElementById('supplier-sdt1-input');
+        var errorPhone = document.getElementById('errorPhone');
+        emailInput.addEventListener('input', function () {
+            var phone = emailInput.value.trim();
+            if (phone === '') {
+                errorPhone.textContent = '* Vui lòng nhập sdt!';
+                errorPhone.style.display = 'block';
+                hasError = true;
+            } else {
+                errorPhone.style.display = 'none';
+                hasError = false;
+            }
+        });
+    }
+
+    function validDiaChi() {
+        var nationalInput = document.getElementById('supplier-diachi1-input');
+        var errorNational = document.getElementById('errorDiaChi');
+        nationalInput.addEventListener('input', function () {
+            var national = nationalInput.value.trim();
+            if (national === '') {
+                errorNational.textContent = '* Vui lòng nhập địa chỉ!';
+                errorNational.style.display = 'block';
+                hasError = true;
+            } else {
+                errorNational.style.display = 'none';
+                hasError = false;
+            }
+        });
+    }
+
+    function validMoTa() {
+        var motaInput = document.getElementById('supplier-mota1-input');
+        var errorMoTa = document.getElementById('errorMoTa');
+        motaInput.addEventListener('input', function () {
+            var moTa = motaInput.value.trim();
+            if (moTa === '') {
+                errorMoTa.textContent = '* Vui lòng nhập mô tả!';
+                errorMoTa.style.display = 'block';
+                hasError = true;
+            } else if (moTa.length > 250) {
+                errorMoTa.textContent = '* Mô tả bạn nhập phải nhỏ hơn 250 ký tự!';
+                errorMoTa.style.display = 'block';
+                hasError = true;
+            } else {
+                errorMoTa.style.display = 'none';
+                hasError = false;
+            }
+        });
+    }
+
+    function validTT() {
+        var motaInput = document.getElementById('supplier-tt1-input');
+        var errorTT = document.getElementById('errorTT');
+        motaInput.addEventListener('input', function () {
+            var moTa = motaInput.value.trim();
+            if (moTa.length > 250) {
+                errorTT.textContent = '* Mô tả bạn nhập phải nhỏ hơn 250 ký tự!';
+                errorTT.style.display = 'block';
+            } else {
+                errorTT.style.display = 'none';
+                hasError = false;
+            }
+        });
+    }
+
+    function isValidEmail(email) {
+        var regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    }
+</script>
+<script th:if="${updateSuccess == true}">
+    swal.fire("Lưu Thay Đổi Thành Công!", "", "success");
+</script>
+<script th:if="${updateFailure == false}">
+    swal.fire("Lưu Thay Đổi Thất Bại!", "", "error");
+</script>
+</html>

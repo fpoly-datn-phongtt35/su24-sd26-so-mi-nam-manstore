@@ -1,0 +1,322 @@
+<!doctype html>
+<html data-bs-theme="light" data-footer="dark" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="client/fragments/head::head"></head>
+<body>
+<div th:replace="client/fragments/header::header"></div>
+<div th:replace="client/fragments/search::search"></div>
+<div th:replace="client/fragments/subscribe::subscribe"></div>
+<section class="trend-fashion-home">
+    <div class="container-fluid container-custom">
+        <div class="row g-0">
+            <div class="col-lg-4">
+                <div class="home-widgets card card-height-100 border-0 rounded-end-0"
+                     style="background-image: url('../assets/images/fashion/img-6.png');background-size: cover;">
+                    <div class="card-body"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-height-100 border-0 rounded-0 bg-info-subtle">
+                    <div class="card-body px-4 px-lg-5 text-center d-flex align-items-center">
+                        <div>
+                            <h3 class="text-capitalize lh-base mb-2">Thời trang thể thao nam <span class="ff-secondary">Toner</span>
+                            </h3>
+                            <p class="fs-16 mb-4">Chúng tôi luôn cung cấp đa dạng các sản phẩm quần, áo thể thao uy tín
+                                và chất lượng</p>
+                            <button class="btn btn-info btn-hover rounded-0" type="button">Tất cả sản phẩm</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!--end col-->
+            <div class="col-lg-4">
+                <div class="card home-widgets card-height-100 border-0 rounded-start-0"
+                     style="background-image: url('../assets/images/fashion/img-7.png');background-size: cover;">
+                    <div class="card-body"></div>
+                </div>
+            </div>
+        </div><!--end row-->
+    </div><!--end container-fluid-->
+</section>
+<!--end home-->
+<section class="section">
+    <div class="container-fluid container-custom">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="section-content text-center mb-5">
+                    <p class="fs-20">Top 8</p>
+                    <h2 class="title fw-normal text-capitalize">Sản phẩm <span class="fw-semibold">mới</span>
+                    </h2>
+                </div>
+            </div><!--end col-->
+        </div><!--end row-->
+        <div class="row row-cols-xxl-4 row-cols-lg-4 row-cols-md-2 row-cols-1" id="productList">
+        </div><!--end row-->
+        <div class="text-center mt-4">
+            <button class="btn btn-info rounded-0 btn-load" id="productLoadMore" onclick="nextPageProduct()"
+                    type="button">
+                    <span class="d-flex align-items-center">
+                        <span class="flex-grow-1 me-2">
+                            Tất cả
+                        </span>
+                        <span class="spinner-border flex-shrink-0" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                    </span>
+            </button>
+        </div>
+    </div><!--end container-->
+</section>
+<!--end product-->
+<!--start why Choose-->
+<section class="section py-0">
+    <div class="container-fluid container-custom">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="section-content text-center mb-5 pb-3">
+                    <h2 class="title fw-normal"><span>Tại sao nên</span> <span class="fw-semibold">mua hàng</span>
+                        từ chúng tôi ?</h2>
+                </div>
+            </div><!--end col-->
+        </div><!--end row-->
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card border-0 text-center">
+                    <div class="card-body">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-light text-reset fs-2 rounded">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                        </div>
+                        <h5>Chất lượng sản phẩm</h5>
+                        <p class="text-muted mb-0">Chất lượng sản phẩm phản ánh mức độ sản phẩm làm hài lòng khách
+                            hàng nhu cầu, phục vụ mục đích của nó và đáp ứng các tiêu chuẩn ngành.</p>
+                    </div>
+                </div>
+            </div><!--end col-->
+            <div class="col-lg-3">
+                <div class="card border-0 text-center">
+                    <div class="card-body">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-light text-reset fs-2 rounded">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                        </div>
+                        <h5>Vận chuyển nhanh</h5>
+                        <p class="text-muted mb-0">Cách rẻ nhất để vận chuyển một gói hàng sẽ phụ thuộc vào các yếu
+                            tố như kích thước và trọng lượng gói hàng cũng như khoảng cách và tốc độ giao hàng.</p>
+                    </div>
+                </div>
+            </div><!--end col-->
+            <div class="col-lg-3">
+                <div class="card border-0 text-center">
+                    <div class="card-body">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-light text-reset fs-2 rounded">
+                                <i class="bi bi-cash-coin"></i>
+                            </div>
+                        </div>
+                        <h5>Bảo mật thanh toán</h5>
+                        <p class="text-muted mb-0">Bảo mật thanh toán đề cập đến việc cung cấp các quy tắc, quy định
+                            và bảo mật các biện pháp để bảo vệ quyền riêng tư của khách hàng hoặc đối tác.</p>
+                    </div>
+                </div>
+            </div><!--end col-->
+            <div class="col-lg-3">
+                <div class="card border-0 text-center">
+                    <div class="card-body">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-light text-reset fs-2 rounded">
+                                <i class="bi bi-house-door"></i>
+                            </div>
+                        </div>
+                        <h5>Kho toàn cầu</h5>
+                        <p class="text-muted mb-0">Kho quốc tế là kho được thiết lập quốc tế, thường đặt tại trung
+                            tâm thương mại toàn cầu Houston hoặc Hồng Kông.</p>
+                    </div>
+                </div>
+            </div><!--end col-->
+        </div><!--end row-->
+    </div><!--end container-fluid-->
+</section>
+<!--end why Choose-->
+<div th:replace="client/fragments/footer::footer"></div>
+<div th:replace="client/fragments/script::script"></div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<script>
+
+    const Toast = swal.mixin({
+        toast: true,
+        position: "top-end",
+        iconColor: "white",
+        customClass: {
+            popup: "colored-toast",
+        },
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+    });
+
+    var chooseColor, chooseSize = [];
+    window.onload = function () {
+        loadPage(0);
+        chooseColor = [];
+        chooseSize = [];
+    }
+
+
+    async function loadPage(pageNumber) {
+        var priceMax = "/api/client/product/priceMax";
+        const responsePriceMax = await fetch(priceMax, {
+            method: 'GET',
+        });
+        var resultPriceMax = await responsePriceMax.json();
+        var url = "/api/client/product/page/" + pageNumber + "/" + 0 + "/" +
+            resultPriceMax + "?sort=" + 0 + "&brand=" + -1 + "&sport=" + -1;
+        var request = requestConfig(chooseColor, chooseSize);
+        console.log(url);
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        var result = await response.json();
+        var list = result.content;
+        var main = '';
+        var color = '';
+        var labelColor = '';
+        var cssStyle = '';
+        var size = '';
+        var index;
+        for (i = 0; i < list.length; i++) {
+            var urlDetailPD = '/api/client/product_detail/detailPD/' + list[i].id;
+            const responseDetailPD = await fetch(urlDetailPD, {
+                method: 'GET'
+            });
+            const data = await responseDetailPD.json();
+            let resultDetailColor = data.filter((product, index, self) =>
+                index === self.findIndex((p) => (
+                    p.ms.id === product.ms.id
+                ))
+            );
+            // Sort colors based on ms.id
+            resultDetailColor.sort((a, b) => a.ms.id - b.ms.id);
+            index = i;
+            for (j = 0; j < resultDetailColor.length; j++) {
+                if (list[i].id === resultDetailColor[j].sp.id) {
+                    var name = resultDetailColor[j].ms.id;
+                    if (resultDetailColor[j].ms.id === 1) {
+                        labelColor = "btn-dark";
+                        cssStyle = "";
+                    } else if (resultDetailColor[j].ms.id === 2) {
+                        cssStyle = "";
+                        labelColor = "btn-light";
+                    } else if (resultDetailColor[j].ms.id === 3) {
+                        cssStyle = "";
+                        labelColor = "btn-danger";
+                    } else if (resultDetailColor[j].ms.id === 4) {
+                        labelColor = "btn-secondary";
+                        cssStyle = "style=\"background-color: rgb(169,169,169); border: none;\"";
+                    } else if (resultDetailColor[j].ms.id === 5) {
+                        cssStyle = "";
+                        labelColor = "btn-success";
+                    } else if (resultDetailColor[j].ms.id === 6) {
+                        cssStyle = "";
+                        labelColor = "btn-secondary";
+                    } else if (resultDetailColor[j].ms.id === 7) {
+                        cssStyle = "";
+                        labelColor = "btn-primary";
+                    } else {
+                        cssStyle = "";
+                        labelColor = "btn-warning";
+                    }
+                    color += `<li><input type="radio" disabled name="product-color" id="product-color"><label class="avatar-xxs btn ${labelColor} p-0 d-flex align-items-center justify-content-center rounded-circle" for="product-color" ${cssStyle}></label></li>`
+                }
+            }
+            let resultDetailSize = data.filter((product, index, self) =>
+                index === self.findIndex((p) => (
+                    p.size === product.size
+                ))
+            );
+            // Sort sizes based on size
+            resultDetailSize.sort((a, b) => a.size.localeCompare(b.size));
+            for (j = 0; j < resultDetailSize.length; j++) {
+                if (list[i].id === resultDetailSize[j].sp.id) {
+                    var name = resultDetailSize[j].size;
+                    size += `<li ><input class="size-input" disabled type="radio" name="product-size" id="product-size"><label class="avatar-xxs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle" for="product-size">${resultDetailSize[j].size}</label></li>`
+                }
+            }
+            main += ` <div class="col item">
+                <div class="card product-widget border-0 card-animate">
+                    <div class="card-body p-2">
+                        <div class="position-relative p-4 bg-light">
+                            <img src="../assets/images/fashion/product/img-02.png" alt=""
+                                 class="img-fluid product-img-main">
+                            <img src="../assets/images/fashion/product/img-17.png" alt=""
+                                 class="img-fluid product-img-2">
+                            <div class="product-btn mx-auto">
+                             <div class="mt-3">
+                            <div class="hstack gap-2">
+                                <button type="button" class="btn btn-info btn-hover w-100" onclick="nextPageProductDetail(${list[i].id})">
+                                    <i class="bi bi-eye"> </i>Xem chi tiết
+                                </button>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="#!">
+                                <h6 class="text-capitalize fs-16 text-truncate">${list[i].tenSP}</h6>
+                            </a>
+                            <h6 class="fw-normal mb-3 fs-16 text-secondary">${formatMoney(list[i].donGia)}</h6>
+                            <ul class="clothe-colors list-unstyled hstack gap-1 mb-auto flex-wrap" style="height: 35px">${color}</ul>
+                            <ul class="clothe-size list-unstyled hstack gap-1 mb-auto flex-wrap" style="height: 35px">${size}</ul>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            color = '';
+            size = '';
+        }
+        document.getElementById("productList").innerHTML = main;
+    }
+
+        function requestConfig(arrColor, arrSize) {
+            let filterRequest = {};
+            if (arrColor.length === 0 && arrSize.length !== 0) {
+                console.log(arrColor);
+                filterRequest = {listColors: null, listSizes: arrSize};
+            } else if (arrColor.length !== 0 && arrSize.length === 0) {
+                console.log(arrSize);
+                filterRequest = {listColors: arrColor, listSizes: null};
+            } else if (arrColor.length === 0 && arrSize.length === 0) {
+                console.log(arrColor, arrSize);
+                filterRequest = {listColors: null, listSizes: null};
+            } else {
+                console.log(arrColor, arrSize);
+                filterRequest = {listColors: arrColor, listSizes: arrSize};
+            }
+            return filterRequest;
+        }
+
+        function formatMoney(money) {
+            const VND = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+            });
+            return VND.format(money);
+        }
+
+        function nextPageProduct() {
+            window.location.href = '/client/product';
+        }
+
+        function nextPageProductDetail(id) {
+            window.location.href = '/client/product/detail/' + id;
+        }
+
+</script>
+</body>
+</html>

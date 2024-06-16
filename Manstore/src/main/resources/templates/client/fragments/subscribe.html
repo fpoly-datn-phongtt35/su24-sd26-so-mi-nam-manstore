@@ -1,0 +1,89 @@
+<div th:fragment="subscribe">
+    <div class="modal fade" id="subscribeModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0">
+                <div class="modal-body p-0 bg-info-subtle rounded">
+                    <!-- Swiper -->
+                    <div class="swiper-container" id="amazingSlider">
+                        <div class="swiper-wrapper">
+                            <!-- Slide 1 -->
+                            <div class="swiper-slide">
+                                <!-- Nội dung của slide 1 -->
+                                <div class="row g-0 align-items-center">
+                                    <div class="col-lg-6">
+                                        <div class="p-4 h-100">
+                                            <span class="badge bg-info-subtle text-info fs-13">GET 10% SALE OFF</span>
+                                            <h2 class="display-6 mt-2 mb-3">Subscribe & Get <b>50% Special</b> Discount
+                                                On Email</h2>
+                                            <p class="mb-4 pb-lg-2 fs-16">Join our newsletter to receive the latest
+                                                updates and
+                                                promotion</p>
+                                            <form action="#!">
+                                                <div class="position-relative ecommerce-subscript">
+                                                    <input class="form-control rounded-pill border-0"
+                                                           placeholder="Enter your email"
+                                                           type="email">
+                                                    <button class="btn btn-info btn-hover rounded-pill" type="submit">
+                                                        Subscript
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="p-4 pb-0">
+                                            <img alt="" class="img-fluid" th:src="@{/assets/images/subscribe2.png}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="swiper-slide">
+                                <!-- Nội dung của slide 2 -->
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="swiper-slide">
+                                <!-- Nội dung của slide 3 -->
+                            </div>
+                        </div>
+                        <!-- Nút điều hướng -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <!-- Dấu bên dưới -->
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .swiper-slide {
+            width: 100%; /* Thiết lập độ rộng của slide */
+            height: auto; /* Thiết lập chiều cao của slide */
+            padding: 20px; /* Khoảng cách giữa các slide */
+            box-sizing: border-box; /* Đảm bảo kích thước của slide không bị tăng lên do padding */
+        }
+
+        .swiper-slide {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .swiper-slide-active {
+            opacity: 1;
+        }
+
+        /*.swiper-pagination {*/
+        /*    opacity: 0; !* Đặt độ trong suốt thành 0 *!*/
+        /*}*/
+        .swiper-pagination {
+            background-color: rgba(255, 255, 255, 0); /* Đặt màu nền trong suốt */
+        }
+
+        .swiper-pagination-fraction {
+            /*color: #ffffff; !* Đặt màu chữ của số trang thành màu trắng *!*/
+            color: black; /* Đặt màu chữ của số trang thành màu trắng */
+        }
+
+    </style>
+</div>

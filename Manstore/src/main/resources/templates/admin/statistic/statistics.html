@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<head th:replace="admin/fragments/head::head"></head>
+<body>
+
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row row-cols-xxl-4 row-cols-1">
+                    <div class="col">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="vr rounded bg-warning opacity-50" style="width: 4px"></div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p class="text-uppercase fw-medium text-muted fs-14 text-truncate">Tổng doanh
+                                            thu</p>
+                                        <h4 class="fs-22 fw-semibold mb-3">
+                                            <span class="counter-value" id="tongdoanhthu">0</span>
+                                        </h4>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-warning-subtle text-warning rounded fs-3"><i
+                                                class="ph-wallet"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="vr rounded bg-warning opacity-50" style="width: 4px"></div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p class="text-uppercase fw-medium text-muted fs-14 text-truncate">Tổng sản phẩm
+                                            bán</p>
+                                        <h4 class="fs-22 fw-semibold mb-3">
+                                            <span class="counter-value" id="tongspban">0</span>
+                                        </h4>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-warning-subtle text-warning rounded fs-3"><i
+                                                class="ph-storefront"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="vr rounded bg-warning opacity-50" style="width: 4px"></div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <p class="text-uppercase fw-medium text-muted fs-14 text-truncate">Doanh thu
+                                            trong ngày</p>
+                                        <h4 class="fs-22 fw-semibold mb-3">
+                                            <span class="counter-value" id="tongdoanhthungay">0</span>
+                                        </h4>
+<!--                                        <input onchange="loadDoanhThuNgay()" type="date" class="form" id="changengay"-->
+<!--                                               style="width: 100%;border: 1px solid gray; border-radius: 5px">-->
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span id="clickmoi"
+                                              class="avatar-title bg-warning-subtle text-warning rounded fs-3">
+                                            <span class="avatar-title bg-warning-subtle text-warning rounded fs-3"><i
+                                                    class="ph-wallet"></i></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 header-sp row p-2">
+                        <h4>Sản phẩm bán chạy</h4>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Thống kê theo</label>
+                        <select onchange="kiemTra()" id="loailoc" class="form-control">
+                            <option selected disabled>Chọn bên dưới</option>
+                            <option value="tuan">Ngày</option>
+                            <option value="thang">Tháng</option>
+                            <option value="quy">Quý</option>
+                            <option value="nam">Năm</option>
+                        </select>
+                    </div>
+                    <div id="divngay" class="col-sm-4" style="display: none">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Từ ngày</label>
+                                <input type="date" class="form-control" id="tungay">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Đến ngày</label>
+                                <input type="date" class="form-control" id="denngay">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divquy" class="col-sm-2" style="display: none">
+                        <label>Chọn quý</label>
+                        <select id="chonquy" class="form-control">
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div id="divthang" class="col-sm-2" style="display: none">
+                        <label>Chọn tháng</label>
+                        <select id="chonthang" class="form-control">
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div id="divnam" class="col-sm-2" style="display: none">
+                        <label>Chọn năm</label>
+                        <select id="chonnam" class="form-control">
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+                    <div id="divbtnloc" class="col-sm-2" style="display: none">
+                        <label>&ThinSpace;</label>
+                        <button onclick="loadSanPham()" class="btn btn-primary form-control">Lọc sản phẩm</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-12" style="margin-top: 30px">
+                    <table class="table table-striped">
+                        <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Môn thể thao</th>
+                            <th scope="col">Số lượng bán</th>
+                        </tr>
+                        </thead>
+                        <tbody style="font-weight: normal" id="listproduct">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-sm-12 header-sp row " style="margin-top: 30px">
+                    <div class="col-md-3">
+                        <label class="loctheongay">Chọn năm cần xem</label>
+                        <select id="nams" class="form-control">
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2"><br>
+                        <button onclick="loadByNam()" class="btn btn-primary form-control" style=""><i
+                                class="fa fa-filter"></i> Lọc
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-12 divtale" style="margin-top: 50px">
+                    <div class="card chart-container divtale">
+                        <canvas id="chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        loadInit();
+        thongKeTop();
+        revenueYear(new Date().getFullYear());
+    }
+</script>
+
+<script>
+    function kiemTra() {
+        var loaiLoc = document.getElementById("loailoc").value;
+        if (loaiLoc == "tuan") {
+            document.getElementById("divngay").style.display = 'block'
+            document.getElementById("divquy").style.display = 'none'
+            document.getElementById("divthang").style.display = 'none'
+            document.getElementById("divnam").style.display = 'none'
+        }
+        if (loaiLoc == "thang") {
+            document.getElementById("divngay").style.display = 'none'
+            document.getElementById("divquy").style.display = 'none'
+            document.getElementById("divthang").style.display = 'block'
+            document.getElementById("divnam").style.display = 'block'
+        }
+        if (loaiLoc == "quy") {
+            document.getElementById("divngay").style.display = 'none'
+            document.getElementById("divquy").style.display = 'block'
+            document.getElementById("divthang").style.display = 'none'
+            document.getElementById("divnam").style.display = 'block'
+        }
+        if (loaiLoc == "nam") {
+            document.getElementById("divngay").style.display = 'none'
+            document.getElementById("divquy").style.display = 'none'
+            document.getElementById("divthang").style.display = 'none'
+            document.getElementById("divnam").style.display = 'block'
+        }
+        document.getElementById("divbtnloc").style.display = 'block'
+    }
+</script>
+
+
+<script>
+    function formatmoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+
+    async function loadSanPham() {
+        var type = document.getElementById("loailoc").value;
+        var tungay = document.getElementById("tungay").value;
+        var denngay = document.getElementById("denngay").value;
+        var chonquy = document.getElementById("chonquy").value;
+        var chonthang = document.getElementById("chonthang").value;
+        var chonnam = document.getElementById("chonnam").value;
+
+        var url = '/admin/statistic/selling-products?type=' + type;
+        var obj = {
+            "from": tungay,
+            "to": denngay,
+            "thang": chonthang,
+            "nam": chonnam,
+            "quy": chonquy,
+        }
+        console.log(obj);
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(obj)
+        });
+        var list = await response.json();
+        console.log(list)
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            main += `<tr>
+                    <td>${list[i].id}</td>
+                    <td>${list[i].tenSP}</td>
+                    <td>${formatmoney(list[i].donGia)}</td>
+                    <td>${list[i].tl.ten}</td>
+                    <td>${list[i].soLuong}</td>
+                </tr>`
+        }
+        document.getElementById("listproduct").innerHTML = main
+    }
+
+    async function thongKeTop() {
+        let obj = {
+            "from": null,
+            "to": null,
+            "thang": 0,
+            "nam": 0,
+            "quy": 0,
+        }
+        let count = 0;
+        let response = await fetch('/admin/statistic/selling-products?type=default', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+        let result = await response.json();
+        console.log(result);
+        result.forEach(function (item) {
+            count += item.soLuong;
+        })
+        document.getElementById("tongspban").innerHTML = count;
+
+        response = await fetch('/admin/statistic/total-sales', {
+            method: 'GET'
+        });
+        result = await response.text();
+        document.getElementById("tongdoanhthu").innerHTML = formatmoney(result)
+
+        response = await fetch('/admin/statistic/total-sales-day', {
+            method: 'GET'
+        });
+        result = await response.text();
+        document.getElementById("tongdoanhthungay").innerHTML = formatmoney(result)
+    }
+
+    async function loadDoanhThuNgay() {
+        var da = document.getElementById("changengay").value
+        var response = await fetch('/admin/statistic/total-sales-day?from=' + da, {});
+        var result = await response.text();
+        document.getElementById("tongdoanhthungay").innerHTML = formatmoney(result)
+    }
+</script>
+
+<script>
+    function loadInit() {
+        var main = '';
+        for (i = 1; i < 13; i++) {
+            var x = i;
+            if (i < 10) {
+                x = "0" + i
+            }
+            main += ` <option value="${x}">Tháng ${i}</option>`
+        }
+        document.getElementById("chonthang").innerHTML = main
+
+        var main = '';
+        for (i = 2023; i < 2030; i++) {
+            main += ` <option value="${i}">Năm ${i}</option>`
+        }
+        document.getElementById("chonnam").innerHTML = main
+        document.getElementById("nams").innerHTML = main
+
+        var main = '';
+        for (i = 1; i < 5; i++) {
+            main += ` <option value="${i}">Quý ${i}</option>`
+        }
+        document.getElementById("chonquy").innerHTML = main
+    }
+
+    async function revenueYear(nam) {
+        if (nam < 2000) {
+            nam = new Date().getFullYear()
+        }
+        var url = '/admin/statistic/sales-year?year=' + nam;
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var list = await response.json();
+        console.log(list)
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            if (list[i] == null) {
+                list[i] = 0
+            }
+        }
+
+
+        var lb = 'doanh thu năm ' + nam;
+        const ctx = document.getElementById("chart").getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["tháng 1", "tháng 2", "tháng 3", "tháng 4",
+                    "tháng 5", "tháng 6", "tháng 7", "tháng 8", "tháng 9", "tháng 10", "tháng 11", "tháng 12"
+                ],
+                datasets: [{
+                    label: lb,
+                    backgroundColor: 'rgba(161, 198, 247, 1)',
+                    borderColor: 'rgb(47, 128, 237)',
+                    data: list,
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            callback: function (value) {
+                                return formatmoney(value);
+                            }
+                        }
+                    }]
+                }
+            },
+        });
+    }
+
+    function loadByNam() {
+        var nam = document.getElementById("nams").value;
+        revenueYear(nam);
+    }
+
+    function formatmoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+</script>
+
+
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+
+</script>
+</body>
+</html>

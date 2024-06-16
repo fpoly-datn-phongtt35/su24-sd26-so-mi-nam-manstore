@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+
+<head th:replace="admin/fragments/head::head"></head>
+
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Thêm Thương Hiệu</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Thương Hiệu</a></li>
+                                    <li class="breadcrumb-item active">Thêm Thương Hiệu</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <form id="create-form" autocomplete="off" class="needs-validation" novalidate method="post"
+                      th:action="@{/admin/trademark/save}" th:object="${th}">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="trademark-name-input">Tên Thương Hiệu
+                                                <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="trademark-name-input"
+                                                   placeholder="Tên Thương Hiệu" required th:field="*{ten}"
+                                                   onkeyup="validName()">
+                                            <div class="text-danger fw-bold" th:if="${errorName}"
+                                                 th:text="${errorName}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="trademark-email-input">Email
+                                                <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="trademark-email-input"
+                                                   placeholder="Email" required th:field="*{email}"
+                                                   onkeyup="validEmail()">
+                                            <div class="text-danger fw-bold" th:if="${errorEmail}"
+                                                 th:text="${errorEmail}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label for="trademark-quocgia-input" class="form-label">Quốc Gia
+                                                <span class="text-danger">*</span></label>
+                                            <input type="text" id="trademark-quocgia-input" class="form-control"
+                                                   placeholder="Tên Quốc Gia" th:field="*{quocGia}"
+                                                   onkeyup="validQuocGia()"/>
+                                            <div class="text-danger fw-bold" th:if="${errorQuocGia}"
+                                                 th:text="${errorQuocGia}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="supplier-mota-input">Mô Tả
+                                                <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="supplier-mota-input"
+                                                   placeholder="Mô Tả" required th:field="*{moTa}"
+                                                   onkeyup="validMoTa()">
+                                            <div class="text-danger fw-bold" th:if="${errorMoTa}"
+                                                 th:text="${errorMoTa}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="mb-3 p-3">
+                                        <label class="form-label">Logo</label>
+                                        <input type="file" onchange="loadAnh()" id="ipanh" class="form-control">
+                                        <input th:field="*{logo}" id="linkanh" type="hidden" class="form-control">
+                                        <img id="imgpreview" th:src="${image}" style="height: 100px; margin-top: 20px"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 d-flex justify-content-start align-items-center">
+                                    <div class="mb-3" style="padding-top: 7px;">
+                                        <div class="d-flex justify-content-end align-items-end">
+                                            <button type="button" class="btn btn-success w-sm" id="btnthem"
+                                                    onclick="showConfirmPopup()">Thêm Mới
+                                            </button>
+                                            <span style="padding: 0 10px;" disabled></span>
+                                            <a th:href="@{/admin/trademark}" class="btn btn-danger w-sm">Quay Lại</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            </form>
+        </div>
+    </div>
+    <!-- end card -->
+
+    <!-- end col -->
+</div>
+<!--end row-->
+
+</div>
+<!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+</div>
+<!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
+<script th:inline="javascript">
+    function showConfirmPopup() {
+        swal.fire({
+            icon: 'question',
+            title: "Bạn có muốn thêm mới?",
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: `Không`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('create-form').submit();
+            }
+        });
+    }
+</script>
+<script th:inline="javascript">
+    function validName() {
+        var nameInput = document.getElementById('trademark-name-input');
+        var errorName = document.getElementById('errorName');
+
+        nameInput.addEventListener('input', function () {
+            if (nameInput.value.trim() !== '') {
+                errorName.style.display = 'none';
+            } else {
+                errorName.style.display = 'block';
+            }
+        });
+    }
+
+    function validEmail() {
+        var emailInput = document.getElementById('trademark-email-input');
+        var errorEmail = document.getElementById('errorEmail');
+
+        if (emailInput.value.trim() !== '') {
+            errorEmail.style.display = 'none';
+        } else {
+            errorEmail.style.display = 'block';
+        }
+
+    }
+
+    function validQuocGia() {
+        var quocGiaInput = document.getElementById('trademark-quocgia-input');
+        var errorQG = document.getElementById('errorQuocGia');
+
+        if (quocGiaInput.value.trim() !== '') {
+            errorQG.style.display = 'none';
+        } else {
+            errorQG.style.display = 'block';
+        }
+    }
+
+    function validMoTa() {
+        var moTaInput = document.getElementById('trademark-mota-input');
+        var errorMoTa = document.getElementById('errorMoTa');
+
+        if (moTaInput.value.trim() !== '') {
+            errorMoTa.style.display = 'none';
+        } else {
+            errorMoTa.style.display = 'block';
+        }
+    }
+
+    async function loadAnh() {
+        const [file] = ipanh.files
+        if (file) {
+            imgpreview.src = URL.createObjectURL(file)
+        }
+        document.getElementById("btnthem").disabled = true
+        const filePath = document.getElementById('ipanh')
+        const formData = new FormData()
+        formData.append("file", filePath.files[0])
+        var urlUpload = 'http://localhost:8080/admin/upload-file';
+        const res = await fetch(urlUpload, {
+            method: 'POST',
+            body: formData
+        });
+        if (res.status < 300) {
+            document.getElementById("linkanh").value = await res.text();
+            document.getElementById("btnthem").disabled = false
+        }
+        document.getElementById("btnthem").disabled = false
+    }
+
+</script>
+<script th:if="${message == true}">
+    swal.fire("Thêm Thành Công!", "", "success").then(() => {
+        window.location.href = '/admin/trademark'
+    });
+</script>
+
+
+</html>

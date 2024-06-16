@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+    <body>
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+            <div th:replace="admin/fragments/header::header"></div>
+           <!-- ========== App Menu ========== -->
+            <div th:replace="admin/fragments/sidebar::sidebar"></div>
+            <!-- Left Sidebar End -->
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0">Grid View</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sellers</a></li>
+                                            <li class="breadcrumb-item active">Grid View</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row mb-4">
+                            <div class="col-xxl-12">
+                                <div class="card text-center bg-primary border-0 mb-0">
+                                    <div class="card-body p-5">
+                                        <h4 class="text-white">Search for Best Sellers</h4>
+                                        <p class="text-center text-white-75 fs-17 mb-3">when you'r searching for a sellers, then are a things you can do to get the most out of your search</p>
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-xxl-6 col-md-10 mx-auto">
+                                <form action="#!" class="mt-n4">
+                                    <div class="seller-search-box position-relative">
+                                        <i class="ri-search-2-line position-absolute my-auto d-flex align-items-center"></i>
+                                        <input type="text" class="form-control rounded-pill border-0 shadow" id="searchInputList" autocomplete="off" placeholder="Search for sellers name & code ...">
+                                        <button class="btn btn-soft-danger fw-normal position-absolute rounded-pill"><i class="ri-map-pin-2-line align-bottom me-1"></i> Germany</button>
+                                    </div>
+                                </form>
+                            </div><!--end col-->
+                        </div><!--end row-->
+
+                        <div class="row mb-4 justify-content-between">
+                            <div class="col-xxl-2 col-sm-6">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Add Seller</button>
+                            </div>
+                            <div class="col-xxl-2 col-sm-6">
+                                <select class="form-control mt-3 mt-sm-0" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
+                                    <option value="all">All</option>
+                                    <option value="Today">Today</option>
+                                    <option value="Yesterday">Yesterday</option>
+                                    <option value="Last 7 Days">Last 7 Days</option>
+                                    <option value="Last 30 Days">Last 30 Days</option>
+                                    <option value="This Month" selected>This Month</option>
+                                    <option value="Last Month">Last Month</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row" id="seller-list"></div>
+                        <!-- end seller-list -->
+
+                        <div id="noresult" class="d-none">
+                            <div class="text-center py-4">
+                                <div class="avatar-md mx-auto mb-4">
+                                    <div class="avatar-title bg-primary-subtle text-primary rounded-circle fs-24">
+                                        <i class="bi bi-search"></i>
+                                    </div>
+                                </div>
+                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4" id="pagination-element">
+                            <div class="col-lg-12">
+                                <div class="pagination-block pagination pagination-separated justify-content-center justify-content-sm-end mb-sm-0">
+                                    <div class="page-item">
+                                        <a href="" class="page-link" id="page-prev"><i class="mdi mdi-chevron-left"></i></a>
+                                    </div>
+                                    <span id="page-num" class="pagination"></span>
+                                    <div class="page-item">
+                                        <a href="" class="page-link" id="page-next"><i class="mdi mdi-chevron-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end pagination-element -->
+
+                    </div>
+                    <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+                </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+     <div th:replace="admin/fragments/chat::chat"></div>
+        <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+        <div th:replace="admin/fragments/script::script"></div>
+    </body>
+</html>

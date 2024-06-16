@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<body>
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        <div th:replace="admin/fragments/header::header"></div>
+         <!-- ========== App Menu ========== -->
+        <div th:replace="admin/fragments/sidebar::sidebar"></div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                <h4 class="mb-sm-0">Shipping List</h4>
+
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Shipping</a></li>
+                                        <li class="breadcrumb-item active">Shipping List</li>
+                                    </ol>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row">
+                        <div class="col-xxl-3">
+                            <div class="sticky-side-div mb-4">
+                                <div class="search-box mb-4">
+                                    <input type="text" class="form-control search" placeholder="Search for ...">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                                <div data-simplebar style="max-height: calc(100vh - 150px);">
+                                    <div class="row gy-4">
+                                        <div class="col-lg-12">
+                                            <div class="card mb-0">
+                                                <div class="card-body">
+                                                    <span class="badge bg-danger-subtle text-danger  float-end clearfix">Out Of Delivery</span>
+                                                    <h5 class="fs-18 mb-3">Themesbrand Logistics</h5>
+                                                    <div class="d-flex align-items-end">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fw-medium mb-1">Track ID: TBL18754263542</h6>
+                                                            <p class="text-muted mb-0">Delivery Date: 20 Jan, 2023</p>
+                                                        </div>
+                                                        <div class="flex-shrink-0">
+                                                            <a href="#!" class="text-reset stretched-link">View <i class="ph-arrow-right align-middle"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="card border-primary border-opacity-50 mb-0">
+                                                <div class="card-body">
+                                                    <span class="badge bg-info-subtle text-info  float-end clearfix">Shipping</span>
+                                                    <h5 class="fs-18 mb-3">Toner Logistics</h5>
+                                                    <div class="d-flex align-items-end">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fw-medium mb-1">Track ID: TTBL147009630</h6>
+                                                            <p class="text-muted mb-0">Delivery Date: 14 Jan, 2023</p>
+                                                        </div>
+                                                        <div class="flex-shrink-0">
+                                                            <a href="#!" class="text-reset stretched-link">View <i class="ph-arrow-right align-middle"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="card mb-0">
+                                                <div class="card-body">
+                                                    <span class="badge bg-success-subtle text-success  float-end clearfix">Delivered</span>
+                                                    <h5 class="fs-18 mb-3">Themesbrand Logistics</h5>
+                                                    <div class="d-flex align-items-end">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fw-medium mb-1">Track ID: TBL18754264568</h6>
+                                                            <p class="text-muted mb-0">Delivery Date: 26 Dec, 2022</p>
+                                                        </div>
+                                                        <div class="flex-shrink-0">
+                                                            <a href="#!" class="text-reset stretched-link">View <i class="ph-arrow-right align-middle"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="card mb-0">
+                                                <div class="card-body">
+                                                    <span class="badge bg-secondary-subtle text-secondary  float-end clearfix">Pickup</span>
+                                                    <h5 class="fs-18 mb-3">Toner Logistics</h5>
+                                                    <div class="d-flex align-items-end">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fw-medium mb-1">Track ID: TTBL147009672</h6>
+                                                            <p class="text-muted mb-0">Delivery Date: 03 Feb, 2023</p>
+                                                        </div>
+                                                        <div class="flex-shrink-0">
+                                                            <a href="#!" class="text-reset stretched-link">View <i class="ph-arrow-right align-middle"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="card mb-0">
+                                                <div class="card-body">
+                                                    <span class="badge bg-success-subtle text-success  float-end clearfix">Delivered</span>
+                                                    <h5 class="fs-18 mb-3">Zibra Logistics</h5>
+                                                    <div class="d-flex align-items-end">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fw-medium mb-1">Track ID: MFDS1400457854</h6>
+                                                            <p class="text-muted mb-0">Delivery Date: 07 Nov, 2022</p>
+                                                        </div>
+                                                        <div class="flex-shrink-0">
+                                                            <a href="#!" class="text-reset stretched-link">View <i class="ph-arrow-right align-middle"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="card mb-0">
+                                                <div class="card-body">
+                                                    <span class="badge bg-danger-subtle text-danger  float-end clearfix">Out Of Delivery</span>
+                                                    <h5 class="fs-18 mb-3">Toner Logistics</h5>
+                                                    <div class="d-flex align-items-end">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fw-medium mb-1">Track ID: TTBL147009390</h6>
+                                                            <p class="text-muted mb-0">Delivery Date: 05 Feb, 2023</p>
+                                                        </div>
+                                                        <div class="flex-shrink-0">
+                                                            <a href="#!" class="text-reset stretched-link">View <i class="ph-arrow-right align-middle"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                    </div><!--end row-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-9">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <h5 class="card-title mb-0 flex-grow-1">Shipping Details</h5>
+                                        <div class="flex-shrink-0">
+                                            <p class="mb-0">Delivery Date: <b>14 Jan, 2023</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xxl-4 col-lg-6">
+                                            <div class="card bg-secondary bg-opacity-10 border-0">
+                                                <div class="card-body">
+                                                    <div class="d-flex gap-3">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fs-18 mb-3">Order Information</h6>
+                                                            <p class="mb-0">ID: <span class="fw-medium">#TBT84000142101</span></p>
+                                                            <p class="mb-1">Amount Total: <span class="fw-medium">$723.65</span></p>
+                                                            <p class="mb-0">Order Date: <span class="fw-medium">05 Jan, 2023</span></p>
+                                                        </div>
+                                                        <div class="avatar-sm flex-shrink-0">
+                                                            <div class="avatar-title bg-secondary-subtle text-secondary rounded fs-3">
+                                                                <i class="ph-shopping-cart"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-4 col-lg-6">
+                                            <div class="card bg-warning bg-opacity-10 border-0">
+                                                <div class="card-body">
+                                                    <div class="d-flex gap-3">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fs-18 mb-3">Shipping Address</h6>
+                                                            <p class="mb-0">Block A, House 123, Floor 2</p>
+                                                            <p class="mb-1">Tashkent, Uzbekistan</p>
+                                                            <p class="mb-0">013-789-9876</p>
+                                                        </div>
+                                                        <div class="avatar-sm flex-shrink-0">
+                                                            <div class="avatar-title bg-warning-subtle text-warning rounded fs-3">
+                                                                <i class="ph-map-pin"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-4 col-lg-6">
+                                            <div class="card bg-success bg-opacity-10 border-0">
+                                                <div class="card-body">
+                                                    <div class="d-flex gap-3">
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="fs-18 mb-3">Customer Info</h6>
+                                                            <p class="mb-0 fw-medium">Daniel Gonzalez</p>
+                                                            <p class="mb-1">gabrielle@toner.com</p>
+                                                            <p class="mb-0">013-789-9876</p>
+                                                        </div>
+                                                        <div>
+                                                            <img src="../assets/images/users/avatar-2.jpg" alt="" class="avatar-sm rounded">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!--end row-->
+                                    <div class="d-flex align-items-center gap-3 mb-4">
+                                        <h5 class="card-title flex-grow-1 mb-0">Order Status</h5>
+                                        <div class="flex-shrink-0">
+                                            <button type="button" class="btn btn-soft-primary btn-sm mt-2 mt-sm-0"><i class="ri-map-pin-line align-bottom me-1"></i> Change Address</button>
+                                            <button type="button" class="btn btn-soft-danger btn-sm mt-2 mt-sm-0"><i class="mdi mdi-archive-remove-outline align-bottom me-1"></i> Cancel Order</button>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-between">
+                                        <div class="col-lg-2 order-tracking text-center completed">
+                                            <span class="is-complete"></span>
+                                            <div class="card mt-3 mb-0 border-0">
+                                                <div class="card-body">
+                                                    <h6 class="fs-17 mb-1">Order Process</h6>
+                                                    <p class="text-muted fs-15 mb-0">Mon, 24 Dec, 2022</p>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-2 order-tracking text-center completed">
+                                            <span class="is-complete"></span>
+                                            <div class="card mt-3 mb-0 border-0">
+                                                <div class="card-body">
+                                                    <h6 class="fs-17 mb-1">Packed</h6>
+                                                    <p class="text-muted fs-15 mb-0">Thu, 28 Dec, 2022</p>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-2 order-tracking text-center completed">
+                                            <span class="is-complete"></span>
+                                            <div class="card mt-3 mb-0 border-0">
+                                                <div class="card-body">
+                                                    <h6 class="fs-17 mb-1">Order Shipped</h6>
+                                                    <p class="text-muted fs-15 mb-0">Thu, 02 Jan, 2023</p>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-2 order-tracking text-center">
+                                            <span class="is-complete"></span>
+                                            <div class="card mt-3 mb-0 border-0">
+                                                <div class="card-body">
+                                                    <h6 class="fs-17 mb-1">Out Of Delivery</h6>
+                                                    <p class="text-muted fs-15 mb-0">Thu, 10 Jan, 2023</p>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                        <div class="col-lg-2 order-tracking text-center">
+                                            <span class="is-complete"></span>
+                                            <div class="card mt-3 mb-0 border-0">
+                                                <div class="card-body">
+                                                    <h6 class="fs-17 mb-1">Delivered</h6>
+                                                    <p class="text-muted fs-15 mb-0">Thu, 14 Jan, 2023</p>
+                                                </div>
+                                            </div>
+                                        </div><!--end col-->
+                                    </div><!--end row-->
+                                    <div class="mt-4">
+                                        <h5 class="card-title mb-4">View Map</h5>
+                                        <div id="users-by-country" data-colors='["--tb-light"]' class="text-center" style="height: 450px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+     </div>
+        <!-- end main content-->
+
+    </div>
+    <!-- END layout-wrapper -->
+<div th:replace="admin/fragments/chat::chat"></div>
+    <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+    <div th:replace="admin/fragments/script::script"></div>
+</body>
+</html>

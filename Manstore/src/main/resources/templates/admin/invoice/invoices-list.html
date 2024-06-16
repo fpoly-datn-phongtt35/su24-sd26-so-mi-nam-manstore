@@ -1,0 +1,1892 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head">
+</head>
+<body>
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Hoá Đơn</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Hoá Đơn</a></li>
+                                    <li class="breadcrumb-item active">Danh Sách Hoá Đơn</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card" id="invoiceList">
+                            <div class="card-header border-0">
+                                <div class="d-flex align-items-center">
+                                    <h5 class="card-title mb-0 flex-grow-1">Danh Sách Hoá Đơn</h5>
+                                </div>
+                            </div>
+                            <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+                                <form>
+                                    <div class="row g-3">
+                                        <div class="col-xxl-3 col-sm-12">
+                                            <label class="form-label" for="search-input">Tìm Kiếm</label>
+                                            <div class="search-box">
+                                                <input type="text" class="form-control search bg-light border-light"
+                                                       placeholder="Mã đơn hàng" id="search-input"
+                                                       onkeyup="loadPage()">
+                                                <i class="ri-search-line search-icon"></i>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-xxl-5 col-sm-4">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label class="form-label" for="start-date">Ngày Bắt Đầu</label>
+                                                    <input type="date" class="form-control bg-light border-light"
+                                                           id="start-date">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="form-label" for="end-date">Ngày Kết Thúc</label>
+                                                    <input type="date" class="form-control bg-light border-light"
+                                                           id="end-date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-xxl-2 col-sm-4">
+                                            <div class="input-light">
+                                                <label class="form-label" for="status-select">Trạng Thái</label>
+                                                <select class="form-control bg-light border-light"
+                                                        id="status-select"
+                                                        onchange="loadPage()">
+                                                    <option value="-1" selected>Tất Cả</option>
+                                                    <option value="1">Chờ Xác Nhận</option>
+                                                    <option value="2">Đang Xử Lý</option>
+                                                    <option value="3">Đang Giao Hàng</option>
+                                                    <option value="4">Hoàn Thành</option>
+                                                    <option value="5">Giao Hàng Thất Bại</option>
+                                                    <option value="6">Huỷ</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+
+                                        <div class="col-xxl-1 col-sm-4" style="padding: 0 1px;">
+                                            <br>
+                                            <button type="button" class="btn btn-info w-100" style="margin-top: 10px;"
+                                                    onclick="loadPage()">
+                                                <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
+                                            </button>
+                                        </div>
+                                        <div class="col-xxl-1 col-sm-12" style="padding: 0 0;">
+                                            <br>
+                                            <button type="button" class="btn btn-info w-100" style="margin-top: 10px;"
+                                                    onclick="handleResetFilter()">
+                                                <i class="ri-restart-fill me-1 align-bottom"></i>Reset
+                                            </button>
+                                        </div>
+                                        <!--end col-->
+                                    </div>
+                                    <!--end row-->
+                                </form>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <div class="table-responsive table-card">
+                                        <table class="table align-middle table-nowrap" id="invoiceTable">
+                                            <thead class="text-muted">
+                                            <tr>
+                                                <th>Mã Hoá Đơn</th>
+                                                <th>Khách Hàng</th>
+                                                <th>Nhân Viên</th>
+                                                <th>Ngày Tạo</th>
+                                                <th>Tổng Tiền<small class="text-muted">(Đã bao gồm VAT)</small></th>
+                                                <th>Trạng Thái</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody
+                                                    class="list form-check-all"
+                                                    id="invoice-list-data">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center mt-3">
+                                        <div class="pagination-wrap hstack gap-2 flex-wrap" id="pagination-element">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body p-5 text-center">
+                                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                                           colors="primary:#405189,secondary:#f06548"
+                                                           style="width:90px;height:90px"></lord-icon>
+                                                <div class="mt-4 text-center">
+                                                    <h4>You are about to delete a order ?</h4>
+                                                    <p class="text-muted fs-15 mb-4">Deleting your order will remove all
+                                                        of your information from our database.</p>
+                                                    <div class="hstack gap-2 justify-content-center remove">
+                                                        <button class="btn btn-link link-success fw-medium text-decoration-none"
+                                                                id="deleteRecord-close" data-bs-dismiss="modal"><i
+                                                                class="ri-close-line me-1 align-middle"></i> Close
+                                                        </button>
+                                                        <button class="btn btn-danger" id="delete-record">Yes, Delete
+                                                            It
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end modal -->
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--end col-->
+                </div>
+                <!--end row-->
+
+            </div><!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<div class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Hoá Đơn Chi Tiết</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="margin-bottom: 20px;">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-12">
+                        <div class="card" id="demo">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <!--end card-header-->
+                                </div><!--end col-->
+                                <div class="col-lg-12">
+                                    <div class="card-body p-4">
+                                        <div class="row g-3">
+                                            <div class="col-lg-3 col-6">
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Hoá
+                                                    Đơn</p>
+                                                <h5 class="fs-15 mb-0">#<span id="invoice-no"></span></h5>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-3 col-6">
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Ngày Tạo</p>
+                                                <h5 class="fs-15 mb-0"><span id="invoice-date"></span></h5>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-3 col-6" id="payment-status">
+
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-3 col-6">
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Tổng
+                                                    Tiền<small class="text-muted">(Trước thuế)</small></p>
+                                                <h5 class="fs-15 mb-0"><span id="total-amount"></span></h5>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                        <!--end row-->
+                                    </div>
+                                    <!--end card-body-->
+                                </div><!--end col-->
+                                <div class="col-lg-12">
+                                    <div class="card-body p-4">
+                                        <div class="table-responsive">
+                                            <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                                                <thead>
+                                                <tr class="table-active">
+                                                    <th scope="col" style="width: 50px;">#</th>
+                                                    <th scope="col" class="text-start">Sản Phẩm</th>
+                                                    <th scope="col">Đơn Giá</th>
+                                                    <th scope="col" style="width: 140px;">Số Lượng</th>
+                                                    <th scope="col" class="text-center">Tổng Tiền</th>
+                                                    <th scope="col" class="text-center hidden-action">Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="products-list">
+                                                </tbody>
+                                            </table><!--end table-->
+                                        </div>
+                                        <div class="row p-1 fw-bold text-danger" id="add-product"></div>
+                                        <div class="border-top border-top-dashed mt-2 d-flex justify-content-between">
+                                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
+                                                   style="width:100%">
+                                                <tbody id="address">
+                                                </tbody>
+                                            </table>
+
+                                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
+                                                   style="width:250px">
+                                                <tbody id="sub-total">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="hstack gap-2 justify-content-between d-print-none mt-4">
+                                            <div class="justify-content-start" id="statusButtonGroup">
+                                            </div>
+                                            <div class="justify-content-end">
+                                                <button class="btn btn-success" onclick="printModal()" id="printButton">
+                                                    <i class="ri-printer-line align-bottom me-1"></i> In Hoá Đơn
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end card-body-->
+                                </div><!--end col-->
+                            </div><!--end row-->
+                        </div>
+                        <!--end card-->
+                    </div>
+                    <!--end col-->
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+<div class="modal fade" id="modal-reason" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="text-danger">Lý Do Huỷ/Giao Thất Bại</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="margin-bottom: 20px;">
+                <input type="text" class="form-control" id="status-input" hidden/>
+                <input type="text" class="form-control" id="id-input" hidden=""/>
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" placeholder="Lí do" id="reason-input"></textarea>
+                    <span class="text-danger" id="valid-reason"></span>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end">
+                <button type="button" class="btn btn-success" onclick="handleCancelInvoice()">Xác Nhận</button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                        aria-label="Close">Huỷ Bỏ
+                </button>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+<div
+        class="modal fade"
+        id="modal_product"
+        tabindex="-1"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sản Phẩm</h4>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                        type="button"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" id="cart-list">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row g-lg-2 g-4">
+                                            <div class="col-lg-3">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Tìm Kiếm</label>
+                                                        <div class="search-box">
+                                                            <input class="form-control search" id="search-product-input"
+                                                                   onkeyup="loadProductDetail(0)" placeholder="..."
+                                                                   type="text">
+                                                            <i class="ri-search-line search-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <div class="row" style="padding-bottom: 10px">
+                                                    <div class="col-md-4">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Màu Sắc</label>
+                                                        <select aria-label=".form-select-lg example"
+                                                                class="form-select mb-3"
+                                                                id="filter-color"
+                                                                onchange="loadProductDetail(undefined)">
+                                                            <option selected value="0">Tất Cả</option>
+                                                            <option value="1">Đen</option>
+                                                            <option value="2">Trắng</option>
+                                                            <option value="3">Đỏ</option>
+                                                            <option value="4">Xám</option>
+                                                            <option value="5">Xanh Lục</option>
+                                                            <option value="6">Tím Xanh</option>
+                                                            <option value="7">Xanh Da Trời</option>
+                                                            <option value="8">Vàng</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Size</label>
+                                                        <select aria-label=".form-select-lg example"
+                                                                class="form-select mb-3"
+                                                                id="filter-size" onchange="loadProductDetail(undefined)"
+                                                        >
+                                                            <option selected value="0">Tất Cả</option>
+                                                            <option value="s">S</option>
+                                                            <option value="m">M</option>
+                                                            <option value="l">L</option>
+                                                            <option value="xl">XL</option>
+                                                            <option value="xxl">XXL</option>
+                                                            <option value="2xl">2XL</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive table-card mb-1">
+                                            <table class="table align-middle table-nowrap"
+                                                   id="customerTable3">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th class="text-start">STT</th>
+                                                    <th class="text-start">Tên</th>
+                                                    <th class="text-start">Ảnh</th>
+                                                    <th class="text-start">Màu Sắc</th>
+                                                    <th class="text-start">Kích Thước</th>
+                                                    <th class="text-start">Số Lượng</th>
+                                                    <th class="text-start">Đơn Giá</th>
+                                                    <th class="text-start">Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="list form-check-all"
+                                                       id="list_product_detail">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination d-flex justify-content-center align-items-center"
+                                                        id="pagination_product_detail">
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    let indexCurrentPage;
+
+    let id_promotion;
+
+    let idInvoice;
+
+    let indexCurrentPageProduct;
+    window.onload = function () {
+        loadPage();
+    }
+
+    $('#modal_product').on('hidden.bs.modal', function (e) {
+        loadPage(indexCurrentPage);
+        detailInvoice(idInvoice);
+    });
+
+    function handleResetFilter() {
+
+        document.getElementById('status-select').value = '-1';
+
+        document.getElementById('search-input').value = '';
+
+        document.getElementById('start-date').value = '';
+
+        document.getElementById('end-date').value = '';
+
+        loadPage();
+    }
+
+    async function loadPage(pageNumber) {
+
+        let status = document.getElementById('status-select').value;
+
+        let keyword = document.getElementById('search-input').value;
+
+        let startDate = document.getElementById('start-date').value;
+
+        let endDate = document.getElementById('end-date').value;
+
+        var baseUrl;
+
+        indexCurrentPage = pageNumber;
+
+        // load default
+        if (pageNumber === undefined && status === "-1" && keyword === "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + 0;
+            console.log('1')
+        }
+        if (pageNumber !== undefined && status === "-1" && keyword === "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber;
+            console.log('2')
+        }
+        //filter with date
+        if (pageNumber === undefined && status === "-1" && keyword === "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?startDate=" + startDate + "&endDate=" + endDate;
+            console.log('3')
+        }
+        if (pageNumber !== undefined && status === "-1" && keyword === "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?startDate=" + startDate + "&endDate=" + endDate;
+            console.log('4')
+        }
+        //filter with status
+        if (pageNumber === undefined && status !== "-1" && keyword === "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?status=" + status;
+            console.log('5')
+        }
+        if (pageNumber !== undefined && status !== "-1" && keyword === "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?status=" + status;
+            console.log('6')
+        }
+        //search
+        if (pageNumber === undefined && status === "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?keyword=" + keyword;
+            console.log('7')
+
+        }
+        if (pageNumber !== undefined && status === "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?keyword=" + keyword;
+            console.log('8')
+        }
+        //search and filter with status
+        if (pageNumber === undefined && status !== "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?status=" + status + "&keyword=" + keyword;
+            console.log('9')
+        }
+        if (pageNumber !== undefined && status !== "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?status=" + status + "&keyword=" + keyword;
+
+        }
+        //search and filter with date
+        if (pageNumber === undefined && status === "-1" && keyword !== "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?keyword=" + keyword + "&startDate=" + startDate + "&endDate=" + endDate;
+            console.log('10')
+        }
+        if (pageNumber !== undefined && status === "-1" && keyword !== "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?keyword=" + keyword + "&startDate=" + startDate + "&endDate=" + endDate;
+            console.log('11')
+        }
+
+        //filter with date and status
+        if (pageNumber === undefined && status !== "-1" && keyword === "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?status=" + status + "&startDate=" + startDate + "&endDate=" + endDate;
+            console.log('12')
+        }
+        if (pageNumber !== undefined && status !== "-1" && keyword === "" && startDate !== "" && !endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?status=" + status + "&startDate=" + startDate + "&endDate=" + endDate;
+            console.log('13')
+        }
+
+        //search and filter all
+        if (pageNumber === undefined && status !== "-1" && keyword !== "" && startDate !== "" && endDate !== "") {
+            baseUrl = "/api/admin/invoice/index/" + 0 + "?status=" + status + "&startDate=" + startDate + "&endDate=" + endDate + "&keyword=" + keyword;
+            console.log('14')
+        }
+        if (pageNumber !== undefined && status !== "-1" && keyword !== "" && (startDate === "" || endDate === "")) {
+            baseUrl = "/api/admin/invoice/index/" + pageNumber + "?status=" + status + "&startDate=" + startDate + "&endDate=" + endDate + "&keyword=" + keyword;
+            console.log('15')
+        }
+
+        console.log(baseUrl);
+        const response = await fetch(baseUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            var createAt = list[i].ngayTao;
+            var money = list[i].tongTien;
+            var momentDate = moment(createAt);
+            var customerName;
+            var staffName;
+            if (list[i].kh === null) {
+                customerName = 'Khách Vãng Lai';
+            } else {
+                customerName = list[i].kh.hoTen;
+            }
+            if (list[i].nv === null) {
+                staffName = 'Chưa Có';
+            } else {
+                staffName = list[i].nv.hoTen;
+            }
+            const formattedDate = momentDate.format('DD/MM/YYYY HH:mm');
+            var statusBadge;
+            if (list[i].trangThai === 1) {
+                statusBadge = '<span class="badge bg-success">Chờ Xác Nhận</span>'
+            }
+            if (list[i].trangThai === 2) {
+                statusBadge = '<span class="badge bg-success">Đang Xử Lý</span>'
+            }
+            if (list[i].trangThai === 3) {
+                statusBadge = '<span class="badge bg-success">Đang Giao Hàng</span>'
+            }
+
+            if (list[i].trangThai === 4) {
+                statusBadge = '<span class="badge bg-success">Hoàn Thành</span>';
+            }
+            if (list[i].trangThai === 5) {
+                statusBadge = '<span class="badge bg-danger">Giao Hàng Thất Bại</span>'
+            }
+            if (list[i].trangThai === 6) {
+                statusBadge = '<span class="badge bg-danger">Huỷ</span>'
+            }
+            let formattedMoney = formatmoney(money + (money * 0.1));
+            main += `<tr >
+                            <td scope="row">${list[i].maDonHang}</td>
+                            <td scope="row">${customerName}</td>
+                            <td scope="row">${staffName}</td>
+                            <td scope="row">${formattedDate}</td>
+                            <td scope="row">${formattedMoney}</td>
+                            <td scope="row">${statusBadge}</td>
+                            <td>
+                                <div onclick="detailInvoice(${list[i].id})"
+                                     class="link-info fs-15 d-flex justify-content-center"><i class="ri-eye-2-line"></i></div>
+                            </td>
+                     </tr>`
+        }
+        document.getElementById("invoice-list-data").innerHTML = main;
+        document.getElementById("pagination-element").innerHTML = `
+                <div class="pagination-wrap hstack gap-2">
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number === 0 ? totalPage - 1 : 0})"  >
+                       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+                       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+                       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+                       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number === totalPage - 1 ? 0 : totalPage - 1})">
+                       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+                </div>`;
+    }
+
+    function formatmoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+
+    async function loadProductDetail(pageNumber) {
+        var keyword = document.getElementById("search-product-input").value;
+        var color = document.getElementById("filter-color").value;
+        var size = document.getElementById("filter-size").value;
+
+        var baseUrl;
+
+        if (pageNumber !== undefined)
+            indexCurrentPageProduct = pageNumber;
+        else
+            indexCurrentPageProduct = 0;
+
+        if (pageNumber === undefined && keyword === '' && color === "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword === '' && color === "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber;
+            console.log(baseUrl);
+        }
+        // search
+        if (pageNumber === undefined && keyword !== '' && color === "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?keyword=" + keyword;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword !== '' && color === "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword=" + keyword;
+            console.log(baseUrl);
+        }
+        // filter by color
+        if (pageNumber === undefined && keyword === '' && color !== "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?color=" + color;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword === '' && color !== "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?color=" + color;
+            console.log(baseUrl);
+        }
+        // filter by size
+        if (pageNumber === undefined && keyword === '' && color === "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?size=" + size;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword === '' && color === "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?size=" + size;
+            console.log(baseUrl);
+        }
+        // filter by all
+        if (pageNumber === undefined && keyword === '' && color !== "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?color=" + color + "&size=" + size;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword === '' && color !== "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?color=" + color + "&size=" + size;
+            console.log(baseUrl);
+        }
+        // search and filter by color
+        if (pageNumber === undefined && keyword !== '' && color !== "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?keyword=" + keyword + "&color=" + color;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword !== '' && color !== "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword=" + keyword + "&color=" + color;
+            console.log(baseUrl);
+        }
+        // search and filter by size
+        if (pageNumber === undefined && keyword !== '' && color === "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword=" + keyword + "&size=" + size;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword !== '' && color === "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword=" + keyword + "&size=" + size;
+            console.log(baseUrl);
+        }
+        // search and filter by all
+        if (pageNumber === undefined && keyword !== '' && color !== "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?keyword="
+                + keyword + "&color=" + color + "&size=" + size;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword !== '' && color !== "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword="
+                + keyword + "&color=" + color + "&size=" + size;
+            console.log(baseUrl);
+        }
+        const response = await fetch(baseUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        var img = '';
+        for (i = 0; i < list.length; i++) {
+            var url = '/api/admin/product_detail/picture/' + list[i].sp.id + '/' + list[i].ms.id;
+            const responsePicture = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            const data = await responsePicture.json();
+            console.log(data);
+
+            if (data !== null) {
+                img = `<img src="${data[0].linkAnh}" alt="Ảnh sản phẩm"
+                    style="width: 100%; height: auto;display: block;">`;
+            } else {
+                img = `<i class="ri-question-mark" style="padding-left: 7px;"></i>`;
+            }
+            main += `<tr >
+                            <td scope="row">${i + 1}</td>
+                            <td scope="row">${list[i].sp.tenSP}</td>
+                            <td scope="row" class="image-container" style="width: 49px;height: 66px;">${img}</td>
+                            <td scope="row">${list[i].ms.ten}</td>
+                            <td scope="row">${list[i].size}</td>
+                            <td scope="row">${list[i].soLuong}</td>
+                            <td scope="row">${formatmoney(list[i].sp.donGia)}</td>
+                            <td>
+                                <button class="btn btn-success" onclick="addToInvoiceDetail(${list[i].id})">
+                                    <i class="ri-add-box-fill"></i>
+                                </button>
+                            </td>
+                     </tr>`
+        }
+        document.getElementById("list_product_detail").innerHTML = main;
+
+        document.getElementById("pagination_product_detail").innerHTML = `
+                <div class="pagination-wrap hstack gap-2">
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadProductDetail(${number === 0 ? totalPage - 1 : 0})">
+                       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadProductDetail(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+                       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+                       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadProductDetail(${number + 1 === totalPage ? 0 : number + 1})"">
+                       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadProductDetail(${number === totalPage - 1 ? 0 : totalPage - 1})">
+                       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+                </div>`;
+        $('#modal_product').modal('show');
+        $('#myModal').modal('hide');
+    }
+
+    async function getPromotion(id) {
+        var url = "/api/admin/promotion/find-by-customer?id=" + id;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        var result = await response.json();
+        return result;
+    }
+
+    async function getPromotionByDate(type) {
+        var url = "/public/promotion/find-by-date?type=" + type;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        var result = await response.json();
+        return result;
+    }
+
+    async function detailInvoice(id) {
+        let url = '/api/admin/invoice/invoice-detail/' + id;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        idInvoice = id;
+        const data = await response.json();
+        let main = '';
+        let sub_total = '';
+        let total_amount = 0;
+        let address;
+        let customer;
+        let order_status;
+        let order_id;
+        let shipp_fee;
+        let note;
+        let money_paid;
+        let money_refund;
+        if (response.status === 200) {
+            money_paid = data[0].dh.tienKhachTra;
+            order_status = data[0].dh.trangThai;
+            order_id = data[0].dh.id;
+            address = data[0].dh.ttvc;
+            customer = data[0].dh.kh;
+            shipp_fee = data[0].dh.phiVanChuyen;
+            note = data[0].dh.ghiChu;
+            let hidden;
+            if (data[0].dh.trangThai > 0 && data[0].dh.trangThai < 4) {
+                hidden = 'style="display: none;"';
+            } else if (data[0].dh.trangThai === 5 && data[0].dh.trangThai === 6) {
+                hidden = 'style="display: none;"';
+            } else {
+                hidden = '';
+            }
+            for (i = 0; i < data.length; i++) {
+                let hidden;
+                if (data[i].dh.trangThai === 4) {
+                    hidden = 'style="display: none;"';
+                } else {
+                    hidden = '';
+                }
+                total_amount += data[i].giaThoiDiemMua * data[i].soLuong;
+                let count = data[i].soLuong;
+                main += `
+                <tr>
+                      <th scope="row">${i + 1}</th>
+                      <td class="text-start">
+                      <span class="fw-medium">${data[i].spct.sp.tenSP}</span>
+                             <p class="text-muted mb-0">${data[i].spct.ms.ten} & ${data[i].spct.size}</p>
+                      </td>
+                      <td>${formatmoney(data[i].giaThoiDiemMua)}</td>
+                      <td style="width: 140px;">
+                         <div class="input-step">
+                                    <button type="button" class="minus" onclick="minusQuantity(${data[i].id},${data[i].soLuong})">–</button>
+                                    <input type="number" class="product-quantity" value="${count}" min="0" max="100" id="input-count-${i + 1}"
+                                    data-value="${data[i].id}" onblur="handleExitInput(${data[i].id},${i + 1},${count})">
+                                    <button type="button" class="plus" onclick="addQuantity(${data[i].id})">+</button>
+                         </div>
+                      </td>
+                      <td class="text-center">${formatmoney(data[i].giaThoiDiemMua * data[i].soLuong)}</td>
+                      <td class="hidden-action">
+                                <div class="hstack gap-3 flex-warp justify-content-center align-items-center" style="padding-top: 8px;">
+                                    <div class="link-danger fs-15"><i class="ri-delete-bin-6-line" onclick="deleteInvoiceDetail(${data[i].id})"></i></div>
+                                </div>
+                      </td>
+                </tr>`
+            }
+            let add_product = `
+                   <div class="col-3 d-flex justify-content-start align-items-center" style="padding-left: 25px;" onclick="loadProductDetail(0)">
+                        <i class="ri-add-line"></i> Thêm Sản Phẩm
+                   </div>
+            `;
+            let vat = (total_amount) - (total_amount * 0.9);
+            let total;
+            console.log("Phí Ship ", shipp_fee);
+            if (shipp_fee === undefined || shipp_fee === null) {
+                total = total_amount + vat;
+            } else {
+                total = total_amount + vat + shipp_fee;
+            }
+            let promotion_title = '(không có khuyến mãi)';
+            let promotion_value = '- 0%';
+            let promotion;
+            let check = true;
+            if (data[0].dh.kh !== null) {
+                check = true;
+                promotion = await getPromotion(data[0].dh.kh.id);
+            } else {
+                check = false;
+                promotion = await getPromotionByDate(0);
+            }
+
+            console.log(promotion);
+            console.log(data[0].dh.km);
+            if (data[0].dh.km === null) {
+                if (check === true && promotion.length === 0) {
+                    id_promotion = null;
+                    promotion_title = '(Không có khuyến mãi)';
+                    promotion_value = '- 0%';
+                } else if (check === false && promotion === null) {
+                    id_promotion = null;
+                    promotion_title = '(Không có khuyến mãi)';
+                    promotion_value = '- 0%';
+                } else {
+                    let obj_promotion = promotion[0];
+                    id_promotion = obj_promotion.id;
+                    let reference_value = total_amount / 1000;
+                    if (reference_value < obj_promotion.giaTriDonHangApDung) {
+                        promotion_title = '(chưa đủ điều kiện áp dụng)';
+                        promotion_value = '- 0%';
+                        let need_more_value = (obj_promotion.giaTriDonHangApDung - reference_value) + '000';
+                        let reduce_value;
+                        if (obj_promotion.loaiKM === true)
+                            reduce_value = '- ' + obj_promotion.giaTriGiam + '%';
+                        else
+                            reduce_value = formatmoney(obj_promotion.giaTriGiam);
+                        add_product += `
+                         <div class="col-9 d-flex justify-content-center align-items-center">
+                                Mua thêm ${formatmoney(need_more_value)} sẽ được giảm ${reduce_value} cho đơn hàng!
+                         </div>`;
+                    }
+                }
+            } else {
+                id_promotion = data[0].dh.km.id;
+                promotion_title = '(' + data[0].dh.km.tenKhuyenMai + ')';
+                if (data[0].dh.km.loaiKM === true) {
+                    promotion_value = '- ' + data[0].dh.km.giaTriGiam + '%';
+                    total = total - (total * (data[0].dh.km.giaTriGiam / 100));
+                } else {
+                    promotion_value = '- ' + formatmoney(data[0].dh.km.giaTriGiam);
+                    total = total - parseInt(data[0].dh.km.giaTriGiam);
+                }
+            }
+            sub_total = `
+                   <tr>
+                              <td>Tổng tiền <small class="text-muted">(Trước thuế)</small></td>
+                              <td class="text-end">${formatmoney(total_amount)}</td>
+                   </tr>
+                   <tr>
+                             <td>VAT (10%)</td>
+                             <td class="text-end">${formatmoney(vat)}</td>
+                   </tr>
+                   <tr>
+                              <td>Khuyến Mãi <small class="text-muted" id="promotion-title">${promotion_title}</small></td>
+                              <td class="text-end" id="promotion-value">${promotion_value}</td>
+                   </tr>
+                   <tr id="money-ship">
+                               <td>Phí Ship</td>
+                               <td><input style="width: 100px;" type="text" class="form-control" id="shipping-fee" onblur="handleShippingFee(${order_id},${shipp_fee})"/></td>
+                   </tr>
+                   <tr class="border-top border-top-dashed fs-15">
+                               <th scope="row">Tổng số tiền</th>
+                               <th class="text-end">${formatmoney(total)}</th>
+                   </tr>
+            `;
+            money_refund = parseInt(money_paid) - parseInt(total);
+            let hideShippingFee = false;
+            if (data[0].dh.trangThai > 0 && data[0].dh.trangThai < 4) {
+                sub_total += ``;
+            } else if (data[0].dh.trangThai === 5 || data[0].dh.trangThai === 6) {
+                sub_total += ``;
+            } else {
+                if (data[0].dh.kh === null) {
+                    hideShippingFee = true;
+                    sub_total += `
+                    <tr ${hidden}>
+                              <td>Tiền Khách Trả</td>
+                              <td class="text-end">${formatmoney(money_paid)}</td>
+                   </tr>
+                   <tr ${hidden}>
+                              <td>Tiền trả lại</td>
+                              <td class="text-end">${formatmoney(money_refund)}</td>
+                   </tr>`;
+                } else {
+                    if (data[0].dh.tienKhachTra !== null) {
+                        hideShippingFee = true;
+                        sub_total += `
+                    <tr ${hidden}>
+                              <td>Tiền Khách Trả</td>
+                              <td class="text-end">${formatmoney(money_paid)}</td>
+                   </tr>
+                   <tr ${hidden}>
+                              <td>Tiền trả lại</td>
+                              <td class="text-end">${formatmoney(money_refund)}</td>
+                   </tr>`;
+                    }
+                }
+            }
+            var momentDate = moment(data[0].dh.ngayTao);
+            var status = '';
+
+            if (data[0].dh.trangThai > 0 && data[0].dh.trangThai < 4) {
+                status = `
+                 <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
+                            <span class="badge bg-success-subtle text-info"
+                                                      >Chưa Thanh Toán</span>
+                `;
+            }
+            if (data[0].dh.trangThai === 4) {
+                status = `
+                 <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
+                            <span class="badge bg-success-subtle text-success"
+                                                      >Đã Thanh Toán</span>
+                `;
+            }
+            if (data[0].dh.trangThai === 6) {
+                status = `
+                 <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
+                            <span class="badge bg-success-subtle text-danger"
+                                                      >Huỷ</span>
+                `;
+            }
+            if (data[0].dh.trangThai === 5) {
+                status = `
+                 <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
+                            <span class="badge bg-success-subtle text-danger"
+                                                      >Giao hàng thất bại</span>
+                `;
+            }
+            if (address) {
+                let addressDetail;
+                let reason;
+                if (note === null) {
+                    reason = ``;
+                } else {
+                    reason = `
+                    <br disabled>
+                    <br disabled>
+                    <div class="row" id="reason-label">
+                           <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block text-danger">
+                                Lý do huỷ/giao thất bại :</span>
+                           </div>
+                    </div>
+                    <div class="form-floating mb-3" id="reason-text" style="padding-left: 0px">
+                      <textarea class="form-control" placeholder="Leave a comment here" id="reason-fail" style="height: 100px" disabled>${note}</textarea>
+                    </div>
+                    `;
+                }
+                if (isNaN(address.diaChiCuThe.charAt(0))) {
+                    addressDetail = address.diaChiCuThe.charAt(0).toUpperCase() + address.diaChiCuThe.slice(1);
+                } else {
+                    addressDetail = address.diaChiCuThe;
+                }
+                let name;
+                if (address.tenNguoiNhan === null) {
+                    name = customer.hoTen;
+                } else {
+                    name = address.tenNguoiNhan;
+                }
+                document.getElementById('address').innerHTML = `
+                        <div class="col-lg-12">
+                            <div class="card border-0">
+                                <br>
+                                <label class="form-label">
+                                    <div class="row">
+                                        <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block">Địa chỉ nhận hàng</span></div>
+                                    </div>
+                                    <span class="fs-14 mb-2 d-block fw-semibold">${name}</span>
+                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${address.ttp + ', ' + address.qh + ', ' + address.xp + '.'}</span>
+                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${addressDetail + '.'}</span>
+                                    <span class="text-muted fw-normal d-block">${address.sdtNguoiNhan}</span>
+                                    ${reason}
+                                </label>
+                            </div>
+                        </div>`;
+            } else {
+                if (data[0].dh.tienKhachTra !== null) {
+                    if (data[0].dh.kh !== null) {
+                        document.getElementById('address').innerHTML = `
+                        <div class="col-lg-12">
+                                    <div class="card border-0">
+                                        <br>
+                                        <label class="form-label">
+                                            <div class="row">
+                                                <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block">Thông tin khách hàng</span></div>
+                                            </div>
+                                            <span class="text-muted fw-normal text-wrap mb-1 d-block">Họ Tên : ${data[0].dh.kh.hoTen}</span>
+                                            <span class="text-muted fw-normal text-wrap mb-1 d-block">Số Điện Thoại : ${data[0].dh.kh.sdt}</span>
+                                            <span class="text-muted fw-normal text-wrap mb-1 d-block">Email : ${data[0].dh.kh.email}</span>
+                                        </label>
+                                    </div>
+                                </div>`;
+                    }
+                }
+            }
+            handleStatusInvoice(order_status, order_id);
+            document.getElementById('products-list').innerHTML = main;
+            document.getElementById('sub-total').innerHTML = sub_total;
+            if (hideShippingFee === true) {
+                document.getElementById('money-ship').classList.add('d-none');
+            }
+            document.getElementById('invoice-no').innerText = data[0].dh.maDonHang;
+            document.getElementById('invoice-date').innerText = momentDate.format('DD/MM/YYYY HH:mm');
+            document.getElementById('payment-status').innerHTML = status;
+            document.getElementById('total-amount').innerText = formatmoney(total_amount);
+            if (shipp_fee !== null) {
+                document.getElementById('shipping-fee').value = formatmoney(shipp_fee);
+                document.getElementById('shipping-fee').style.paddingRight = '0';
+                document.getElementById('shipping-fee').classList.add('text-end');
+            }
+            if (data[0].dh.trangThai === 3 || data[0].dh.trangThai === 4
+                || data[0].dh.trangThai === 5 || data[0].dh.trangThai === 6) {
+                let arr_btn_plus = document.querySelectorAll('.plus');
+                arr_btn_plus.forEach(function (item) {
+                    item.style.display = 'none';
+                })
+                let arr_btn_minus = document.querySelectorAll('.minus');
+                arr_btn_minus.forEach(function (item) {
+                    item.style.display = 'none';
+                })
+                let input_step = document.querySelectorAll('.input-step');
+                input_step.forEach(function (item) {
+                    item.style.border = 'none';
+                })
+                let input_quantity = document.querySelectorAll('.product-quantity');
+                input_quantity.forEach(function (item) {
+                    item.style.border = 'none';
+                    item.disabled = true;
+                })
+                let action_row = document.querySelectorAll('.hidden-action');
+
+                action_row.forEach(function (item) {
+                    item.style.display = 'none';
+                })
+
+                let shipp = document.getElementById('shipping-fee');
+                shipp.classList.add('border-0');
+                shipp.style.paddingRight = '0';
+                shipp.classList.add('text-end');
+                shipp.disabled = true;
+
+                shipp.addEventListener('click', function () {
+                    console.log("was run");
+                    shipp.classList.remove('border-0');
+                    shipp.style.paddingRight = '10';
+                    shipp.classList.remove('text-end');
+                });
+                shipp.addEventListener('focus', function () {
+                    console.log("was run");
+                    shipp.classList.remove('border-0');
+                    shipp.style.paddingRight = '10';
+                    shipp.classList.remove('text-end');
+                });
+
+                document.getElementById('add-product').innerHTML = ``;
+            } else {
+                let shipp = document.getElementById('shipping-fee');
+                shipp.addEventListener('click', function () {
+                    shipp.classList.remove('border-0');
+                    shipp.style.paddingRight = '10';
+                    shipp.classList.remove('text-end');
+                });
+                shipp.addEventListener('focus', function () {
+                    shipp.classList.remove('border-0');
+                    shipp.style.paddingRight = '10';
+                    shipp.classList.remove('text-end');
+                });
+
+                document.getElementById('add-product').innerHTML = add_product;
+
+                let action_row = document.querySelectorAll('.hidden-action');
+
+                action_row.forEach(function (item) {
+                    item.style.display = 'block';
+                })
+            }
+            $('#myModal').modal('show');
+        }
+    }
+
+    function handleShippingFee(id_order, shipping_fee) {
+        let ship = document.getElementById('shipping-fee').value;
+        const numberRegex = /^(0|[1-9]\d{3,5}|1000000)$/;
+        if (ship !== '') {
+            let filteredString = ship.replace(/[.₫\s]/g, "");
+            console.log("after filter : ", filteredString)
+            if (!numberRegex.test(filteredString)) {
+                swal.fire({
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    title: 'Phí ship không hợp lệ!',
+                    text: 'Phí ship có thể nhập 0, hoặc 1.000đ -> 1.000.000đ!'
+                })
+                document.getElementById('shipping-fee').value = '';
+            } else {
+                document.getElementById('shipping-fee').value = formatmoney(filteredString);
+                if (parseInt(filteredString) === parseInt(shipping_fee)) {
+                    return;
+                }
+                $.ajax({
+                    url: '/api/admin/invoice/calculate/' + id_order + '?shipping_fee=' + filteredString + '&shipping_fee_before=' + shipping_fee,
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        if (response === 'success') {
+                            loadPage(0);
+                            detailInvoice(idInvoice);
+                        }
+                        if (response === 'failure') {
+                            swal.fire({
+                                icon: 'error',
+                                title: 'Thông Báo',
+                                text: 'Phí Ship Bạn Nhập Không Hợp Lệ!'
+                            })
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                })
+
+            }
+        }
+    }
+
+    function printModal() {
+        document.getElementById('layout-wrapper').style.display = 'none';
+        document.getElementById('statusButtonGroup').style.display = 'none';
+        if (document.getElementById('reason-label')) {
+            document.getElementById('reason-label').style.display = 'none';
+        }
+        window.print();
+        document.getElementById('layout-wrapper').style.display = 'block';
+        document.getElementById('statusButtonGroup').style.display = 'block';
+        if (document.getElementById('reason-label')) {
+            document.getElementById('reason-label').style.display = 'block';
+        }
+    }
+
+    function handleStatusInvoice(status, id_order) {
+        let buttonGroup = '';
+        if (status === 1) {
+            buttonGroup = `
+                <button class="btn btn-success" onclick="handleInvoice(2,${id_order})"><i
+                     class="ri-check-line align-bottom me-1"></i> Xác Nhận
+                </button>
+                <button class="btn btn-danger" onclick="handleInvoice(6,${id_order})"><i
+                     class="ri-close-line align-bottom me-1"></i> Huỷ
+                </button>
+            `;
+            document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
+        } else if (status === 2) {
+            buttonGroup = `
+                <button class="btn btn-success" onclick="handleInvoice(3,${id_order})"><i
+                     class="ri-truck-fill align-bottom me-1"></i> Giao Hàng
+                </button>
+                <button class="btn btn-danger" onclick="handleInvoice(6,${id_order})"><i
+                     class="ri-close-line align-bottom me-1"></i> Huỷ
+                </button>
+            `;
+            document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
+        } else if (status === 3) {
+            buttonGroup = `
+                <button class="btn btn-success" onclick="handleInvoice(4,${id_order})"><i
+                     class="ri-check-line align-bottom me-1"></i> Giao Thành Công
+                </button>
+                 <button class="btn btn-danger" onclick="handleInvoice(5,${id_order})"><i
+                     class="ri-error-warning-fill align-bottom me-1"></i> Giao Thất Bại
+                </button>
+            `;
+            document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
+        } else {
+            document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
+        }
+    }
+
+    async function handleCancelInvoice() {
+        let status = document.getElementById('status-input').value;
+        let id = document.getElementById('id-input').value;
+        let regex = /^(?!\s)[\s\S\s]{0,199}$/;
+        let staff_id = localStorage.getItem("adminId");
+        let input = document.getElementById('reason-input').value;
+        if (input.length === 0) {
+            document.getElementById('valid-reason').innerText = 'Vui lòng nhập lí do!';
+            return;
+        }
+        if (!regex.test(input)) {
+            document.getElementById('valid-reason').innerText = 'Vui lòng nhập lí do hợp lệ!';
+        } else {
+            $.ajax({
+                url: '/api/admin/invoice/change-status/' +
+                    id + '?status=' + status + '&idStaff=' + staff_id + '&reason=' + input,
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: function (response) {
+                    console.log(response)
+                    if (response.statusText === 'success') {
+                        swal.fire({
+                            icon: 'success',
+                            title: 'Thông Báo',
+                            text: 'Chuyển Trạng Thái Thành Công!'
+                        }).then(() => {
+                            $('#myModal').modal('hide');
+                            $('#modal-reason').modal('hide');
+                            loadPage();
+                        })
+                    }
+                    if (response.statusText === 'failure') {
+                        if (response.message === 'The status has been switched before') {
+                            swal.fire({
+                                icon: 'warning',
+                                title: 'Thông Báo',
+                                text: 'Đơn Hàng Đã Được Chuyển Trạng Thái Trước Đó!'
+                            }).then(() => {
+                                $('#myModal').modal('hide');
+                                $('#modal-reason').modal('hide');
+                                loadPage();
+                            })
+                        } else if (response.message === 'Shipping fee is null') {
+                            swal.fire({
+                                icon: 'warning',
+                                title: 'Thông Báo',
+                                text: 'Vui Lòng Nhập Phí Vận Chuyển!'
+                            })
+                        } else {
+                            swal.fire({
+                                icon: 'warning',
+                                title: 'Thông Báo',
+                                text: 'Đơn Hàng Không Thể Chuyển Trạng Thái!'
+                            }).then(() => {
+                                $('#myModal').modal('hide');
+                                $('#modal-reason').modal('hide');
+                                loadPage();
+                            })
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            })
+        }
+    }
+
+    $('#modal-reason').on('hidden.bs.modal', function (e) {
+        loadPage(0);
+        detailInvoice(idInvoice);
+    });
+
+    function showModalReason(status, id) {
+        $('#modal-reason').modal('show');
+        $('#myModal').modal('hide');
+        document.getElementById('status-input').value = status;
+        document.getElementById('id-input').value = id;
+    }
+
+    async function handleInvoice(status, id) {
+        let ship = document.getElementById('shipping-fee').value;
+        let staff_id = localStorage.getItem("adminId");
+        let alert_message = '';
+        if (parseInt(status) === 2) {
+            alert_message = "Bạn Muốn Xác Nhận Đơn Hàng ?"
+        } else {
+            alert_message = "Bạn Muốn Chuyển Trạng Thái Đơn Hàng ?"
+        }
+        swal.fire({
+            icon: 'question',
+            title: 'Thông báo',
+            text: alert_message,
+            confirmButtonText: 'Có',
+            showCancelButton: true,
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (parseInt(status) === 3 && ship === '') {
+                swal.fire({
+                    icon: 'warning',
+                    title: 'Thông báo',
+                    text: 'Bạn chưa nhập phí ship!',
+                    confirmButtonText: 'OK'
+                })
+                return;
+            }
+            if (result.isConfirmed) {
+                if (parseInt(status) === 6 || parseInt(status) === 5) {
+                    showModalReason(status, id);
+                } else {
+                    $.ajax({
+                        url: '/api/admin/invoice/change-status/' +
+                            id + '?status=' + status + '&idStaff=' + staff_id,
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        success: function (response) {
+                            console.log(response)
+                            if (response.statusText === 'success') {
+                                swal.fire({
+                                    icon: 'success',
+                                    title: 'Thông Báo',
+                                    text: 'Chuyển Trạng Thái Thành Công!'
+                                }).then(() => {
+                                    $('#myModal').modal('hide');
+                                    loadPage();
+                                })
+                            } else if (response.statusText === 'failure') {
+                                if (response.message === 'The status has been switched before') {
+                                    swal.fire({
+                                        icon: 'warning',
+                                        title: 'Thông Báo',
+                                        text: 'Đơn Hàng Đã Được Chuyển Trạng Thái Trước Đó!'
+                                    }).then(() => {
+                                        $('#myModal').modal('hide');
+                                        loadPage();
+                                    })
+                                }
+                                if (response.message === 'Shipping fee is null') {
+                                    swal.fire({
+                                        icon: 'warning',
+                                        title: 'Thông Báo',
+                                        text: 'Vui Lòng Nhập Phí Vận Chuyển!'
+                                    })
+                                }
+                            } else {
+                                let message = `
+                                    <table class="table align-middle table-borderless table-nowrap text-center mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-start">Sản Phẩm</th>
+                                                <th class="text-start">Size & Màu Sắc</th>
+                                                <th class="text-start">Số Lượng Tồn</th>
+                                            </tr>
+                                        </thead>`;
+                                response.forEach(function (item) {
+                                    message +=
+                                        `<tbody>
+                                        <td class="text-start"> ${item.ten}  </td>
+                                        <td class="text-start"> ${item.ms_size} </td>
+                                        <td class="text-start"> ${item.sl_ton} Sản Phẩm </td>
+                                    </tbody>`;
+                                });
+                                message += `</table>`;
+                                swal.fire({
+                                    title: 'Có 1 Vài Sản Phẩm Đã Hết Hoặc Đạt Giới Hạn Mua!',
+                                    icon: 'warning',
+                                    html: message,
+                                    width: 700,
+                                    confirmButtonText: "Tôi đã biết!",
+                                })
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+
+    function addQuantity(id) {
+        let url = '';
+        if (id_promotion === null) {
+            url = '/api/admin/invoice/add-quantity/' + id;
+        } else {
+            url = '/api/admin/invoice/add-quantity/' + id + '?promotion=' + id_promotion;
+        }
+        $.ajax({
+            url: url === '' ? '/api/admin/invoice/add-quantity/' + id : url,
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            success: function (response) {
+                console.log('response add ' + response);
+                if (response === "success") {
+                    loadPage(indexCurrentPage);
+                    detailInvoice(idInvoice);
+                }
+                if (response === "failure") {
+                    swal.fire({
+                        icon: "warning",
+                        title: "Thông Báo",
+                        text: "Sản phẩm đã hết hàng!",
+                        confirmButtonText: "OK",
+                    })
+                }
+                if (response === "no-status") {
+                    swal.fire({
+                        icon: "warning",
+                        title: "Thông Báo",
+                        text: "Không thể thêm số lượng sản phẩm cho đơn hàng này!",
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            loadPage(indexCurrentPage);
+                            detailInvoice(idInvoice);
+                        }
+                    });
+                }
+                if (response === "out of quantity") {
+                    swal.fire({
+                        icon: "warning",
+                        title: "Thông Báo",
+                        text: "Số lượng của sản phẩm này trong đơn hàng đã bằng với số lượng trên hệ thống!",
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            loadPage(indexCurrentPage);
+                            detailInvoice(idInvoice);
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function minusQuantity(id, count) {
+        let url = '';
+        if (id_promotion === null) {
+            url = '/api/admin/invoice/minus-quantity/' + id;
+        } else {
+            url = '/api/admin/invoice/minus-quantity/' + id + '?promotion=' + id_promotion;
+        }
+        console.log(url);
+        if (count === 1) {
+            swal.fire({
+                icon: 'question',
+                title: "Thông Báo",
+                text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Đơn Hàng?",
+                confirmButtonText: "Xoá",
+                showCancelButton: true,
+                cancelButtonText: 'Không'
+            }).then((result) => {
+                if (result.isConfirmed === true) {
+                    $.ajax({
+                        url: url === '' ? '/api/admin/invoice/minus-quantity/' + id : url,
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if (response === "deletion all success") {
+                                swal.fire({
+                                    icon: "success",
+                                    title: "Xoá Thành Công!",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadPage(indexCurrentPage);
+                                        detailInvoice(idInvoice);
+                                    }
+                                });
+                            }
+                            if (response === "success") {
+                                swal.fire({
+                                    icon: "warning",
+                                    text: "Chưa thể xoá sản phẩm do có 1 nhân viên nào đó đã thêm số lượng sản phẩm này!",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadPage(indexCurrentPage);
+                                        detailInvoice(idInvoice);
+                                    }
+                                });
+                            }
+                            if (response === "no-status") {
+                                swal.fire({
+                                    icon: "warning",
+                                    title: "Thông Báo",
+                                    text: "Không thể giảm số lượng sản phẩm cho đơn hàng này!",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadPage(indexCurrentPage);
+                                        detailInvoice(idInvoice);
+                                    }
+                                });
+                            }
+                            if (response === "cannot be deleted") {
+                                swal.fire({
+                                    icon: "warning",
+                                    title: "Thông Báo",
+                                    text: "Không thể xoá sản phẩm này khỏi đơn hàng!",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadPage(indexCurrentPage);
+                                        detailInvoice(idInvoice);
+                                    }
+                                });
+                            }
+                            if (response === "not exist") {
+                                swal.fire({
+                                    icon: "warning",
+                                    title: "Thông Báo",
+                                    text: "Sản phẩm trong đơn hàng này đã có 1 nhân viên xoá trước đó!",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadPage(indexCurrentPage);
+                                        detailInvoice(idInvoice);
+                                    }
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+        } else {
+            $.ajax({
+                url: url === '' ? '/api/admin/invoice/minus-quantity/' + id : url,
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response === "success") {
+                        loadPage(indexCurrentPage);
+                        detailInvoice(idInvoice);
+                    }
+                    if (response === "no-status") {
+                        swal.fire({
+                            icon: "warning",
+                            title: "Thông Báo",
+                            text: "Không thể giảm số lượng sản phẩm cho đơn hàng này!",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                loadPage(indexCurrentPage);
+                                detailInvoice(idInvoice);
+                            }
+                        });
+                    }
+                    if (response === "cannot be deleted") {
+                        swal.fire({
+                            icon: "warning",
+                            title: "Thông Báo",
+                            text: "Không thể xoá sản phẩm này khỏi đơn hàng!",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                loadPage(indexCurrentPage);
+                                detailInvoice(idInvoice);
+                            }
+                        });
+                    }
+                    if (response === "deletion all success") {
+                        swal.fire({
+                            icon: "warning",
+                            title: "Thông Báo",
+                            text: "Có nhân viên đã giảm số lượng sản phẩm còn 1 trước đó. Nên sản phẩm đã bị xoá khỏi đơn hàng!",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                loadPage(indexCurrentPage);
+                                detailInvoice(idInvoice);
+                            }
+                        });
+                    }
+                    if (response === "not exist") {
+                        swal.fire({
+                            icon: "warning",
+                            title: "Thông Báo",
+                            text: "Sản phẩm trong đơn hàng đã có 1 nhân viên xoá trước đó!",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                loadPage(indexCurrentPage);
+                                detailInvoice(idInvoice);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+
+    function handleExitInput(id, index, quantity) {
+        const regex = /^-?\d+$/;
+        var count = document.getElementById('input-count-' + index).value;
+        if (regex.test(count)) {
+            if (parseInt(count) === parseInt(quantity)) {
+                return;
+            }
+            $.ajax({
+                url: '/api/admin/invoice/edit-quantity/' + id + '?quantity=' + count,
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response !== "success") {
+                        swal.fire({
+                            text: response,
+                            icon: "warning",
+                            confirmButtonText: 'OK!'
+                        }).then(() => {
+                            loadPage(indexCurrentPage);
+                            detailInvoice(idInvoice);
+                        })
+                    }
+                    loadPage(indexCurrentPage);
+                    detailInvoice(idInvoice);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        } else {
+            swal.fire({
+                title: "Hãy nhập số!",
+                icon: "warning",
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('input-count-' + index).value = quantity;
+                }
+            })
+        }
+    }
+
+    function deleteInvoiceDetail(id) {
+        swal.fire({
+            title: "Thông Báo",
+            icon: 'question',
+            text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Đơn Hàng?",
+            showCancelButton: true,
+            confirmButtonText: "Xoá",
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/admin/invoice/delete-invoice-detail/' + id,
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        if (response === "success") {
+                            swal.fire({
+                                title: 'Thông Báo',
+                                text: 'Xoá Thành Công',
+                                icon: "success",
+                                confirmButtonText: 'OK!'
+                            }).then(() => {
+                                loadPage(indexCurrentPage);
+                                detailInvoice(idInvoice);
+                            })
+                        } else if (response === "no-status") {
+                            swal.fire({
+                                title: 'Thông Báo',
+                                text: 'Không thể xoá sản phẩm này khỏi đơn hàng!',
+                                icon: "warning",
+                                confirmButtonText: 'OK!'
+                            }).then(() => {
+                                loadPage(indexCurrentPage);
+                                detailInvoice(idInvoice);
+                            })
+                        } else if (response === "error") {
+                            swal.fire({
+                                title: 'Thông Báo',
+                                text: 'Không thể xoá sản phẩm này khỏi đơn hàng!',
+                                icon: "warning",
+                                confirmButtonText: 'OK!'
+                            }).then(() => {
+                                loadPage(indexCurrentPage);
+                                detailInvoice(idInvoice);
+                            })
+                        } else {
+                            swal.fire({
+                                title: 'Thông Báo',
+                                text: 'Sản Phẩm Đã Được Xoá Khỏi Đơn Hàng Trước Đó!',
+                                icon: "warning",
+                                confirmButtonText: 'OK!'
+                            }).then(() => {
+                                loadPage(indexCurrentPage);
+                                detailInvoice(idInvoice);
+                            })
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+    }
+
+    async function addToInvoiceDetail(id) {
+        console.log(idInvoice, id);
+        if (id === undefined) {
+            swal.fire({
+                title: "Bạn Chưa Chọn Sản Phẩm!",
+                icon: "warning",
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: "OK",
+            })
+        } else {
+            $.ajax({
+                url: '/api/admin/invoice/add-to-invoice-detail/' + idInvoice + '/' + id,
+                method: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response === "success") {
+                        swal.fire({
+                            text: "Thêm Thành Công!",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        }).then(() => {
+                            $('#modal_product').modal('hide');
+                        })
+                    } else if (response === "failure") {
+                        swal.fire({
+                            title: "Thông Báo",
+                            text: "Đơn Hàng Không Tồn Tại!",
+                            icon: "error",
+                            showConfirmButton: true,
+                            confirmButtonText: "OK",
+                        }).then(() => {
+                            loadPage(indexCurrentPage);
+                        })
+                    } else if (response === "quantity-zero") {
+                        swal.fire({
+                            title: "Thông Báo",
+                            text: "Sản phẩm đã hết hàng!",
+                            icon: "warning",
+                            showConfirmButton: true,
+                            confirmButtonText: "OK",
+                        }).then(() => {
+                            loadProductDetail(indexCurrentPageProduct);
+                        })
+                    } else if (response === "no-status") {
+                        swal.fire({
+                            title: "Thông Báo",
+                            text: "Không thể thêm sản phẩm cho đơn hàng!",
+                            icon: "warning",
+                            showConfirmButton: true,
+                            confirmButtonText: "OK",
+                        }).then(() => {
+                            $('#modal_product').modal('hide');
+                        })
+                    } else {
+                        swal.fire({
+                            title: "Thông Báp",
+                            text: "Sản Phẩm Đã Có Trong Đơn Hàng!",
+                            icon: "warning",
+                            showConfirmButton: true,
+                            confirmButtonText: "OK",
+                        })
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+</script>
+</html>

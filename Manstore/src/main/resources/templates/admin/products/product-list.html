@@ -1,0 +1,1974 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
+          integrity="sha512-dUOcWaHA4sUKJgO7lxAQ0ugZiWjiDraYNeNJeRKGOIpEq4vroj1DpKcS3jP0K4Js4v6bXk31AAxAxaYt3Oi9xw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css">
+</head>
+<body>
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row" style="padding: 10px 10px">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Danh Sách Sản Phẩm</h4>
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Sản Phẩm</a></li>
+                                    <li class="breadcrumb-item active">Danh Sách Sản Phẩm</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row" style="padding: 10px 10px">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8 d-flex justify-content-center align-items-center ">
+                                        <div class="row w-100" style="padding-bottom: 10px">
+                                            <div class="col-md-2">
+                                                <label class="form-label">Sắp Xếp</label>
+                                                <select class="form-control mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="sort"
+                                                        onchange="loadPage(0)">
+                                                    <option value="ngayTao,desc" selected>Mới nhất</option>
+                                                    <option value="ngayTao,asc">Cũ nhất</option>
+                                                    <option value="donGia,desc">Giá giảm dần</option>
+                                                    <option value="donGia,asc">Giá tăng dần</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">Danh Mục</label>
+                                                <select class="form-control mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="filter-collections"
+                                                        onchange="loadPage(0)">
+                                                    <option value="-1" selected>Tất Cả</option>
+                                                    <option value="0">Quần</option>
+                                                    <option value="1">Áo</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">Trạng Thái</label>
+                                                <select class="form-control mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="filter-status"
+                                                        onchange="loadPage(0)">
+                                                    <option value="-1" selected>Tất Cả</option>
+                                                    <option value="0">Chưa Mở Bán</option>
+                                                    <option value="1">Đang Mở Bán</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Nhà Cung Cấp</label>
+                                                <select class="form-control mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="filter-supplier"
+                                                        onchange="loadPage(0)">
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Thương Hiệu</label>
+                                                <select class="form-control mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="filter-trademark"
+                                                        onchange="loadPage(0)">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 d-flex justify-content-center align-items-center p-0">
+                                        <div class="col-md-4">
+                                            <div class="search-box ms-2">
+                                                <input type="text" class="form-control" autocomplete="off"
+                                                       id="search-product-input" placeholder="Tìm Kiếm"
+                                                       onkeyup="loadPage(0)"/>
+                                                <i class="ri-search-line search-icon"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex justify-content-center align-items-cente">
+                                            <button class="btn btn-primary" onclick="resetFilter()"><i
+                                                    class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a th:href="@{/admin/product/create_product}" class="btn btn-success"
+                                               id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm
+                                                Sản
+                                                Phẩm</a>
+                                        </div>
+                                    </div>
+
+                                    <!--                                    <div class="col-md-2 d-flex justify-content-center align-items-center "-->
+                                    <!--                                         style="padding: 0 0">-->
+                                    <!--                                        <a th:href="@{/admin/product/create_product}" class="btn btn-success"-->
+                                    <!--                                           id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Thêm-->
+                                    <!--                                            Sản-->
+                                    <!--                                            Phẩm</a>-->
+                                    <!--                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-2">
+                            <div id="product-list" class="gridjs-border-none mb-4">
+                                <table class="table table-striped">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Tên</th>
+                                        <th scope="col">Số Lượng</th>
+                                        <th scope="col">Đơn Giá</th>
+                                        <th scope="col">Danh Mục</th>
+                                        <th scope="col">Nhà Cung Cấp</th>
+                                        <th scope="col">Thương Hiệu</th>
+                                        <th scope="col">Trạng Thái</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="font-weight: normal" id="list_Product">
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-1"></div>
+                                    <div class="col-lg-4">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-center" id="pagination">
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <div class="modal" id="myModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Chi Tiết Sản Phẩm</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="update-form" action="" class="my-form" method="post">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm">
+                                                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                                        <i class="bi bi-list-ul"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-1">General Information</h5>
+                                                <p class="text-muted mb-0">Fill all information below.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row ">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="product-name-update-input">Tên Sản
+                                                        Phẩm</label>
+                                                    <input type="text" class="form-control"
+                                                           id="product-name-update-input"
+                                                           placeholder="Enter product name" onkeyup="validName()">
+                                                </div>
+                                                <span id="error-name-update" class="text-danger fw-bold"></span>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nhà Cung Cấp</label>
+                                                    <select class="form-select mb-3"
+                                                            aria-label=".form-select-lg example"
+                                                            id="product-provider-update-input"
+                                                            onchange="validProvider()">
+                                                    </select>
+                                                    <span id="error-provider-update" class="text-danger fw-bold"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end row -->
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Danh Mục</label>
+                                                    <select class="form-select mb-3"
+                                                            aria-label=".form-select-lg example"
+                                                            id="product-collections-update-input"
+                                                            onchange="validCollections()">
+                                                        <option selected value="-1">Open this select menu</option>
+                                                        <option value="0">Quần</option>
+                                                        <option value="1">Áo</option>
+                                                    </select>
+                                                    <span id="error-collections-update"
+                                                          class="text-danger fw-bold"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Trang Thái</label>
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" type="radio"
+                                                               id="radioStatus1"
+                                                               value="0" name="status-update">
+                                                        <label class="form-check-label" for="radioStatus1">
+                                                            Chưa Mở Bán
+                                                        </label>
+                                                        <br>
+                                                        <input class="form-check-input" type="radio"
+                                                               id="radioStatus2"
+                                                               value="1" name="status-update">
+                                                        <label class="form-check-label" for="radioStatus2">
+                                                            Đang Mở Bán
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end row-->
+
+                                        <div class="row">
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div class="md-3">
+                                                    <label class="form-label">Thương Hiệu</label>
+                                                    <select class="form-select mb-3"
+                                                            aria-label=".form-select-lg example"
+                                                            id="product-brand-update-input"
+                                                            onchange="validBrand()">
+                                                    </select>
+                                                    <span id="error-brand-update" class="text-danger fw-bold"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label"
+                                                           for="product-price-update-input">Giá</label>
+                                                    <div class="input-group has-validation mb-3">
+                                                        <span class="input-group-text"
+                                                              id="product-price-addon">VND</span>
+                                                        <input type="text" class="form-control"
+                                                               id="product-price-update-input"
+                                                               placeholder="Enter price" aria-label="Price"
+                                                               aria-describedby="product-price-addon"
+                                                               required onkeyup="validPrice()">
+                                                    </div>
+                                                </div>
+                                                <span id="error-price-update"
+                                                      class="text-danger fw-bold"></span>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="product-type-update-input">Môn Thể
+                                                        Thao</label>
+                                                    <select class="form-select mb-3"
+                                                            aria-label=".form-select-lg example"
+                                                            id="product-type-update-input"
+                                                            onchange="validType()">
+                                                    </select>
+                                                    <span id="error-type-update" class="text-danger fw-bold"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end col -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Đóng
+                                        </button>
+                                        <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">
+                                            Lưu
+                                        </button>
+                                    </div>
+                                    <!-- end row -->
+                                </div>
+                            </form>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+            </div>
+            <!--end modal-->
+            <div class="modal" id="myModalTable" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Danh Sách Sản Phẩm Chi Tiết</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card p-2" style="height: 115px;">
+                                <div class="row">
+                                    <div class="col-md-6 d-flex justify-content-center align-items-center justify-content-sm-start">
+                                        <button class="btn btn-success"
+                                                id="add-product-detail-btn" onclick="showModalAddProductDetail()">
+                                            <i class="ri-add-line align-bottom me-1"></i>
+                                            Thêm Sản Phẩm Chi Tiết
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-center align-items-center justify-content-sm-between">
+                                        <div class="row" style="padding-bottom: 10px">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Màu Sắc</label>
+                                                <select class="form-select mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="filter-color"
+                                                        onchange="viewProductDetail(idProduct,undefined)">
+                                                    <option value="0" selected>Tất Cả</option>
+                                                    <option value="1">Đen</option>
+                                                    <option value="2">Trắng</option>
+                                                    <option value="3">Đỏ</option>
+                                                    <option value="4">Xám</option>
+                                                    <option value="5">Xanh Lục</option>
+                                                    <option value="6">Tím Xanh</option>
+                                                    <option value="7">Xanh Da Trời</option>
+                                                    <option value="8">Vàng</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Size</label>
+                                                <select class="form-select mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="filter-size"
+                                                        onchange="viewProductDetail(idProduct,undefined)">
+                                                    <option value="0" selected>Tất Cả</option>
+                                                    <option value="s">S</option>
+                                                    <option value="m">M</option>
+                                                    <option value="l">L</option>
+                                                    <option value="xl">XL</option>
+                                                    <option value="xxl">XXL</option>
+                                                    <option value="2xl">2XL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card p-2">
+                                <div id="product-detail-list" class="gridjs-border-none mb-4">
+                                    <table class="table table-striped">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Màu Sắc</th>
+                                            <th scope="col">Size</th>
+                                            <th scope="col">Số Lượng</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody style="font-weight: normal" id="list_Product_Detail">
+                                        </tbody>
+                                    </table>
+                                    <div class="row">
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-1"></div>
+                                        <div class="col-lg-4">
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination justify-content-center" id="pagination2">
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                        <div class="col-lg-3"></div>
+                                        <div class="col-lg-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="myModalView" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thêm Sản Phẩm Chi Tiết</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="margin-bottom: 20px;">
+                <form id="save_product_detail" action="" class="my-form" method="post">
+                    <div class="card p-2" style="height: 115px;">
+                        <div class="row">
+                            <div class="col-md-5 d-flex" style="padding-top: 25px;">
+                                <div class="flex-shrink-0 me-3 ms-auto">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="bi bi-list-ul"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">General Information</h5>
+                                    <p class="text-muted mb-0">Fill all information below.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-7 d-flex justify-content-center align-items-center justify-content-sm-between">
+                                <div class="row" style="padding-bottom: 10px">
+                                    <div class="col-md-6">
+                                    </div>
+                                    <div class="col-md-6">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-2">
+                        <div class="row ">
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Tên Sản Phẩm</label>
+                                    <input type="text" class="form-control" id="product-detail-name-input"
+                                           placeholder="Enter product name" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <div class="col-xl-6">
+                                        <div class="color-picker">
+                                            <label class="form-label">Màu Sắc</label>
+                                            <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
+                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="Xanh Lục Bảo">
+                                                    <input type="checkbox" value="5" id="color-1"
+                                                           name="product-color-input">
+                                                    <label class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                           for="color-1"></label>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="Xám">
+                                                    <input type="checkbox" value="4" id="color-2"
+                                                           name="product-color-input">
+                                                    <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                           for="color-2"
+                                                           style="background-color: rgb(169,169,169); border: none;"></label>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="Vàng">
+                                                    <input type="checkbox" value="8" id="color-3"
+                                                           name="product-color-input">
+                                                    <label class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                           for="color-3"></label>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                    data-bs-placement="top" data-bs-original-title="Đỏ">
+                                                    <input type="checkbox" value="3" id="color-4"
+                                                           name="product-color-input">
+                                                    <label class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                           for="color-4"></label>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="Xanh Da Trời">
+                                                    <input type="checkbox" value="7" id="color-5"
+                                                           name="product-color-input">
+                                                    <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                           for="color-5"></label>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="Tím Xanh">
+                                                    <input type="checkbox" value="6"
+                                                           id="color-6" name="product-color-input">
+                                                    <label class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                           for="color-6"
+                                                           data-bs-original-title="Tím Xanh"></label>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="Đen">
+                                                    <input type="checkbox" value="1" id="color-7"
+                                                           name="product-color-input">
+                                                    <label class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                           for="color-7"></label>
+                                                </li>
+                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                    data-bs-placement="top"
+                                                    data-bs-original-title="Trắng">
+                                                    <input type="checkbox" value="2" id="color-8"
+                                                           name="product-color-input">
+                                                    <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                           for="color-8"></label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                        <div class="row">
+                            <div class="col-lg-6" style="padding-top: 20px">
+                                <div class="mb-3">
+                                    <label class="form-label">Số Lượng</label>
+                                    <input type="text" class="form-control"
+                                           id="product-detail-count-input"
+                                           placeholder="Enter count" aria-label="Count"
+                                           aria-describedby="product-count-addon"
+                                           required th:name="soLuong">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <div class="col-xl-6">
+                                        <div class="mt-4">
+                                            <label class="form-label">Size :</label>
+                                            <div class="d-flex flex-wrap gap-2 size-picker">
+                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                     data-bs-placement="top">
+                                                    <input type="checkbox" class="btn-check"
+                                                           id="productsize-radio1" value="s"
+                                                           name="product-detail-size-input">
+                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                           for="productsize-radio1">S</label>
+                                                </div>
+
+                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                     data-bs-placement="top">
+                                                    <input type="checkbox" class="btn-check"
+                                                           id="productsize-radio2" value="m"
+                                                           name="product-detail-size-input">
+                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                           for="productsize-radio2">M</label>
+                                                </div>
+                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                     data-bs-placement="top">
+                                                    <input type="checkbox" class="btn-check"
+                                                           id="productsize-radio3" value="l"
+                                                           name="product-detail-size-input">
+                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                           for="productsize-radio3">L</label>
+                                                </div>
+
+                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                     data-bs-placement="top">
+                                                    <input type="checkbox" class="btn-check"
+                                                           id="productsize-radio4" value="xl"
+                                                           name="product-detail-size-input">
+                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                           for="productsize-radio4">XL</label>
+                                                </div>
+                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                     data-bs-placement="top">
+                                                    <input type="checkbox" class="btn-check"
+                                                           id="productsize-radio5" value="xxl"
+                                                           name="product-detail-size-input">
+                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                           for="productsize-radio5">XXL</label>
+                                                </div>
+
+                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                     data-bs-placement="top">
+                                                    <input type="checkbox" class="btn-check"
+                                                           id="productsize-radio6" value="2xl"
+                                                           name="product-detail-size-input">
+                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                           for="productsize-radio6">2XL</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="showConfirmPopupSave()"
+                        id="btnSaveProductDetail">
+                    Lưu
+                </button>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+<div class="modal" id="myModalEdit" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Cập Nhật Sản Phẩm Chi Tiết</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="margin-bottom: 20px;">
+                <form id="edit_product_detail" action="" class="my-form" method="post">
+                    <div class="card p-2" style="height: 100px;">
+                        <div class="row">
+                            <div class="col-md-10 d-flex align-items-center" style="padding-top: 10px">
+                                <div class="flex-shrink-0 me-3 ms-auto">
+                                    <div class="avatar-sm">
+                                        <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                            <i class="ri-file-warning-line"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Chú ý</h5>
+                                    <p class="text-muted mb-0">Khi thay đổi ảnh, tất cả sản phẩm chi tiết có cùng màu đều được thay đổi!</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 d-flex justify-content-center align-items-center justify-content-sm-between">
+                                <div class="row" style="padding-bottom: 10px">
+                                    <div class="col-md-6">
+                                    </div>
+                                    <div class="col-md-6">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-2">
+                        <div class="card-body">
+                            <div class="row ">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tên Sản Phẩm</label>
+                                        <input type="text" class="form-control" id="product-name-input-edit"
+                                               placeholder="Enter product name" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <div class="col-xl-6">
+                                            <div class="color-picker">
+                                                <label class="form-label">Màu Sắc</label>
+                                                <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xanh Lục Bảo">
+                                                        <input type="radio" value="5" id="color-5-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-5-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xám">
+                                                        <input type="radio" value="4" id="color-4-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-4-update"
+                                                               style="background-color: rgb(169,169,169); border: none;"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Vàng">
+                                                        <input type="radio" value="8" id="color-8-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-8-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top" data-bs-original-title="Đỏ">
+                                                        <input type="radio" value="3" id="color-3-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-3-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Xanh Da Trời">
+                                                        <input type="radio" value="7" id="color-7-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-7-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Tím Xanh">
+                                                        <input type="radio" value="6"
+                                                               id="color-6-update" name="ms">
+                                                        <label class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-6-update"
+                                                               data-bs-original-title="Tím Xanh"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Đen">
+                                                        <input type="radio" value="1" id="color-1-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-1-update"></label>
+                                                    </li>
+                                                    <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Trắng">
+                                                        <input type="radio" value="2" id="color-2-update"
+                                                               name="ms">
+                                                        <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                               for="color-2-update"></label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
+
+                            <div class="row">
+                                <div class="col-lg-6" style="padding-top: 20px;">
+                                    <div class="mb-3">
+                                        <label class="form-label">Số Lượng</label>
+                                        <input type="text" class="form-control"
+                                               id="productdetail-count-input-edit"
+                                               placeholder="Enter Count" aria-label="Count"
+                                               aria-describedby="product-count-addon"
+                                               required th:name="soLuong">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <div class="col-xl-6">
+                                            <div class="mt-4">
+                                                <label class="form-label">Size :</label>
+                                                <div class="d-flex flex-wrap gap-2 size-picker">
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-s" value="s"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-s">S</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-m" value="m"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-m">M</label>
+                                                    </div>
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-l" value="l"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-l">L</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-xl" value="xl"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-xl">XL</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-xxl" value="xxl"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-xxl">XXL</label>
+                                                    </div>
+
+                                                    <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                         data-bs-placement="top">
+                                                        <input type="radio" class="btn-check"
+                                                               id="productsize-radio-update-2xl" value="2xl"
+                                                               name="size-update">
+                                                        <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                               for="productsize-radio-update-2xl">2XL</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6" style="padding-top: 20px">
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="inputFile" id="text-label"></label>
+                                        <input type="file" class="form-control" id="inputFile"
+                                               name="file" style="display: none">
+                                        <input id="linkPicture" type="hidden" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" style="padding-top: 20px">
+                                    <div class="input-group mb-3 d-flex justify-content-center align-items-center">
+                                        <img id="preview" src="" style="max-width: 200px; max-height: 100%;">
+                                        <i class="ri-file-image-line" id="icon-default"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary"
+                        onclick="showConfirmPopupUpdate()">
+                    Lưu
+                </button>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+
+<!-- end main content-->
+
+<!-- END layout-wrapper -->
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<!--<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.10.5/sweetalert2.all.min.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+
+    const Toast = swal.mixin({
+        toast: true,
+        position: "top-end",
+        iconColor: "white",
+        customClass: {
+            popup: "colored-toast",
+        },
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+    });
+
+    // lưu page index đang select của table
+    var page;
+
+    var idProduct;
+
+    var idProduct_Detail;
+
+    var pageProduct;
+
+    var pageProductDetail;
+
+    var sourceImg;
+
+    let isPictureUploaded = false;
+
+    window.onload = async function () {
+        await loadSelect();
+        loadPage(0);
+        findType();
+        findDataInSelect();
+    }
+
+    function resetFilter() {
+        document.getElementById('sort').value = 'ngayTao,desc';
+        document.getElementById('filter-collections').value = '-1';
+        document.getElementById('filter-status').value = '-1';
+        document.getElementById('filter-supplier').value = '-1';
+        document.getElementById('filter-trademark').value = '-1';
+
+        loadPage(0);
+    }
+
+    async function loadSelect() {
+
+        let url = '/api/admin/supplier/find-all';
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        })
+
+        const data = await response.json();
+
+        let supplier = '<option value="-1" selected>Tất Cả</option>';
+
+        data.forEach(function (item) {
+            supplier += `<option value="${item.id}">${item.ten}</option>`
+        })
+
+        document.getElementById('filter-supplier').innerHTML = supplier;
+
+        url = '/api/admin/trademark/find-all';
+
+        const response2 = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        })
+
+        const data2 = await response2.json();
+
+        let trademark = '<option value="-1" selected>Tất Cả</option>';
+
+        data2.forEach(function (item) {
+            trademark += `<option value="${item.id}">${item.ten}</option>`
+        })
+
+        document.getElementById('filter-trademark').innerHTML = trademark;
+    }
+
+    function detailProduct(productId) {
+        console.log(productId);
+        fetch('/api/admin/product/detail/' + productId, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            document.getElementById('product-name-update-input').value = data.tenSP;
+            document.getElementById('product-brand-update-input').value = data.thieu.id;
+            document.getElementById('product-collections-update-input').value = data.danhMuc;
+            document.getElementById('product-provider-update-input').value = data.ncc.id;
+            document.getElementById('product-price-update-input').value = data.donGia;
+            document.getElementById('product-type-update-input').value = data.tl.id;
+            idProduct = productId;
+            if (data.trangThai === 0) {
+                document.getElementById('radioStatus1').checked = true;
+            } else if (data.trangThai === 1) {
+                document.getElementById('radioStatus2').checked = true;
+            }
+            document.getElementById('error-name-update').innerText = '';
+            document.getElementById('error-brand-update').innerText = '';
+            document.getElementById('error-provider-update').innerText = '';
+            document.getElementById('error-collections-update').innerText = '';
+            document.getElementById('error-price-update').innerText = '';
+            $('#myModal').modal('show');
+        })
+            .catch(error => console.error('Error:', error));
+    }
+
+    async function editProductDetail(idProductDetail) {
+        try {
+            const response = await fetch('/api/admin/product_detail/detail/' + idProductDetail,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log(data);
+            idProduct_Detail = idProductDetail;
+            document.getElementById('product-name-input-edit').value = data.sp.tenSP;
+            document.getElementById('productdetail-count-input-edit').value = data.soLuong;
+
+            const colorId = data.ms.id;
+            document.getElementById('color-' + colorId + '-update').checked = true;
+
+            const sizeName = data.size;
+            document.getElementById('productsize-radio-update-' + sizeName.toLowerCase()).checked = true;
+
+            const idProduct = data.sp.id;
+            await findPicture(idProduct, colorId);
+            $('#myModalEdit').modal('show');
+            $('#myModalTable').modal('hide');
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    $('#myModalEdit').on('hidden.bs.modal', function (e) {
+        $('#myModalTable').modal('show');
+    });
+
+    async function findPicture(idProduct, idColor) {
+        const pictureResponse = await fetch('/api/admin/product_detail/picture/' + idProduct + '/' + idColor, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        });
+        var labelElement = document.getElementById("text-label");
+        console.log(pictureResponse);
+        if (pictureResponse.status === 200) {
+            const pictureData = await pictureResponse.json();
+            console.log(pictureData);
+
+            document.getElementById("linkPicture").value = pictureData[0].linkAnh;
+            document.getElementById("preview").src = pictureData[0].linkAnh;
+            labelElement.textContent = 'Thay ảnh khác';
+        } else {
+            document.getElementById("linkPicture").value = '';
+            document.getElementById("preview").src = '';
+            document.getElementById("inputFile").src = '';
+            labelElement.textContent = 'Tải ảnh lên';
+        }
+    }
+
+    async function loadPicture(event) {
+
+        var formData = new FormData();
+        formData.append("file", $("#inputFile")[0].files[0]);
+
+        // hiển thị preview sau khi user chọn ảnh
+        var input = event.target;
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            var img = document.getElementById('preview');
+            img.src = reader.result;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+
+        // call api upload file với form data đã tạo trước đó
+        var urlUpload = '/admin/upload-file';
+        isPictureUploaded = true;
+        const res = await fetch(urlUpload, {
+            method: 'POST',
+            body: formData
+        });
+        if (res.status < 300) {
+            const resText = await res.text();
+            document.getElementById("linkPicture").value = resText;
+            sourceImg = resText;
+        }
+        event.target.value = '';
+    }
+
+    document.getElementById('inputFile').addEventListener('change', loadPicture);
+
+    function getDataFromForm() {
+
+        var tenSP = document.getElementById('product-name-update-input').value;
+        var thieu = document.getElementById('product-brand-update-input').value;
+        var danhMuc = document.getElementById('product-collections-update-input').value;
+        var theLoai = document.getElementById('product-type-update-input').value;
+        var trangThai = document.querySelector('input[name="status-update"]:checked').value;
+        var ncc = document.getElementById('product-provider-update-input').value;
+        var donGia = document.getElementById('product-price-update-input').value;
+
+        var formData = {
+            tenSP: tenSP,
+            thieu: thieu,
+            danhMuc: danhMuc,
+            trangThai: trangThai,
+            theLoai: theLoai,
+            ncc: ncc,
+            donGia: donGia
+        };
+
+        return formData;
+    }
+
+    function showConfirmPopup() {
+
+        var data = getDataFromForm();
+
+        var isValid = 0;
+
+        var regex = /^[A-Za-z]/;
+
+        console.log(data);
+
+        if (data.tenSP === '') {
+            document.getElementById('error-name-update').innerText = 'Vui lòng điền tên!';
+            isValid += 1;
+        }
+        if (data.thieu === '-1') {
+            document.getElementById('error-brand-update').innerText = 'Vui lòng chọn thương hiệu!';
+            isValid += 1;
+        }
+        if (data.ncc === '-1') {
+            document.getElementById('error-provider-update').innerText = 'Vui lòng chọn nhà cung cấp!';
+            isValid += 1;
+        }
+        if (data.danhMuc === '-1') {
+            document.getElementById('error-collections-update').innerText = 'Vui lòng chọn danh mục!';
+            isValid += 1;
+        }
+        if (data.theLoai === '-1') {
+            document.getElementById('error-type-update').innerText = 'Vui lòng chọn môn thể thao!';
+            isValid += 1;
+        }
+        if (data.donGia === '') {
+            document.getElementById('error-price-update').innerText = 'Vui lòng điền đơn giá!';
+            isValid += 1;
+        }
+        console.log(isValid);
+        if (isValid === 0) {
+            swal.fire({
+                icon: 'question',
+                title: "Lưu các thay đổi?",
+                showCancelButton: true,
+                confirmButtonText: "Có",
+                cancelButtonText: 'Không'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/admin/product/update/' + idProduct,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
+                        data: JSON.stringify(data),
+                        success: function (response) {
+                            console.log(response);
+                            if (response === 'success') {
+                                swal.fire({
+                                    icon: 'success',
+                                    title: "Cập nhật thành công!",
+                                    confirmButtonText: "Ok",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadPage(page);
+                                        $('#myModal').modal('hide');
+                                    }
+                                });
+                            } else {
+                                for (i = 0; i < response.length; i++) {
+                                    if (response[i].statusText === 'failure') {
+                                        if (response[i].message === 'errorFormatName') {
+                                            if (regex.test(data.tenSP)) {
+                                                (async () => {
+                                                    await Toast.fire({
+                                                        icon: "error",
+                                                        title: "Tên tối thiếu 10 kí tự,tối đa 50 kí tự!",
+                                                    });
+                                                })();
+                                            } else {
+                                                (async () => {
+                                                    await Toast.fire({
+                                                        icon: "error",
+                                                        title: "Tên phải bắt đầu bằng chữ!",
+                                                    });
+                                                    await Toast.fire({
+                                                        icon: "error",
+                                                        title: "Tên tối thiếu 10 kí tự,tối đa 50 kí tự!",
+                                                    });
+                                                })();
+                                            }
+                                        }
+                                        if (response[i].message === 'errorDuplicateName') {
+                                            (async () => {
+                                                await Toast.fire({
+                                                    icon: "error",
+                                                    title: "Tên sản phẩm đã tồn tại!",
+                                                });
+                                            })();
+                                        }
+                                        if (response[i].message === 'errorFormatPrice') {
+                                            (async () => {
+                                                await Toast.fire({
+                                                    icon: "error",
+                                                    title: "Định dạng đơn giá không đúng!",
+                                                });
+                                            })();
+                                        }
+                                        if (response[i].message === 'errorPriceLessThan') {
+                                            (async () => {
+                                                await Toast.fire({
+                                                    icon: "error",
+                                                    title: "Đơn giá không dưới 70.000VND!",
+                                                });
+                                            })();
+                                        }
+                                        if (response[i].message === 'errorPriceMoreThan') {
+                                            (async () => {
+                                                await Toast.fire({
+                                                    icon: "error",
+                                                    title: "Đơn giá không quá 5.000.000VND!",
+                                                });
+                                            })();
+                                        }
+                                    }
+                                }
+                                // end loop for
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    function showConfirmPopupSave() {
+        var count = document.getElementById("product-detail-count-input").value;
+        var spct;
+        var selectedColors = [];
+        var colorCheckboxes = document.querySelectorAll('input[name="product-color-input"]:checked');
+        colorCheckboxes.forEach(function (checkbox) {
+            selectedColors.push(checkbox.value);
+        });
+
+        var selectedSizes = [];
+        var sizeCheckboxes = document.querySelectorAll('input[name="product-detail-size-input"]:checked');
+        sizeCheckboxes.forEach(function (checkbox) {
+            selectedSizes.push(checkbox.value);
+        });
+        if (count === '') {
+            swal.fire({
+                icon: "warning",
+                title: "Bạn Chưa Nhập Số Lượng Sản Phẩm?",
+                confirmButtonText: "OK"
+            })
+        } else if (isNaN(count)) {
+            swal.fire({
+                icon: "warning",
+                title: "Hãy nhập đúng số lượng!",
+                confirmButtonText: "OK"
+            })
+        } else if (count <= 50 || count >= 2000) {
+            swal.fire({
+                icon: "warning",
+                title: "Số lượng phải lớn hơn 50 và bé hơn 2000!",
+                confirmButtonText: "OK"
+            })
+        } else if (selectedColors.length === 0) {
+            swal.fire({
+                icon: "warning",
+                title: "Bạn Chưa Chọn Màu Sắc?",
+                confirmButtonText: "OK",
+            })
+        } else if (selectedSizes.length === 0) {
+            swal.fire({
+                icon: "warning",
+                title: "Bạn Chưa Chọn Size?",
+                confirmButtonText: "OK",
+            })
+        } else {
+            swal.fire({
+                icon: 'question',
+                title: "Bạn Có Muốn Thêm Mới?",
+                showCancelButton: true,
+                confirmButtonText: "Có",
+                cancelButtonText: "Không"
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var productArray = [];
+
+                    if (selectedColors.length > selectedSizes.length) {
+                        for (i = 0; i < selectedColors.length; i++) {
+                            for (y = 0; y < selectedSizes.length; y++) {
+                                spct = {
+                                    sl: count,
+                                    ms: selectedColors[i],
+                                    size: selectedSizes[y]
+                                }
+                                productArray.push(spct);
+                            }
+                        }
+                    } else {
+                        for (i = 0; i < selectedSizes.length; i++) {
+                            for (y = 0; y < selectedColors.length; y++) {
+                                spct = {
+                                    sl: count,
+                                    ms: selectedColors[y],
+                                    size: selectedSizes[i]
+                                }
+                                productArray.push(spct);
+                            }
+                        }
+                    }
+                    var uniqueArr = productArray.reduce(function (acc, curr) {
+                        if (acc.indexOf(curr) === -1) {
+                            acc.push(curr);
+                        }
+                        return acc;
+                    }, []);
+                    $.ajax({
+                        url: '/api/admin/product/save_product_detail/validation/' + idProduct,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
+                        data: JSON.stringify(uniqueArr),
+                        success: function (response) {
+                            var countIsValid = {
+                                true: 0,
+                                false: 0
+                            };
+
+                            response.forEach(function (item) {
+                                if (item.valid === true) {
+                                    countIsValid.true++;
+                                } else {
+                                    countIsValid.false++;
+                                }
+                            });
+                            console.log("false : " + countIsValid.false);
+                            console.log("true : " + countIsValid.true);
+                            if (countIsValid.true > 0 && countIsValid.false === 0) {
+                                swal.fire({
+                                    icon: "error",
+                                    title: "Các Sản Phẩm Bạn Muốn Thêm Đã Tồn Tại!",
+                                    text: "Vui Lòng Kiểm Tra Và Thử Lại!",
+                                    showCancelButton: true
+                                })
+                            }
+                            if (countIsValid.true > 0 && countIsValid.false > 0) {
+                                swal.fire({
+                                    icon: "error",
+                                    title: "Có " + countIsValid.true + " Sản Phẩm Bạn Muốn Thêm Đã Tồn Tại!",
+                                    text: "Vui Lòng Kiểm Tra Và Thử Lại!",
+                                    showCancelButton: true
+                                })
+                            }
+                            if (countIsValid.true === 0 && countIsValid.false > 0) {
+                                $.ajax({
+                                    url: '/api/admin/product/save_product_detail/save/' + idProduct,
+                                    method: 'POST',
+                                    contentType: 'application/json',
+                                    headers: {
+                                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                                    },
+                                    data: JSON.stringify(response),
+                                    success: function (response) {
+                                        console.log(response);
+                                        if (response === "success") {
+                                            swal.fire({
+                                                icon: "success",
+                                                title: "Thêm Thành Công!",
+                                                confirmButtonText: "Ok"
+                                            })
+                                            viewProductDetail(idProduct, 0);
+                                            document.querySelectorAll('input').forEach(function (input) {
+                                                if (input.getAttribute('name') === 'product-color-input') {
+                                                    input.checked = false;
+                                                }
+                                                if (input.getAttribute('name') === 'product-detail-size-input') {
+                                                    input.checked = false;
+                                                }
+                                            });
+                                            document.getElementById('product-detail-count-input').value = '';
+                                            $('#myModalView').modal('hide');
+                                            loadPage(page);
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error:', error);
+                                    }
+                                });
+                            }
+                            if (countIsValid.true === 0 && countIsValid.false === 0) {
+                                $.ajax({
+                                    url: '/api/admin/product/save_product_detail/save/' + idProduct,
+                                    method: 'POST',
+                                    contentType: 'application/json',
+                                    headers: {
+                                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                                    },
+                                    data: JSON.stringify(uniqueArr),
+                                    success: function (response) {
+                                        console.log(response);
+                                        if (response === "success") {
+                                            swal.fire({
+                                                icon: "success",
+                                                title: "Thêm Thành Công!",
+                                                confirmButtonText: "Ok"
+                                            })
+                                            viewProductDetail(idProduct, 0);
+                                            document.querySelectorAll('input').forEach(function (input) {
+                                                if (input.getAttribute('name') === 'product-color-input') {
+                                                    input.checked = false;
+                                                }
+                                                if (input.getAttribute('name') === 'product-detail-size-input') {
+                                                    input.checked = false;
+                                                }
+                                            });
+                                            document.getElementById('product-detail-count-input').value = '';
+                                            $('#myModalView').modal('hide');
+                                            loadPage(page);
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error:', error);
+                                    }
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    async function showConfirmPopupUpdate() {
+        if (isPictureUploaded === true && sourceImg === undefined) {
+            await (async () => {
+                await Toast.fire({
+                    icon: "warning",
+                    title: "Ảnh Chưa Được Tải Xong!",
+                    timer: 3000
+                });
+            })();
+        } else {
+            swal.fire({
+                icon: 'question',
+                title: "Bạn có muốn lưu thay đổi?",
+                showCancelButton: true,
+                confirmButtonText: "Lưu",
+                cancelButtonText: 'Quay lại'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log(sourceImg);
+                    var count = document.getElementById("productdetail-count-input-edit").value;
+                    var color;
+                    var size;
+                    const colorInput = document.querySelectorAll('input[name="ms"]:checked');
+                    if (colorInput.length > 0) {
+                        color = colorInput[0].value;
+                    }
+                    const sizeInput = document.querySelectorAll('input[name="size-update"]:checked');
+                    if (sizeInput.length > 0) {
+                        size = sizeInput[0].value;
+                    }
+                    var spct = {
+                        sl: count,
+                        ms: color,
+                        size: size,
+                        imgSrc: sourceImg
+                    }
+                    if (count === '') {
+                        swal.fire({
+                            title: "Hãy Nhập Số Lượng!",
+                            icon: 'warning'
+                        })
+                    }
+                    console.log(spct);
+                    $.ajax({
+                        url: '/api/admin/product_detail/update/' + idProduct_Detail,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
+                        data: JSON.stringify(spct),
+                        success: function (response, status) {
+                            console.log(response);
+                            if (status === "success" && response !== "No Valid") {
+                                swal.fire({
+                                    title: response + "!",
+                                    icon: 'warning'
+                                })
+                            }
+                            if (status === "success" && response === "No Valid") {
+                                swal.fire({
+                                    title: "Sản Phẩm Chi Tiết Đã Được Cập Nhật!",
+                                    icon: 'success'
+                                })
+                                $('#myModalEdit').modal('hide');
+                                viewProductDetail(idProduct, pageProductDetail);
+                                isPictureUploaded = false;
+                                sourceImg = 'null';
+                                loadPage(page);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    async function loadPage(pageNumber) {
+        let keyword = document.getElementById("search-product-input").value.trim().toLowerCase();
+        let status = document.getElementById("filter-status").value;
+        let collection = document.getElementById("filter-collections").value;
+        let sort = $("#sort").val();
+        let supplier = $("#filter-supplier").val();
+        let trademark = $("#filter-trademark").val();
+
+        console.log('page number', pageNumber)
+
+        var url = "/api/admin/product/page?page=" + pageNumber + '&size=' + 5 + '&sort=' + sort;
+        if (keyword !== '') {
+            url += '&keyWord=' + keyword + '&status=' + status + '&collection=' + collection + '&supplier=' + supplier + '&trademark=' + trademark;
+        } else {
+            url += '&status=' + status + '&collection=' + collection + '&supplier=' + supplier + '&trademark=' + trademark;
+        }
+
+        console.log(url)
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        });
+        page = pageNumber;
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        for (let i = 0; i < list.length; i++) {
+            var urlDetailPD = '/api/client/product_detail/detailPD/' + list[i].id;
+            const responseDetailPD = await fetch(urlDetailPD, {
+                method: 'GET'
+            });
+
+            const data = await responseDetailPD.json();
+
+            let quantity = 0;
+            if (data.length > 0) {
+                for (let j = 0; j < data.length; j++) {
+                    quantity += data[j].soLuong;
+                }
+            }
+            var trangThaiBadge = (list[i].trangThai === 0) ? '<div class="form-check form-switch" \>\n' +
+                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 1)" />\n' +
+                '</div>' : '<div class="form-check form-switch" \>\n' +
+                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0)" checked/>\n' +
+                '</div>';
+            main += `<tr >
+                            <td scope="row">${list[i].maSP}</td>
+                            <td scope="row">${list[i].tenSP}</td>
+                            <td scope="row">${quantity}</td>
+                            <td scope="row">${formatMoney(list[i].donGia)}</td>
+                            <td scope="row">${list[i].danhMuc === 0 ? 'Quần' : 'Áo'}</td>
+                            <td scope="row">${list[i].ncc.ten}</td>
+                            <td scope="row">${list[i].thieu.ten}</td>
+                            <td>${trangThaiBadge}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="detailProduct(${list[i].id})"
+                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                <div onclick="viewProductDetail(${list[i].id},0)"><i class="ri-eye-2-line"></i></div>
+                                 </div>
+                            </td>
+                     </tr>`
+        }
+        document.getElementById("list_Product").innerHTML = main;
+        document.getElementById("pagination").innerHTML = `
+                <div class="pagination-wrap hstack gap-2">
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number === 0 ? totalPage - 1 : 0})"  >
+                       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+                       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+                       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+                       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number === totalPage - 1 ? 0 : totalPage - 1})">
+                       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+                </div>`;
+    }
+
+    function showModalAddProductDetail() {
+        console.log(idProduct);
+        if (idProduct === null || idProduct === undefined) {
+            Swal.fire({
+                icon: "warning",
+                title: "Hãy Chọn Sản Phẩm Bên Trên!",
+            });
+        } else {
+            fetch('/api/admin/product/detail/' + idProduct, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data);
+                document.getElementById('product-detail-name-input').value = data.tenSP;
+                $('#myModalView').modal('show');
+            })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+
+    async function viewProductDetail(Idproduct, pageNumber) {
+        var color = document.getElementById("filter-color").value;
+        var size = document.getElementById("filter-size").value;
+
+        var colorName = $('#filter-color :selected').text();
+
+        var baseUrl;
+
+        if (pageNumber === undefined) {
+            baseUrl = "/api/admin/product/product_detail/" + Idproduct + "/" + 0 + "?color=" + color + "&size=" + size;
+        }
+        if (pageNumber !== undefined) {
+            baseUrl = "/api/admin/product/product_detail/" + Idproduct + '/' + pageNumber + "?color=" + color + "&size=" + size;
+        }
+
+        var url = "/api/admin/product/product_detail/" + Idproduct + "/" + 0 + "?color=" + 0 + "&size=" + 0;
+
+        const response_check = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        });
+
+
+        const checkResult = await response_check.json();
+
+        let checkList = checkResult.content;
+
+        idProduct = Idproduct;
+        pageProductDetail = pageNumber;
+
+        const response = await fetch(baseUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        });
+        var result = await response.json();
+        var list = result.content;
+        console.log(list);
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        $('#myModalTable').modal('show');
+        if (list.length > 0) {
+            for (i = 0; i < list.length; i++) {
+                main += `<tr >
+                            <td scope="row">${list[i].id}</td>
+                            <td scope="row">${list[i].ms.ten}</td>
+                            <td scope="row">${list[i].size}</td>
+                            <td scope="row">${list[i].soLuong}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="editProductDetail(${list[i].id})"
+                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                 </div>
+                            </td>
+                     </tr>`
+            }
+        } else {
+            if (checkList.length === 0) {
+                main = `
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-label">Sản Phẩm Này Chưa Có Sản Phẩm Chi Tiết!</div>
+                    </td>
+                    <td></td>
+                </tr>
+            `;
+            } else if (checkList.length > 0 && color === "0" && size !== "0") {
+                main = `
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-label">Sản Phẩm Này Chưa Có Size ${size} !</div>
+                    </td>
+                    <td></td>
+                </tr>
+            `;
+            } else if (checkList.length > 0 && color !== "0" && size === "0") {
+                main = `
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-label">Sản Phẩm Này Chưa Có Màu ${colorName} !</div>
+                    </td>
+                    <td></td>
+                </tr>
+            `;
+            } else {
+                main = `
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-label">Sản Phẩm Này Chưa Có Màu ${colorName} và Size ${size} !</div>
+                    </td>
+                    <td></td>
+                </tr>
+            `;
+            }
+        }
+        document.getElementById("list_Product_Detail").innerHTML = main;
+        document.getElementById("pagination2").innerHTML = `
+                <div class="pagination-wrap hstack gap-2">
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="viewProductDetail(${Idproduct},${number === 0 ? totalPage - 1 : 0})">
+                       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="viewProductDetail(${Idproduct},${number - 1 < 0 ? totalPage - 1 : number - 1})">
+                       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+                       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="viewProductDetail(${Idproduct},${number + 1 === totalPage ? 0 : number + 1})">
+                       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="viewProductDetail(${Idproduct},${totalPage - 1 === number ? 0 : totalPage - 1})">
+                       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+                </div>`;
+    }
+
+    function formatMoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+
+    function updateStatus(idProduct, status) {
+        let message = ''
+        if (status === 1) {
+            message = 'Bạn có muốn mở bán cho sản phẩm này?';
+        } else {
+            message = 'Bạn có muốn mở ngừng bán sản phẩm này?';
+        }
+        swal.fire({
+            icon: 'question',
+            title: message,
+            showCancelButton: true,
+            confirmButtonText: "Lưu",
+            cancelButtonText: `Không`
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '/api/admin/product/update_status/' + idProduct + '/' + status,
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        if (response === 'success') {
+                            swal.fire({
+                                icon: 'success',
+                                title: 'Thông Báo',
+                                text: 'Cập nhật trạng thái thành công!'
+                            })
+                            loadPage(page);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        swal.fire({
+                            icon: 'error',
+                            title: 'Thông Báo',
+                            text: 'Lỗi không xác định!'
+                        })
+                    }
+                })
+            } else {
+                // If the user has not confirmed, then check the status of the checkbox and return it to its original state.
+                if (status === 1) {
+                    document.getElementById("input-status-" + idProduct).checked = false;
+                } else {
+                    document.getElementById("input-status-" + idProduct).checked = true;
+                }
+            }
+        });
+    }
+</script>
+<script th:inline="javascript">
+
+    async function findType() {
+        let url = '/api/admin/sport/find-all';
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        })
+
+        const data = await response.json();
+
+        console.log(data);
+
+        var sport = '<option selected value="-1">Open this select menu</option>';
+
+        for (let i = 0; i < data.length; i++) {
+            sport += `
+                <option value="${data[i].id}">${data[i].ten}</option>
+            `;
+        }
+
+        document.getElementById('product-type-update-input').innerHTML = sport;
+    }
+
+    async function findDataInSelect() {
+        let urlProvider = '/api/admin/supplier/find-all';
+        let urlBrand = '/api/admin/trademark/find-all';
+
+        const responseProvider = await fetch(urlProvider, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        })
+        const listProvider = await responseProvider.json();
+
+        const responseBrand = await fetch(urlBrand, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        })
+        const listBrand = await responseBrand.json();
+        console.log(listBrand);
+
+        let brand = `<option selected value="-1">Open this select menu</option>`;
+
+        let provider = `<option selected value="-1">Open this select menu</option>`;
+
+        for (let i = 0; i < listBrand.length; i++) {
+            brand += `
+                   <option value="${listBrand[i].id}">${listBrand[i].ten}</option>
+            `;
+        }
+        for (let i = 0; i < listProvider.length; i++) {
+            provider += `
+                   <option value="${listProvider[i].id}">${listProvider[i].ten}</option>
+            `;
+        }
+
+        document.getElementById('product-brand-update-input').innerHTML = brand;
+        document.getElementById('product-provider-update-input').innerHTML = provider;
+    }
+
+    function validPrice() {
+        var priceInput = document.getElementById('product-price-update-input');
+        var errorPrice = document.getElementById('error-price-update');
+
+        priceInput.addEventListener('input', function () {
+            if (priceInput.value.trim() !== '') {
+                errorPrice.style.display = 'none';
+            } else {
+                errorPrice.style.display = 'block';
+            }
+        });
+    }
+
+    function validName() {
+        var nameInput = document.getElementById('product-name-update-input');
+        var errorName = document.getElementById('error-name-update');
+
+        nameInput.addEventListener('input', function () {
+            if (nameInput.value.trim() !== '') {
+                errorName.style.display = 'none';
+            } else {
+                errorName.style.display = 'block';
+            }
+        });
+    }
+
+    function validCollections() {
+        var collectionsInput = document.getElementById('product-collections-update-input');
+        var errorCollections = document.getElementById('error-collections-update');
+
+        if (collectionsInput.value !== "-1") {
+            errorCollections.style.display = 'none';
+        } else {
+            errorCollections.style.display = 'block';
+        }
+
+    }
+
+    function validType() {
+        var typeInput = document.getElementById('product-type-update-input');
+        var errorType = document.getElementById('error-type-update');
+
+        if (typeInput.value !== "-1") {
+            errorType.style.display = 'none';
+        } else {
+            errorType.style.display = 'block';
+        }
+
+    }
+
+    function validProvider() {
+        var providerInput = document.getElementById('product-provider-update-input');
+        var errorProvider = document.getElementById('error-provider-update');
+
+        if (providerInput.value !== "-1") {
+            errorProvider.style.display = 'none';
+        } else {
+            errorProvider.style.display = 'block';
+        }
+    }
+
+    function validBrand() {
+        var brandInput = document.getElementById('product-brand-update-input');
+        var errorBrand = document.getElementById('error-brand-update');
+
+        if (brandInput.value !== "-1") {
+            errorBrand.style.display = 'none';
+        } else {
+            errorBrand.style.display = 'block';
+        }
+    }
+
+</script>
+</html>

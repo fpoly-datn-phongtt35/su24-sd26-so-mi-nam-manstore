@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html
+        data-body-image="none"
+        data-layout="vertical"
+        data-preloader="disable"
+        data-sidebar="light"
+        data-sidebar-image="none"
+        data-sidebar-size="lg"
+        data-topbar="light"
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<!-- Mirrored from themesbrand.com/toner/html/backend/users-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 17 Jan 2024 17:14:47 GMT -->
+<head th:replace="admin/fragments/head::head">
+    <style>
+
+        .dropdown-menu {
+            position: absolute;
+            width: 100%;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none; /* Ban đầu ẩn đi */
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        .dropdown-menu li {
+            list-style: none;
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .image-container {
+            width: 49px; /* Độ rộng của khung hiển thị */
+            height: 66px; /* Độ cao của khung hiển thị */
+            overflow: hidden; /* Ẩn bất kỳ phần nào của ảnh vượt qua khung */
+            border: 1px solid #ccc; /* Đường viền cho khung */
+        }
+    </style>
+</head>
+<body>
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+</div>
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div
+                            class="page-title-box d-sm-flex align-items-center justify-content-between"
+                    >
+                        <h4 class="mb-sm-0">Bán hàng tại quầy</h4>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav nav-tabs card-border-dark" id="myTab" role="tablist">
+            </ul>
+            <div class="tab-content" id="myTabContent">
+            </div>
+            <!-- end page title -->
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+</div>
+<!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<!-- deleteRecordModal -->
+<div
+        aria-hidden="true"
+        class="modal fade zoomIn"
+        id="deleteRecordModal"
+        tabindex="-1"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button
+                        aria-label="Close"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        type="button"
+                ></button>
+            </div>
+            <div class="modal-body p-md-5">
+                <div class="text-center">
+                    <div class="text-danger">
+                        <i class="bi bi-trash display-4"></i>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="mb-2">Are you sure ?</h4>
+                        <p class="text-muted fs-17 mx-4 mb-0">
+                            Are you sure you want to remove this record ?
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                    <button
+                            class="btn w-sm btn-light btn-hover"
+                            data-bs-dismiss="modal"
+                            id="deleteRecord-close"
+                            type="button"
+                    >
+                        Close
+                    </button>
+                    <button
+                            class="btn w-sm btn-danger btn-hover"
+                            id="delete-record"
+                            type="button"
+                    >
+                        Yes, Delete It!
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!--modal -->
+<div
+        aria-hidden="true"
+        aria-labelledby="exampleModalLabel"
+        class="modal fade"
+        id="showModal"
+        tabindex="-1"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sản Phẩm</h4>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                        type="button"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" id="cart-list">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row g-lg-2 g-4">
+                                            <div class="col-lg-3">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Tìm Kiếm</label>
+                                                        <div class="search-box">
+                                                            <input class="form-control search" id="search-product-input"
+                                                                   onkeyup="loadProductDetail(0)" placeholder="..."
+                                                                   type="text">
+                                                            <i class="ri-search-line search-icon"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <div class="row" style="padding-bottom: 10px">
+                                                    <div class="col-md-4">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Màu Sắc</label>
+                                                        <select aria-label=".form-select-lg example"
+                                                                class="form-select mb-3"
+                                                                id="filter-color"
+                                                                onchange="loadProductDetail(undefined)">
+                                                            <option selected value="0">Tất Cả</option>
+                                                            <option value="1">Đen</option>
+                                                            <option value="2">Trắng</option>
+                                                            <option value="3">Đỏ</option>
+                                                            <option value="4">Xám</option>
+                                                            <option value="5">Xanh Lục</option>
+                                                            <option value="6">Tím Xanh</option>
+                                                            <option value="7">Xanh Da Trời</option>
+                                                            <option value="8">Vàng</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Size</label>
+                                                        <select aria-label=".form-select-lg example"
+                                                                class="form-select mb-3"
+                                                                id="filter-size" onchange="loadProductDetail(undefined)"
+                                                        >
+                                                            <option selected value="0">Tất Cả</option>
+                                                            <option value="s">S</option>
+                                                            <option value="m">M</option>
+                                                            <option value="l">L</option>
+                                                            <option value="xl">XL</option>
+                                                            <option value="xxl">XXL</option>
+                                                            <option value="2xl">2XL</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive table-card mb-1">
+                                            <table class="table align-middle table-nowrap"
+                                                   id="customerTable3">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th class="text-start">STT</th>
+                                                    <th class="text-start">Tên</th>
+                                                    <th class="text-start">Ảnh</th>
+                                                    <th class="text-start">Màu Sắc</th>
+                                                    <th class="text-start">Kích Thước</th>
+                                                    <th class="text-start">Số Lượng</th>
+                                                    <th class="text-start">Đơn Giá</th>
+                                                    <th class="text-start">Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="list form-check-all"
+                                                       id="list_product_detail">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row p-2">
+                                    <div class="col-lg-4 justify-content-sm-start">
+                                    </div>
+                                    <div class="col-lg-8 justify-content-sm-end">
+                                        <div class="row">
+                                            <div class="col-lg-4"></div>
+                                            <div class="col-lg-2"></div>
+                                            <div class="col-lg-6">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination justify-content-center"
+                                                        id="pagination_product_detail">
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+<!-- /.modal -->
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<!--<script th:src="@{/assets/js/qr.js}" defer></script>-->
+<script>
+
+    const Toast = swal.mixin({
+        toast: true,
+        position: "top-end",
+        iconColor: "white",
+        customClass: {
+            popup: "colored-toast",
+        },
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+    });
+
+    // lưu id hoá đơn đang được select
+    var selectedInvoiceId = null;
+
+    var indexCurrentPage;
+
+    var currentPageCart;
+
+    // lưu id sản phẩm chi tiết đang được select
+    var selectedProductDetailId;
+
+    var idElementInvoiceDetail;
+
+    window.onload = function () {
+        loadInvoice();
+    }
+
+    $('#showModal').on('show.bs.modal', function (e) {
+        loadProductDetail(0);
+    })
+
+    function deleteInvoice(id) {
+        swal.fire({
+            icon: 'question',
+            title: "Bạn Có Muốn Xoá Hoá Đơn Này?",
+            showCancelButton: true,
+            confirmButtonText: "Xoá",
+            cancelButtonText: "Không"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/admin/sell-off/delete/' + id,
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        if (response === "success") {
+                            swal.fire({
+                                title: "Xoá thành công!",
+                                icon: "success",
+                                confirmButtonText: 'OK!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    loadInvoice();
+                                }
+                            })
+                        }
+                        if (response === "fail") {
+                            swal.fire({
+                                title: "Lỗi Hệ Thống!",
+                                icon: "error",
+                                confirmButtonText: 'OK!'
+                            })
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+    }
+
+    async function createInvoice() {
+        $.ajax({
+            url: '/admin/sell-off/save_invoice/' + localStorage.getItem("adminId"),
+            method: 'GET',
+            success: function (response) {
+                console.log(response);
+                if (response === "success") {
+                    swal.fire({
+                        title: "Thêm thành công!",
+                        icon: "success",
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            loadInvoice();
+                        }
+                    })
+                }
+                if (response === "fail") {
+                    swal.fire({
+                        title: "Tối Đa 20 Hoá Đơn Chờ!",
+                        icon: "error",
+                        confirmButtonText: 'OK'
+                    })
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function formatmoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+
+    async function addToInvoiceDetail(id) {
+        if (id === undefined) {
+            swal.fire({
+                title: "Bạn Chưa Chọn Sản Phẩm!",
+                icon: "warning",
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: "Dạ",
+                cancelButtonText: "Quay Lại"
+            })
+        } else {
+            $.ajax({
+                url: '/api/admin/sell-off/cart/save/' + selectedInvoiceId + '?idProductDetail=' + id,
+                method: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response === "success") {
+                        swal.fire({
+                            title: "Thêm Thành Công!",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        }).then(() => {
+                            selectedProductDetailId = [];
+                            $('#showModal').modal('hide');
+                            loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                        })
+                    } else if (response === "failure-1") {
+                        swal.fire({
+                            title: "Hãy thêm số lượng cho sản phẩm!",
+                            icon: "warning",
+                            showConfirmButton: true,
+                            confirmButtonText: "OK",
+                        })
+                    } else if (response === "failure-3") {
+                        swal.fire({
+                            title: "Lỗi hệ thống!",
+                            icon: "warning",
+                            showConfirmButton: true,
+                            confirmButtonText: "OK",
+                        })
+                    } else {
+                        swal.fire({
+                            title: "Sản phẩm đã có trong giỏ hàng!",
+                            icon: "warning",
+                            showConfirmButton: true,
+                            confirmButtonText: "OK",
+                        })
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+
+    async function loadProductDetail(pageNumber) {
+        console.log(pageNumber);
+        var keyword = document.getElementById("search-product-input").value;
+        var color = document.getElementById("filter-color").value;
+        var size = document.getElementById("filter-size").value;
+
+        var baseUrl;
+
+        indexCurrentPage = pageNumber;
+
+        if (pageNumber === undefined && keyword === '' && color === "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword === '' && color === "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber;
+            console.log(baseUrl);
+        }
+        // search
+        if (pageNumber === undefined && keyword !== '' && color === "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?keyword=" + keyword;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword !== '' && color === "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword=" + keyword;
+            console.log(baseUrl);
+        }
+        // filter by color
+        if (pageNumber === undefined && keyword === '' && color !== "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?color=" + color;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword === '' && color !== "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?color=" + color;
+            console.log(baseUrl);
+        }
+        // filter by size
+        if (pageNumber === undefined && keyword === '' && color === "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?size=" + size;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword === '' && color === "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?size=" + size;
+            console.log(baseUrl);
+        }
+        // filter by all
+        if (pageNumber === undefined && keyword === '' && color !== "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?color=" + color + "&size=" + size;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword === '' && color !== "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?color=" + color + "&size=" + size;
+            console.log(baseUrl);
+        }
+        // search and filter by color
+        if (pageNumber === undefined && keyword !== '' && color !== "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?keyword=" + keyword + "&color=" + color;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword !== '' && color !== "0" && size === "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword=" + keyword + "&color=" + color;
+            console.log(baseUrl);
+        }
+        // search and filter by size
+        if (pageNumber === undefined && keyword !== '' && color === "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword=" + keyword + "&size=" + size;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword !== '' && color === "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword=" + keyword + "&size=" + size;
+            console.log(baseUrl);
+        }
+        // search and filter by all
+        if (pageNumber === undefined && keyword !== '' && color !== "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + 0 + "?keyword="
+                + keyword + "&color=" + color + "&size=" + size;
+            console.log(baseUrl);
+        }
+        if (pageNumber !== undefined && keyword !== '' && color !== "0" && size !== "0") {
+            baseUrl = "/api/admin/sell-off/product-detail/pagination/" + pageNumber + "?keyword="
+                + keyword + "&color=" + color + "&size=" + size;
+            console.log(baseUrl);
+        }
+        const response = await fetch(baseUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        var img = '';
+        for (i = 0; i < list.length; i++) {
+            var url = '/api/admin/product_detail/picture/' + list[i].sp.id + '/' + list[i].ms.id;
+            const responsePicture = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            const data = await responsePicture.json();
+            console.log(data);
+
+            if (data !== null) {
+                img = `<img src="${data[0].linkAnh}" alt="Ảnh sản phẩm"
+                    style="width: 100%; height: auto;display: block;">`;
+            } else {
+                img = `<i class="ri-question-mark" style="padding-left: 7px;"></i>`;
+            }
+            main += `<tr >
+                            <td scope="row">${i + 1}</td>
+                            <td scope="row">${list[i].sp.tenSP}</td>
+                            <td scope="row" class="image-container" style="width: 49px;height: 66px;">${img}</td>
+                            <td scope="row">${list[i].ms.ten}</td>
+                            <td scope="row">${list[i].size}</td>
+                            <td scope="row">${list[i].soLuong}</td>
+                            <td scope="row">${formatmoney(list[i].sp.donGia)}</td>
+                            <td>
+                                <button class="btn btn-success" onclick="addToInvoiceDetail(${list[i].id})">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </td>
+                     </tr>`
+        }
+        document.getElementById("list_product_detail").innerHTML = main;
+
+        document.getElementById("pagination_product_detail").innerHTML = `
+                <div class="pagination-wrap hstack gap-2">
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadProductDetail(${number === 0 ? totalPage - 1 : 0})">
+                       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadProductDetail(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+                       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+                       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadProductDetail(${number + 1 === totalPage ? 0 : number + 1})"">
+                       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadProductDetail(${number === totalPage - 1 ? 0 : totalPage - 1})">
+                       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+                </div>`;
+    }
+
+    async function loadInvoiceDetail(id, page, index) {
+        currentPageCart = page;
+        var urlGetDetaiIlnvoice = "/api/admin/sell-off/invoice/list-invoice/" + id + "/" + page;
+        const responseDetailInvoice = await fetch(urlGetDetaiIlnvoice, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        var urlCalculate = "/api/admin/sell-off/invoice/calculate/" + id;
+        const responseCalculate = await fetch(urlCalculate, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        var total_calculate = await responseCalculate.json();
+        var resultInvoiceDetail = await responseDetailInvoice.json();
+        var listInvoiceDetail = resultInvoiceDetail.content;
+        console.log(listInvoiceDetail);
+        var totalPageOfCart = resultInvoiceDetail.totalPages;
+        var numberOfCart = resultInvoiceDetail.number;
+        var mainOfCart = '';
+        var currentPageOfCart = '';
+        if (listInvoiceDetail.length === 0) {
+            currentPageOfCart +=
+                `<tr>
+                    <td></td>
+                    <td scope="row"><span class="fs-5" style="text-align: center;">Chưa Có Sản Phẩm!</span></td>
+                 </tr>
+                `;
+            document.getElementById("pagination_cart_" + index).innerHTML = currentPageOfCart;
+            document.getElementById("list_product_detail_of_cart_" + index).innerHTML = mainOfCart;
+            document.getElementById("count-total-input_" + index).value = '';
+
+        } else {
+            for (i = 0; i < listInvoiceDetail.length; i++) {
+                var count = listInvoiceDetail[i].soLuong;
+                mainOfCart += `<tr >
+                            <td scope="row">${i + 1}</td>
+                            <td scope="row">${listInvoiceDetail[i].spct.sp.tenSP}</td>
+                            <td scope="row">${listInvoiceDetail[i].spct.ms.ten}</td>
+                            <td scope="row" class="text-center">${listInvoiceDetail[i].spct.size}</td>
+                            <td scope="row" id="count-product-detail" class="p-0">
+                                <div class="input-step">
+                                    <button type="button" class="minus" onclick="minusQuantityProduct(${listInvoiceDetail[i].id},${count})">–</button>
+                                    <input type="number" class="product-quantity" value="${count}" min="0" max="100" id="input-count-${listInvoiceDetail[i].id}${i + 1}"
+                                    data-value="${listInvoiceDetail[i].id}" onblur="handleExitInput(${listInvoiceDetail[i].id},${i + 1})">
+                                    <button type="button" class="plus" onclick="addQuantity(${listInvoiceDetail[i].id})">+</button>
+                                </div>
+                            </td>
+                            <td scope="row">${formatmoney(listInvoiceDetail[i].spct.sp.donGia)}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp d-flex justify-content-center align-items-center">
+                                    <div onclick="deleteInvoiceDetail(${listInvoiceDetail[i].id})" class="link-danger fs-15"><i class="ri-delete-bin-6-line"></i></div>
+                                </div>
+                            </td>
+                     </tr>`
+            }
+            document.getElementById("list_product_detail_of_cart_" + index).innerHTML = mainOfCart;
+
+            document.getElementById("pagination_cart_" + index).innerHTML = `
+                <div class="pagination-wrap hstack gap-2">
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="event.preventDefault();loadInvoiceDetail(${id},0,${index})"  >
+                       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="event.preventDefault();loadInvoiceDetail(${id},${numberOfCart - 1 < 0 ? totalPageOfCart - 1 : numberOfCart - 1},${index})">
+                       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+                       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${numberOfCart + 1}</a></li></ul>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="event.preventDefault();loadInvoiceDetail(${id},${numberOfCart + 1 === totalPageOfCart ? 0 : numberOfCart + 1},${index})">
+                       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="event.preventDefault();loadInvoiceDetail(${id},${totalPageOfCart - 1},${index})">
+                       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+                </div>`;
+            // let promotion = await getPromotion();
+            // if(promotion.length === 0) {
+            //     document.getElementById("count-total-input_" + index).value = formatmoney(total_calculate + (total_calculate * 0.1));
+            // }
+            // else {
+            //     let totalAfterVAT = total_calculate + (total_calculate * 0.1);
+            //     if(promotion[0].loaiKM === true)
+            //         document.getElementById("count-total-input_" + index).value = formatmoney(totalAfterVAT - (totalAfterVAT *(promotion[0].giaTriGiam/100)));
+            //     else
+            //         document.getElementById("count-total-input_" + index).value = formatmoney(totalAfterVAT - promotion[0].giaTriGiam);
+            // }
+            document.getElementById("count-total-input_" + index).value = formatmoney(total_calculate + (total_calculate * 0.1));
+        }
+    }
+
+    function handleExitInput(id, index) {
+        const regex = /^-?\d+$/;
+        var count = document.getElementById('input-count-' + id + index).value;
+        console.log(id, index, count);
+        if (regex.test(count)) {
+            $.ajax({
+                url: '/api/admin/sell-off/cart/edit-quantity/' + id + '?quantity=' + count,
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: function (response) {
+                    console.log(response);
+                    loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                    if (response.statusText === "failure") {
+                        swal.fire({
+                            text: response.message,
+                            icon: "warning",
+                            confirmButtonText: 'OK!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                            }
+                        })
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        } else {
+            swal.fire({
+                title: "Hãy nhập số!",
+                icon: "warning",
+                confirmButtonText: 'Dạ!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                }
+            })
+        }
+    }
+
+    function addQuantity(id) {
+        console.log(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+        $.ajax({
+            url: '/api/admin/sell-off/cart/add-quantity/' + id,
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            success: function (response) {
+                console.log(response);
+                if (response === "success") {
+                    loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                } else {
+                    swal.fire({
+                        text: "Sản phẩm này đã hết hàng!",
+                        icon: "warning",
+                        confirmButtonText: 'OK!'
+                    })
+                    loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function minusQuantityProduct(id, count) {
+        if (count === 1) {
+            swal.fire({
+                icon: 'question',
+                text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Giỏ Hàng?",
+                confirmButtonText: "Xoá",
+                showCancelButton: true,
+                cancelButtonText: 'Không'
+            }).then((result) => {
+                if (result.isConfirmed === true) {
+                    $.ajax({
+                        url: '/api/admin/sell-off/cart/minus-quantity/' + id,
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if (response === "success") {
+                                swal.fire({
+                                    icon: "success",
+                                    title: "Xoá Thành Công!",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                                    }
+                                });
+
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
+        } else {
+            $.ajax({
+                url: '/api/admin/sell-off/cart/minus-quantity/' + id,
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response === "success") {
+                        loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+
+    function deleteInvoiceDetail(id) {
+        console.log(id);
+        swal.fire({
+            icon: 'question',
+            text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Giỏ Hàng?",
+            showCancelButton: true,
+            confirmButtonText: "Xoá",
+            cancelButtonText: `Không`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var url = '/api/admin/sell-off/cart/delete/' + id;
+                const promise = fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                promise.then(response => {
+                    if (response.status === 200) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Xoá thành công!"
+                        }).then(async () => {
+                            await loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                        })
+                    }
+                })
+            }
+        });
+    }
+
+    async function getPromotion() {
+        let url = "/public/promotion/find-by-date" + "?type=0";
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+        return data;
+    }
+
+    async function loadInvoice() {
+        let url = "/api/admin/sell-off/page/" + 0;
+        let promotion = await getPromotion();
+        console.log(promotion);
+        let promotion_value = '';
+        if (promotion !== null) {
+            if (promotion.length > 0) {
+                if (promotion[0].loaiKM === true)
+                    promotion_value = '- ' + promotion[0].giaTriGiam + '%';
+                else
+                    promotion_value = '- ' + formatmoney(promotion[0].giaTriGiam);
+            } else {
+                promotion_value = 'Không có khuyến mãi'
+            }
+        } else {
+            promotion_value = 'Không có khuyến mãi'
+        }
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        let result = await response.json();
+        console.log(result);
+        let list = result.content;
+        let main = '';
+        let tab = '';
+
+        if (list.length === 0) {
+            tab += `
+                <br>
+                 <li class="nav-item" style="padding: 0 10px;list-style: none">
+                        <div class="row">
+                            <div class="col-lg-auto col-sm-auto">
+                                <button type="button" class="btn btn-sm btn-soft-primary btn-hover"
+                                        id="create-record" onclick="createInvoice()">
+                                    <i class="bi bi-plus"></i></button>
+                            </div>
+                        </div>
+                 </li>
+                <p class="text-center fs-3 text-danger fw-bold">Chưa Có Hoá Đơn Chờ.Nhấn nút + để thêm hoá đơn chờ!</p>`;
+        } else {
+            let staff_name = '';
+            for (i = 0; i < list.length; i++) {
+                let time = moment(list[i].ngayTao).format('DD/MM/YY HH:mm:ss')
+                if (list[i].nv === null) {
+                    staff_name = 'Anonymous';
+                } else {
+                    staff_name = list[i].nv.hoTen;
+                }
+                if (i === 0) {
+                    main += `
+                    <li class="nav-item" role="presentation">
+                         <div class="row">
+                               <div class="col-lg-auto col-sm-auto">
+                                     <div class="d-flex justify-content-center">
+                                          <button type="button" class="btn btn-sm btn-soft-danger btn-hover"
+                                                   onclick="deleteInvoice(${list[i].id})"><i class="bi bi-x"></i>
+                                          </button>
+                                     </div>
+                                     <div>
+                                         <a
+                                             class="nav-link active"
+                                             id="${list[i].maDonHang}-tab"
+                                             data-bs-toggle="tab"
+                                             data-bs-target="#${list[i].maDonHang}"
+                                             type="button"
+                                             role="tab"
+                                             data-value="${list[i].id}"
+                                             data-bs-title="${i + 1}"
+                                             aria-controls="${list[i].maDonHang}"
+                                             aria-selected="true">
+                                             ${list[i].maDonHang}
+                                         </a>
+                                     </div>
+                              </div>
+                        </div>
+                    </li>
+                `;
+                    tab +=
+                        `<div class="tab-pane fade show active" id="${list[i].maDonHang}" role="tabpanel" aria-labelledby="${list[i].maDonHang}-tab">
+                           <form id="form" autocomplete="off" class="needs-validation">
+                            <div class="row">
+                             <div class="col-xl-8 col-lg-8">
+                                  <div class="card">
+                                      <div class="card-header">
+                                             <div class="row">
+                                                  <div class="col-lg-3 col-sm-12">
+                                                        <div class="mb-auto">
+                                                                     <div class="mt-auto" style="height: 50%;width: 100%;" id="my-qr-reader">
+                                                                      </div>
+                                                        </div>
+                                                  </div>
+                                                    <div class="col-lg-3 col-sm-12">
+                                                  </div>
+                                                  <div class="col-lg-6 col-sm-12">
+                                                        <div class="mb-auto">
+                                                              <div class="d-flex gap-2 justify-content-end mt-auto mb-auto">
+                                                                    <button type="button" class="btn w-sm btn-success btn-hover" href="#showModal"
+                                                                                data-bs-toggle="modal">Tìm kiếm
+                                                                     </button>
+                                                              </div>
+                                                        </div>
+                                                    <div class="mb-auto mt-5">
+                                                        <label for="id-product-input_${i + 1}" class="form-label">Mã sản phẩm</label>
+                                                        <input type="text" id="id-product-input_${i + 1}" class="form-control"
+                                                               placeholder="Nhập mã sản phẩm" onkeyup="searchBox(${i + 1})">
+                                                        <ul class="dropdown-menu" id="searchResults_${i + 1}" style="width: 281px;">
+                                                        </ul>
+                                                    </div>
+                                                  </div>
+                                             </div>
+                                      </div>
+                                  </div>
+                                  <div class="card">
+                                    <div class="card-body">
+                                        <div class="row" id="gioHangList">
+                                             <div class="col-lg-12">
+                                                <div class="card">
+                                                <div class="card-body">
+                                                    <div class="table-responsive table-card mb-1">
+                                                        <table class="table align-middle table-nowrap"
+                                                               id="customerTable3">
+                                                            <thead class="table-light">
+                                                            <tr>
+                                                                <th class="text-start">#</th>
+                                                                <th class="text-start">Tên</th>
+                                                                <th class="text-start">Màu Sắc</th>
+                                                                <th class="text-center">Kích Thước</th>
+                                                                <th class="text-center">Số Lượng</th>
+                                                                <th class="text-start">Đơn Giá</th>
+                                                                <th class="text-start">Action</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody class="list form-check-all"
+                                                                   id="list_product_detail_of_cart_${i + 1}">
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="d-flex justify-content-center">
+                                                                <nav aria-label="Page navigation example">
+                                                                    <ul class="pagination justify-content-center"
+                                                                        id="pagination_cart_${i + 1}">
+                                                                    </ul>
+                                                                </nav>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-xl-4 col-lg-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6 class="card-title mb-0">Thông tin đơn hàng</h6>
+                                            </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                      <div class="col-lg-6 col-sm-12">
+                                         <div class="mb-3">
+                                            <label for="staff-input" class="form-label">Nhân viên</label>
+                                        <input type="text" id="staff-input" class="form-control" value="${staff_name}" disabled>
+                                         </div>
+                                         </div>
+                                       <div class="col-lg-6 col-sm-12">
+                                         <div class="mb-3">
+                                            <label for="time-input_${i + 1}" class="form-label">Thời gian</label>
+                                        <input type="text" id="time-input_${i + 1}" class="form-control" value="${time}" disabled>
+                                         </div>
+                                         </div>
+                                    </div>
+                                     <div class="row">
+                                      <div class="col-lg-5 col-sm-12">
+                                         <div class="mb-3">
+                                          <label class="form-label">Khách hàng</label>
+                                           <input type="number" class="form-control" placeholder="SDT" value="" id="number-phone-${i + 1}" onkeyup="searchCustomerByPhone(${i + 1})">
+                                         </div>
+                                         </div>
+                                       <div class="col-lg-7 col-sm-12">
+                                         <div class="mb-3">
+                                            <label class="form-label"></label>
+                                            <input type="text" class="form-control mt-2" id="customer-name-${i + 1}" disabled>
+                                         </div>
+                                         </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-lg-6 col-sm-12">
+                                         <div class="mb-3">
+                                        <label for="promotion-select" class="form-label">Khuyến Mãi</label>
+                                        <input class="form-control promotion-title" value="${promotion_value}" disabled/>
+                                         </div>
+                                         </div>
+                                       <div class="col-lg-6 col-sm-12">
+                                         <div class="mb-3">
+                                       <label for="count-total-input_${i + 1}" class="form-label">Tổng tiền <small class="text-muted">(+10% VAT)</small></label>
+                                        <input type="text" id="count-total-input_${i + 1}" class="form-control" placeholder="" disabled>
+                                         </div>
+                                         </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-sm-12">
+                                            <label for="paydown-input${i + 1}" class="form-label">Tiền khách trả</label>
+                                            <input type="text" id="paydown-input_${i + 1}" class="form-control" placeholder="" onblur="formatMoneyToPay(${i + 1})">
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12 d-flex justify-content-start align-items-end">
+                                            <button class="btn btn-primary" type="button" onclick="paymentOrder(${i + 1})">Thanh Toán</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>`;
+                    loadInvoiceDetail(list[i].id, 0, i + 1);
+                    selectedInvoiceId = list[i].id;
+                    idElementInvoiceDetail = i + 1;
+                } else {
+                    main +=
+                        `<li class="nav-item" role="presentation">
+                                         <div class="row">
+                                               <div class="col-lg-auto col-sm-auto">
+                                                     <div class="d-flex justify-content-center">
+                                                            <button type="button" class="btn btn-sm btn-soft-danger btn-hover"
+                                                                       onclick="deleteInvoice(${list[i].id})"><i class="bi bi-x"></i>
+                                                            </button>
+                                                     </div>
+                                                         <div>
+                                                               <a
+                                                                   class="nav-link"
+                                                                   id="${list[i].maDonHang}-tab"
+                                                                   data-bs-toggle="tab"
+                                                                   data-bs-target="#${list[i].maDonHang}"
+                                                                   type="button"
+                                                                   role="tab"
+                                                                   data-value="${list[i].id}"
+                                                                   data-bs-title="${i + 1}"
+                                                                   aria-controls="${list[i].maDonHang}"
+                                                                   aria-selected="true">${list[i].maDonHang}
+                                                               </a>
+                                                        </div>
+                                              </div>
+                                        </div>
+                        </li>`;
+                    tab +=
+                        `<div class="tab-pane fade" id="${list[i].maDonHang}" role="tabpanel" aria-labelledby="${list[i].maDonHang}-tab">
+                           <form id="form" autocomplete="off" class="needs-validation">
+                            <div class="row">
+                             <div class="col-xl-8 col-lg-8">
+                                  <div class="card">
+                                      <div class="card-header">
+                                             <div class="row">
+                                                  <div class="col-lg-3 col-sm-12">
+                                                        <div class="mb-auto">
+                                                                     <div class="mt-auto" style="height: 50%;width: 100%;" id="my-qr-reader-${i}">
+                                                                      </div>
+                                                        </div>
+                                                  </div>
+                                                    <div class="col-lg-3 col-sm-12">
+                                                  </div>
+                                                  <div class="col-lg-6 col-sm-12">
+                                                        <div class="mb-auto">
+                                                              <div class="d-flex gap-2 justify-content-end mt-auto mb-auto">
+                                                                    <button type="button" class="btn w-sm btn-success btn-hover" href="#showModal"
+                                                                                data-bs-toggle="modal">Tìm kiếm
+                                                                     </button>
+                                                              </div>
+                                                        </div>
+                                                        <div class="mb-auto mt-5">
+                                                               <label for="id-product-input_${i + 1}" class="form-label">Mã sản phẩm</label>
+                                                               <input type="text" id="id-product-input_${i + 1}" class="form-control"
+                                                                      placeholder="Nhập mã sản phẩm" onkeyup="searchBox(${i + 1})">
+                                                               <ul class="dropdown-menu" id="searchResults_${i + 1}" style="width: 281px;">
+                                                               </ul>
+
+                                                        </div>
+                                                  </div>
+                                             </div>
+                                      </div>
+                                  </div>
+                                  <div class="card">
+                                    <div class="card-body">
+                                        <div class="row" id="gioHangList">
+                                             <div class="col-lg-12">
+                                                 <div class="card">
+                                                       <div class="card-body">
+                                                             <div class="row g-lg-2 g-4">
+                                                                    <div class="col-lg-3">
+                                                                 <div class="d-flex">
+                                                       <div class="flex-shrink-0 me-3">
+                                                            <div class="avatar-sm">
+                                                                <div class="avatar-title rounded-circle bg-light text-primary fs-15">
+                                                                     <i class="bi bi-cart2"></i>
+                                                                </div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="flex-grow-1">
+                                                           <h5 class="card-title mb-1">Giỏ hàng</h5>
+                                                           <p class="text-muted mb-0">Cart</p>
+                                                        </div>
+                                                </div>
+                                                                    </div>
+                                                                    <div class="col-lg-auto col-sm-9">
+                                                                    </div>
+                                                            </div>
+                                                       </div>
+                                                 </div>
+                                                <div class="card">
+                                                <div class="card-body">
+                                                    <div class="table-responsive table-card mb-1">
+                                                        <table class="table align-middle table-nowrap"
+                                                               id="customerTable3">
+                                                            <thead class="table-light">
+                                                            <tr>
+                                                                <th class="text-start">STT</th>
+                                                                <th class="text-start">Tên</th>
+                                                                <th class="text-start">Màu Sắc</th>
+                                                                <th class="text-start">Kích Thước</th>
+                                                                <th class="text-start">Số Lượng</th>
+                                                                <th class="text-start">Đơn Giá</th>
+                                                                <th class="text-start">Action</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody class="list form-check-all"
+                                                                   id="list_product_detail_of_cart_${i + 1}">
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="d-flex justify-content-center">
+                                                                <nav aria-label="Page navigation example">
+                                                                    <ul class="pagination justify-content-center"
+                                                                        id="pagination_cart_${i + 1}">
+                                                                    </ul>
+                                                                </nav>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-xl-4 col-lg-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6 class="card-title mb-0">Thông tin đơn hàng</h6>
+                                            </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                      <div class="col-lg-6 col-sm-12">
+                                         <div class="mb-3">
+                                            <label for="staff-input" class="form-label">Nhân viên</label>
+                                        <input type="text" id="staff-input" class="form-control" value="${staff_name}" disabled>
+                                         </div>
+                                         </div>
+                                       <div class="col-lg-6 col-sm-12">
+                                         <div class="mb-3">
+                                            <label for="time-input_${i + 1}" class="form-label">Thời gian</label>
+                                        <input type="text" id="time-input_${i + 1}" class="form-control" value="${time}" disabled>
+                                         </div>
+                                         </div>
+                                    </div>
+                                     <div class="row">
+                                      <div class="col-lg-5 col-sm-12">
+                                         <div class="mb-3">
+                                          <label class="form-label">Khách hàng</label>
+                                           <input type="number" class="form-control" placeholder="SDT" value="" id="number-phone-${i + 1}" onkeyup="searchCustomerByPhone(${i + 1})">
+                                         </div>
+                                         </div>
+                                       <div class="col-lg-7 col-sm-12">
+                                         <div class="mb-3">
+                                            <label class="form-label"></label>
+                                            <input type="text" class="form-control mt-2" id="customer-name-${i + 1}" disabled>
+                                         </div>
+                                         </div>
+                                    </div>
+                                        <div class="row">
+                                      <div class="col-lg-6 col-sm-12">
+                                         <div class="mb-3">
+                                        <label for="voucher-select" class="form-label">Khuyến Mãi</label>
+                                        <input class="form-control promotion-title" value="${promotion_value}" disabled>
+                                         </div>
+                                         </div>
+                                       <div class="col-lg-6 col-sm-12">
+                                         <div class="mb-3">
+                                       <label for="count-total-input_${i + 1}" class="form-label">Tổng tiền</label>
+                                        <input type="text" id="count-total-input_${i + 1}" class="form-control" placeholder="" disabled>
+                                         </div>
+                                         </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="paydown-input${i + 1}" class="form-label">Tiền khách trả</label>
+                                        <input type="text" id="paydown-input_${i + 1}" class="form-control" placeholder="" onblur="formatMoneyToPay(${i + 1})">
+                                    </div>
+                                     <div class="mt-2">
+                                        <button class="btn btn-primary" type="button" onclick="paymentOrder(${i + 1})">Thanh Toán</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+`;
+                    loadInvoiceDetail(list[i].id, 0, i + 1);
+                }
+                if (i === (list.length - 1)) {
+                    main += `
+                    <li class="nav-item" style="padding: 0 10px;">
+                        <div class="row">
+                            <div class="col-lg-auto col-sm-auto">
+                                <button type="button" class="btn btn-sm btn-soft-primary btn-hover"
+                                        id="create-record" onclick="createInvoice()">
+                                    <i class="bi bi-plus"></i></button>
+                            </div>
+                        </div>
+                    </li>`;
+                }
+            }
+        }
+        document.getElementById("myTab").innerHTML = main;
+        document.getElementById("myTabContent").innerHTML = tab;
+        $.getScript("/assets/js/qr.js");
+    }
+
+    document.addEventListener('click', function (event) {
+        if (event.target.matches('a[data-bs-toggle="tab"]')) {
+            var dataBsTarget = event.target.getAttribute('data-bs-target');
+            var ariaControls = event.target.getAttribute('aria-controls');
+            var dataValue = event.target.getAttribute('data-value');
+            var dataTitle = event.target.getAttribute('data-bs-title');
+            console.log(dataBsTarget, ariaControls, dataValue);
+            selectedInvoiceId = dataValue;
+            idElementInvoiceDetail = dataTitle;
+        }
+    });
+
+    function addProduct(id) {
+        $.ajax({
+            url: '/api/admin/sell-off/cart/save/' + selectedInvoiceId + "?idProductDetail=" + id,
+            method: 'POST',
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            success: function (response) {
+                console.log(response);
+                if (response === "success") {
+                    (async () => {
+                        await Toast.fire({
+                            icon: "success",
+                            title: "Thêm thành công!",
+                        });
+                    })();
+                    loadInvoiceDetail(selectedInvoiceId, currentPageCart, idElementInvoiceDetail);
+                } else {
+                    (async () => {
+                        await Toast.fire({
+                            icon: "error",
+                            title: "Đã có sản phẩm trong giỏ hàng!",
+                        });
+                    })();
+                }
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    async function searchBox(index) {
+        var inputElement = document.getElementById('id-product-input_' + index);
+        var searchResults = document.getElementById('searchResults_' + index);
+        var result = '';
+        // Lấy keyword từ input
+        var keyword = inputElement.value.trim().toLowerCase();
+
+        if (keyword.length > 0 && !isNaN(keyword)) {
+            $.ajax({
+                url: '/api/admin/sell-off/product-detail/search-by-id/' + keyword,
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                success: async function (response) {
+                    console.log(response);
+                    if (response !== 'null') {
+
+                        var url = '/api/admin/product_detail/picture/' + response.sp.id + '/' + response.ms.id;
+
+                        const responsePicture = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                            }
+                        })
+
+                        const data = await responsePicture.json();
+
+                        if (data !== null) {
+                            result += `
+                                <li>
+                                    <div class="dropdown-item d-flex align-items-center">
+                                         <img src="${data[0].linkAnh}" alt="Ảnh sản phẩm"
+                                          style="width: 25%; height: 70%; padding-right: 15px;">
+                                         <div>
+                                            <span>${response.sp.tenSP}</span>
+                                            <p class="small">${response.ms.ten}, ${response.size}</p>
+                                        </div>
+                                        <i class="ri-add-line ms-auto" onclick="addProduct(${response.id})"></i>
+                                    </div>
+                                </li>`;
+
+                            // Kích hoạt dropdown
+                            searchResults.style.display = 'block';
+                            searchResults.innerHTML = result;
+                        } else {
+                            result += `
+                                <li>
+                                    <div class="dropdown-item d-flex align-items-center">
+                                        <div class="d-flex justify-content-center align-items-center" style="width: 25%; height: 70%; padding-right: 15px;">
+                                                       <i class="ri-question-mark"></i>
+                                                   </div>
+                                        <div>
+                                            <span>${response.sp.tenSP}</span>
+                                            <p class="small">${response.ms.ten}, ${response.size}</p>
+                                        </div>
+                                        <i class="ri-add-line ms-auto" onclick="addProduct(${response.id})"></i>
+                                    </div>
+                            </li>`;
+
+                            // Kích hoạt dropdown
+                            searchResults.style.display = 'block';
+                            searchResults.innerHTML = result;
+                        }
+                    }
+                    if (response === 'null') {
+                        result = `
+                                <li>
+                                    <div class="dropdown-item d-flex align-items-center">
+                                         <div>
+                                            <span>Không có kết quả!</span>
+                                        </div>
+                                    </div>
+                                </li>`;
+                        searchResults.style.display = 'block';
+                        searchResults.innerHTML = result;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+
+        } else {
+            // Ẩn dropdown nếu không có keyword
+            searchResults.style.display = 'none';
+        }
+    }
+
+    function formatMoneyToPay(index) {
+        var inputElement = document.getElementById('paydown-input_' + index);
+        var value = inputElement.value;
+        value = value.replace(/[^\d]/g, '');
+        value = formatmoney(value);
+        inputElement.value = value;
+    }
+
+    async function paymentOrder(index) {
+        let promotion = await getPromotion();
+        let id_promotion = null;
+        if (promotion.length > 0) {
+            id_promotion = promotion[0].id;
+        }
+        var money = document.getElementById('paydown-input_' + index).value;
+        var totalCount = document.getElementById('count-total-input_' + index).value;
+        var id = document.getElementById('customer-name-' + index).getAttribute('data-customer-id');
+        if (totalCount === '') {
+            await Toast.fire({
+                icon: "error",
+                title: "Đơn hàng chưa có sản phẩm!",
+            });
+            return;
+        }
+        if (money === '') {
+            await Toast.fire({
+                icon: "error",
+                title: "Vui lòng nhập tiền khách trả!",
+            });
+            return;
+        }
+        let cleanedString = totalCount.split('(')[0].trim();
+        var cleanedStr = cleanedString.replace(/[^\d\s]/g, '');
+        var cleanedStr2 = money.replace(/[^\d\s]/g, '');
+        var totalAmount = parseInt(cleanedStr);
+        var moneyToPay = parseInt(cleanedStr2);
+        console.log(money, totalCount);
+        if (isNaN(cleanedStr2)) {
+            await Toast.fire({
+                icon: "error",
+                title: "Vui lòng nhập đúng giá tiền!",
+            });
+        } else if (moneyToPay < totalAmount) {
+            await Toast.fire({
+                icon: "warning",
+                title: "Tiền khách trả không đủ!",
+            });
+        } else {
+            swal.fire({
+                icon: 'question',
+                title: 'Bạn có chắc muốn thanh toán?',
+                showCancelButton: true,
+                cancelButtonText: 'Không',
+                confirmButtonText: 'Có'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/admin/sell-off/invoice/change-status/' + selectedInvoiceId + '?total_amount=' + totalAmount
+                            + '&cash_from_customer=' + moneyToPay + '&customer=' + id + '&promotion=' + id_promotion,
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if (response === 'success') {
+                                swal.fire({
+                                    title: "Thanh toán thành công!",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadInvoice();
+                                    }
+                                })
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            })
+        }
+    }
+
+    async function searchCustomerByPhone(index) {
+        let phone = document.getElementById('number-phone-' + index).value;
+        if (phone.replace(/[^0-9]/g, '').length === 0) {
+            await Toast.fire({
+                icon: "warning",
+                text: "Số điện thoại không đúng!",
+            });
+            return;
+        }
+        let url = '/api/admin/customer/find/' + phone.replace(/[^0-9]/g, '');
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        const data = await response.json();
+        console.log(data);
+        if (data === null) {
+            document.getElementById('customer-name-' + index).value = 'Khách vãng lai';
+            document.getElementById('customer-name-' + index).setAttribute('data-customer-id', null);
+        } else {
+            document.getElementById('customer-name-' + index).value = data.hoTen + " - " + data.sdt;
+            document.getElementById('customer-name-' + index).setAttribute('data-customer-id', data.id);
+        }
+    }
+</script>
+</body>
+</html>

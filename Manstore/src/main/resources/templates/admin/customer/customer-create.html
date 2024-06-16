@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+
+<head th:replace="admin/fragments/head::head"></head>
+
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Khách Hàng</a></li>
+                                    <li class="breadcrumb-item active">Thêm Khách Hàng</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <form id="create-form" autocomplete="off" class="needs-validation" novalidate method="post"
+                      th:action="@{/admin/customer/save}" th:object="${khachHang}">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="customer-name-input">Họ tên</label>
+                                            <input type="text" class="form-control" id="customer-name-input"
+                                                   placeholder="Họ tên" required th:field="*{hoTen}"
+                                                   onkeyup="validName()">
+                                            <div class="text-danger" th:if="${errorName}" th:text="${errorName}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="customer-phone-input">Số điện
+                                                thoại</label>
+                                            <input type="text" class="form-control" id="customer-phone-input"
+                                                   placeholder="Số điện thoại" required th:field="*{sdt}"
+                                                   onkeyup="validPhone()">
+                                            <div class="text-danger" th:if="${errorPhone}" th:text="${errorPhone}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="customer-email-input">Email</label>
+                                            <input type="text" class="form-control" id="customer-email-input"
+                                                   placeholder="Email" required th:field="*{email}"
+                                                   onkeyup="validEmail()">
+                                            <div class="text-danger" th:if="${errorEmail}" th:text="${errorEmail}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label for="customer-birthday-input" class="form-label">Ngày sinh</label>
+                                            <input type="date" id="customer-birthday-input" class="form-control"
+                                                   onkeyup="validBirthday()" th:field="*{ngaySinh}"/>
+                                            <div class="text-danger" th:if="${errorBirthday}"
+                                                 th:text="${errorBirthday}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Giới Tính</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" id="nam" value="true"
+                                                       th:name="gioiTinh"
+                                                       checked="checked">
+                                                <label class="form-check-label" for="nam">
+                                                    Nam
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" value="false" id="nu"
+                                                       th:name="gioiTinh">
+                                                <label class="form-check-label" for="nu">
+                                                    Nữ
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Tỉnh</label>
+                                            <select class="form-control" name="tinh" id="province"
+                                                    onchange="getDistricts()" onkeyup="validProvince()">
+                                                <option value="" data-id="">Chọn</option>
+                                            </select>
+                                            <div class="text-danger" th:if="${errorProvince}"
+                                                 th:text="${errorProvince}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Quận/Huyện</label>
+                                            <select class="form-control" name="quan" id="district"
+                                                    onchange="getWards()" onkeyup="validDistrict()">
+                                                <option value="" data-id="">Chọn quận/huyện</option>
+                                            </select>
+                                            <div class="text-danger" th:if="${errorDistrict}"
+                                                 th:text="${errorDistrict}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Xã/Phường</label>
+                                            <select class="form-control" name="xa" id="ward"
+                                                    onkeyup="validWard()">
+                                                <option value="" data-id="">Chọn Xã/Phường</option>
+                                            </select>
+                                            <div class="text-danger" th:if="${errorWard}"
+                                                 th:text="${errorWard}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="customer-diachi-input">Địa Chỉ
+                                            </label>
+                                            <input type="text" class="form-control" name="diaChiCT"
+                                                   id="customer-diachi-input"
+                                                   placeholder="Địa chỉ cụ thể" onkeyup="validAddress()"
+                                            >
+                                            <div class="text-danger" th:if="${errorAddress}"
+                                                 th:text="${errorAddress}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                    <div class="text-end mb-3">
+                        <a th:href="@{/admin/customer}" class="btn btn-danger w-sm">Trở lại</a>
+                        <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm mới
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end card -->
+
+        <!-- end col -->
+    </div>
+    <!--end row-->
+
+</div>
+<!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+</div>
+<!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
+<script th:inline="javascript">
+    function showConfirmPopup() {
+        swal.fire({
+            icon: 'question',
+            title: "Bạn có muốn thêm mới?",
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('create-form').submit();
+            }
+        });
+    }
+</script>
+<script th:inline="javascript">
+    let errorNumberPhone = /*[[ ${errorPhone} ]]*/ null;
+
+    if (errorNumberPhone === 'Số điện thoại chưa đúng!') {
+        swal.fire({
+            icon: 'warning',
+            title: 'Lưu ý !',
+            text: 'Số điện phải bắt đầu từ 0 và có 9 hoặc 10 kí tự số!',
+            confirmButtonText: "OK"
+        })
+    }
+
+</script>
+<script th:inline="javascript">
+
+    function validName() {
+        var nameInput = document.getElementById('customer-name-input');
+        var errorName = document.getElementById('errorName');
+
+        nameInput.addEventListener('input', function () {
+            if (nameInput.value.trim() !== '') {
+                errorName.style.display = 'none';
+            } else {
+                errorName.style.display = 'block';
+            }
+        });
+    }
+
+    function validPhone() {
+        var phoneInput = document.getElementById('customer-phone-input');
+        var errorPhone = document.getElementById('errorPhone');
+
+        phoneInput.addEventListener('input', function () {
+            if (phoneInput.value.trim() !== '') {
+                errorPhone.style.display = 'none';
+            } else {
+                errorPhone.style.display = 'block';
+            }
+        });
+    }
+
+    function validEmail() {
+        var emailInput = document.getElementById('customer-email-input');
+        var errorEmail = document.getElementById('errorEmail');
+
+        if (emailInput.value.trim() !== '') {
+            errorEmail.style.display = 'none';
+        } else {
+            errorEmail.style.display = 'block';
+        }
+
+    }
+
+    function validBirthday() {
+        var birthdayInput = document.getElementById('customer-birthday-input');
+        var errorBirthday = document.getElementById('errorBirthday');
+
+        if (birthdayInput.value.trim() !== '') {
+            errorBirthday.style.display = 'none';
+        } else {
+            errorBirthday.style.display = 'block';
+        }
+    }
+
+    function validAddress() {
+        var addressInput = document.getElementById('customer-address-input');
+        var errorAddress = document.getElementById('errorAddress');
+
+        if (addressInput.value.trim() !== '') {
+            errorAddress.style.display = 'none';
+        } else {
+            errorAddress.style.display = 'block';
+        }
+    }
+
+    function validProvince() {
+        var provinceInput = document.getElementById('customer-address-input');
+        var errorProvince = document.getElementById('errorProvince');
+
+        if (provinceInput.value.trim() !== '') {
+            errorProvince.style.display = 'none';
+        } else {
+            errorProvince.style.display = 'block';
+        }
+    }
+
+    function validDistrict() {
+        var districtInput = document.getElementById('customer-district-input');
+        var errorDistrict = document.getElementById('errorDistrict');
+
+        if (districtInput.value.trim() !== '') {
+            errorDistrict.style.display = 'none';
+        } else {
+            errorDistrict.style.display = 'block';
+        }
+    }
+
+    function validWard() {
+        var wardInput = document.getElementById('customer-ward-input');
+        var errorWard = document.getElementById('errorWard');
+
+        if (wardInput.value.trim() !== '') {
+            errorWard.style.display = 'none';
+        } else {
+            errorWard.style.display = 'block';
+        }
+    }
+
+    const host = "https://online-gateway.ghn.vn/shiip/public-api/master-data/province";
+    const districtHost = "https://online-gateway.ghn.vn/shiip/public-api/master-data/district";
+    const wardHost = "https://online-gateway.ghn.vn/shiip/public-api/master-data/ward";
+    const token = "92b43f7d-dee6-11ee-a2c1-ca2feb4b63fa";
+
+    $(document).ready(function () {
+        const provinceDropdown = $("#province");
+
+        axios.get(host, {
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        })
+            .then(response => {
+                const provinces = response.data.data;
+
+                provinces.forEach(province => {
+                    provinceDropdown.append(`<option value="${province.ProvinceName}" data-id="${province.ProvinceID}">${province.ProvinceName}</option>`);
+                });
+
+            })
+            .catch(error => {
+                console.error('Error fetching GHN Provinces:', error);
+            });
+    });
+
+
+    function getDistricts() {
+        const selectedProvince = $("#province option:selected");
+        const selectedProvinceId = selectedProvince.data("id");
+        const selectedProvinceName = selectedProvince.val();
+        const districtDropdown = $("#district");
+        const wardDropdown = $("#ward");
+
+        districtDropdown.empty();
+        districtDropdown.append(`<option value="" data-id="">Chọn quận</option>`);
+
+        wardDropdown.empty();
+        wardDropdown.append(`<option value="" data-id="">Chọn phường/xã</option>`);
+
+
+        if (!selectedProvinceId) {
+            return;
+        }
+
+        axios.get(`${districtHost}?province_id=${selectedProvinceId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        })
+            .then(response => {
+                const districts = response.data.data;
+
+                districts.forEach(district => {
+                    districtDropdown.append(`<option value="${district.DistrictName}" data-id="${district.DistrictID}">${district.DistrictName}</option>`);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching GHN Districts:', error);
+            });
+    }
+
+
+    function getWards() {
+        const selectedDistrict = $("#district option:selected");
+        const selectedDistrictId = selectedDistrict.data("id");
+        const selectedDistrictName = selectedDistrict.val();
+        const wardDropdown = $("#ward");
+
+
+        wardDropdown.empty();
+        wardDropdown.append(`<option value="" data-id="">Chọn phường/xã</option>`);
+
+
+        if (!selectedDistrictId) {
+            return;
+        }
+
+
+        axios.get(`${wardHost}?district_id=${selectedDistrictId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        })
+            .then(response => {
+                const wards = response.data.data;
+
+                wards.forEach(ward => {
+                    wardDropdown.append(`<option value="${ward.WardName}" data-id="${ward.WardID}">${ward.WardName}</option>`);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching GHN Wards:', error);
+            });
+    }
+</script>
+<script th:if="${message == true}">
+    swal.fire("Thêm Thành Công!", "", "success").then(() => {
+        window.location.href = '/admin/customer';
+    });
+</script>
+
+</html>

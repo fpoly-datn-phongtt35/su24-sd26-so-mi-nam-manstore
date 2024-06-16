@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.1.0/remixicon.css"
+          integrity="sha512-dUOcWaHA4sUKJgO7lxAQ0ugZiWjiDraYNeNJeRKGOIpEq4vroj1DpKcS3jP0K4Js4v6bXk31AAxAxaYt3Oi9xw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body>
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row" style="padding: 10px 10px">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Danh Sách Sản Phẩm</h4>
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Sản Phẩm</a></li>
+                                    <li class="breadcrumb-item active">Danh Sách Sản Phẩm</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row" style="padding: 10px 10px">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 d-flex justify-content-center align-items-center justify-content-sm-start">
+                                        <a th:href="@{/api/admin/product/create_product}" class="btn btn-success"
+                                           id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i>Thêm
+                                            Sản
+                                            Phẩm</a>
+                                    </div>
+
+                                    <div class="col-md-6 d-flex justify-content-center align-items-center justify-content-sm-between">
+                                        <div class="row" style="padding-bottom: 10px">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Danh Mục</label>
+                                                <select class="form-select mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="filter-collections"
+                                                        onchange="searchProduct()">
+                                                    <option value="-1" selected>Tất Cả</option>
+                                                    <option value="0">Quần</option>
+                                                    <option value="1">Áo</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Trạng Thái</label>
+                                                <select class="form-select mb-3"
+                                                        aria-label=".form-select-lg example"
+                                                        id="filter-status"
+                                                        onchange="searchProduct()">
+                                                    <option value="-1" selected>Tất Cả</option>
+                                                    <option value="0">Chưa Mở Bán</option>
+                                                    <option value="1">Đang Mở Bán</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 d-flex justify-content-center align-items-center justify-content-sm-end">
+                                        <div class="search-box ms-2">
+                                            <input type="text" class="form-control" autocomplete="off"
+                                                   id="search-product-input" placeholder="Tìm Kiếm Sản Phẩm..."
+                                                   onkeyup="searchProduct()">
+                                            <i class="ri-search-line search-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-2">
+                            <div id="product-list" class="gridjs-border-none mb-4">
+                                <table class="table table-striped">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Tên</th>
+                                        <th scope="col">Giá</th>
+                                        <th scope="col">Danh Mục</th>
+                                        <th scope="col">Trạng Thái</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="font-weight: normal" id="list_Product">
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-1"></div>
+                                    <div class="col-lg-4">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-center" id="pagination">
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row" style="padding: 10px 10px">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Danh Sách Sản Phẩm Chi Tiết</h4>
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Sản Phẩm</a></li>
+                                    <li class="breadcrumb-item active">Danh Sách Sản Phẩm Chi Tiết</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row" style="padding: 10px 10px">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 d-flex justify-content-center align-items-center justify-content-sm-start">
+                                        <button class="btn btn-success" onclick="showModal()"
+                                                id="addproduct-btn2"><i class="ri-add-line align-bottom me-1"></i>Thêm
+                                            Sản
+                                            Phẩm Chi Tiết
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4 d-flex justify-content-center align-items-center justify-content-sm-start">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1">Sản Phẩm</span>
+                                            <input class="form-control"
+                                                   id="fill-name" type="text" placeholder="......." disabled/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-2">
+                            <div id="product-detail-list" class="gridjs-border-none mb-4">
+                                <table class="table table-striped">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Màu Sắc</th>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">Số Lượng</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="font-weight: normal" id="list_Product_Detail">
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-1"></div>
+                                    <div class="col-lg-4">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-center" id="pagination2">
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+
+            <div class="modal" id="myModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Thêm Sản Phẩm Chi Tiết</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="save_product_detail" action="" class="my-form" method="post">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm">
+                                                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                                        <i class="bi bi-list-ul"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-1">General Information</h5>
+                                                <p class="text-muted mb-0">Fill all information below.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row ">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <h5 class="fs-15 mb-3">Tên Sản Phẩm</h5>
+                                                    <input type="text" class="form-control" id="product-name-input"
+                                                           placeholder="Enter product name" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <div class="col-xl-6">
+                                                        <div class="color-picker">
+                                                            <label class="form-label">Màu Sắc</label>
+                                                            <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Xanh Lục Bảo">
+                                                                    <input type="checkbox" value="5" id="color-1"
+                                                                           name="mauSac">
+                                                                    <label class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-1"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Xám">
+                                                                    <input type="checkbox" value="4" id="color-2"
+                                                                           name="mauSac">
+                                                                    <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-2"
+                                                                           style="background-color: rgb(169,169,169); border: none;"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Vàng">
+                                                                    <input type="checkbox" value="8" id="color-3"
+                                                                           name="mauSac">
+                                                                    <label class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-3"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top" data-bs-original-title="Đỏ">
+                                                                    <input type="checkbox" value="3" id="color-4"
+                                                                           name="mauSac">
+                                                                    <label class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-4"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Xanh Da Trời">
+                                                                    <input type="checkbox" value="7" id="color-5"
+                                                                           name="mauSac">
+                                                                    <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-5"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Tím Xanh">
+                                                                    <input type="checkbox" value="6"
+                                                                           id="color-6" name="mauSac">
+                                                                    <label class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-6"
+                                                                           data-bs-original-title="Tím Xanh"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Đen">
+                                                                    <input type="checkbox" value="1" id="color-7"
+                                                                           name="mauSac">
+                                                                    <label class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-7"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Trắng">
+                                                                    <input type="checkbox" value="2" id="color-8"
+                                                                           name="mauSac">
+                                                                    <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-8"></label>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end row -->
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <h5 class="fs-15 mb-3">Số Lượng</h5>
+                                                    <input type="text" class="form-control"
+                                                           id="product-count-input"
+                                                           placeholder="Enter count" aria-label="Count"
+                                                           aria-describedby="product-count-addon"
+                                                           required th:name="soLuong">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <div class="col-xl-6">
+                                                        <div class="mt-4">
+                                                            <h5 class="fs-15 mb-3">Size :</h5>
+                                                            <div class="d-flex flex-wrap gap-2 size-picker">
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="checkbox" class="btn-check"
+                                                                           id="productsize-radio1" value="s"
+                                                                           name="size">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio1">S</label>
+                                                                </div>
+
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="checkbox" class="btn-check"
+                                                                           id="productsize-radio2" value="m"
+                                                                           name="size">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio2">M</label>
+                                                                </div>
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="checkbox" class="btn-check"
+                                                                           id="productsize-radio3" value="l"
+                                                                           name="size">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio3">L</label>
+                                                                </div>
+
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="checkbox" class="btn-check"
+                                                                           id="productsize-radio4" value="xl"
+                                                                           name="size">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio4">XL</label>
+                                                                </div>
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="checkbox" class="btn-check"
+                                                                           id="productsize-radio5" value="xxl"
+                                                                           name="size">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio5">XXL</label>
+                                                                </div>
+
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="checkbox" class="btn-check"
+                                                                           id="productsize-radio6" value="2xl"
+                                                                           name="size">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio6">2XL</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end row-->
+
+                                        <!-- end col -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Đóng
+                                        </button>
+                                        <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">
+                                            Lưu
+                                        </button>
+                                    </div>
+                                    <!-- end row -->
+                                </div>
+                            </form>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+            </div>
+            <!--end modal-->
+            <div class="modal" id="myModalEdit" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Sản Phẩm Chi Tiết</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="edit_product_detail" action="" class="my-form" method="post">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm">
+                                                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
+                                                        <i class="bi bi-list-ul"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="card-title mb-1">General Information</h5>
+                                                <p class="text-muted mb-0">Fill all information below.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row ">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <h5 class="fs-15 mb-3">Tên Sản Phẩm</h5>
+                                                    <input type="text" class="form-control" id="product-name-input-edit"
+                                                           placeholder="Enter product name" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <div class="col-xl-6">
+                                                        <div class="color-picker">
+                                                            <label class="form-label">Màu Sắc</label>
+                                                            <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Xanh Lục Bảo">
+                                                                    <input type="radio" value="5" id="color-5-update"
+                                                                           name="ms">
+                                                                    <label class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-5-update"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Xám">
+                                                                    <input type="radio" value="4" id="color-4-update"
+                                                                           name="ms">
+                                                                    <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-4-update"
+                                                                           style="background-color: rgb(169,169,169); border: none;"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Vàng">
+                                                                    <input type="radio" value="8" id="color-8-update"
+                                                                           name="ms">
+                                                                    <label class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-8-update"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top" data-bs-original-title="Đỏ">
+                                                                    <input type="radio" value="3" id="color-3-update"
+                                                                           name="ms">
+                                                                    <label class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-3-update"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Xanh Da Trời">
+                                                                    <input type="radio" value="7" id="color-7-update"
+                                                                           name="ms">
+                                                                    <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-7-update"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Tím Xanh">
+                                                                    <input type="radio" value="6"
+                                                                           id="color-6-update" name="ms">
+                                                                    <label class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-6-update"
+                                                                           data-bs-original-title="Tím Xanh"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Đen">
+                                                                    <input type="radio" value="1" id="color-1-update"
+                                                                           name="ms">
+                                                                    <label class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-1-update"></label>
+                                                                </li>
+                                                                <li data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top"
+                                                                    data-bs-original-title="Trắng">
+                                                                    <input type="radio" value="2" id="color-2-update"
+                                                                           name="ms">
+                                                                    <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
+                                                                           for="color-2-update"></label>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end row -->
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <h5 class="fs-15 mb-3">Số Lượng</h5>
+                                                    <input type="text" class="form-control"
+                                                           id="productdetail-count-input-edit"
+                                                           placeholder="Enter Count" aria-label="Count"
+                                                           aria-describedby="product-count-addon"
+                                                           required th:name="soLuong">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <div class="col-xl-6">
+                                                        <div class="mt-4">
+                                                            <h5 class="fs-15 mb-3">Size :</h5>
+                                                            <div class="d-flex flex-wrap gap-2 size-picker">
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="radio" class="btn-check"
+                                                                           id="productsize-radio-update-s" value="s"
+                                                                           name="size-update">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio-update-s">S</label>
+                                                                </div>
+
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="radio" class="btn-check"
+                                                                           id="productsize-radio-update-m" value="m"
+                                                                           name="size-update">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio-update-m">M</label>
+                                                                </div>
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="radio" class="btn-check"
+                                                                           id="productsize-radio-update-l" value="l"
+                                                                           name="size-update">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio-update-l">L</label>
+                                                                </div>
+
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="radio" class="btn-check"
+                                                                           id="productsize-radio-update-xl" value="xl"
+                                                                           name="size-update">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio-update-xl">XL</label>
+                                                                </div>
+
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="radio" class="btn-check"
+                                                                           id="productsize-radio-update-xxl" value="xxl"
+                                                                           name="size-update">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-radio-update-xxl">XXL</label>
+                                                                </div>
+
+                                                                <div data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                     data-bs-placement="top">
+                                                                    <input type="radio" class="btn-check"
+                                                                           id="productsize-update-2xl" value="2xl"
+                                                                           name="size-update">
+                                                                    <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
+                                                                           for="productsize-update-2xl">2XL</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end row-->
+
+                                        <!-- end col -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Đóng
+                                        </button>
+                                        <button type="button" class="btn btn-primary"
+                                                onclick="showConfirmPopupUpdate()">
+                                            Lưu
+                                        </button>
+                                    </div>
+                                    <!-- end row -->
+                                </div>
+                            </form>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+            </div>
+            <!-- end modal -->
+        </div>
+    </div>
+</div>
+<!-- End Page-content -->
+</div>
+<!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<div th:replace="admin/fragments/chat::chat"></div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script th:inline="javascript">
+
+    window.onload = function () {
+        loadPage(0);
+    }
+
+    var idProduct;
+
+    var idProduct_Detail;
+
+    var pageProduct;
+
+    var pageProductDetail;
+
+    async function detailProduct(productId, pageNumber) {
+        var url = "/api/admin/product/product_detail/" + productId + "/" + pageNumber;
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var urlProduct = "/api/admin/product/detail/" + productId;
+        const responseProduct = await fetch(urlProduct, {
+            method: 'GET'
+        });
+        var resultProduct = await responseProduct.json();
+        idProduct = productId;
+        pageProductDetail = pageNumber;
+        var result = await response.json();
+        var list = result.content;
+        console.log(list);
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        document.getElementById('fill-name').value = resultProduct.tenSP;
+        if (list.length > 0) {
+            for (i = 0; i < list.length; i++) {
+                main += `<tr >
+                            <td scope="row">${list[i].id}</td>
+                            <td scope="row">${list[i].ms.ten}</td>
+                            <td scope="row">${list[i].size}</td>
+                            <td scope="row">${list[i].soLuong}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="editProductDetail(${list[i].id})"
+                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                 </div>
+                            </td>
+                     </tr>`
+            }
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Sản Phẩm Này Chưa Có Sản Phẩm Chi Tiết!",
+            });
+        }
+        document.getElementById("list_Product_Detail").innerHTML = main;
+        var currentPage = `
+             <li class="page-item">
+                    <button class="page-link" onclick="detailProduct(${productId},0)" aria-label="First">First</button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" aria-label="Previous" onclick="detailProduct(${productId},${number - 1 < 0 ? totalPage - 1 : number - 1})"><span aria-hidden="true">&laquo;</span></button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link">${number + 1}</button>
+            </li>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" aria-label="Next" onclick="detailProduct(${productId},${number + 1 === totalPage ? 0 : number + 1})">
+                       <span aria-hidden="true">&raquo;</span>
+                     </button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" onclick="detailProduct(${productId},${totalPage - 1})" aria-label="Last">Last</button>
+            </li>
+        `;
+        document.getElementById("pagination2").innerHTML = currentPage;
+    }
+
+    async function editProductDetail(idProductDetail) {
+        fetch('/api/admin/product_detail/detail/' + idProductDetail, {
+            method: 'GET'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            idProduct_Detail = idProductDetail;
+            document.getElementById('product-name-input-edit').value = data.sp.tenSP;
+            document.getElementById('productdetail-count-input-edit').value = data.soLuong;
+
+            const colorId = data.ms.id;
+            document.getElementById('color-' + colorId + '-update').checked = true;
+
+            const sizeName = data.size;
+            document.getElementById('productsize-radio-update-' + sizeName.toLowerCase()).checked = true;
+
+            $('#myModalEdit').modal('show');
+        })
+            .catch(error => console.error('Error:', error));
+    }
+
+    document.getElementById('myModalEdit').addEventListener('hide.bs.modal', function (event) {
+
+        var colorCheckboxes = document.querySelectorAll('[name="ms"]');
+        colorCheckboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
+        });
+
+        var sizeCheckboxes = document.querySelectorAll('[name="size"]');
+        sizeCheckboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
+        });
+    });
+    document.getElementById('myModal').addEventListener('hide.bs.modal', function (event) {
+
+        var colorCheckboxes = document.querySelectorAll('[name="mauSac"]');
+        colorCheckboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
+        });
+
+        var sizeCheckboxes = document.querySelectorAll('[name="size"]');
+        sizeCheckboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
+        });
+    });
+
+    async function loadPage(pageNumber) {
+        var url = "/api/admin/product/page/search/" + pageNumber + "/" + "null";
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        pageProduct = pageNumber;
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch" \>\n' +
+                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 1)" />\n' +
+                '</div>' : '<div class="form-check form-switch" \>\n' +
+                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0)" checked/>\n' +
+                '</div>';
+            main += `<tr >
+                            <td scope="row">${list[i].maSP}</td>
+                            <td scope="row">${list[i].tenSP}</td>
+                            <td scope="row">${formatMoney(list[i].donGia)}</td>
+                            <td scope="row">${list[i].danhMuc == 0 ? 'Quần' : 'Áo'}</td>
+                            <td>${trangThaiBadge}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="detailProduct(${list[i].id},0)"
+                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                 </div>
+                            </td>
+                     </tr>`
+        }
+        document.getElementById("list_Product").innerHTML = main;
+        var currentPage = `
+            <li class="page-item">
+                    <button class="page-link" aria-label="Previous" onclick="loadPage(${number - 1 === 0 ? totalPage : number - 1})"><span aria-hidden="true">&laquo;</span></button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" onclick="loadPage(0)">1</button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" onclick="loadPage(1)">2</button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" onclick="loadPage(2)">3</button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" aria-label="Next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+                       <span aria-hidden="true">&raquo;</span>
+                     </button>
+            </li>
+        `;
+        document.getElementById("pagination").innerHTML = currentPage;
+    }
+
+    function formatMoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+
+    async function searchProduct(pageNumber) {
+        var keyword = document.getElementById("search-product-input").value.trim().toLowerCase();
+        var status = document.getElementById("filter-status").value;
+        var collection = document.getElementById("filter-collections").value;
+        var url;
+
+        pageNumber === undefined ? pageProduct = 0 : pageProduct = pageNumber;
+
+        if (pageNumber === undefined && keyword === '' && status === "-1" && collection === "-1") {
+            loadPage(0);
+        }// if start search with keyword
+        else if (pageNumber === undefined && keyword !== '' && status === "-1" && collection === "-1") {
+            url = "/api/admin/product/page/search/" + 0 + "/" + keyword;
+            console.log(url);
+            console.log(1);
+        }// search and paging
+        else if (pageNumber !== undefined && keyword !== '' && status === "-1" && collection === "-1") {
+            url = "/api/admin/product/page/search/" + pageNumber + "/" + keyword + "/" + -1 + "/" - 1;
+            console.log(url);
+            console.log(2);
+        }// filter
+        else if (pageNumber === undefined && keyword === '' && (status !== "-1" || collection !== "-1")) {
+            url = "/api/admin/product/page/" + "null" + "/" + 0 + "/" + status + "/" + collection;
+            console.log(url);
+            console.log(3);
+        }// filter and search
+        else if (pageNumber === undefined && keyword !== '' && (status !== "-1" || collection !== "-1")) {
+            url = "/api/admin/product/page/" + keyword + "/" + 0 + "/" + status + "/" + collection;
+            console.log(url);
+            console.log(4);
+        }// filter and paging
+        else if (pageNumber !== undefined && keyword === '' && (status !== "-1" || collection !== "-1")) {
+            url = "/api/admin/product/page/" + "null" + "/" + pageNumber + "/" + status + "/" + collection;
+            console.log(url);
+            console.log(5);
+        }// filter, search and paging
+        else if (pageNumber !== undefined && (status !== "-1" || collection !== "-1") && keyword !== '') {
+            url = "/api/admin/product/page/" + keyword + "/" + pageNumber + "/" + status + "/" + collection;
+            console.log(url);
+            console.log(6);
+        }
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        for (i = 0; i < list.length; i++) {
+            var trangThaiBadge = (list[i].trangThai == 0) ? '<div class="form-check form-switch" \>\n' +
+                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 1)" />\n' +
+                '</div>' : '<div class="form-check form-switch" \>\n' +
+                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0)" checked/>\n' +
+                '</div>';
+            main += `<tr >
+                            <td scope="row">${list[i].maSP}</td>
+                            <td scope="row">${list[i].tenSP}</td>
+                            <td scope="row">${formatMoney(list[i].donGia)}</td>
+                            <td scope="row">${list[i].danhMuc == 0 ? 'Quần' : 'Áo'}</td>
+                            <td>${trangThaiBadge}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="detailProduct(${list[i].id})"
+                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                 </div>
+                            </td>
+                     </tr>`
+        }
+        document.getElementById("list_Product").innerHTML = main;
+        var currentPage = `
+            <li class="page-item">
+                    <button class="page-link" onclick="searchProduct(0)" aria-label="First">First</button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" aria-label="Previous" onclick="searchProduct(${number - 1 < 0 ? totalPage - 1 : number - 1})"><span aria-hidden="true">&laquo;</span></button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link">${number + 1}</button>
+            </li>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" aria-label="Next" onclick="searchProduct(${number + 1 === totalPage ? 0 : number + 1})">
+                       <span aria-hidden="true">&raquo;</span>
+                     </button>
+            </li>
+            <li class="page-item">
+                    <button class="page-link" onclick="searchProduct(${totalPage - 1})" aria-label="Last">Last</button>
+            </li>
+        `;
+        document.getElementById("pagination").innerHTML = currentPage;
+    }
+
+    function updateStatus(idProduct, status) {
+        swal.fire({
+            title: "Bạn Có Muốn Thay Đổi Trạng Thái?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Lưu Thay Đổi",
+            denyButtonText: `Quay Về`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/api/admin/product/update_status/' + idProduct + '/' + status, {
+                    method: 'GET'
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    console.log(data)
+                }).catch(error => console.log('Error:', error));
+            } else {
+                if (status === 1) {
+                    document.getElementById("input-status-" + idProduct).checked = false;
+                } else {
+                    document.getElementById("input-status-" + idProduct).checked = true;
+                }
+            }
+        });
+    }
+
+    function showModal() {
+        console.log(idProduct);
+        if (idProduct === null || idProduct === undefined) {
+            Swal.fire({
+                icon: "warning",
+                title: "Hãy Chọn Sản Phẩm Bên Trên!",
+            });
+        } else {
+            fetch('/api/admin/product/detail/' + idProduct, {
+                method: 'GET'
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data);
+                document.getElementById('product-name-input').value = data.tenSP;
+                $('#myModal').modal('show');
+            })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+
+    function showConfirmPopup() {
+        swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var count = document.getElementById("product-count-input").value;
+                var selectedColors = [];
+                var spct;
+                var colorCheckboxes = document.querySelectorAll('input[name="mauSac"]:checked');
+                colorCheckboxes.forEach(function (checkbox) {
+                    selectedColors.push(checkbox.value);
+                });
+
+                var selectedSizes = [];
+                var sizeCheckboxes = document.querySelectorAll('input[name="size"]:checked');
+                sizeCheckboxes.forEach(function (checkbox) {
+                    selectedSizes.push(checkbox.value);
+                });
+
+                if (selectedColors.length > selectedSizes.length) {
+                    for (i = 0; i < selectedColors.length; i++) {
+                        for (y = 0; y < selectedSizes.length; y++) {
+
+                            spct = {
+                                sl: count,
+                                ms: selectedColors[i],
+                                size: selectedSizes[y]
+                            }
+                            fetch('/api/admin/product/save_product_detail/' + idProduct, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(spct)
+                            })
+                                .then(response => response.json())
+                                .then((data) => {
+                                    detailProduct(idProduct, pageProductDetail);
+                                    console.log(data);
+                                })
+                                .catch((error) => {
+                                    console.log(spct);
+                                    console.error('Error:', error);
+                                });
+                        }
+                    }
+                } else {
+                    for (i = 0; i < selectedSizes.length; i++) {
+                        for (y = 0; y < selectedColors.length; y++) {
+
+                            spct = {
+                                sl: count,
+                                ms: selectedColors[y],
+                                size: selectedSizes[i]
+                            }
+                            console.log(spct);
+                            fetch('/api/admin/product/save_product_detail/' + idProduct, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(spct)
+                            })
+                                .then(response => response.json())
+                                .then((data) => {
+                                    detailProduct(idProduct, pageProductDetail);
+                                    console.log(data);
+                                })
+                                .catch((error) => {
+                                    console.log(spct);
+                                    console.error('Error:', error);
+                                });
+                        }
+                    }
+                }
+
+            }
+        });
+    }
+
+    async function showConfirmPopupUpdate() {
+        swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var count = document.getElementById("productdetail-count-input-edit").value;
+                var color;
+                var size;
+                const colorInput = document.querySelectorAll('input[name="ms"]:checked');
+                if (colorInput.length > 0) {
+                    color = colorInput[0].value;
+                }
+                const sizeInput = document.querySelectorAll('input[name="size-update"]:checked');
+                if (sizeInput.length > 0) {
+                    size = sizeInput[0].value;
+                }
+                var spct = {
+                    sl: count,
+                    ms: color,
+                    size: size
+                }
+                console.log(count);
+                if (count === '') {
+                    swal.fire({
+                        title: " Pls Enter Count!",
+                        icon: 'warning'
+                    })
+                }
+                console.log(spct);
+                $.ajax({
+                    url: '/api/admin/product_detail/update/' + idProduct_Detail,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(spct),
+                    success: function (response, status) {
+                        console.log(response);
+                        if (status === "success" && response !== "No Valid") {
+                            swal.fire({
+                                title: response + "!",
+                                icon: 'warning'
+                            })
+                        }
+                        if(status === "success" && response === "No Valid"){
+                            detailProduct(idProduct, pageProductDetail);
+
+                            swal.fire({
+                                title: "Sản Phẩm Chi Tiết Đã Được Cập Nhật!",
+                                icon: 'success'
+                            })
+
+                            $('#myModalEdit').modal('hide');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+    }
+</script>
+<script th:if="${updateSuccess == true}">
+    swal.fire("Changes have been Saved!", "", "success");
+</script>
+<script th:if="${saveSuccess == true}">
+    swal.fire("Product detail have been Saved!", "", "success");
+</script>
+<script th:if="${saveFailure == true}">
+    swal.fire("Product detail have not been Saved!", "", "error");
+</script>
+<script th:if="${updateFailure == false}">
+    swal.fire("Changes have not been saved!", "", "error");
+</script>
+</html>

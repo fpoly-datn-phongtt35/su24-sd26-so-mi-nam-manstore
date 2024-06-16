@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+
+<head th:replace="admin/fragments/head::head"></head>
+
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Nhà Cung Cấp</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Nhà Cung Cấp</a></li>
+                                    <li class="breadcrumb-item active">Thêm Nhà Cung Cấp</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <form id="create-form" autocomplete="off" class="needs-validation" novalidate method="post"
+                      th:action="@{/admin/supplier/save}" th:object="${ncc}">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="supplier-name-input">Tên Nhà Cung Cấp<span
+                                                    class="text-danger"> *</span></label>
+                                            <input type="text" class="form-control" id="supplier-name-input"
+                                                   placeholder="Tên Nhà Cung Cấp" required th:field="*{ten}"
+                                                   onkeyup="validName()">
+                                            <div class="text-danger fw-bold" th:if="${errorName}"
+                                                 th:text="${errorName}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="supplier-phone-input">Số Điện
+                                                Thoại <span class="text-danger"> *</span></label>
+                                            <input type="text" class="form-control" id="supplier-phone-input"
+                                                   placeholder="Số điện thoại" required th:field="*{sdt}"
+                                                   onkeyup="validPhone()">
+                                            <div class="text-danger fw-bold" th:if="${errorPhone}"
+                                                 th:text="${errorPhone}">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="supplier-email-input">Email<span
+                                                    class="text-danger"> *</span></label>
+                                            <input type="text" class="form-control" id="supplier-email-input"
+                                                   placeholder="Email" required th:field="*{email}"
+                                                   onkeyup="validEmail()">
+                                            <div class="text-danger fw-bold" th:if="${errorEmail}"
+                                                 th:text="${errorEmail}">
+                                                Please enter a invoice.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label for="supplier-diachi-input" class="form-label">Địa Chỉ <span
+                                                    class="text-danger"> *</span></label>
+                                            <input type="text" id="supplier-diachi-input" class="form-control"
+                                                   placeholder="Nhập Địa Chỉ" th:field="*{diaChi}"
+                                                   onkeyup="validDiaChi()"/>
+                                            <div class="text-danger fw-bold" th:if="${errorDiaChi}"
+                                                 th:text="${errorDiaChi}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="supplier-mota-input">Mô Tả <span
+                                                    class="text-danger"> *</span></label>
+                                            <input type="text" class="form-control" id="supplier-mota-input"
+                                                   placeholder="Mô Tả" required th:field="*{moTa}"
+                                                   onkeyup="validMoTa()">
+                                            <div class="text-danger fw-bold" th:if="${errorMoTa}"
+                                                 th:text="${errorMoTa}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label for="supplier-tt-input" class="form-label">Thông Tin Khác</label>
+                                            <input type="text" id="supplier-tt-input" class="form-control"
+                                                   th:field="*{thongTinKhac}" onkeyup="validTT()"/>
+                                            <div class="text-danger fw-bold" th:if="${errorTT}"
+                                                 th:text="${errorTT}">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                    <div class="text-end mb-3">
+                        <a th:href="@{/admin/supplier}" class="btn btn-danger w-sm">Quay Lại</a>
+                        <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm mới
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end card -->
+
+        <!-- end col -->
+    </div>
+    <!--end row-->
+
+</div>
+<!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+</div>
+<!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
+<script th:inline="javascript">
+    function showConfirmPopup() {
+        swal.fire({
+            icon: 'question',
+            title: "Bạn có muốn thêm mới?",
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: `Không`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('create-form').submit();
+            }
+
+        });
+    }
+</script>
+<script th:inline="javascript">
+    function validName() {
+        var nameInput = document.getElementById('supplier-name-input');
+        var errorName = document.getElementById('errorName');
+
+        nameInput.addEventListener('input', function () {
+            if (nameInput.value.trim() !== '') {
+                errorName.style.display = 'none';
+            } else {
+                errorName.style.display = 'block';
+            }
+        });
+    }
+
+    function validPhone() {
+        var phoneInput = document.getElementById('supplier-phone-input');
+        var errorPhone = document.getElementById('errorPhone');
+
+        phoneInput.addEventListener('input', function () {
+            if (phoneInput.value.trim() !== '') {
+                errorPhone.style.display = 'none';
+            } else {
+                errorPhone.style.display = 'block';
+            }
+        });
+    }
+
+    function validEmail() {
+        var emailInput = document.getElementById('supplier-email-input');
+        var errorEmail = document.getElementById('errorEmail');
+
+        if (emailInput.value.trim() !== '') {
+            errorEmail.style.display = 'none';
+        } else {
+            errorEmail.style.display = 'block';
+        }
+
+    }
+
+    function validDiaChi() {
+        var diaChiInput = document.getElementById('supplier-diachi-input');
+        var errorDiaChi = document.getElementById('errorDiaChi');
+
+        if (diaChiInput.value.trim() !== '') {
+            errorDiaChi.style.display = 'none';
+        } else {
+            errorDiaChi.style.display = 'block';
+        }
+    }
+
+    function validMoTa() {
+        var moTaInput = document.getElementById('supplier-mota-input');
+        var errorMoTa = document.getElementById('errorMoTa');
+
+        if (moTaInput.value.trim() !== '') {
+            errorMoTa.style.display = 'none';
+        } else {
+            errorMoTa.style.display = 'block';
+        }
+    }
+
+    function validTT() {
+        var ttInput = document.getElementById('supplier-tt-input');
+        var errorTT = document.getElementById('errorTT');
+
+        if (ttInput.value.trim() !== '') {
+            errorTT.style.display = 'none';
+        } else {
+            errorTT.style.display = 'block';
+        }
+    }
+</script>
+<script th:if="${message == true}">
+    swal.fire("Thêm Thành Công!", "", "success").then(() => {
+        window.location.href = '/admin/supplier';
+    });
+</script>
+</html>

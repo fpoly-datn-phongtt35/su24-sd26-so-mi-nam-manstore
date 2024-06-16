@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="account/fragments/head::head"></head>
+    <body>
+        <section class="auth-page-wrapper position-relative bg-light min-vh-100 d-flex align-items-center justify-content-between">
+            <div class="auth-header position-fixed top-0 start-0 end-0 bg-body">
+                <div class="container-fluid">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-2">
+                            <a class="navbar-brand mb-2 mb-sm-0" href="../admin/index.html">
+                                <img src="../assets/images/logo-dark.png" class="card-logo card-logo-dark" alt="logo dark" height="22">
+                                <img src="../assets/images/logo-light.png" class="card-logo card-logo-light" alt="logo light" height="22">
+                            </a>
+                        </div><!---end col-->
+                        <div class="col-auto">
+                            <ul class="list-unstyled hstack gap-2 mb-0">
+                                <li class="me-md-3">
+                                    <a href="#!" class="text-body fw-medium fs-15">Become a Selling</a>
+                                </li>
+                                <li class="d-none d-md-block">
+                                    <a href="#!" class="btn btn-soft-secondary" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-google-play align-middle me-1"></i> Download App
+                                    </a>
+                                </li>
+                                <li class="d-none d-md-block">
+                                    <a href="#!" class="btn btn-soft-primary" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-apple align-middle me-1"></i> Download App
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!--end row-->
+                </div><!--end container-fluid-->
+            </div>
+            <div class="w-100">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6">
+                            <div class="auth-card mx-lg-3">
+                                <div class="card border-0 mb-0">
+                                    <div class="card-header bg-primary border-0">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-3">
+                                                <img src="../assets/images/auth/img-1.png" alt="" class="img-fluid">
+                                            </div>
+                                            <div class="col-lg-8 col-9">
+                                                <h1 class="text-white lh-base fw-lighter">Well done !</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-center">
+
+                                        <div class="avatar-sm mx-auto mb-4">
+                                            <div class="avatar-title bg-success-subtle text-success fs-20 rounded">
+                                                <i class="bi bi-check2-circle"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-muted fs-15">Aww yeah, you successfully read this important message.</p>
+
+                                        <div>
+                                            <a href="auth-signin-basic.html" class="btn btn-success w-100">Back to Dashboard</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </div><!--end container-->
+                <footer class="footer" th:replace="admin/fragments/footer::footer"></footer>
+            </div>
+        </section>
+        <div th:replace="account/fragments/script::script"></div>
+    </body>
+</html>

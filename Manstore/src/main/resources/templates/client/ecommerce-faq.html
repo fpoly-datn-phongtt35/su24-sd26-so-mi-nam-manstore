@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html data-footer="dark" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="client/fragments/head::head"></head>
+<body>
+<div th:replace="client/fragments/header::header"></div>
+<div th:replace="client/fragments/search::search"></div>
+<section class="ecommerce-about bg-primary">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <h1 class="text-white mb-0">Các câu hỏi thường gặp </h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-light justify-content-center mt-4 fs-15">
+                            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">Câu hỏi thường gặp</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
+    </div>
+    <!--end container-->
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="text-center">
+                    <h3>Có câu hỏi nào không ?</h3>
+                    <p class="text-muted mb-4">Bạn có thể hỏi bất cứ điều gì bạn muốn biết.</p>
+                    <div class="hstack flex-wrap gap-2 justify-content-center">
+                        <button class="btn btn-success btn-label rounded-pill" type="button"><i
+                                class="ri-mail-line label-icon align-middle rounded-pill fs-16"></i> Email
+                        </button>
+                        <button class="btn btn-info btn-label rounded-pill" type="button"><i
+                                class="ri-twitter-line label-icon align-middle rounded-pill fs-16"></i> Tweet
+                        </button>
+                        <button class="btn btn-primary btn-label rounded-pill" type="button"><i
+                                class="ri-facebook-line label-icon align-middle rounded-pill fs-16"></i> Facebook
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div><!--end row-->
+
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center mt-4 position-relative">
+                    <div class="card-body">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-success-subtle text-success rounded-circle h1 m-0">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                        </div>
+                        <h5 class="fs-16 mb-3"><a class="text-body stretched-link" href="#">Đặt hàng</a></h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center mt-4">
+                    <div class="card-body">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-success-subtle text-success rounded-circle h1 m-0">
+                                <i class="bi bi-cash-coin"></i>
+                            </div>
+                        </div>
+                        <h5 class="fs-16 mb-3"><a class="text-body stretched-link" href="#">Thanh toán</a></h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center mt-4">
+                    <div class="card-body">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-success-subtle text-success rounded-circle h1 m-0">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                        </div>
+                        <h5 class="fs-16 mb-3"><a class="text-body stretched-link" href="#">Vận chuyển</a></h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center mt-4">
+                    <div class="card-body">
+                        <div class="avatar-md mx-auto mb-4">
+                            <div class="avatar-title bg-success-subtle text-success rounded-circle h1 m-0">
+                                <i class="bi bi-bag-dash"></i>
+                            </div>
+                        </div>
+                        <h5 class="fs-16 mb-3"><a class="text-body stretched-link" href="#">Trả lại</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gy-4 justify-content-center mt-2">
+            <div class="col-xxl-8 col-lg-8">
+                <div>
+                    <div class="mb-4">
+                        <h5 class="fs-16 mb-0 fw-semibold">Câu hỏi chung</h5>
+                    </div>
+
+                    <div class="accordion accordion-border-box" id="genques-accordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="genques-headingOne">
+                                <button aria-controls="genques-collapseOne" aria-expanded="true"
+                                        class="accordion-button"
+                                        data-bs-target="#genques-collapseOne" data-bs-toggle="collapse"
+                                        type="button">
+                                    Câu hỏi thường gặp ?
+                                </button>
+                            </h2>
+                            <div aria-labelledby="genques-headingOne" class="accordion-collapse collapse show"
+                                 data-bs-parent="#genques-accordion" id="genques-collapseOne">
+                                <div class="accordion-body">
+                                    Shop phân loại khách hàng như thế nào ?
+                                    <ul class="">
+                                        <li class="">Tất cả</li>
+                                        <li class="">Khách Hàng Mới(Tạo account =< 30 ngày tính từ thời điểm hiện tại)
+                                        </li>
+                                        <li class="">Khách Hàng Tiềm năng(Tạo account > 30 ngày tính từ thời điểm hiện
+                                            tại && Tổng số đơn mua < 50 và tổng tiền thanh toán < 50tr )
+                                        </li>
+                                        <li class="">Khách Hàng Thân Thiết(Tổng số đơn mua >= 50 và tổng tiền thanh toán
+                                            > 50tr).
+                                        </li>
+                                    </ul>
+                                    Làm thế nào để tôi biết được kích cỡ nào phù hợp với mình ?
+                                    <ul class="">
+                                        <li class="">Đối với kích cỡ, trang FAQ có thể cung cấp một bảng kích cỡ chi
+                                            tiết cùng với hướng dẫn đo lường để khách hàng có thể tự xác định kích cỡ
+                                            phù hợp.
+                                        </li>
+                                        <img alt="" sizes="" srcset="" th:src="@{/assets/images/R.jpg}">
+                                    </ul>
+                                    Làm thế nào để theo dõi đơn hàng của tôi?
+                                    <ul class="">
+                                        <li class="">Truy cập trang web.</li>
+                                        <li class="">Đăng nhập tài khoản.</li>
+                                        <li class="">Vào phần thông tin khách hàng.</li>
+                                        <li class="">Chọn Tab đơn hàng.</li>
+                                        <li class="">Chọn đơn hàng muốn xem.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="genques-headingTwo">
+                                <button aria-controls="genques-collapseTwo" aria-expanded="false"
+                                        class="accordion-button collapsed"
+                                        data-bs-target="#genques-collapseTwo" data-bs-toggle="collapse"
+                                        type="button">
+                                    Quy trình ?
+                                </button>
+                            </h2>
+                            <div aria-labelledby="genques-headingTwo" class="accordion-collapse collapse"
+                                 data-bs-parent="#genques-accordion" id="genques-collapseTwo">
+                                <div class="accordion-body">
+                                    Đặt hàng online diễn ra như thế nào?
+                                    <ul class="">
+                                        <li class="">Đặt hàng: Khách hàng chọn sản phẩm và đặt hàng.</li>
+                                        <li class="">Nhận đơn hàng: Đơn hàng được chuyển đến đội ngũ thực hiện đơn
+                                            hàng.
+                                        </li>
+                                        <li class="">Chọn sản phẩm: Đội ngũ thực hiện đơn hàng tìm kiếm và chọn sản phẩm
+                                            từ kho hàng
+                                        </li>
+                                        <li class="">Đóng gói sản phẩm: Sản phẩm được thu thập, sau đó được tổ chức và
+                                            đóng gói.
+                                        </li>
+                                        <li class="">Giao hàng: Đơn hàng được gửi đi.</li>
+                                        <li class="">Giao hàng thành công: Đơn hàng được giao đến địa chỉ của khách
+                                            hàng.
+                                        </li>
+                                        Ngoài ra, quy trình đặt hàng trực tuyến cũng có thể bao gồm các bước sau:
+                                        <li class="">Tìm kiếm và chọn sản phẩm bạn muốn mua và thêm chúng vào giỏ
+                                            hàng.
+                                        </li>
+                                        <li class="">Nhập thông tin cá nhân như tên, địa chỉ, số điện thoại, v.v.</li>
+                                        <li class="">Chọn phương thức giao hàng.</li>
+                                        <li class="">Chọn phương thức thanh toán.</li>
+                                    </ul>
+                                    <!--                                    Các phương thức thanh toán được chấp nhận bao gồm những gì?-->
+                                    <!--                                    <ul class="">-->
+                                    <!--                                        <li class="">Thẻ tín dụng và thẻ ghi nợ: Đây là phương thức thanh toán phổ biến nhất. Thẻ tín dụng cho phép khách hàng mua sắm lớn ngay cả khi họ không có nhiều tiền mặt.-->
+                                    <!--                                        </li>-->
+                                    <!--                                        <li class="">Tiền mặt: Mặc dù không phổ biến trong mua sắm trực tuyến, nhưng một số dịch vụ cung cấp phương thức thanh toán khi nhận hàng (COD - Cash on Delivery).-->
+                                    <!--                                        </li>-->
+                                    <!--                                        <li class="">Ví điện tử: Ví điện tử như PayPal, Apple Pay, Google Pay, Paytm, Freecharge đang trở nên ngày càng phổ biến.</li>-->
+                                    <!--                                        <li class="">Mua ngay, trả sau (BNPL): Đây là một hình thức thanh toán cho phép khách hàng mua hàng ngay và trả tiền sau.</li>-->
+                                    <!--                                        <li class="">Séc: Một số trang web vẫn chấp nhận thanh toán bằng séc.</li>-->
+                                    <!--                                        <li class="">Chuyển khoản ngân hàng: Khách hàng có thể chuyển tiền trực tiếp từ tài khoản ngân hàng của họ.</li>-->
+                                    <!--                                        <li class="">Thanh toán tự động (Autopay): Đây là một hình thức thanh toán tự động, thường được sử dụng cho các dịch vụ định kỳ.</li>-->
+                                    <!--                                        <li class="">Tiền điện tử (Cryptocurrency): Một số trang web chấp nhận thanh toán bằng tiền điện tử như Bitcoin.</li>-->
+                                    <!--                                    </ul>-->
+                                </div>
+                            </div>
+                        </div>
+<!--                        <div class="accordion-item">-->
+<!--                            <h2 class="accordion-header" id="genques-headingThree">-->
+<!--                                <button aria-controls="genques-collapseThree" aria-expanded="false"-->
+<!--                                        class="accordion-button collapsed"-->
+<!--                                        data-bs-target="#genques-collapseThree" data-bs-toggle="collapse"-->
+<!--                                        type="button">-->
+<!--                                    Mục đích ?-->
+<!--                                </button>-->
+<!--                            </h2>-->
+<!--                            <div aria-labelledby="genques-headingThree" class="accordion-collapse collapse"-->
+<!--                                 data-bs-parent="#genques-accordion" id="genques-collapseThree">-->
+<!--                                <div class="accordion-body">-->
+<!--                                    Mục đích của Câu hỏi thường gặp thường là cung cấp thông tin về các câu hỏi thường-->
+<!--                                    gặp hoặc mối quan tâm; tuy nhiên, định dạng này là một phương tiện hữu ích để tổ-->
+<!--                                    chức thông tin và văn bản. bao gồm các câu hỏi và câu trả lời của họ do đó có thể-->
+<!--                                    được gọi là Câu hỏi thường gặp.-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="accordion-item">-->
+<!--                            <h2 class="accordion-header" id="genques-headingFour">-->
+<!--                                <button aria-controls="genques-collapseFour" aria-expanded="false"-->
+<!--                                        class="accordion-button collapsed"-->
+<!--                                        data-bs-target="#genques-collapseFour" data-bs-toggle="collapse"-->
+<!--                                        type="button">-->
+<!--                                    Trực tiếp ?-->
+<!--                                </button>-->
+<!--                            </h2>-->
+<!--                            <div aria-labelledby="genques-headingFour" class="accordion-collapse collapse"-->
+<!--                                 data-bs-parent="#genques-accordion" id="genques-collapseFour">-->
+<!--                                <div class="accordion-body">-->
+<!--                                    Câu hỏi thường gặp là viết tắt của các câu hỏi thường gặp. Đây là một trong nhiều-->
+<!--                                    trang quan trọng của trang web của bạn. Nó cung cấp cho khách hàng của bạn câu trả-->
+<!--                                    lời cho các câu hỏi thường gặp và phổ biến cũng như giải quyết mối quan ngại của họ-->
+<!--                                    tài liệu sản phẩm công cộng được phát hành cùng thời điểm thời gian.-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </div>
+                    <!--end accordion-->
+                </div>
+            </div><!--end col-->
+        </div>
+    </div><!--end container-->
+</section>
+
+<div th:replace="client/fragments/footer::footer"></div>
+<div th:replace="client/fragments/script::script"></div>
+</body>
+</html>

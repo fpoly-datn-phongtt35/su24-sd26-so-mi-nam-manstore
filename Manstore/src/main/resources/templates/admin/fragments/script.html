@@ -1,0 +1,541 @@
+<div th:fragment="script">
+    <!-- JAVASCRIPT -->
+    <script th:src="@{/assets/libs/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/libs/simplebar/simplebar.min.js}"></script>
+    <!-- <script th:src="@{assets/js/plugins.js"></script> -->
+
+    <!-- apexcharts -->
+    <script th:src="@{assets/libs/apexcharts/apexcharts.min.js}"></script>
+
+    <!-- Vector map-->
+    <script th:src="@{/assets/libs/jsvectormap/js/jsvectormap.min.js}"></script>
+    <script th:src="@{/assets/libs/jsvectormap/maps/world-merc.js}"></script>
+
+    <!--    <script th:src="@{../../assets/libs/list.js/list.min.html}"></script>-->
+
+    <!--Swiper slider js-->
+    <script th:src="@{/assets/libs/swiper/swiper-bundle.min.js}"></script>
+
+    <!-- Dashboard init -->
+    <script th:src="@{/assets/js/pages/dashboard-ecommerce.init.js}"></script>
+
+    <!-- App js -->
+    <script th:src="@{/assets/js/app.js}"></script>
+
+    <!-- QR js -->
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js}"
+            integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--Toast message-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.10.5/sweetalert2.all.min.js"></script>
+
+    <!--moment-js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/cjs/index.min.js"></script>
+
+    <script>
+        //  Line chart datalabel
+        var linechartDatalabelColors = getChartColorsArray(
+            "line_chart_datalabel"
+        );
+        if (linechartDatalabelColors) {
+            var options = {
+                chart: {
+                    height: 405,
+                    zoom: {
+                        enabled: true,
+                    },
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                colors: linechartDatalabelColors,
+                markers: {
+                    size: 0,
+                    colors: "#ffffff",
+                    strokeColors: linechartDatalabelColors,
+                    strokeWidth: 1,
+                    strokeOpacity: 0.9,
+                    fillOpacity: 1,
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    width: [2, 2, 2],
+                    curve: "smooth",
+                },
+                series: [
+                    {
+                        name: "Orders",
+                        type: "line",
+                        data: [
+                            180, 274, 346, 290, 370, 420, 490, 542, 510, 580, 636, 745,
+                        ],
+                    },
+                    {
+                        name: "Refunds",
+                        type: "area",
+                        data: [
+                            100, 154, 302, 411, 300, 284, 273, 232, 187, 174, 152, 122,
+                        ],
+                    },
+                    {
+                        name: "Earnings",
+                        type: "line",
+                        data: [
+                            260, 360, 320, 345, 436, 527, 641, 715, 832, 794, 865, 933,
+                        ],
+                    },
+                ],
+                fill: {
+                    type: ["solid", "gradient", "solid"],
+                    gradient: {
+                        shadeIntensity: 1,
+                        type: "vertical",
+                        inverseColors: false,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.0,
+                        stops: [20, 80, 100, 100],
+                    },
+                },
+                grid: {
+                    row: {
+                        colors: ["transparent", "transparent"], // takes an array which will be repeated on columns
+                        opacity: 0.2,
+                    },
+                    borderColor: "#f1f1f1",
+                },
+                xaxis: {
+                    categories: [
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    ],
+                },
+                legend: {
+                    position: "top",
+                    horizontalAlign: "right",
+                    floating: true,
+                    offsetY: -25,
+                    offsetX: -5,
+                },
+                responsive: [
+                    {
+                        breakpoint: 600,
+                        options: {
+                            chart: {
+                                toolbar: {
+                                    show: false,
+                                },
+                            },
+                            legend: {
+                                show: false,
+                            },
+                        },
+                    },
+                ],
+            };
+
+            var chart = new ApexCharts(
+                document.querySelector("#line_chart_datalabel"),
+                options
+            );
+            chart.render();
+        }
+
+        // world map with line & markers
+        var vectorMapWorldLineColors = getChartColorsArray(
+            "world-map-line-markers"
+        );
+        if (vectorMapWorldLineColors)
+            var worldlinemap = new jsVectorMap({
+                map: "world_merc",
+                selector: "#world-map-line-markers",
+                zoomOnScroll: false,
+                zoomButtons: false,
+                markers: [
+                    {
+                        name: "Greenland",
+                        coords: [71.7069, 42.6043],
+                        style: {
+                            image: "../assets/images/flags/gl.svg",
+                        },
+                    },
+                    {
+                        name: "Canada",
+                        coords: [56.1304, -106.3468],
+                        style: {
+                            image: "../assets/images/flags/ca.svg",
+                        },
+                    },
+                    {
+                        name: "Brazil",
+                        coords: [-14.235, -51.9253],
+                        style: {
+                            image: "../assets/images/flags/br.svg",
+                        },
+                    },
+                    {
+                        name: "Serbia",
+                        coords: [44.0165, 21.0059],
+                        style: {
+                            image: "../assets/images/flags/rs.svg",
+                        },
+                    },
+                    {
+                        name: "Russia",
+                        coords: [61, 105],
+                        style: {
+                            image: "../assets/images/flags/ru.svg",
+                        },
+                    },
+                    {
+                        name: "US",
+                        coords: [37.0902, -95.7129],
+                        style: {
+                            image: "../assets/images/flags/us.svg",
+                        },
+                    },
+                    {
+                        name: "Australia",
+                        coords: [25.2744, 133.7751],
+                        style: {
+                            image: "../assets/images/flags/au.svg",
+                        },
+                    },
+                ],
+                lines: [
+                    {
+                        from: "Canada",
+                        to: "Serbia",
+                    },
+                    {
+                        from: "Russia",
+                        to: "Serbia",
+                    },
+                    {
+                        from: "Greenland",
+                        to: "Serbia",
+                    },
+                    {
+                        from: "Brazil",
+                        to: "Serbia",
+                    },
+                    {
+                        from: "US",
+                        to: "Serbia",
+                    },
+                    {
+                        from: "Australia",
+                        to: "Serbia",
+                    },
+                ],
+                regionStyle: {
+                    initial: {
+                        stroke: "#9599ad",
+                        strokeWidth: 0.25,
+                        fill: vectorMapWorldLineColors,
+                        fillOpacity: 1,
+                    },
+                },
+                labels: {
+                    markers: {
+                        render(marker, index) {
+                            return marker.name || marker.labelName || "Not available";
+                        },
+                    },
+                },
+                lineStyle: {
+                    animation: true,
+                    strokeDasharray: "6 3 6",
+                },
+            });
+
+        // Multi-Radial Bar
+        var chartRadialbarMultipleColors =
+            getChartColorsArray("multiple_radialbar");
+        if (chartRadialbarMultipleColors) {
+            var options = {
+                series: [85, 69, 45, 78],
+                chart: {
+                    height: 300,
+                    type: "radialBar",
+                },
+                sparkline: {
+                    enabled: true,
+                },
+                plotOptions: {
+                    radialBar: {
+                        startAngle: -90,
+                        endAngle: 90,
+                        dataLabels: {
+                            name: {
+                                fontSize: "22px",
+                            },
+                            value: {
+                                fontSize: "16px",
+                            },
+                            total: {
+                                show: true,
+                                label: "Sales",
+                                formatter: function (w) {
+                                    return 2922;
+                                },
+                            },
+                        },
+                    },
+                },
+                labels: ["Fashion", "Electronics", "Groceries", "Others"],
+                colors: chartRadialbarMultipleColors,
+                legend: {
+                    show: false,
+                    fontSize: "16px",
+                    position: "bottom",
+                    labels: {
+                        useSeriesColors: true,
+                    },
+                    markers: {
+                        size: 0,
+                    },
+                },
+            };
+
+            var chart = new ApexCharts(
+                document.querySelector("#multiple_radialbar"),
+                options
+            );
+            chart.render();
+        }
+
+        //  Spline Area Charts
+        var areachartSplineColors = getChartColorsArray("area_chart_spline");
+        if (areachartSplineColors) {
+            var options = {
+                series: [
+                    {
+                        name: "This Month",
+                        data: [49, 54, 48, 54, 67, 88, 96],
+                    },
+                    {
+                        name: "Last Month",
+                        data: [57, 66, 74, 63, 55, 70, 85],
+                    },
+                ],
+                chart: {
+                    height: 250,
+                    type: "area",
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                fill: {
+                    type: ["gradient", "gradient"],
+                    gradient: {
+                        shadeIntensity: 1,
+                        type: "vertical",
+                        inverseColors: false,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.0,
+                        stops: [50, 70, 100, 100],
+                    },
+                },
+                markers: {
+                    size: 4,
+                    colors: "#ffffff",
+                    strokeColors: areachartSplineColors,
+                    strokeWidth: 1,
+                    strokeOpacity: 0.9,
+                    fillOpacity: 1,
+                    hover: {
+                        size: 6,
+                    },
+                },
+                grid: {
+                    show: false,
+                    padding: {
+                        top: -35,
+                        right: 0,
+                        bottom: 0,
+                        left: -6,
+                    },
+                },
+                legend: {
+                    show: false,
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    width: [2, 2],
+                    curve: "smooth",
+                },
+                colors: areachartSplineColors,
+                xaxis: {
+                    labels: {
+                        show: false,
+                    },
+                },
+                yaxis: {
+                    labels: {
+                        show: false,
+                    },
+                },
+            };
+
+            var chart = new ApexCharts(
+                document.querySelector("#area_chart_spline"),
+                options
+            );
+            chart.render();
+        }
+    </script>
+    <script>
+        async function logout() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("adminId");
+            localStorage.removeItem("adminName");
+            await fetch('/api/v1/auth/logout', {
+                method: 'POST'
+            })
+            window.location.href = '/login';
+        }
+    </script>
+    <script>
+        function decodeToken() {
+            const jwtDecode = window.jwtDecode;
+            const jwtToken = localStorage.getItem('token');
+            const decodedToken = jwtDecode(jwtToken);
+            const currentTimeMillis = Date.now();
+            const expTimeMillis = decodedToken.exp * 1000
+            console.log(expTimeMillis);
+            console.log(decodedToken);
+            if (expTimeMillis > currentTimeMillis) {
+                console.log('Token còn hiệu lực');
+            } else {
+                swal.fire({
+                    icon: "warning",
+                    title: "Thông Báo",
+                    text: "Phiên Đăng Nhập Của Bạn Đã Hết Hạn!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        logout();
+                    }
+                })
+                console.log('Token đã hết hạn');
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            handleAuth();
+            decodeToken();
+        });
+    </script>
+    <script>
+        async function getUserInformation(userId) {
+            let url = '/api/v1/auth/getInformation-staff/' + userId;
+            const response = await fetch(url, {
+                method: 'POST'
+            })
+            const data = await response.json();
+            return data;
+        }
+
+        async function handleAuth() {
+            let handleAuthElement = '';
+            let adminId = localStorage.getItem("adminId");
+            let avatarElement = '';
+            const adminObj = await getUserInformation(adminId);
+            if (adminObj.anhNhanVien !== null) {
+                avatarElement = `   <img
+                                            class="rounded-circle header-profile-user"
+                                            src="${adminObj.anhNhanVien}"
+                                            alt="Header Avatar"
+                                            id="avatar-user"
+                                    />`
+            } else {
+                avatarElement = `   <img
+                                            class="rounded-circle header-profile-user"
+                                            src="/assets/images/users/user-dummy-img.jpg"
+                                            alt="Header Avatar"
+                                            id="avatar-user"
+                                    />`
+            }
+            if (adminId !== null) {
+                handleAuthElement = `
+                                <div
+                                        class="dropdown ms-sm-3 header-item topbar-user topbar-head-dropdown dropdown-hover-end"
+                                >
+                                    <button
+                                            type="button"
+                                            class="btn"
+                                            id="page-header-user-dropdown"
+                                            data-bs-toggle="dropdown"
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                    >
+                                    ${avatarElement}
+                                    </button>
+                              <span class="d-flex align-items-center">
+
+                                <span class="text-start ms-xl-2">
+                                  <span
+                                          class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"
+                                  >${adminObj.hoTen}</span
+                                  >
+                                  <span
+                                          class="d-none d-xl-block ms-1 fs-13 user-name-sub-text"
+                                  >Founder</span
+                                  >
+                                </span>
+                              </span>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <h6 class="dropdown-header">Welcome ${adminObj.hoTen}!</h6>
+                                        <a class="dropdown-item" onclick="handleProfile()"
+                                        ><i
+                                                class="bi bi-person-circle text-muted fs-15 align-middle me-1"
+                                        ></i>
+                                            <span class="align-middle">Profile</span></a
+                                        >
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" onclick="logout()"
+                                        ><i
+                                                class="bi bi-box-arrow-right text-muted fs-15 align-middle me-1"
+                                        ></i>
+                                            <span class="align-middle" data-key="t-logout"
+                                            >Logout</span
+                                            ></a
+                                        >
+                                    </div>
+                                </div>
+                            `;
+                document.getElementById('login-logout').innerHTML = handleAuthElement;
+
+            }
+        }
+    </script>
+
+    <script>
+        function handleLogin() {
+            window.location.href = '/login';
+        }
+    </script>
+    <script>
+        function handleProfile() {
+            window.location.href = '/admin/profile/' + localStorage.getItem("adminId");
+        }
+    </script>
+</div>

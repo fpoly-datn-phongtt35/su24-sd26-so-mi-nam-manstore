@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <div th:replace="admin/fragments/header::header"></div>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Danh sách nhân viên</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Nhân viên</a></li>
+                                    <li class="breadcrumb-item active">Danh sách</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row" id="usersList">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row g-lg-2 g-4">
+                                    <div class="col-lg-3">
+                                        <div class="search-box">
+                                            <input type="text" class="form-control search" id="staff-search-input"
+                                                   placeholder="Tìm kiếm nhân viên..." onkeyup="search()">
+                                            <i class="ri-search-line search-icon"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-auto col-sm-3">
+                                        <label class="" style="margin-top: 10px">Sắp xếp theo : </label>
+                                    </div>
+                                    <div class="col-lg-auto col-sm-3">
+                                        <select class="form-control" required id="staff-sort-filter"
+                                                onchange="search()">
+                                            <option value="0">Mới nhất</option>
+                                            <option value="3">Cũ nhất</option>
+                                            <option value="1">Ngày sinh tăng dần</option>
+                                            <option value="2">Ngày sinh giảm dần</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-auto col-sm-3 me-5">
+                                        <select class="form-control" required id="staff-status-filter"
+                                                onchange="search()">
+                                            <option value="-1">Trạng thái</option>
+                                            <option value="0">Đang làm</option>
+                                            <option value="1">Đã nghỉ</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-auto col-sm-3 ms-auto">
+                                        <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/staff/add}">
+                                            Thêm mới
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive table-card mb-1">
+                                    <table class="table align-middle table-nowrap" id="customerTable">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Họ tên</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Email</th>
+                                            <th>Ngày sinh</th>
+                                            <th>Trạng thái</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="list form-check-all" id="list_Staff">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-grid justify-content-center" id="pagination">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+
+<!--<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<div class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-4 pt-4">
+                <h5 class="modal-title" id="exampleModalLabel">Thông tin nhân viên</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-modal"></button>
+            </div>
+            <form class="tablelist-form" novalidate autocomplete="off" id="update-form" method="post"
+                  th:object="${nhanVien}">
+                <div class="modal-body p-4">
+                    <div id="alert-error-msg" class="d-none alert alert-danger py-2"></div>
+                    <input type="hidden" id="id-field"/>
+
+                    <!-- style="display: none"-->
+                    <div style="display: none">
+                        <div class="mb-3">
+                            <label for="staff-code-input" class="form-label">Mã NV</label>
+                            <input type="text" id="staff-code-input" class="form-control" required th:name="maNV"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="staff-password-input" class="form-label">Mật khẩu</label>
+                            <input type="text" id="staff-password-input" class="form-control" required
+                                   th:name="matKhau"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="staff-datecreated-input">Mật khẩu mã hóa</label>
+                            <input class="form-control" id="staff-password-encoder-input" required
+                                   th:name="matKhauMaHoa"
+                                   type="text"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="staff-datecreated-input" class="form-label">Ngày tạo</label>
+                            <input type="text" id="staff-datecreated-input" class="form-control" required
+                                   th:name="ngayTao"/>
+                        </div>
+                    </div>
+                    <!-- End style="display: none"-->
+
+                    <div class="mb-3">
+                        <label for="staff-name-input" class="form-label">Họ Tên</label>
+                        <input type="text" id="staff-name-input" class="form-control" required th:name="hoTen"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="staff-phone-input" class="form-label">Số điện thoại</label>
+                        <input type="email" id="staff-phone-input" class="form-control" required th:name="sdt"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="staff-email-input" class="form-label">Email</label>
+                        <input type="email" id="staff-email-input" class="form-control" required th:name="email"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="staff-birthday-input" class="form-label">Ngày sinh</label>
+                        <input type="date" id="staff-birthday-input" class="form-control" required th:name="ngaySinh"/>
+                    </div>
+
+                    <!--                    <div class="mb-3">-->
+                    <!--                        <label for="staff-position-input" class="form-label">Chức vụ</label>-->
+                    <!--                        <select class="form-control" required id="staff-position-input" th:name="cv">-->
+                    <!--                            <option th:value="0">Chức vụ</option>-->
+                    <!--                            <option th:each="position:${chucVu}" th:value="${position.id}"-->
+                    <!--                                    th:text="${position.tenChucVu}"></option>-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
+                    <div class="mb-3">
+                        <label for="staff-status-input" class="form-label">Trạng thái</label>
+                        <select class="form-control" required id="staff-status-input" th:name="trangThai">
+                            <option th:value="0">Đang làm</option>
+                            <option th:value="1">Đã nghỉ</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-ghost-danger" data-bs-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-success" id="add-btn" onclick="showConfirmPopup()">
+                                Sửa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    // lưu page index đang select của table
+    var page;
+    window.onload = function () {
+        loadPage(0);
+    }
+
+    function detail(Id) {
+        console.log(Id);
+        fetch('/admin/staff/detail/' + Id, {
+            method: 'GET'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            document.getElementById('staff-code-input').value = data.maNV;
+            document.getElementById('staff-password-input').value = data.matKhau;
+            document.getElementById('staff-password-encoder-input').value = data.matKhauMaHoa;
+            document.getElementById('staff-datecreated-input').value = data.ngayTao;
+            // none
+            document.getElementById('staff-name-input').value = data.hoTen;
+            document.getElementById('staff-phone-input').value = data.sdt;
+            document.getElementById('staff-email-input').value = data.email;
+            document.getElementById('staff-birthday-input').value = data.ngaySinh;
+            document.getElementById('staff-status-input').value = data.trangThai;
+            // document.getElementById('staff-position-input').value = data.cv.id;
+            document.getElementById('update-form').action = '/admin/staff/update/' + Id;
+            // if (data.cv.id === 1) {
+            //     document.getElementById('staff-position-input').checked = true;
+            // } else if (data.trangThai === 2) {
+            //     document.getElementById('staff-position-input').checked = true;
+            // }
+            // if (data.trangThai === 0) {
+            //     document.getElementById('staff-status-input').checked = true;
+            // } else if (data.trangThai === 1) {
+            //     document.getElementById('staff-status-input').checked = true;
+            // }
+            $('#myModal').modal('show');
+        })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function showConfirmPopup() {
+        swal.fire({
+            title: "Bạn muốn cập nhật thông tin ?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: "Không"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('update-form').submit();
+                loadPage(page);
+            }
+            // else if (result.isDenied) {
+            //     // swal.fire("Changes are not saved", "", "info");
+            // }
+        });
+    }
+
+    async function loadPage(pageNumber) {
+        var sort = document.getElementById("staff-sort-filter").value;
+        var url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + -1 + "/" + sort;
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        page = pageNumber;
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        // var currentPage = '';
+
+        for (i = 0; i < list.length; i++) {
+            var trangThaiBadge = (list[i].trangThai == 0) ?
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>';
+            main += `<tr >
+                            <td scope="row">${list[i].maNV}</td>
+                            <td scope="row">${list[i].hoTen}</td>
+                            <td scope="row">${list[i].sdt}</td>
+                            <td scope="row">${list[i].email}</td>
+                            <td scope="row">${list[i].ngaySinh}</td>
+                            <td scope="row">${trangThaiBadge}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="detail(${list[i].id})"
+                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                 </div>
+                            </td>
+                     </tr>`;
+        }
+
+        document.getElementById("list_Staff").innerHTML = main;
+
+        var currentPage = `<div class="pagination-wrap hstack gap-2">
+       <button class="page-item pagination-prev " id="pagination-start" onclick="loadPage(0)"  >
+       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+       <button class="page-item pagination-prev " id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+      <ul class="pagination listjs-pagination mb-0" id="pageNum"><li class="active"><a class="page">${number + 1}</a></li></ul>
+       <button class="page-item pagination-next " id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+       <button class="page-item pagination-next" id="pagination-end"  onclick="loadPage(${totalPage - 1})">
+       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button></div>`;
+        document.getElementById("pagination").innerHTML = currentPage;
+    }
+
+    async function search(pageNumber) {
+        var keyword = document.getElementById("staff-search-input").value.trim().toLowerCase();
+        var status = document.getElementById("staff-status-filter").value;
+        var sort = document.getElementById("staff-sort-filter").value;
+        console.log(keyword);
+        console.log(status);
+        console.log(sort);
+        console.log(pageNumber);
+        var url;
+        if (pageNumber === undefined && keyword === '' && status === "-1") {
+            loadPage(page);
+        } else if (pageNumber === undefined && keyword !== '' && status === "-1") {
+            url = "/api/admin/staff/page/" + 0 + "/" + keyword + "/" + -1 + "/" + sort;
+            console.log(url);
+            console.log(1);
+        } else if (pageNumber === undefined && keyword === '' && (status !== "-1")) {
+            url = "/api/admin/staff/page/" + 0 + "/" + "null" + "/" + status + "/" + sort;
+            console.log(url);
+            console.log(2);
+        } else if (pageNumber === undefined && keyword !== '' && (status !== "-1")) {
+            url = "/api/admin/staff/page/" + 0 + "/" + keyword + "/" + status + "/" + sort;
+            console.log(url);
+            console.log(3);
+        } else if (pageNumber !== undefined && keyword !== '' && status === "-1") {
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + -1 + "/" + 0;
+            console.log(url);
+            console.log(4);
+        } else if (pageNumber !== undefined && keyword === '' && (status !== "-1")) {
+            url = "/api/admin/staff/page/" + pageNumber + "/" + "null" + "/" + status + "/" + sort;
+            console.log(url);
+            console.log(5);
+        } else if (pageNumber !== undefined && keyword !== '' && (status !== "-1")) {
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + sort;
+            console.log(url);
+            console.log(6);
+        } else if (pageNumber !== undefined && keyword !== '' && status !== "-1") {
+            url = "/api/admin/staff/page/" + pageNumber + "/" + keyword + "/" + status + "/" + sort;
+            console.log(url);
+            console.log(7);
+        }
+        pageNumber === undefined ? page = 0 : page = pageNumber;
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        var result = await response.json();
+        console.log(result);
+        var list = result.content;
+        console.log(list);
+        var totalPage = result.totalPages;
+        console.log(totalPage);
+        var number = result.number;
+        console.log(number);
+        var main = '';
+        var currentPage = '';
+
+        for (i = 0; i < list.length; i++) {
+            var trangThaiBadge = (list[i].trangThai == 0) ?
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" checked id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',1)"/></div>' :
+                '<div class="form-check form-switch "><input class="form-check-input form-control-icon" type="checkbox" id="input-status-' + list[i].id + '" onchange="updateStatus(' + list[i].id + ',0)"/></div>';
+            main += `<tr >
+                            <td scope="row">${list[i].maNV}</td>
+                            <td scope="row">${list[i].hoTen}</td>
+                            <td scope="row">${list[i].sdt}</td>
+                            <td scope="row">${list[i].email}</td>
+                            <td scope="row">${list[i].ngaySinh}</td>
+                            <td scope="row">${trangThaiBadge}</td>
+                            <td>
+                                <div class="hstack gap-3 flex-warp">
+                                <div onclick="detail(${list[i].id})"
+                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                                 </div>
+                            </td>
+                     </tr>`;
+        }
+        document.getElementById("list_Staff").innerHTML = main;
+        currentPage = `<div class="pagination-wrap hstack gap-2">
+               <button class="page-item pagination-prev" id="pagination-start" onclick="search(0)" >
+               <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+               <button class="page-item pagination-prev" id="pagination-prev" onclick="search(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+               <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+                 <ul class="pagination listjs-pagination mb-0" id="pageNum"><li class="active"><a class="page">${number + 1}</a></li></ul>
+               <button class="page-item pagination-next" id="pagination-next" onclick="search(${number + 1})">
+               <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+               <button class="page-item pagination-next" id="pagination-end" onclick="search(${number + 1 === totalPage ? 0 : number + 1})">
+               <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+              </div>`;
+        document.getElementById("pagination").innerHTML = currentPage;
+    }
+
+    function updateStatus(id, status) {
+        swal.fire({
+            title: "Bạn Muốn Thay Đổi Trạng Thái?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Thay Đổi",
+            cancelButtonText: "Quay Về"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/api/admin/staff/update_status/' + id + '/' + status, {
+                    method: 'GET'
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    console.log(data)
+                }).catch(error => console.log('Error:', error));
+            } else {
+                // If the user has not confirmed, then check the status of the checkbox and return it to its original state.
+                if (status === 0) {
+                    document.getElementById("input-status-" + id).checked = false;
+                } else {
+                    document.getElementById("input-status-" + id).checked = true;
+                }
+            }
+        });
+    }
+</script>
+<script th:if="${message == true}">
+    swal.fire("Lưu thay đổi thành công!", "", "success");
+</script>
+<script th:if="${message == false}">
+    swal.fire("Lưu thay đổi thất bại!", "", "error");
+</script>
+</html>

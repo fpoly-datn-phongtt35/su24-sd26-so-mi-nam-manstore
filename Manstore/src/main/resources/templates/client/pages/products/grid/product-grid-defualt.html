@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" data-footer="dark" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="client/fragments/head::head"></head>
+<div th:replace="client/fragments/search::search"></div>
+<style>
+    /* Import Google Font - Poppins */
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+    /* Định dạng phần nhập giá */
+    .price-input {
+        width: 100%;
+        display: flex;
+        margin: 30px 0 35px;
+    }
+
+    .price-input .field {
+        display: flex;
+        width: 100%;
+        height: 45px;
+        align-items: center;
+    }
+
+    .field input {
+        width: 100%;
+        height: 100%;
+        outline: none;
+        font-size: 19px;
+        margin-left: 12px;
+        border-radius: 5px;
+        text-align: center;
+        border: 1px solid #999;
+        -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    .price-input .separator {
+        width: 130px;
+        display: flex;
+        font-size: 19px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Định dạng thanh trượt */
+    .slider {
+        height: 5px;
+        position: relative;
+        background: #ddd;
+        border-radius: 5px;
+    }
+
+    .slider .progress {
+        height: 100%;
+        left: 0%; /* Cài đặt mặc định cho thanh trượt */
+        right: 0%; /* Cài đặt mặc định cho thanh trượt */
+        position: absolute;
+        border-radius: 5px;
+        background: #17a2b8;
+    }
+
+    /* Định dạng phần input range */
+    .range-input {
+        position: relative;
+    }
+
+    .range-input input {
+        position: absolute;
+        width: 100%;
+        height: 5px;
+        top: -5px; /* Để input range nằm trên thanh trượt */
+        background: none;
+        pointer-events: none;
+        -webkit-appearance: none; /* Loại bỏ giao diện mặc định trên WebKit */
+        -moz-appearance: none; /* Loại bỏ giao diện mặc định trên Firefox */
+    }
+
+    /* Định dạng nút điều khiển trên input range */
+    input[type="range"]::-webkit-slider-thumb {
+        height: 17px;
+        width: 17px;
+        border-radius: 100%;
+        background: #17a2b8;
+        pointer-events: auto;
+        -webkit-appearance: none; /* Loại bỏ giao diện mặc định trên WebKit */
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        height: 17px;
+        width: 17px;
+        border: none;
+        border-radius: 100%;
+        background: #17a2b8;
+        pointer-events: auto;
+        -moz-appearance: none; /* Loại bỏ giao diện mặc định trên Firefox */
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+
+</style>
+<body>
+<div th:replace="client/fragments/header::header"></div>
+<div th:replace="client/fragments/search::search"></div>
+<div th:replace="client/fragments/subscribe::subscribe"></div>
+<section class="section pb-0 mt-4">
+    <div class="container">
+        <div class="row g-2">
+            <div class="col-lg-12">
+                <a
+                        class="product-banner-1 mt-4 mt-lg-0 rounded overflow-hidden d-block"
+                        href="#!"
+                >
+                    <img
+                            alt=""
+                            class="w-50 rounded object-fit-cover"
+                            src="../assets/images/ecommerce/features/img-6.jpg"
+                            style="max-height: 450px"
+                    />
+                </a>
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
+    </div>
+    <!--end container-->
+</section>
+<div id="sport-param" style="display: none;" th:text="${sport_param}"></div>
+<div class="position-relative section">
+    <div class="container">
+        <div class="ecommerce-product gap-4">
+            <div class="sidebar small-sidebar flex-shrink-0">
+                <div class="card overflow-hidden">
+                    <div class="card-header">
+                        <div class="d-flex mb-3">
+                            <div class="flex-grow-1">
+                                <h5 class="fs-16">Filters</h5>
+                            </div>
+                            <div class="flex-shrink-3">
+                                <button class="btn btn-sm btn-info btn-hover"
+                                        id="clearall" onclick="ClearAll()"
+                                >Clear All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion accordion-flush filter-accordion">
+                        <div class="card-body border-bottom">
+                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                                Price
+                            </p>
+                            <div class="slider">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="range-input">
+                                <input class="range-min" onchange="loadPage(0)" step="10000"
+                                       type="range">
+                                <input class="range-max" onchange="loadPage(0)" step="10000"
+                                       type="range">
+                            </div>
+                            <div class="price-input formCost d-flex gap-2 align-items-center mt-3">
+                                <input
+                                        class="form-control form-control-sm"
+                                        disabled
+                                        id="minCost"
+                                        type="text"
+                                />
+                                <span class="fw-semibold text-muted">to</span>
+                                <input
+                                        class="form-control form-control-sm"
+                                        disabled
+                                        id="maxCost"
+                                        type="text"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="card-body border-bottom">
+                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                                Brands
+                            </p>
+                            <select class="form-control bg-light border-light"
+                                    id="filter-brands" name="choices-single-default" onchange="loadPage(0)">
+
+                            </select>
+
+                        </div>
+
+                        <div class="card-body border-bottom">
+                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                                Sports
+                            </p>
+                            <select class="form-control bg-light border-light"
+                                    id="filter-sports" name="choices-single-default" onchange="loadPage(0)">
+
+                            </select>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingColors">
+                                <button
+                                        aria-controls="flush-collapseColors"
+                                        aria-expanded="true"
+                                        class="accordion-button bg-transparent shadow-none"
+                                        data-bs-target="#flush-collapseColors"
+                                        data-bs-toggle="collapse"
+                                        type="button"
+                                >
+                      <span class="text-muted text-uppercase fs-13 fw-medium"
+                      >Colors</span
+                      >
+                                    <span
+                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"
+                                    ></span>
+                                </button>
+                            </h2>
+
+                            <div
+                                    aria-labelledby="flush-headingColors"
+                                    class="accordion-collapse collapse show"
+                                    id="flush-collapseColors"
+                            >
+                                <div class="accordion-body text-body pt-0">
+                                    <ul
+                                            class="clothe-colors list-unstyled hstack gap-3 mb-0 flex-wrap"
+                                            id="color-filter"
+                                    >
+                                        <li>
+                                            <input
+                                                    id="color-7"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(1)"
+                                                    type="checkbox"
+                                                    value="1"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-7"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-8"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(2)"
+                                                    type="checkbox"
+                                                    value="2"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-8"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-4"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(3)"
+                                                    type="checkbox"
+                                                    value="3"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-4"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-2"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(4)"
+                                                    type="checkbox"
+                                                    value="4"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-2"
+                                                    style="background-color: rgb(169,169,169); border: none;"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-1"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(5)"
+                                                    type="checkbox"
+                                                    value="5"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-1"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-6"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(6)"
+                                                    type="checkbox"
+                                                    value="6"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-6"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-5"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(7)"
+                                                    type="checkbox"
+                                                    value="7"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-5"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-3"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(8)"
+                                                    type="checkbox"
+                                                    value="8"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-3"
+                                            ></label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end accordion-item -->
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingSize">
+                                <button
+                                        aria-controls="flush-collapseSize"
+                                        aria-expanded="true"
+                                        class="accordion-button bg-transparent shadow-none"
+                                        data-bs-target="#flush-collapseSize"
+                                        data-bs-toggle="collapse"
+                                        type="button"
+                                >
+                      <span class="text-muted text-uppercase fs-13 fw-medium"
+                      >Sizes</span
+                      >
+                                    <span
+                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"
+                                    ></span>
+                                </button>
+                            </h2>
+
+                            <div
+                                    aria-labelledby="flush-headingSize"
+                                    class="accordion-collapse collapse show"
+                                    id="flush-collapseSize"
+                            >
+                                <div class="accordion-body text-body pt-0">
+                                    <ul
+                                            class="clothe-size list-unstyled hstack gap-3 mb-0 flex-wrap"
+                                            id="size-filter"
+                                    >
+                                        <li>
+                                            <input
+                                                    id="size1"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(1)"
+                                                    type="checkbox"
+                                                    value="s"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size1"
+                                            >S</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size2"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(2)"
+                                                    type="checkbox"
+                                                    value="m"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size2"
+                                            >M</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size3"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(3)"
+                                                    type="checkbox"
+                                                    value="l"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size3"
+                                            >L</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size4"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(4)"
+                                                    type="checkbox"
+                                                    value="xl"
+
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size4"
+                                            >XL</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size5"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(5)"
+                                                    type="checkbox"
+                                                    value="xxl"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size5"
+                                            >XXL</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size6"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(6)"
+                                                    type="checkbox"
+                                                    value="2xl"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size6"
+                                            >2XL</label
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <p class="text-muted flex-grow-1 mb-0">
+                        Hiển thị 8 sản phẩm / 1 trang
+                    </p>
+                    <div class="flex-shrink-0">
+                        <div class="d-flex gap-2">
+                            <div class="flex-shrink-0">
+                                <label class="col-form-label" for="sort-elem"
+                                >Sắp Xếp:</label
+                                >
+                            </div>
+                            <div class="flex-shrink-0">
+                                <select class="form-select w-md" id="sort-elem" onchange="loadPage(page)">
+                                    <option value="0">Tất Cả</option>
+                                    <option value="1">A-Z</option>
+                                    <option value="2">Z-A</option>
+                                    <option value="3">Giá Tăng Dần</option>
+                                    <option value="4">Giá Giảm Dần</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="product-grid">
+                </div>
+                <div class="row" id="pagination-element">
+                </div>
+
+                <div class="row d-none" id="search-result-elem">
+                    <div class="col-lg-12">
+                        <div class="text-center py-5">
+                            <div class="avatar-lg mx-auto mb-4">
+                                <div
+                                        class="avatar-title bg-primary-subtle text-primary rounded-circle fs-24"
+                                >
+                                    <i class="bi bi-search"></i>
+                                </div>
+                            </div>
+
+                            <h5>No matching records found</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end container-->
+</div>
+
+<div th:replace="client/fragments/footer::footer"></div>
+<div th:replace="client/fragments/script::script"></div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<script>
+
+    const Toast = swal.mixin({
+        toast: true,
+        position: "top-end",
+        iconColor: "white",
+        customClass: {
+            popup: "colored-toast",
+        },
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+    });
+
+    //lưu page
+    var page;
+    // lưu id sản phẩm chi tiết đang được select
+    var selectedProduct;
+    var selectedProductDetailId;
+    var selectedProductDetailColor;
+    var selectedProductDetailSize;
+    var productDetail;
+    var chooseColor = [];
+    var chooseSize = [];
+    var dataPriceMax;
+
+    window.onload = async function () {
+        await loadSports();
+        await loadBrands();
+        await range();
+        await loadPage(0);
+        chooseColor = [];
+        chooseSize = [];
+        selectedProduct = undefined;
+
+    }
+
+    async function getPriceMax() {
+        var priceMax = "/api/client/product/priceMax";
+        const responsePriceMax = await fetch(priceMax, {
+            method: 'GET'
+        });
+        var resultPriceMax = await responsePriceMax.json();
+        dataPriceMax = resultPriceMax;
+        return resultPriceMax;
+    }
+
+    async function loadBrands() {
+        let url = "/api/client/brands/find-all";
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        let result = await response.json();
+
+        let option = `<option value="-1" selected>Tất Cả</option>`;
+        for (let i = 0; i < result.length; i++) {
+            option += `
+                   <option value="${result[i].id}">${result[i].ten}</option>
+            `;
+        }
+        document.getElementById('filter-brands').innerHTML = option;
+    }
+
+    async function loadSports() {
+        let param = document.getElementById('sport-param').innerText;
+        let url = "/api/client/sports/find-all";
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+        let result = await response.json();
+
+        let option;
+
+        if (param !== '') {
+            let sport = parseInt(param);
+            option = `<option value="-1">Tất Cả</option>`;
+            for (let i = 0; i < result.length; i++) {
+                if (result[i].id === sport) {
+                    option += `
+                                <option value="${result[i].id}" selected>${result[i].ten}</option>
+                                `;
+                }
+                option += `
+                   <option value="${result[i].id}">${result[i].ten}</option>
+                            `;
+            }
+        } else {
+            option = `<option value="-1" selected>Tất Cả</option>`;
+            for (let i = 0; i < result.length; i++) {
+                option += `
+                   <option value="${result[i].id}">${result[i].ten}</option>
+            `;
+            }
+        }
+        document.getElementById('filter-sports').innerHTML = option;
+    }
+
+    async function loadPage(pageNumber) {
+        let resultPriceMax = await getPriceMax();
+        let sort = document.getElementById('sort-elem').value;
+        let brand = $("#filter-brands").val();
+        let sport = $("#filter-sports").val();
+        let minCost = document.getElementById("minCost").value;
+        let maxCost = document.getElementById("maxCost").value;
+
+        let url;
+        console.log(minCost, maxCost);
+        if (parseInt(minCost) === 0 && parseInt(maxCost) === resultPriceMax) {
+            url = "/api/client/product/page/" + pageNumber + "/" + '0' + "/" +
+                resultPriceMax + "?sort=" + sort + "&brand=" + brand + "&sport=" + sport;
+        } else {
+            url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" +
+                maxCost + "?sort=" + sort + "&brand=" + brand + "&sport=" + sport;
+        }
+
+        console.log(url);
+        let request = requestConfig(chooseColor, chooseSize);
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        page = pageNumber;
+        var result = await response.json();
+        var list = result.content;
+        console.log(result);
+        var totalPage = result.totalPages;
+        var number = result.number;
+        var main = '';
+        var color = '';
+        var labelColor = '';
+        var cssStyle = '';
+        var size = '';
+        var index;
+        for (i = 0; i < list.length; i++) {
+            var img = '';
+            //get product detail
+            var urlDetailPD = '/api/client/product_detail/detailPD/' + list[i].id;
+
+            const responseDetailPD = await fetch(urlDetailPD, {
+                method: 'GET'
+            });
+
+            const data = await responseDetailPD.json();
+
+            //get picture of product
+            var urlPicture = '/api/client/product_detail/picture/' + list[i].id;
+
+            const responsePicture = await fetch(urlPicture, {
+                method: 'GET',
+            })
+
+            const dataPicture = await responsePicture.json();
+
+            // console.log(dataPicture);
+
+            if (dataPicture.statusText === 'failure') {
+                img = `<img id="picture-product" src="../assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
+                    style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">`;
+            } else {
+                var src = dataPicture[0].linkAnh;
+                img = `<img id="picture-product" src="${src}" alt="Ảnh Sản Phẩm"
+                    style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">`;
+            }
+
+            let resultDetailColor = data.filter((product, index, self) =>
+                index === self.findIndex((p) => (
+                    p.ms.id === product.ms.id
+                ))
+            );
+            // Sort colors based on ms.id
+            resultDetailColor.sort((a, b) => a.ms.id - b.ms.id);
+            index = i;
+            for (j = 0; j < resultDetailColor.length; j++) {
+                if (list[i].id === resultDetailColor[j].sp.id) {
+                    var name = resultDetailColor[j].ms.id;
+                    if (resultDetailColor[j].ms.id === 1) {
+                        labelColor = "btn-dark";
+                        cssStyle = "";
+                    } else if (resultDetailColor[j].ms.id === 2) {
+                        cssStyle = "";
+                        labelColor = "btn-light";
+                    } else if (resultDetailColor[j].ms.id === 3) {
+                        cssStyle = "";
+                        labelColor = "btn-danger";
+                    } else if (resultDetailColor[j].ms.id === 4) {
+                        labelColor = "btn-secondary";
+                        cssStyle = "style=\"background-color: rgb(169,169,169); border: none;\"";
+                    } else if (resultDetailColor[j].ms.id === 5) {
+                        cssStyle = "";
+                        labelColor = "btn-success";
+                    } else if (resultDetailColor[j].ms.id === 6) {
+                        cssStyle = "";
+                        labelColor = "btn-secondary";
+                    } else if (resultDetailColor[j].ms.id === 7) {
+                        cssStyle = "";
+                        labelColor = "btn-primary";
+                    } else {
+                        cssStyle = "";
+                        labelColor = "btn-warning";
+                    }
+                    color += `<li><input type="radio" value="${name}" name="product-color" id="product-color-${index}${name}" onclick="chooseProductColor(${list[i].id},${index},${name})"><label class="avatar-xxs btn ${labelColor} p-0 d-flex align-items-center justify-content-center rounded-circle" for="product-color-${index}${name}" ${cssStyle}></label></li>`
+                }
+            }
+            let resultDetailSize = data.filter((product, index, self) =>
+                index === self.findIndex((p) => (
+                    p.size === product.size
+                ))
+            );
+            // Sort sizes based on size
+            resultDetailSize.sort((a, b) => a.size.localeCompare(b.size));
+            for (j = 0; j < resultDetailSize.length; j++) {
+                if (list[i].id === resultDetailSize[j].sp.id) {
+                    var name = resultDetailSize[j].size;
+                    size += `<li data-value="${name}" class="li-size${list[i].id}"><input class="size-input${list[i].id}" disabled type="radio" value="${name}" name="product-size" id="product-size-${index}${j + 1}" onclick="chooseProductSize(${list[i].id},${index},${j + 1})"><label class="avatar-xxs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle" for="product-size-${index}${j + 1}" >${resultDetailSize[j].size}</label></li>`
+                }
+            }
+            main += `<div class="col-xxl-3 col-xxl-3 col-md-6">
+                        <div class="card ecommerce-product-widgets border-0 rounded-0 shadow-none overflow-hidden">
+                            <div class="bg-light bg-opacity-50 rounded py-4 position-relative" id="image-product-${list[i].id}">
+                                ${img}
+                                <div class="action vstack gap-2">
+                                    <button onclick="nextPageDetail(${list[i].id})" class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action "
+                                            data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+                                        <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+                                </div>
+                            </div>
+                            <div class="pt-4">
+                                <div>
+                                    <ul class="clothe-colors list-unstyled hstack gap-1 mb-3 flex-wrap" style="height: 35px" >${color}</ul>
+                                    <ul class="clothe-size list-unstyled hstack gap-1 mb-3 flex-wrap" style="height: 35px">${size}</ul>
+                                    <a><h6 class="text-capitalize fs-15 lh-base text-truncate mb-0">${list[i].tenSP}</h6></a>
+                                    <div class="mt-2">
+                                        <h5 class="text-secondary mb-0">${formatMoney(list[i].donGia)}
+                                        </h5>
+                                    </div>
+                                    <div class="tn mt-3"><button onclick="AddToCart()" class="btn btn-primary btn-hover w-100 add-btn"><i
+                                            class="mdi mdi-cart me-1"></i>Thêm giỏ hàng</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+            color = '';
+            size = '';
+        }
+        document.getElementById("product-grid").innerHTML = main;
+
+        document.getElementById("pagination-element").innerHTML = `
+                <div class="pagination-wrap hstack gap-2 d-flex justify-content-center align-items-center">
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number === 0 ? totalPage - 1 : 0})"  >
+                       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+                       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+                       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+                       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+                       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+                       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number === totalPage - 1 ? 0 : totalPage - 1})">
+                       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+                </div>`;
+    }
+
+    function requestConfig(arrColor, arrSize) {
+        let filterRequest = {};
+        if (arrColor.length === 0 && arrSize.length !== 0) {
+            console.log(arrColor);
+            filterRequest = {listColors: null, listSizes: arrSize};
+        } else if (arrColor.length !== 0 && arrSize.length === 0) {
+            console.log(arrSize);
+            filterRequest = {listColors: arrColor, listSizes: null};
+        } else if (arrColor.length === 0 && arrSize.length === 0) {
+            console.log(arrColor, arrSize);
+            filterRequest = {listColors: null, listSizes: null};
+        } else {
+            console.log(arrColor, arrSize);
+            filterRequest = {listColors: arrColor, listSizes: arrSize};
+        }
+        return filterRequest;
+    }
+
+    function formatMoney(money) {
+        const VND = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+        return VND.format(money);
+    }
+
+    async function chooseProductColor(idPD, indexId, id) {
+        console.log(idPD, id);
+        var url = "/api/client/product_detail/detail/" + idPD + "/" + id;
+        var arrSize = [];
+        var liSize = document.querySelectorAll('li.li-size' + idPD);
+        var inputSize = document.querySelectorAll('input.size-input' + idPD);
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+        var urlGetPicture = '/api/client/product_detail/picture-detail/' + idPD + '/' + id;
+        const pictureResponse = await fetch(urlGetPicture, {
+            method: 'GET',
+        });
+        var dataPicture = await pictureResponse.json();
+        console.log(dataPicture);
+        var img;
+        if (dataPicture.statusText === 'failure') {
+            img = `<img id="picture-product" src="../assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
+                    style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
+                         <div class="action vstack gap-2">
+                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+                                            onclick="nextPageDetail(${idPD})"
+                                            data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+                                    <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+                         </div>`;
+        } else {
+            img = `<img id="picture-product" src="${dataPicture[0].linkAnh}" alt="Ảnh Sản Phẩm"
+                    style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
+                         <div class="action vstack gap-2">
+                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+                                            onclick="nextPageDetail(${idPD})"
+                                            data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+                                    <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+                         </div>`;
+        }
+        document.getElementById('image-product-' + idPD).innerHTML = img;
+        var result = await response.json();
+        if (selectedProduct === undefined && selectedProductDetailColor === undefined) {
+            arrSize = [];
+            selectedProduct = idPD;
+            selectedProductDetailColor = id;
+            for (i = 0; i < result.length; i++) {
+                inputSize.forEach(function (inputs) {
+                    var a = inputs.value.toLowerCase();
+                    var b = result[i].size.toLowerCase();
+                    if (b === a) {
+                        inputs.removeAttribute('disabled');
+                        arrSize.push(inputs.value);
+                    }
+                });
+            }
+        } else {
+            if (selectedProduct === idPD && selectedProductDetailColor !== id) {
+                arrSize = [];
+                selectedProductDetailColor = id;
+                selectedProductDetailSize = undefined;
+                for (i = 0; i < result.length; i++) {
+                    inputSize.forEach(function (inputs) {
+                        var a = inputs.value.toLowerCase();
+                        var b = result[i].size.toLowerCase();
+                        if (b === a) {
+                            inputs.checked = false;
+                            inputs.removeAttribute('disabled');
+                            arrSize.push(inputs.value);
+                        }
+                    });
+                }
+            } else {
+                var radioInputs = document.querySelectorAll('input[type="radio"]');
+                var idToRemove = "product-color-" + indexId + id;
+                for (var i = 0; i < radioInputs.length; i++) {
+                    if (radioInputs[i].id === idToRemove) {
+                        // Loại bỏ checked = false cho các phần tử radio trừ phần tử hiện tại
+                        for (var j = 0; j < radioInputs.length; j++) {
+                            if (j !== i) {
+                                radioInputs[j].checked = false;
+                            }
+                        }
+                        break;
+                    }
+                }
+                selectedProduct = idPD;
+                selectedProductDetailColor = id;
+                arrSize = [];
+                for (i = 0; i < result.length; i++) {
+                    inputSize.forEach(function (inputs) {
+                        var a = inputs.value.toLowerCase();
+                        var b = result[i].size.toLowerCase();
+                        if (b === a) {
+                            inputs.removeAttribute('disabled');
+                            arrSize.push(inputs.value);
+                        }
+                    });
+                }
+            }
+        }
+
+        liSize.forEach(function (li) {
+            var a = li.dataset.value.toLowerCase();
+            var matchFound = false;
+            for (i = 0; i < arrSize.length; i++) {
+                var b = arrSize[i].toLowerCase();
+                if (a === b) {
+                    matchFound = true;
+                    break;
+                }
+            }
+            if (!matchFound) {
+                li.style.display = 'none';
+            } else {
+                li.style.display = 'block';
+            }
+        });
+    }
+
+    function chooseProductSize(idPD, indexId, id) {
+        //lưu size selectSize
+        selectedProduct = idPD;
+        var nameSize = document.getElementById('product-size-' + indexId + id);
+        selectedProductDetailSize = nameSize.value;
+    }
+
+    async function ClearAll() {
+        document.getElementById("sort-elem").value = 0;
+        selectedProduct = undefined;
+        selectedProductDetailColor = undefined;
+        selectedProductDetailSize = undefined;
+        document.getElementById("maxCost").value = dataPriceMax;
+        document.getElementById("minCost").value = 0;
+        document.querySelector('.range-input input.range-min').value = 0;
+        document.querySelector('.range-input input.range-max').value = dataPriceMax;
+        let rangeInput = document.querySelectorAll(".range-input input");
+        let range = document.querySelector(".slider .progress");
+        rangeInput.forEach(() => {
+            range.style.left = 0 * 100 + "%";
+            range.style.right = 0 * 100 + "%";
+        });
+        chooseColor = [];
+        chooseSize = [];
+        let inputCheckbox = document.querySelectorAll('input[type=checkbox]');
+        let inputRadio = document.querySelectorAll('input[type=radio]');
+        inputCheckbox.forEach(function (input) {
+            input.checked = false;
+        })
+        inputRadio.forEach(function (input) {
+            input.checked = false;
+        })
+
+        let selectElement = document.getElementById('filter-sports');
+
+        for (let i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === "-1") {
+                selectElement.options[i].selected = true;
+            } else {
+                selectElement.options[i].selected = false;
+            }
+        }
+        let selectElement2 = document.getElementById('filter-brands');
+
+        for (let i = 0; i < selectElement2.options.length; i++) {
+            if (selectElement2.options[i].value === "-1") {
+                selectElement2.options[i].selected = true;
+            } else {
+                selectElement2.options[i].selected = false;
+            }
+        }
+        history.pushState(null, null, '/client/product');
+        await loadPage(0);
+    }
+
+    async function AddToCart() {
+        var userId = localStorage.getItem("userId");
+        console.log(userId);
+        if (userId === null || userId === undefined) {
+            swal.fire({
+                icon: "error",
+                title: "Thông Báo",
+                text: "Bạn phải đăng nhập để sử dụng chức năng này!",
+                confirmButtonText: "OK"
+            })
+        } else {
+            let statusToken = decodeToken();
+            if (statusToken === true) {
+                let product = {};
+                if (selectedProductDetailColor === undefined && selectedProductDetailSize === undefined) {
+
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Chưa Chọn Màu Và Size!",
+                    });
+                } else if (selectedProductDetailColor === undefined) {
+
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Chưa Chọn Màu!",
+                    });
+                } else if (selectedProductDetailSize === undefined) {
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Chưa Chọn Size!",
+                    });
+                } else {
+                    product = {idSP: selectedProduct, ms: selectedProductDetailColor, size: selectedProductDetailSize};
+
+                    $.ajax({
+                        url: '/api/client/cart_detail/add/' + userId,
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify(product),
+                        success: function (response) {
+                            console.log(response);
+                            if (response === "success") {
+                                let input = document.querySelectorAll('input[type=radio]');
+                                input.forEach(function (inputE) {
+                                    inputE.checked = false;
+                                })
+                                selectedProduct = undefined;
+                                selectedProductDetailColor = undefined;
+                                selectedProductDetailSize = undefined;
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "success",
+                                        title: "Thêm thành công!",
+                                    });
+                                })();
+                                handleQuantityCart(userId);
+                            } else if (response === "failure") {
+                                let input = document.querySelectorAll('input[type=radio]');
+                                input.forEach(function (inputE) {
+                                    inputE.checked = false;
+                                })
+                                selectedProduct = undefined;
+                                selectedProductDetailColor = undefined;
+                                selectedProductDetailSize = undefined;
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "warning",
+                                        title: "Sản phẩm đã hết hàng!",
+                                    });
+                                })();
+                            } else if (response === "discontinued product") {
+                                let input = document.querySelectorAll('input[type=radio]');
+                                input.forEach(function (inputE) {
+                                    inputE.checked = false;
+                                })
+                                selectedProduct = undefined;
+                                selectedProductDetailColor = undefined;
+                                selectedProductDetailSize = undefined;
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "warning",
+                                        title: "Sản phẩm đã ngừng bán!",
+                                    });
+                                })();
+                                loadPage(0);
+                            } else {
+                                let input = document.querySelectorAll('input[type=radio]');
+                                input.forEach(function (inputE) {
+                                    inputE.checked = false;
+                                })
+                                selectedProduct = undefined;
+                                selectedProductDetailColor = undefined;
+                                selectedProductDetailSize = undefined;
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "warning",
+                                        title: "Giới Hạn Mua(" + response + ")!",
+                                    });
+                                })();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    function chooseFilterColor(id) {
+        // Kiểm tra xem ID đã được chọn có trong danh sách hay không?
+        var index = chooseColor.indexOf(id);
+        var numberParse = parseInt(id);
+        if (index === -1) {
+            // Nếu không tìm thấy, thêm ID vào danh sách!
+            chooseColor.push(numberParse);
+            console.log(chooseColor);
+            loadPage(0);
+        } else {
+            // Nếu tìm thấy, loại bỏ ID khỏi danh sách!
+            chooseColor.splice(index, 1);
+            console.log(chooseColor);
+            loadPage(0);
+        }
+    }
+
+    function chooseFilterSize(id) {
+        var checkboxSize = document.getElementById("size" + id);
+        // Kiểm tra xem ID đã được chọn có trong danh sách hay không?
+        var index = chooseSize.indexOf(checkboxSize.value);
+        if (index === -1) {
+            // Nếu không tìm thấy, thêm ID vào danh sách!
+            chooseSize.push(checkboxSize.value);
+            console.log(chooseSize);
+            loadPage(0);
+        } else {
+            // Nếu tìm thấy, loại bỏ ID khỏi danh sách!
+            chooseSize.splice(index, 1);
+            console.log(chooseSize);
+            loadPage(0);
+        }
+    }
+
+    async function range() {
+        var rangeInput = document.querySelectorAll(".range-input input");
+        var priceInput = document.querySelectorAll(".price-input input");
+        var range = document.querySelector(".slider .progress");
+
+        let priceGap = 0;
+
+        // Hàm để gọi API và cập nhật giá trị max của input range
+        function updateRangeMaxFromAPI() {
+            // Gọi API từ Spring Boot
+            fetch('/api/client/product/priceMax')
+                .then(response => response.json())
+                .then(data => {
+                    // Lấy giá trị max từ phản hồi của API
+                    var maxFromAPI = data;
+                    console.log(data);
+                    // Cập nhật giá trị max của input range
+                    var rangeInputMin = document.querySelector('.range-input input.range-min');
+                    var rangeInputMax = document.querySelector('.range-input input.range-max');
+                    var minCost = document.getElementById("minCost");
+                    var maxCost = document.getElementById("maxCost");
+                    //Set min
+                    rangeInputMax.min = 0;
+                    rangeInputMax.max = maxFromAPI;
+                    //Set max
+                    rangeInputMin.min = 0;
+                    rangeInputMin.max = maxFromAPI;
+                    // Cập nhật giá trị mặc định của input range nếu cần
+                    // Ví dụ: Đặt giá trị mặc định là giá trị max từ API
+                    //Set min
+                    rangeInputMin.value = 0;
+                    minCost.value = 0;
+                    //Set max
+                    rangeInputMax.value = maxFromAPI;
+                    maxCost.value = maxFromAPI;
+
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Gọi hàm để cập nhật giá trị max từ API khi cần
+        updateRangeMaxFromAPI();
+
+        priceInput.forEach((input) => {
+            input.addEventListener("input", (e) => {
+                let minPrice = parseInt(priceInput[0].value),
+                    maxPrice = parseInt(priceInput[1].value);
+
+                if (maxPrice - minPrice >= priceGap && maxPrice <= rangeInput[1].max) {
+                    if (e.target.id === "minCost") {
+                        rangeInput[0].value = minPrice;
+                        range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
+                    } else {
+                        rangeInput[1].value = maxPrice;
+                        range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+                    }
+                }
+            });
+        });
+
+        rangeInput.forEach((input) => {
+            input.addEventListener("input", (e) => {
+                let minVal = parseInt(rangeInput[0].value),
+                    maxVal = parseInt(rangeInput[1].value);
+
+                if (maxVal - minVal < priceGap) {
+                    if (e.target.className === "range-min") {
+                        rangeInput[0].value = maxVal - priceGap;
+                    } else {
+                        rangeInput[1].value = minVal + priceGap;
+                    }
+                } else {
+                    priceInput[0].value = minVal;
+                    priceInput[1].value = maxVal;
+                    range.style.left = (minVal / rangeInput[0].max) * 100 + "%";
+                    range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+                }
+            });
+        });
+    }
+
+    function nextPageDetail(id) {
+        window.location.href = '/product/detail/' + id;
+    }
+</script>
+</body>
+</html>

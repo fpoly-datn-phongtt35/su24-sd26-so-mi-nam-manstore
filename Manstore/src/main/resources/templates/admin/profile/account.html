@@ -1,0 +1,572 @@
+<!doctype html>
+<html data-body-image="none"
+      data-layout="vertical"
+      data-preloader="disable"
+      data-sidebar="light"
+      data-sidebar-image="none"
+      data-sidebar-size="lg"
+      data-topbar="light"
+      lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/head::head"></head>
+
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+    <header th:replace="admin/fragments/header::header"></header>
+    <!-- ========== App Menu ========== -->
+    <div th:replace="admin/fragments/sidebar::sidebar"></div>
+    <!-- Left Sidebar End -->
+    <!-- Vertical Overlay-->
+    <div class="vertical-overlay"></div>
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Tài khoản của tôi</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tài khoản</a></li>
+                                    <li class="breadcrumb-item active">Tài khoản của tôi</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-xxl-12">
+                        <div class="card" style="height: 600px">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-4 d-flex justify-content-center align-items-start">
+                                        <div class="profile-user-img position-relative"
+                                             style="width: 300px;height: 300px">
+                                           <span class="position-absolute translate-middle badge border border-3 border-white rounded-circle bg-primary p-1 mt-1 me-1">
+                                              <label class="mb-0" data-bs-placement="right" data-bs-toggle="tooltip"
+                                                     for="staff-image-input" title="Select Image">
+                                                    <div class="avatar-md-custom cursor-pointer">
+                                                        <div class="avatar-title bg-light border rounded-circle text-muted">
+                                                            <i class="ri-image-fill"></i>
+                                                        </div>
+                                                    </div>
+                                                </label></span>
+                                            <div class="position-absolute bottom-0 end-0">
+                                                <form autocomplete="off" class="tablelist-form" id="update-form-img"
+                                                      method="post" novalidate
+                                                      th:object="${nhanVien}">
+                                                    <input class="form-control" id="src-img"
+                                                           type="hidden" th:name="anhNhanVien"/>
+                                                </form>
+                                                <input accept="image/png, image/gif, image/jpeg ,image/jpg"
+                                                       class="form-control d-none" id="staff-image-input"
+                                                       onchange="loadAvatar()"
+                                                       type="file"
+                                                       value=""/>
+                                            </div>
+                                            <img class="rounded object-fit-cover" id="preview-avatar"
+                                                 th:src="${(profile.anhNhanVien != null && !#strings.isEmpty(profile.anhNhanVien)) ? profile.anhNhanVien : '/assets/images/users/user-dummy-img.jpg'}"
+                                            />
+                                        </div>
+                                    </div><!--end col-->
+                                    <div class="col-lg-8">
+                                        <div class="d-flex border-bottom border-bottom-dashed mt-4 mt-lg-0">
+                                            <div class="flex-grow-1">
+                                                <h5 th:text="${profile.hoTen}"></h5>
+                                                <!--                                                        <p class="text-muted mb-0">Sales & Marketing Manager</p>-->
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <a class="btn btn-ghost-primary" data-bs-toggle="modal"
+                                                   href="#modalProfilePassword">
+                                                    <i class="bi bi-key me-1"></i> Đổi mật khẩu
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="table-responsive">
+                                                    <table class="table table-borderless table-sm mb-0">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                Ngày sinh
+                                                            </td>
+                                                            <td class="fw-medium" th:text="${profile.ngaySinh}">
+
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>
+                                                                Email
+                                                            </td>
+                                                            <td class="fw-medium" th:text="${profile.Email}">
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                Số điện thoại
+                                                            </td>
+                                                            <td class="fw-medium" th:text="${profile.sdt}">
+
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div><!--end col-->
+                                        </div><!--end row-->
+                                        <div id="history-card" class="card">
+                                            <div class="card-header">
+                                                <div class="row">
+                                                    <div class="col-md-3 d-flex justify-content-start align-items-center">
+                                                        <i class="ri-history-fill" style="margin-right: 10px;"></i> Lịch
+                                                        Sử Đơn Hàng
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input
+                                                                class="form-control"
+                                                                type="text" id="history-search" value=""
+                                                                placeholder="Nhập Mã Hoá Đơn"
+                                                        />
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <button class="btn btn-success" onclick="loadHistory()">Tìm
+                                                            Kiếm
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body" id="history">
+                                            </div>
+                                        </div>
+                                    </div><!--end col-->
+                                </div><!--end row-->
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<div class="modal fade" id="modalProfilePassword" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-4 pt-4">
+                <h5 class="modal-title">Đổi mật khẩu</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" id="close-modal"
+                        type="button"></button>
+            </div>
+            <form autocomplete="off" class="tablelist-form" id="update-form-password" method="post" novalidate
+                  th:object="${nhanVien}">
+                <div class="modal-body p-4 ">
+                    <div class="mb-3">
+                        <label class="form-label" for="oldpasswordInput">Mật khẩu
+                            cũ</label>
+                        <div class="input-group input-group-append">
+                            <input class="form-control " id="oldpasswordInput"
+                                   placeholder="Mật khẩu hiện tại"
+                                   style="border-right: none" type="password">
+                            <span class="input-group-text" id="eye-1"
+                                  onclick="handlePassword('oldpasswordInput','eye-1')"><i
+                                    class="ri-eye-2-line eye-1"></i></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="newpasswordInput">Mật khẩu
+                            mới</label>
+                        <div class="input-group input-group-append">
+                            <input class="form-control" id="newpasswordInput"
+                                   placeholder="Mật khẩu mới" style="border-right: none"
+                                   th:name="matKhau" type="password">
+                            <span class="input-group-text" id="eye-2"
+                                  onclick="handlePassword('newpasswordInput','eye-2')"><i
+                                    class="ri-eye-2-line eye-2"></i></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="confirmpasswordInput">Xác
+                            nhận mật khẩu</label>
+                        <div class="input-group input-group-append">
+                            <input class="form-control" id="confirmpasswordInput"
+                                   placeholder="Mật khẩu xác nhận"
+                                   style="border-right: none"
+                                   type="password">
+                            <span class="input-group-text" id="eye-3"
+                                  onclick="handlePassword('confirmpasswordInput','eye-3')"><i
+                                    class="ri-eye-2-line eye-3"></i></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button class="btn btn-ghost-danger" data-bs-dismiss="modal" type="button">Đóng</button>
+                            <button class="btn btn-success" onclick="showConfirmPopupPassword()" type="button">
+                                Đổi mật khẩu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/fragments/script::script"></div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
+<script>
+
+    var adminId = localStorage.getItem("adminId");
+    console.log(adminId);
+
+    window.onload = function () {
+        loadHistory();
+    }
+
+    const Toast = swal.mixin({
+        toast: true,
+        position: "top-end",
+        iconColor: "white",
+        customClass: {
+            popup: "colored-toast",
+        },
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+    });
+
+    async function loadAvatar() {
+        const src_img = document.getElementById('staff-image-input');
+        const selectedFile = src_img.files[0];
+        const image_link = document.getElementById('preview-avatar').src;
+        if (selectedFile) {
+            document.getElementById('preview-avatar').src = URL.createObjectURL(selectedFile);
+            swal.fire({
+                icon: 'question',
+                title: 'Bạn có muốn thay đổi ảnh?',
+                showCancelButton: true,
+                confirmButtonText: 'Có',
+                cancelButtonText: 'Không'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append("file", selectedFile);
+                    const urlUpload = 'http://localhost:8080/admin/upload-file';
+                    try {
+                        const res = await fetch(urlUpload, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        if (res.ok) {
+                            const imageUrl = await res.text();
+                            document.getElementById("src-img").value = imageUrl; // Lưu URL vào input hidden để submit cùng form
+                            console.log('Image uploaded successfully:', imageUrl);
+                            document.getElementById('update-form-img').action = '/admin/profile/change_Img/' + adminId;
+                            document.getElementById('update-form-img').submit();
+                        } else {
+                            console.error('Failed to upload image:', res.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Error during image upload:', error);
+                    }
+                } else {
+                    document.getElementById('preview-avatar').src = image_link;
+                }
+            });
+
+        } else {
+            console.warn('No file selected');
+        }
+    }
+
+
+    function handlePassword(password, eye) {
+        var passwordInput = document.getElementById(password);
+        let open = '.ri-eye-2-line ' + eye;
+        let close = '.ri-eye-close-fill ' + eye;
+        var eyeIcon = document.querySelector(open);
+        var eyeIconClose = document.querySelector(close);
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('ri-eye-2-line');
+            eyeIcon.classList.add('ri-eye-close-fill');
+        } else {
+            passwordInput.type = 'password';
+            eyeIconClose.classList.remove('ri-eye-close-fill');
+            eyeIconClose.classList.add('ri-eye-2-line');
+        }
+    }
+
+    async function showConfirmPopupPassword() {
+        var url = "/api/admin/profile/" + adminId;
+        const strongPasswordRegex = /^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9]{6,250}$/;
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+        var account = await response.json();
+        console.log(account);
+        var oldPasswordInput = document.getElementById('oldpasswordInput').value;
+        var newPasswordInput = document.getElementById('newpasswordInput').value;
+        var confirmPasswordInput = document.getElementById('confirmpasswordInput').value;
+        if (oldPasswordInput === '' && newPasswordInput === '' && confirmPasswordInput === '') {
+
+            await Toast.fire({
+                icon: "warning",
+                title: "Vui lòng nhập mật khẩu!",
+            });
+
+        } else if (oldPasswordInput === '') {
+
+            await Toast.fire({
+                icon: "warning",
+                title: "Mật khẩu cũ chưa được nhập!",
+            });
+
+        } else if (newPasswordInput === '') {
+
+            await Toast.fire({
+                icon: "warning",
+                title: "Mật khẩu mới chưa được nhập!",
+            });
+
+        } else if (confirmPasswordInput === '') {
+
+            await Toast.fire({
+                icon: "warning",
+                title: "Mật khẩu xác nhận chưa được nhập!",
+            });
+
+        } else if (!strongPasswordRegex.test(newPasswordInput)) {
+            await Toast.fire({
+                icon: "warning",
+                text: "Mật khẩu mới phải có ít nhất 6 kí tự, chỉ bao gồm cả chữ và số!",
+            });
+
+        } else {
+            if (oldPasswordInput === account.matKhau) {
+                if (newPasswordInput === confirmPasswordInput) {
+                    swal.fire({
+                        icon: "question",
+                        title: "Bạn muốn đổi mật khẩu ?",
+                        showCancelButton: true,
+                        confirmButtonText: "Có",
+                        cancelButtonText: "Đóng"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var oldPasswordInput = document.getElementById('oldpasswordInput').value;
+                            var newPasswordInput = document.getElementById('newpasswordInput').value;
+                            var confirmPasswordInput = document.getElementById('confirmpasswordInput').value;
+                            if (oldPasswordInput === '' && newPasswordInput === '' && confirmPasswordInput === '') {
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "warning",
+                                        title: "Tất cả trống !",
+                                    });
+                                })();
+                            } else {
+                                if (oldPasswordInput === account.matKhau) {
+                                    if (newPasswordInput === confirmPasswordInput) {
+                                        document.getElementById('update-form-password').action = '/admin/profile/change_Password/' + adminId;
+                                        document.getElementById('update-form-password').submit();
+                                    } else {
+                                        (async () => {
+                                            await Toast.fire({
+                                                icon: "warning",
+                                                title: "Mật khẩu mới và mật khẩu xác nhận phải trùng nhau!",
+                                            });
+                                        })();
+                                    }
+                                } else {
+                                    (async () => {
+                                        await Toast.fire({
+                                            icon: "warning",
+                                            title: "Mật khẩu cũ sai!",
+                                        });
+                                    })();
+                                }
+                            }
+                        }
+                    });
+                } else {
+
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Mật khẩu mới và Xác nhận mật khẩu không trùng!",
+                    });
+
+                }
+            } else {
+
+                await Toast.fire({
+                    icon: "warning",
+                    title: "Mật khẩu cũ không đúng !",
+                });
+
+            }
+        }
+    }
+
+    async function loadHistory() {
+        let url = '/api/admin/notification';
+        let keyword = document.getElementById('history-search').value;
+        if (keyword !== '') {
+            url += '?keyword=' + keyword;
+        }
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        let history_element = '';
+
+        const data = await response.json();
+        if (data.length === 0) {
+            Toast.fire({
+                icon: "warning",
+                title: "Không có đơn hàng có mã " + keyword + "!",
+            });
+        }
+        for (let i = 0; i < data.length; i++) {
+            var momentDate = moment(data[i].thoiGianGui);
+            const formattedDate = momentDate.format('DD/MM/YYYY HH:mm');
+            let message = '';
+            let status_message = '';
+            if (data[i].trangThaiDonHang === 1) {
+                message = `<span class="text-success">Khách Hàng ${data[i].kh.hoTen} đã đặt hàng</span>`;
+                status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' đang chờ xác nhận!';
+            }
+            if (data[i].trangThaiDonHang === 2) {
+                message = `<span class="text-warning">Đơn hàng đã được xác nhận</span>`;
+                status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' đã được xác nhận bởi nhân viên ' + data[i].nv.hoTen + '!';
+            }
+            if (data[i].trangThaiDonHang === 3) {
+                message = `<span class="text-primary">Đơn hàng đã được xử lý</span>`;
+                status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' đã được xử lý nhân viên ' + data[i].nv.hoTen + '!';
+            }
+            if (data[i].trangThaiDonHang === 4) {
+                message = `<span class="text-success">Đơn hàng đã được giao thành công</span>`;
+                status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' đã được giao thành công, nhân viên thao tác : ' + data[i].nv.hoTen + '!';
+            }
+            if (data[i].trangThaiDonHang === 5) {
+                message = `<span class="text-danger">Đơn hàng không được giao thành công</span>`;
+                if (data[i].noiDung !== null) {
+                    status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' giao thất bại, nhân viên thao tác : ' + data[i].nv.hoTen + '!';
+                } else {
+                    status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' giao thất bại, nhân viên thao tác : ' + data[i].nv.hoTen + '!';
+                }
+            }
+            if (data[i].trangThaiDonHang === 6) {
+                message = `<span class="text-danger">Đơn hàng đã bị huỷ!</span>`;
+                if (data[i].noiDung !== null) {
+                    if (data[i].nv !== null)
+                        status_message = 'Nhân Viên ' + data[i].nv.hoTen +
+                            ' đã huỷ đơn' + ' hàng ' + data[i].dh.maDonHang + ' với lý do : ' + data[i].noiDung + '.';
+                    else
+                        status_message = 'Khách Hàng ' + data[i].kh.hoTen +
+                            ' đã huỷ đơn' + ' hàng ' + data[i].dh.maDonHang + ' với lý do : ' + data[i].noiDung + '.';
+                } else {
+                    if (data[i].nv !== null)
+                        status_message = 'Nhân Viên ' + data[i].nv.hoTen +
+                            'huỷ đơn' + ' hàng ' + data[i].dh.maDonHang + ' với lý do : ' + data[i].noiDung + '.';
+                    else
+                        status_message = 'Khách Hàng ' + data[i].kh.hoTen +
+                            'huỷ đơn' + ' hàng ' + data[i].dh.maDonHang + ' với lý do : ' + data[i].noiDung + '.';
+                }
+            }
+            history_element += `<div
+                                        class="text-reset notification-item d-block dropdown-item position-relative"
+                                >
+                                    <div class="d-flex">
+                                        <div class="position-relative me-3 flex-shrink-0">
+                                            <img
+                                                    alt="user-pic"
+                                                    class="rounded-circle avatar-xs"
+                                                    src="/assets/images/users/user-dummy-img.jpg"
+                                            />
+                                            <span
+                                                    class="active-badge position-absolute start-100 translate-middle p-1 bg-warning rounded-circle"
+                                            >
+                              <span class="visually-hidden">New alerts</span>
+                            </span>
+                                        </div>
+
+                                        <div class="flex-grow-1">
+                                            <a class="stretched-link" disabled>
+                                                <h6 class="mt-0 mb-1 fs-14 fw-semibold">
+                                                    ${message}
+                                                </h6>
+                                            </a>
+                                            <div class="fs-13 text-muted">
+                                                <p class="mb-1">
+                                                    ${status_message}
+                                                </p>
+                                            </div>
+                                            <p
+                                                    class="mb-0 fs-11 fw-medium text-uppercase text-muted"
+                                            >
+                              <span
+                              ><i class="mdi mdi-clock-outline"></i> ${formattedDate}</span
+                              >
+                                            </p>
+                                        </div>
+                                        <div class="px-2 fs-15">
+                                            <div class="form-check notification-check">
+                                                <input
+                                                        class="form-check-input"
+                                                        id="all-notification-check04"
+                                                        type="checkbox"
+                                                        value=""
+                                                />
+                                                <label
+                                                        class="form-check-label"
+                                                        for="all-notification-check04"
+                                                ></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+        }
+        document.getElementById('history').innerHTML = history_element;
+    }
+</script>
+<script th:if="${message == true}">
+    swal.fire("Thay đổi mật khẩu thành công!", "", "success");
+</script>
+<script th:if="${message == false}">
+    swal.fire("Thay đổi mật khẩu thất bại!", "", "error");
+</script>
+</script>
+<script th:if="${messageImg == true}">
+    swal.fire("Thay đổi ảnh thành công!", "", "success");
+</script>
+<script th:if="${messageImg == false}">
+    swal.fire("Thay đổi ảnh thất bại!", "", "error");
+</script>
+</body>
+</html>
