@@ -217,7 +217,7 @@
             return;
         }
 
-        var url = '/admin/dot-giam-gia/findAll-page?page=' + page + '&size=' + size + '&sort=' + sort + '&customer_type=' + customer_type + '&promotion_type=' + promotion_type;
+        var url = '/admin/promotion/findAll-page?page=' + page + '&size=' + size + '&sort=' + sort + '&customer_type=' + customer_type + '&promotion_type=' + promotion_type;
         if (start != null && start !== "" && end != null && end !== "" && start !== 'null' && end !== 'null') {
             url += '&start=' + start + '&end=' + end;
         }
@@ -243,15 +243,15 @@
                 '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0,\'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" checked/>\n' +
                 '</div>';
             let typeOfCustomer = '';
-            if (list[i].loaiKhachHangApDung === 0) {
-                typeOfCustomer = 'Tất cả';
-            } else if (list[i].loaiKhachHangApDung === 1) {
-                typeOfCustomer = 'Khách hàng mới';
-            } else if (list[i].loaiKhachHangApDung === 2) {
-                typeOfCustomer = 'Khách hàng tiềm năng';
-            } else {
-                typeOfCustomer = 'Khách hàng thân thiết';
-            }
+            // if (list[i].loaiKhachHangApDung === 0) {
+            //     typeOfCustomer = 'Tất cả';
+            // } else if (list[i].loaiKhachHangApDung === 1) {
+            //     typeOfCustomer = 'Khách hàng mới';
+            // } else if (list[i].loaiKhachHangApDung === 2) {
+            //     typeOfCustomer = 'Khách hàng tiềm năng';
+            // } else {
+            //     typeOfCustomer = 'Khách hàng thân thiết';
+            // }
             main += `<tr>
                     <td>${i + 1}</td>
                     <td>${list[i].ten}</td>
