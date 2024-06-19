@@ -65,4 +65,10 @@ public class DotGiamGiaServiceImpl implements DotGiamGiaService{
         return dotGiamGiaRepo.findAll();
     }
 
+    @Override
+    public Optional<DotGiamGia> findById(Integer id) {
+        return dotGiamGiaRepo.findById(id);
+    }
+
+
 }

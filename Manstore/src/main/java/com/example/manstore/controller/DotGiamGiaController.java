@@ -28,12 +28,4 @@ public class DotGiamGiaController {
     }
 
 
-    @GetMapping("/admin/promotion/findAll-page")
-    public ResponseEntity<?> findAll(@RequestParam(value = "start", required = false) LocalDate start,
-                                     @RequestParam(value = "end", required = false) LocalDate end,
-                                     @RequestParam(value = "promotion_type", required = false) String promotionType,
-                                     Pageable pageable) {
-        Page<DotGiamGia> result = dotGiamGiaService.findAll(start, end, promotionType, pageable);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 }

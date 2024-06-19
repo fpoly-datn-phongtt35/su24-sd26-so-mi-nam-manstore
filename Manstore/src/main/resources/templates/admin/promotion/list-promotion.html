@@ -100,7 +100,7 @@
                                             <th>Tên</th>
                                             <th class="text-center">Giá trị giảm giá</th>
                                             <th>Giá trị áp dụng</th>
-                                            <th class="text-center">Khách hàng áp dụng</th>
+
                                             <th>Ngày bắt đầu</th>
                                             <th>Ngày kết thúc</th>
                                             <th class="text-center">Trạng Thái</th>
@@ -163,10 +163,6 @@
                         <td id="giatriapdung"></td>
                     </tr>
                     <tr>
-                        <th>Khách hàng áp dụng</th>
-                        <td id="khachhangapdung"></td>
-                    </tr>
-                    <tr>
                         <th>Giá trị giảm</th>
                         <td id="giatg"></td>
                     </tr>
@@ -203,10 +199,9 @@
         var sort = document.getElementById("sort").value;
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
-        var customer_type = $("#select-customer-type").val();
         var promotion_type = $("#select-promotion-type").val();
 
-        console.log(customer_type, promotion_type);
+        console.log(promotion_type);
 
         if (new Date(start) > new Date(end)) {
             await Toast.fire({
@@ -217,7 +212,7 @@
             return;
         }
 
-        var url = '/admin/promotion/findAll-page?page=' + page + '&size=' + size + '&sort=' + sort + '&customer_type=' + customer_type + '&promotion_type=' + promotion_type;
+        var url = '/admin/promotion/findAll-page?page=' + page + '&size=' + size + '&sort=' + sort+ '&promotion_type=' + promotion_type;
         if (start != null && start !== "" && end != null && end !== "" && start !== 'null' && end !== 'null') {
             url += '&start=' + start + '&end=' + end;
         }
@@ -236,28 +231,18 @@
         for (let i = 0; i < list.length; i++) {
             let momentDateStart = moment(list[i].ngayBatDau);
             let momentDateEnd = moment(list[i].ngayKetThuc);
-            let giaTriApDung = list[i].giatriDH;
+            let giaTriApDung = list[i].giaTriDonHang;
             let trangThaiBadge = (list[i].trangThai === false) ? '<div class="form-check form-switch d-flex justify-content-center" \>\n' +
                 '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 1, \'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" />\n' +
                 '</div>' : '<div class="form-check form-switch  d-flex justify-content-center" \>\n' +
                 '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0,\'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" checked/>\n' +
                 '</div>';
-            let typeOfCustomer = '';
-            // if (list[i].loaiKhachHangApDung === 0) {
-            //     typeOfCustomer = 'Tất cả';
-            // } else if (list[i].loaiKhachHangApDung === 1) {
-            //     typeOfCustomer = 'Khách hàng mới';
-            // } else if (list[i].loaiKhachHangApDung === 2) {
-            //     typeOfCustomer = 'Khách hàng tiềm năng';
-            // } else {
-            //     typeOfCustomer = 'Khách hàng thân thiết';
-            // }
+
             main += `<tr>
                     <td>${i + 1}</td>
                     <td>${list[i].ten}</td>
-                    <td class="text-center">${list[i].loaiGG === false ? formatmoney(list[i].giatriGiam) : list[i].giatriGiam + '%'}</td>
+                    <td class="text-center">${list[i].loaiGiamGia === false ? formatmoney(list[i].giaTriGiam) : list[i].giaTriGiam + '%'}</td>
                     <td>${formatmoney(giaTriApDung)}</td>
-                    <td class="text-center">${typeOfCustomer}</td>
                     <td>${momentDateStart.format('DD/MM/YYYY HH:mm')}</td>
                     <td>${momentDateEnd.format('DD/MM/YYYY HH:mm')}</td>
                     <td>${trangThaiBadge}</td>
@@ -365,26 +350,15 @@
         });
         var result = await response.json();
         let momentDate = moment(result.ngayTao);
-        let giaTriApDung = result.giaTriDonHangApDung + '000';
-        let typeOfCustomer = '';
-        if (result.loaiKhachHangApDung === 0) {
-            typeOfCustomer = 'Tất cả';
-        } else if (result.loaiKhachHangApDung === 1) {
-            typeOfCustomer = 'Khách hàng mới';
-        } else if (result.loaiKhachHangApDung === 2) {
-            typeOfCustomer = 'Khách hàng tiềm năng';
-        } else {
-            typeOfCustomer = 'Khách hàng thân thiết';
-        }
+        let giaTriApDung = result.giaTriDonHang;
         console.log(result)
-        document.getElementById("tenkm").innerHTML = result.tenKhuyenMai
+        document.getElementById("tenkm").innerHTML = result.ten
         document.getElementById("ngaybd").innerHTML = result.ngayBatDau
         document.getElementById("ngaykt").innerHTML = result.ngayKetThuc
-        document.getElementById("loaigg").innerHTML = result.loaiKM === true ? "Giảm giá theo %" : "Giảm giá theo số tiền";
-        document.getElementById("giatg").innerHTML = result.loaiKM === true ? result.giaTriGiam + "%" : formatmoney(result.giaTriGiam)
+        document.getElementById("loaigg").innerHTML = result.loaiGiamGia === true ? "Giảm giá theo %" : "Giảm giá theo số tiền";
+        document.getElementById("giatg").innerHTML = result.loaiGiamGia === true ? result.giaTriGiam + "%" : formatmoney(result.giaTriGiam)
         document.getElementById("ngayt").innerHTML = momentDate.format('DD/MM/YYYY HH:mm');
         document.getElementById("trangThai").innerHTML = result.trangThai === true ? 'Kích Hoạt' : 'Chưa Kích Hoạt';
-        document.getElementById("khachhangapdung").innerText = typeOfCustomer;
         document.getElementById("giatriapdung").innerHTML = formatmoney(giaTriApDung);
         // document.getElementById("anh").src = result.banner
     }

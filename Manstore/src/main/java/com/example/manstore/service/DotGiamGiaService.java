@@ -15,4 +15,6 @@ public interface DotGiamGiaService {
     Page<DotGiamGia> findAll(LocalDate start, LocalDate end, String typePromotion, Pageable pageable);
 
     List<DotGiamGia> getAll();
+
+    Optional<DotGiamGia> findById(Integer id);
 }
