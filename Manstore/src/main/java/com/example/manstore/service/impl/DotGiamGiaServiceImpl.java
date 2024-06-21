@@ -1,7 +1,8 @@
-package com.example.manstore.service;
+package com.example.manstore.service.impl;
 
 import com.example.manstore.entity.DotGiamGia;
 import com.example.manstore.repository.DotGiamGiaRepository;
+import com.example.manstore.service.DotGiamGiaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class DotGiamGiaServiceImpl implements DotGiamGiaService{
+public class DotGiamGiaServiceImpl implements DotGiamGiaService {
     @Autowired
     private DotGiamGiaRepository dotGiamGiaRepo;
 
