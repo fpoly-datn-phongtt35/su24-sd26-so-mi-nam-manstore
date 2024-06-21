@@ -22,6 +22,17 @@ public class AdminUI {
         return "admin/products/product-create";
     }
 
+//    @RequestMapping("/trademark")
+//    public String trademarkList() {
+//        return "admin/trademark/trademark-list";
+//    }
+//
+    @RequestMapping("/trademark")
+    public String trademarkList() {
+        return "admin/trademark/trademark-list";  // Giao diện danh sách thương hiệu
+    }
+
+
 //    @RequestMapping("/account")
 //    public String account() {
 //        return "admin/profile/account";

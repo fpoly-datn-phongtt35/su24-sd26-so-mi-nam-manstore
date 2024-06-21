@@ -55,34 +55,34 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-sm-12">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="trademark-email-input">Email
-                                                <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="trademark-email-input"
-                                                   placeholder="Email" required th:field="*{email}"
-                                                   onkeyup="validEmail()">
-                                            <div class="text-danger fw-bold" th:if="${errorEmail}"
-                                                 th:text="${errorEmail}">
-                                            </div>
-                                        </div>
-                                    </div>
+<!--                                    <div class="col-lg-6 col-sm-12">-->
+<!--                                        <div class="mb-3">-->
+<!--                                            <label class="form-label" for="trademark-email-input">Email-->
+<!--                                                <span class="text-danger">*</span></label>-->
+<!--                                            <input type="text" class="form-control" id="trademark-email-input"-->
+<!--                                                   placeholder="Email" required th:field="*{email}"-->
+<!--                                                   onkeyup="validEmail()">-->
+<!--                                            <div class="text-danger fw-bold" th:if="${errorEmail}"-->
+<!--                                                 th:text="${errorEmail}">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                     <!-- end col -->
                                 </div>
                                 <!-- end row -->
                                 <div class="row">
-                                    <div class="col-lg-6 col-sm-12">
-                                        <div class="mb-3">
-                                            <label for="trademark-quocgia-input" class="form-label">Quốc Gia
-                                                <span class="text-danger">*</span></label>
-                                            <input type="text" id="trademark-quocgia-input" class="form-control"
-                                                   placeholder="Tên Quốc Gia" th:field="*{quocGia}"
-                                                   onkeyup="validQuocGia()"/>
-                                            <div class="text-danger fw-bold" th:if="${errorQuocGia}"
-                                                 th:text="${errorQuocGia}">
-                                            </div>
-                                        </div>
-                                    </div>
+<!--                                    <div class="col-lg-6 col-sm-12">-->
+<!--                                        <div class="mb-3">-->
+<!--                                            <label for="trademark-quocgia-input" class="form-label">Quốc Gia-->
+<!--                                                <span class="text-danger">*</span></label>-->
+<!--                                            <input type="text" id="trademark-quocgia-input" class="form-control"-->
+<!--                                                   placeholder="Tên Quốc Gia" th:field="*{quocGia}"-->
+<!--                                                   onkeyup="validQuocGia()"/>-->
+<!--                                            <div class="text-danger fw-bold" th:if="${errorQuocGia}"-->
+<!--                                                 th:text="${errorQuocGia}">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
                                             <label class="form-label" for="supplier-mota-input">Mô Tả
@@ -100,14 +100,14 @@
                             </div>
                             <!-- end row -->
                             <div class="row">
-                                <div class="col-lg-6 col-sm-12">
-                                    <div class="mb-3 p-3">
-                                        <label class="form-label">Logo</label>
-                                        <input type="file" onchange="loadAnh()" id="ipanh" class="form-control">
-                                        <input th:field="*{logo}" id="linkanh" type="hidden" class="form-control">
-                                        <img id="imgpreview" th:src="${image}" style="height: 100px; margin-top: 20px"/>
-                                    </div>
-                                </div>
+<!--                                <div class="col-lg-6 col-sm-12">-->
+<!--                                    <div class="mb-3 p-3">-->
+<!--                                        <label class="form-label">Logo</label>-->
+<!--                                        <input type="file" onchange="loadAnh()" id="ipanh" class="form-control">-->
+<!--                                        <input th:field="*{logo}" id="linkanh" type="hidden" class="form-control">-->
+<!--                                        <img id="imgpreview" th:src="${image}" style="height: 100px; margin-top: 20px"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
                                 <div class="col-lg-6 col-sm-12 d-flex justify-content-start align-items-center">
                                     <div class="mb-3" style="padding-top: 7px;">
                                         <div class="d-flex justify-content-end align-items-end">

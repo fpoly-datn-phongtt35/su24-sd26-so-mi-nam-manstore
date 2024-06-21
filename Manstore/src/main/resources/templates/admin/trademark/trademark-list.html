@@ -19,620 +19,632 @@
 
 <!-- Begin page -->
 <div id="layout-wrapper">
-    <div th:replace="admin/fragments/header::header"></div>
-    <!-- ========== App Menu ========== -->
-    <div th:replace="admin/fragments/sidebar::sidebar"></div>
-    <!-- Left Sidebar End -->
-    <!-- ============================================================== -->
-    <!-- Start right Content here -->
-    <!-- ============================================================== -->
-    <div class="main-content">
+  <div th:replace="admin/fragments/header::header"></div>
+  <!-- ========== App Menu ========== -->
+  <div th:replace="admin/fragments/sidebar::sidebar"></div>
+  <!-- Left Sidebar End -->
+  <!-- ============================================================== -->
+  <!-- Start right Content here -->
+  <!-- ============================================================== -->
+  <div class="main-content">
 
-        <div class="page-content">
-            <div class="container-fluid">
+    <div class="page-content">
+      <div class="container-fluid">
 
-                <!-- start page title -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Thương Hiệu</h4>
+        <!-- start page title -->
+        <div class="row">
+          <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+              <h4 class="mb-sm-0">Thương Hiệu</h4>
 
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Thương Hiệu</a></li>
-                                    <li class="breadcrumb-item active"> Danh Sách Thương Hiệu</li>
-                                </ol>
-                            </div>
+              <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                  <li class="breadcrumb-item"><a href="javascript: void(0);">Thương Hiệu</a></li>
+                  <li class="breadcrumb-item active"> Danh Sách Thương Hiệu</li>
+                </ol>
+              </div>
 
-                        </div>
-                    </div>
-                </div>
-                <!-- end page title -->
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card" id="invoiceList">
-                            <div class="card-header border-0">
-                                <div class="d-flex align-items-center">
-                                    <h5 class="card-title mb-0 flex-grow-1">Thương Hiệu</h5>
-                                    <div class="flex-shrink-0">
-                                        <div class="d-flex gap-2 flex-wrap">
-                                            <button class="btn btn-danger btn-icon" id="remove-actions"
-                                                    onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i>
-                                            </button>
-                                            <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/trademark/add}">
-                                                Thêm Mới</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-xxl-3 col-sm-12">
-                                            <div class="search-box">
-                                                <input type="text" class="form-control search bg-light border-light"
-                                                       placeholder="Search..." id="search-input"
-                                                       onkeyup="searchTrademark()">
-                                                <i class="ri-search-line search-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end row-->
-                                </form>
-                            </div>
-                            <div class="card-body">
-                                <div>
-                                    <div class="gridjs-border-none mb-4">
-                                        <table class="table align-middle table-nowrap" id="invoiceTable">
-                                            <thead class="text-muted">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Tên Thương hiệu</th>
-                                                <th>Email</th>
-                                                <th>Quốc gia</th>
-                                                <th>Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody class="list form-check-all" id="list_Trademark">
-
-                                            </tbody>
-                                        </table>
-                                        <div class="row">
-                                            <div class="col-lg-3"></div>
-                                            <div class="col-lg-1"></div>
-                                            <div class="col-lg-4">
-                                                <nav aria-label="Page navigation example">
-                                                    <ul class="pagination justify-content-center" id="pagination">
-                                                    </ul>
-                                                </nav>
-                                            </div>
-                                            <div class="col-lg-3"></div>
-                                            <div class="col-lg-1"></div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="myModal" tabindex="-1">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Chi Tiết Thương Hiệu</h4>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form id="" action="" class="my-form" method="post"
-                                                          th:object="${th}">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row ">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label for="trademark-name-input"
-                                                                                   class="form-label">Tên
-                                                                                thương hiệu</label>
-                                                                            <input type="text" id="trademark-name-input"
-                                                                                   class="form-control" required
-                                                                                   th:name="ten"/>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label for="trademark-email-input"
-                                                                                   class="form-label">Email</label>
-                                                                            <input type="email"
-                                                                                   id="trademark-email-input"
-                                                                                   class="form-control" required
-                                                                                   th:name="email"/>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- end row -->
-
-                                                                <div class="row">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label for="trademark-quocgia-input"
-                                                                                   class="form-label">Quốc gia</label>
-                                                                            <input type="text"
-                                                                                   id="trademark-quocgia-input"
-                                                                                   class="form-control" required
-                                                                                   th:name="quocGia"/>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label class="form-label"
-                                                                                   for="trademark-mota-input">Mô Tả
-                                                                            </label>
-                                                                            <textarea type="text" class="form-control"
-                                                                                      id="trademark-mota-input"
-                                                                                      th:name="moTa"
-                                                                                      readonly></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <!--end row-->
-                                                                <div class="row">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label for="imgpreview" class="form-label">Logo</label>
-                                                                            <input id="linkanh" type="hidden"
-                                                                                   class="form-control" th:name="logo">
-                                                                            <img id="imgpreview" th:src="${image}"
-                                                                                 style="height: 100px; margin-top: 20px">
-                                                                        </div>
-                                                                        <!--                                                    <div class="alert alert-danger" th:if="${errorCollections != null}" th:text="${errorCollections}"></div>-->
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                    </div>
-                                                                </div>
-                                                                <!--end row-->
-                                                                <!-- end col -->
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">
-                                                                    Đóng
-                                                                </button>
-                                                                <!--                                                    <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">-->
-                                                                <!--                                                        Lưu-->
-                                                                <!--                                                    </button>-->
-                                                            </div>
-                                                            <!-- end row -->
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--end modal -->
-                                    </div>
-                                    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                         aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Chi Tiết Thương Hiệu</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form id="update-form" action="" class="my-form" method="post"
-                                                          th:object="${th}">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row ">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label for="trademark-name-input"
-                                                                                   class="form-label">Tên
-                                                                                thương hiệu</label>
-                                                                            <input type="text" id="trademark-name1-input"
-                                                                                   class="form-control" required
-                                                                                   th:name="ten" />
-                                                                            <span id="errorName" class="text-danger" style="display:none;"></span>
-
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label for="trademark-email-input"
-                                                                                   class="form-label">Email</label>
-                                                                            <input type="email"
-                                                                                   id="trademark-email1-input"
-                                                                                   class="form-control" required
-                                                                                   th:name="email" />
-                                                                            <span id="errorEmail" class="text-danger" style="display:none;"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- end row -->
-
-                                                                <div class="row">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label for="trademark-quocgia1-input"
-                                                                                   class="form-label">Quốc gia</label>
-                                                                            <input type="text"
-                                                                                   id="trademark-quocgia1-input"
-                                                                                   class="form-control" required
-                                                                                   th:name="quocGia" />
-                                                                            <span id="errorNational" class="text-danger" style="display:none;"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label class="form-label"
-                                                                                   for="trademark-mota1-input">Mô Tả
-                                                                            </label>
-                                                                            <textarea type="text" class="form-control"
-                                                                                      id="trademark-mota1-input"
-                                                                                      th:name="moTa"
-                                                                                     ></textarea>
-                                                                            <span id="errorDescription" class="text-danger" style="display:none;"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <!--end row-->
-                                                                <div class="row">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="mb-3">
-                                                                            <label for="imgpreview1" class="form-label">Logo</label>
-                                                                            <input type="file" onchange="loadAnh()"
-                                                                                   id="ipanh1" class="form-control" th:name="logo">
-                                                                            <input id="linkanh1" type="hidden"
-                                                                                   class="form-control" th:name="logo"/>
-                                                                            <img id="imgpreview1" th:src="${image}"
-                                                                                 style="height: 100px; margin-top: 20px"/>
-                                                                        </div>
-                                                                        <!--                                                    <div class="alert alert-danger" th:if="${errorCollections != null}" th:text="${errorCollections}"></div>-->
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                    </div>
-                                                                </div>
-                                                                <!--end row-->
-                                                                <!-- end col -->
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal" >
-                                                                    Đóng
-                                                                </button>
-                                                                <button type="button" id="btnthem"
-                                                                        class="btn btn-primary" onclick="showConfirmPopup()">
-                                                                    Lưu
-                                                                </button>
-                                                            </div>
-                                                            <!-- end row -->
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--end modal -->
-                                    </div>
-                                </div>
-
-                            </div>
-                            <!--end col-->
-                        </div>
-                        <!--end row-->
-
-                    </div><!-- container-fluid -->
-                </div>
-                <!-- End Page-content -->
             </div>
-            <!-- end main content-->
-
+          </div>
         </div>
+        <!-- end page title -->
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card" id="invoiceList">
+              <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                  <h5 class="card-title mb-0 flex-grow-1">Thương Hiệu</h5>
+                  <div class="flex-shrink-0">
+                    <div class="d-flex gap-2 flex-wrap">
+                      <button class="btn btn-danger btn-icon" id="remove-actions"
+                              onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i>
+                      </button>
+                      <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/trademark/add}">
+                        Thêm Mới</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+                <form>
+                  <div class="row g-3">
+                    <div class="col-xxl-3 col-sm-12">
+                      <div class="search-box">
+                        <input type="text" class="form-control search bg-light border-light"
+                               placeholder="Search..." id="search-input"
+                               onkeyup="searchTrademark()">
+                        <i class="ri-search-line search-icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end row-->
+                </form>
+              </div>
+              <div class="card-body">
+                <div>
+                  <div class="gridjs-border-none mb-4">
+                    <table class="table align-middle table-nowrap" id="invoiceTable">
+                      <thead class="text-muted">
+                      <tr>
+                        <th>#</th>
+                        <th>Mã</th>
+                        <th>Tên Thương hiệu</th>
+                        <th>Mô Tả</th>
+                        <th>Action</th>
+                      </tr>
+                      </thead>
+                      <tbody class="list form-check-all" id="list_Trademark">
+
+                      </tbody>
+                    </table>
+                    <div class="row">
+                      <div class="col-lg-3"></div>
+                      <div class="col-lg-1"></div>
+                      <div class="col-lg-4">
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination justify-content-center" id="pagination">
+                          </ul>
+                        </nav>
+                      </div>
+                      <div class="col-lg-3"></div>
+                      <div class="col-lg-1"></div>
+                    </div>
+                  </div>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="myModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Chi Tiết Thương Hiệu</h4>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                        </div>
+                      </div>
+
+                      <div class="modal-body">
+                        <form id="" action="" class="my-form" method="post"
+                              th:object="${th}">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="row ">
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label for="trademark-name-input"
+                                           class="form-label">Tên
+                                      thương hiệu</label>
+                                    <input type="text" id="trademark-name-input"
+                                           class="form-control" required
+                                           th:name="ten"/>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- end row -->
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label class="form-label"
+                                           for="trademark-mota-input">Mô Tả
+                                    </label>
+                                    <textarea type="text" class="form-control"
+                                              id="trademark-mota-input"
+                                              th:name="moTa"
+                                              readonly></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--end row-->
+                              <!-- end col -->
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary"
+                                      data-bs-dismiss="modal">
+                                Đóng
+                              </button>
+                              <!--                                                    <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">-->
+                              <!--                                                        Lưu-->
+                              <!--                                                    </button>-->
+                            </div>
+                            <!-- end row -->
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--end modal -->
+                </div>
+                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Chi Tiết Thương Hiệu</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form id="update-form" action="" class="my-form" method="post"
+                              th:object="${th}">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="row ">
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label for="trademark-name-input"
+                                           class="form-label">Tên
+                                      thương hiệu</label>
+                                    <input type="text" id="trademark-name1-input"
+                                           class="form-control" required
+                                           th:name="ten"/>
+                                    <span id="errorName" class="text-danger" style="display:none;"></span>
+
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- end row -->
+
+                              <div class="row">
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label class="form-label"
+                                           for="trademark-mota1-input">Mô Tả
+                                    </label>
+                                    <textarea type="text" class="form-control"
+                                              id="trademark-mota1-input"
+                                              th:name="moTa"
+                                    ></textarea>
+                                    <span id="errorDescription" class="text-danger" style="display:none;"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--end row-->
+                              <!-- end col -->
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary"
+                                      data-bs-dismiss="modal">
+                                Đóng
+                              </button>
+                              <button type="button" id="btnthem"
+                                      class="btn btn-primary" onclick="showConfirmPopup()">
+                                Lưu
+                              </button>
+                            </div>
+                            <!-- end row -->
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--end modal -->
+                </div>
+              </div>
+
+            </div>
+            <!--end col-->
+          </div>
+          <!--end row-->
+
+        </div><!-- container-fluid -->
+      </div>
+      <!-- End Page-content -->
     </div>
+    <!-- end main content-->
+
+  </div>
+</div>
 </div>
 <!-- END layout-wrapper -->
 <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
 <div th:replace="admin/fragments/script::script"></div>
 </body>
+
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script th:inline="javascript">
 
-    var page;
-    var hasError = false;
-
     window.onload = function () {
-        loadPage(0);
-        validName();
-        validEmail();
-        validMota();
-        validQuocgia();
+        loadPage();
     }
-    $('#myModal1').on('hidden.bs.modal', function (e) {
-        // Xóa các thông báo lỗi
-        document.getElementById('errorName').style.display = 'none';
-        document.getElementById('errorEmail').style.display = 'none';
-        document.getElementById('errorNational').style.display = 'none';
-        document.getElementById('errorDescription').style.display = 'none';
-    });
-    function detailTrademark(trademarkId) {
-        fetch('/admin/trademark/detail/' + trademarkId, {
-            method: 'GET'
-        }).then(response => {
+    async function loadPage(pageNumber = 0, pageSize = 3) {
+        try {
+            const response = await fetch(`http://localhost:8080/admin/trademark/list?page=${pageNumber}&size=${pageSize}`);
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`Lỗi HTTP! trạng thái: ${response.status}`);
             }
-            return response.json();
-        }).then(data => {
-            console.log(data);
-            document.getElementById('trademark-name-input').value = data.ten;
-            document.getElementById('trademark-email-input').value = data.email;
-            document.getElementById('trademark-mota-input').value = data.moTa;
-            document.getElementById('trademark-quocgia-input').value = data.quocGia;
-            document.getElementById('imgpreview').src = data.logo;
-            document.getElementById('update-form').action = '/api/admin/trademark/update/' + trademarkId;
-            $('#myModal').modal('show');
-        })
-            .catch(error => console.error('Error:', error));
-    }
 
-    function editTrademark(trademarkId) {
-        fetch('/admin/trademark/detail/' + trademarkId, {
-            method: 'GET'
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            const result = await response.json();
+            const list = result.content;
+
+            if (!Array.isArray(list)) {
+                throw new Error('Cấu trúc dữ liệu không hợp lệ: list không phải là một mảng');
             }
-            return response.json();
-        }).then(data => {
-            console.log(data);
-            document.getElementById('trademark-name1-input').value = data.ten;
-            document.getElementById('trademark-email1-input').value = data.email;
-            document.getElementById('trademark-mota1-input').value = data.moTa;
-            document.getElementById('trademark-quocgia1-input').value = data.quocGia;
-            document.getElementById('imgpreview1').src = data.logo;
-            document.getElementById('update-form').action = '/admin/trademark/update/' + trademarkId;
-            $('#myModal1').modal('show');
-        })
-            .catch(error => console.error('Error:', error));
-    }
-    async function loadAnh() {
-        const [file] = ipanh.files
-        if (file) {
-            imgpreview1.src = URL.createObjectURL(file)
-        }
-        document.getElementById("btnthem").disabled = true
-        const filePath = document.getElementById('ipanh1')
-        const formData = new FormData()
-        formData.append("file", filePath.files[0])
-        var urlUpload = 'http://localhost:8080/admin/upload-file';
-        const res = await fetch(urlUpload, {
-            method: 'POST',
-            body: formData
-        });
-        if (res.status < 300) {
-            document.getElementById("linkanh1").value = await res.text();
-            document.getElementById("btnthem").disabled = false
-        }
-        document.getElementById("btnthem").disabled = false
-    }
 
-    function showConfirmPopup() {
-        if(!hasError){
-            swal.fire({
-                title: "Bạn có muốn lưu thay đổi không?",
-                showCancelButton: true,
-                confirmButtonText: "Có",
-                cancelButtonText: "Không"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('update-form').submit();
-                    loadPage(0);
-                }
+            let main = '';
+            list.forEach((item, index) => {
+                main += `<tr>
+                <td>${index + 1}</td>
+                <td>${item.ma}</td>
+                <td>${item.ten}</td>
+                <td>${item.moTa}</td>
+                <td>
+                    <div class="hstack gap-3 flex-warp">
+                        <div onclick="detailTrademark(${item.id})" class="ri-eye-2-line d-none"></div>
+                        <div onclick="editTrademark(${item.id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                    </div>
+                </td>
+            </tr>`;
             });
+            document.getElementById("list_Trademark").innerHTML = main;
+
+            // Generate pagination
+            let totalPages = result.totalPages;
+            let pagination = `<div class="pagination-wrap hstack gap-2">
+            <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${pageNumber - 1 < 0 ? 0 : pageNumber - 1})">
+                <i class="mdi mdi-chevron-left align-middle ms-1"></i>
+            </button>
+            <ul class="pagination">`;
+
+            for (let i = 0; i < totalPages; i++) {
+                pagination += `<li class="page-item ${i === pageNumber ? 'active' : ''}"><a class="page-link" onclick="loadPage(${i})">${i + 1}</a></li>`;
+            }
+
+            pagination += `</ul>
+            <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${pageNumber + 1 >= totalPages ? totalPages - 1 : pageNumber + 1})">
+                <i class="mdi mdi-chevron-right align-middle ms-1"></i>
+            </button>
+        </div>`;
+
+            document.getElementById("pagination").innerHTML = pagination;
+
+        } catch (error) {
+            console.error('Lỗi khi tải trang:', error);
+            document.getElementById("list_Trademark").innerHTML = `<tr><td colspan="5">Lỗi khi tải dữ liệu: ${error.message}</td></tr>`;
         }
     }
 
-    async function loadPage(pageNumber) {
-        var url = "/api/admin/trademark/page/" + pageNumber;
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer '+ localStorage.getItem('token')
-            }
-        });
-        page = pageNumber;
-        var result = await response.json();
-        console.log(result);
-        var list = result.content;
-        var totalPage = result.totalPages;
-        var number = result.number;
-        var main = '';
-        for (i = 0; i < list.length; i++) {
 
-            main += `<tr >
-                            <td scope="row">${i + 1}</td>
-                            <td><strong>${list[i].ten}</strong></td>
-                            <td>${list[i].email}</td>
-                            <td>${list[i].quocGia}</td>
-                            <td>
-                                <div class="hstack gap-3 flex-warp">
-                                <div onclick="detailTrademark(${list[i].id})"
-                                     class="ri-eye-2-line"></div>
-                                <div onclick="editTrademark(${list[i].id})"
-                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
-                                </div>
-                            </td>
-                     </tr>`
-        }
-        document.getElementById("list_Trademark").innerHTML = main;
-        var currentPage = `<div class="pagination-wrap hstack gap-2">
-       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(0)"  >
-       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
-       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
-       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
-       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
-       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
-       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
-      </div>`;
-        document.getElementById("pagination").innerHTML = currentPage;
-    }
-
-    async function searchTrademark(pageNumber) {
-        var keyword = document.getElementById("search-input").value.trim().toLowerCase();
-        var url;
-        console.log(keyword);
-        console.log(pageNumber);
-        pageNumber === undefined ? page = 0 : page = pageNumber;
-
-        if (pageNumber === undefined && keyword === '') {
-            loadPage(0);
-        } else if (pageNumber === undefined && keyword !== '') {
-            url = "/api/admin/trademark/page/search/" + 0 + "/" + keyword;
-            console.log(url);
-            console.log(1);
-        } else if (pageNumber !== undefined && keyword !== '') {
-            url = "/api/admin/trademark/page/search/" + pageNumber + "/" + keyword + "/";
-            console.log(url);
-            console.log(3);
-        }
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer '+ localStorage.getItem('token')
-            }
-        });
-        var result = await response.json();
-        console.log(result);
-        var list = result.content;
-        var totalPage = result.totalPages;
-        var number = result.number;
-        var main = '';
-        for (i = 0; i < list.length; i++) {
-            main += `<tr >
-                            <td scope="row">${i + 1}</td>
-                            <td><strong>${list[i].ten}</strong></td>
-                            <td>${list[i].email}</td>
-                            <td>${list[i].quocGia}</td>
-                            <td>
-                                <div class="hstack gap-3 flex-warp">
-                                <div onclick="detailTrademark(${list[i].id})"
-                                     class="ri-eye-2-line"></div>
-                                 </div>
-                            </td>
-                            <td>
-                            <div onclick="editTrademark(${list[i].id})"
-                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
-                            </div>
-                            </td>
-                     </tr>`
-        }
-        document.getElementById("list_Trademark").innerHTML = main;
-        var currentPage = `<div class="pagination-wrap hstack gap-2">
-       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(0)"  >
-       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
-       <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
-       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
-       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
-       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-       <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
-       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
-      </div>`;
-        document.getElementById("pagination").innerHTML = currentPage;
-    }
-    function validName() {
-        var nameInput = document.getElementById('trademark-name1-input');
-        var errorName = document.getElementById('errorName');
-        nameInput.addEventListener('input', function () {
-            var name = nameInput.value.trim();
-            if (name === '') {
-                errorName.textContent = '* Vui lòng nhập tên thương hiệu!';
-                errorName.style.display = 'block';
-                hasError = true;
-                document.getElementById("btnthem").disable = true;
-            } else {
-                errorName.style.display = 'none';
-                hasError = false
-                document.getElementById("btnthem").disable = false;
-
-            }
-        });
-    }
-
-    function validEmail() {
-        var emailInput = document.getElementById('trademark-email1-input');
-        var errorEmail = document.getElementById('errorEmail');
-        emailInput.addEventListener('input', function () {
-            var email = emailInput.value.trim();
-            if (email === '') {
-                errorEmail.textContent = '* Vui lòng nhập email!';
-                errorEmail.style.display = 'block';
-                document.getElementById("btnthem").disable = false;
-            }else if (!isValidEmail(email)) {
-                errorEmail.textContent = '* Vui lòng nhập đúng định dạng email!';
-                errorEmail.style.display = 'block';
-                hasError = true;
-                document.getElementById("btnthem").disable = true;
-            } else {
-                errorEmail.style.display = 'none';
-                hasError = false
-                document.getElementById("btnthem").disable = false;
-            }
-        });
-    }
+    //
+    // function detailTrademark(trademarkId) {
+    //     fetch(`/admin/trademark/detail/${trademarkId}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             document.getElementById('trademark-name-input').value = data.ten;
+    //             document.getElementById('trademark-mota-input').value = data.moTa;
+    //             $('#myModal').modal('show');
+    //         })
+    //         .catch(error => console.error('Error:', error));
+    // }
+    //
+    // function editTrademark(trademarkId) {
+    //     fetch(`/admin/trademark/detail/${trademarkId}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             document.getElementById('trademark-name1-input').value = data.ten;
+    //             document.getElementById('trademark-mota1-input').value = data.moTa;
+    //             document.getElementById('update-form').action = `/admin/trademark/update/${trademarkId}`;
+    //             $('#myModal1').modal('show');
+    //         })
+    //         .catch(error => console.error('Error:', error));
+    // }
 
 
-    function validQuocgia() {
-        var nationalInput = document.getElementById('trademark-quocgia1-input');
-        var errorNational = document.getElementById('errorNational');
-        document.getElementById("btnthem").disable = true;
-        nationalInput.addEventListener('input', function () {
-            var national = nationalInput.value.trim();
-            if (national === '') {
-                errorNational.textContent = '* Vui lòng nhập tên quốc gia!';
-                errorNational.style.display = 'block';
-                hasError = true;
-                document.getElementById("btnthem").disable = true;
-            } else {
-                errorNational.style.display = 'none';
-                hasError = false
-                document.getElementById("btnthem").disable = false;
+    //    var page;
+    //    var hasError = false;
+    //
+    //    window.onload = function () {
+    //        loadPage(0);
+    //        validName();
+    //        validEmail();
+    //        validMota();
+    //        validQuocgia();
+    //    }
+    //    $('#myModal1').on('hidden.bs.modal', function (e) {
+    //        // Xóa các thông báo lỗi
+    //        document.getElementById('errorName').style.display = 'none';
+    //        document.getElementById('errorEmail').style.display = 'none';
+    //        document.getElementById('errorNational').style.display = 'none';
+    //        document.getElementById('errorDescription').style.display = 'none';
+    //    });
+    //    function detailTrademark(trademarkId) {
+    //        fetch('/admin/trademark/detail/' + trademarkId, {
+    //            method: 'GET'
+    //        }).then(response => {
+    //            if (!response.ok) {
+    //                throw new Error('Network response was not ok');
+    //            }
+    //            return response.json();
+    //        }).then(data => {
+    //            console.log(data);
+    //            document.getElementById('trademark-name-input').value = data.ten;
+    //            document.getElementById('trademark-email-input').value = data.email;
+    //            document.getElementById('trademark-mota-input').value = data.moTa;
+    //            document.getElementById('trademark-quocgia-input').value = data.quocGia;
+    //            document.getElementById('imgpreview').src = data.logo;
+    //            document.getElementById('update-form').action = '/api/admin/trademark/update/' + trademarkId;
+    //            $('#myModal').modal('show');
+    //        })
+    //            .catch(error => console.error('Error:', error));
+    //    }
+    //
+    //    function editTrademark(trademarkId) {
+    //        fetch('/admin/trademark/detail/' + trademarkId, {
+    //            method: 'GET'
+    //        }).then(response => {
+    //            if (!response.ok) {
+    //                throw new Error('Network response was not ok');
+    //            }
+    //            return response.json();
+    //        }).then(data => {
+    //            console.log(data);
+    //            document.getElementById('trademark-name1-input').value = data.ten;
+    //            document.getElementById('trademark-email1-input').value = data.email;
+    //            document.getElementById('trademark-mota1-input').value = data.moTa;
+    //            document.getElementById('trademark-quocgia1-input').value = data.quocGia;
+    //            document.getElementById('imgpreview1').src = data.logo;
+    //            document.getElementById('update-form').action = '/admin/trademark/update/' + trademarkId;
+    //            $('#myModal1').modal('show');
+    //        })
+    //            .catch(error => console.error('Error:', error));
+    //    }
+    // async function loadAnh() {
+    //     const [file] = ipanh.files
+    //     if (file) {
+    //         imgpreview1.src = URL.createObjectURL(file)
+    //     }
+    //     document.getElementById("btnthem").disabled = true
+    //     const filePath = document.getElementById('ipanh1')
+    //     const formData = new FormData()
+    //     formData.append("file", filePath.files[0])
+    //     var urlUpload = 'http://localhost:8080/admin/upload-file';
+    //     const res = await fetch(urlUpload, {
+    //         method: 'POST',
+    //         body: formData
+    //     });
+    //     if (res.status < 300) {
+    //         document.getElementById("linkanh1").value = await res.text();
+    //         document.getElementById("btnthem").disabled = false
+    //     }
+    //     document.getElementById("btnthem").disabled = false
+    // }
+    //
+    // function showConfirmPopup() {
+    //     if(!hasError){
+    //         swal.fire({
+    //             title: "Bạn có muốn lưu thay đổi không?",
+    //             showCancelButton: true,
+    //             confirmButtonText: "Có",
+    //             cancelButtonText: "Không"
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 document.getElementById('update-form').submit();
+    //                 loadPage(0);
+    //             }
+    //         });
+    //     }
+    // }
 
-            }
-        });
-    }
+    // async function loadPage(pageNumber) {
+    //     var url = "/api/admin/trademark/page/" + pageNumber;
+    //     const response = await fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': 'Bearer '+ localStorage.getItem('token')
+    //         }
+    //     });
+    //     page = pageNumber;
+    //     var result = await response.json();
+    //     console.log(result);
+    //     var list = result.content;
+    //     var totalPage = result.totalPages;
+    //     var number = result.number;
+    //     var main = '';
+    //     for (i = 0; i < list.length; i++) {
+    //
+    //         main += `<tr >
+    //                         <td scope="row">${i + 1}</td>
+    //                         <td><strong>${list[i].ten}</strong></td>
+    //                         <td>${list[i].email}</td>
+    //                         <td>${list[i].quocGia}</td>
+    //                         <td>
+    //                             <div class="hstack gap-3 flex-warp">
+    //                             <div onclick="detailTrademark(${list[i].id})"
+    //                                  class="ri-eye-2-line"></div>
+    //                             <div onclick="editTrademark(${list[i].id})"
+    //                                  class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+    //                             </div>
+    //                         </td>
+    //                  </tr>`
+    //     }
+    //     document.getElementById("list_Trademark").innerHTML = main;
+    //     var currentPage = `<div class="pagination-wrap hstack gap-2">
+    //    <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(0)"  >
+    //    <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+    //    <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+    //    <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+    //    <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+    //    <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+    //    <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+    //    <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
+    //    <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+    //   </div>`;
+    //     document.getElementById("pagination").innerHTML = currentPage;
+    // }
 
-    function validMota() {
-        var motaInput = document.getElementById('trademark-mota1-input');
-        var errorDescription = document.getElementById('errorDescription');
-        motaInput.addEventListener('input', function () {
-            var moTa = motaInput.value.trim();
-           if ( moTa.length > 225) {
-                errorDescription.textContent = '* Mô tả bạn nhập phải nhỏ hơn 225 ký tự!';
-                errorDescription.style.display = 'block';
-               hasError = true;
-               document.getElementById("btnthem").disable = true;
-           } else {
-               errorDescription.style.display = 'none';
-               hasError = false
-               document.getElementById("btnthem").disable = false;
-
-           }
-        });
-
-    }
-
-    function isValidEmail(email) {
-        var regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
-        return regex.test(email);
-    }
+    // async function searchTrademark(pageNumber) {
+    //     var keyword = document.getElementById("search-input").value.trim().toLowerCase();
+    //     var url;
+    //     console.log(keyword);
+    //     console.log(pageNumber);
+    //     pageNumber === undefined ? page = 0 : page = pageNumber;
+    //
+    //     if (pageNumber === undefined && keyword === '') {
+    //         loadPage(0);
+    //     } else if (pageNumber === undefined && keyword !== '') {
+    //         url = "/api/admin/trademark/page/search/" + 0 + "/" + keyword;
+    //         console.log(url);
+    //         console.log(1);
+    //     } else if (pageNumber !== undefined && keyword !== '') {
+    //         url = "/api/admin/trademark/page/search/" + pageNumber + "/" + keyword + "/";
+    //         console.log(url);
+    //         console.log(3);
+    //     }
+    //     const response = await fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': 'Bearer '+ localStorage.getItem('token')
+    //         }
+    //     });
+    //     var result = await response.json();
+    //     console.log(result);
+    //     var list = result.content;
+    //     var totalPage = result.totalPages;
+    //     var number = result.number;
+    //     var main = '';
+    //     for (i = 0; i < list.length; i++) {
+    //         main += `<tr >
+    //                         <td scope="row">${i + 1}</td>
+    //                         <td><strong>${list[i].ten}</strong></td>
+    //                         <td>${list[i].email}</td>
+    //                         <td>${list[i].quocGia}</td>
+    //                         <td>
+    //                             <div class="hstack gap-3 flex-warp">
+    //                             <div onclick="detailTrademark(${list[i].id})"
+    //                                  class="ri-eye-2-line"></div>
+    //                              </div>
+    //                         </td>
+    //                         <td>
+    //                         <div onclick="editTrademark(${list[i].id})"
+    //                                  class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+    //                         </div>
+    //                         </td>
+    //                  </tr>`
+    //     }
+    //     document.getElementById("list_Trademark").innerHTML = main;
+    //     var currentPage = `<div class="pagination-wrap hstack gap-2">
+    //    <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(0)"  >
+    //    <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
+    //    <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+    //    <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+    //    <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
+    //    <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
+    //    <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+    //    <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
+    //    <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
+    //   </div>`;
+    //     document.getElementById("pagination").innerHTML = currentPage;
+    // }
+    // function validName() {
+    //     var nameInput = document.getElementById('trademark-name1-input');
+    //     var errorName = document.getElementById('errorName');
+    //     nameInput.addEventListener('input', function () {
+    //         var name = nameInput.value.trim();
+    //         if (name === '') {
+    //             errorName.textContent = '* Vui lòng nhập tên thương hiệu!';
+    //             errorName.style.display = 'block';
+    //             hasError = true;
+    //             document.getElementById("btnthem").disable = true;
+    //         } else {
+    //             errorName.style.display = 'none';
+    //             hasError = false
+    //             document.getElementById("btnthem").disable = false;
+    //
+    //         }
+    //     });
+    // }
+    //
+    // function validEmail() {
+    //     var emailInput = document.getElementById('trademark-email1-input');
+    //     var errorEmail = document.getElementById('errorEmail');
+    //     emailInput.addEventListener('input', function () {
+    //         var email = emailInput.value.trim();
+    //         if (email === '') {
+    //             errorEmail.textContent = '* Vui lòng nhập email!';
+    //             errorEmail.style.display = 'block';
+    //             document.getElementById("btnthem").disable = false;
+    //         }else if (!isValidEmail(email)) {
+    //             errorEmail.textContent = '* Vui lòng nhập đúng định dạng email!';
+    //             errorEmail.style.display = 'block';
+    //             hasError = true;
+    //             document.getElementById("btnthem").disable = true;
+    //         } else {
+    //             errorEmail.style.display = 'none';
+    //             hasError = false
+    //             document.getElementById("btnthem").disable = false;
+    //         }
+    //     });
+    // }
+    //
+    //
+    // function validQuocgia() {
+    //     var nationalInput = document.getElementById('trademark-quocgia1-input');
+    //     var errorNational = document.getElementById('errorNational');
+    //     document.getElementById("btnthem").disable = true;
+    //     nationalInput.addEventListener('input', function () {
+    //         var national = nationalInput.value.trim();
+    //         if (national === '') {
+    //             errorNational.textContent = '* Vui lòng nhập tên quốc gia!';
+    //             errorNational.style.display = 'block';
+    //             hasError = true;
+    //             document.getElementById("btnthem").disable = true;
+    //         } else {
+    //             errorNational.style.display = 'none';
+    //             hasError = false
+    //             document.getElementById("btnthem").disable = false;
+    //
+    //         }
+    //     });
+    // }
+    //
+    // function validMota() {
+    //     var motaInput = document.getElementById('trademark-mota1-input');
+    //     var errorDescription = document.getElementById('errorDescription');
+    //     motaInput.addEventListener('input', function () {
+    //         var moTa = motaInput.value.trim();
+    //        if ( moTa.length > 225) {
+    //             errorDescription.textContent = '* Mô tả bạn nhập phải nhỏ hơn 225 ký tự!';
+    //             errorDescription.style.display = 'block';
+    //            hasError = true;
+    //            document.getElementById("btnthem").disable = true;
+    //        } else {
+    //            errorDescription.style.display = 'none';
+    //            hasError = false
+    //            document.getElementById("btnthem").disable = false;
+    //
+    //        }
+    //     });
+    //
+    // }
+    //
+    // function isValidEmail(email) {
+    //     var regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
+    //     return regex.test(email);
+    // }
 </script>
-<script th:if="${updateSuccess == true}">
-    swal.fire("Lưu thay đổi thành công!", "", "success");
-</script>
-<script th:if="${updateFailure == false}">
-    swal.fire("Thay đổi chưa được lưu!", "", "error");
-</script>
+<!--<script th:if="${updateSuccess == true}">-->
+<!--    swal.fire("Lưu thay đổi thành công!", "", "success");-->
+<!--</script>-->
+<!--<script th:if="${updateFailure == false}">-->
+<!--    swal.fire("Thay đổi chưa được lưu!", "", "error");-->
+<!--</script>-->
 </html>
