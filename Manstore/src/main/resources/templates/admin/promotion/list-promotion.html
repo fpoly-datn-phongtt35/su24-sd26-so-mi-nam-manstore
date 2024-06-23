@@ -64,16 +64,6 @@
                                         <input id="end" type="date" class="form-control">
                                     </div>
                                     <div class="col-xxl-2 col-sm-6">
-                                        <label>Khách Hàng Áp Dụng</label>
-                                        <select id="select-customer-type" class="form-control">
-                                            <option value="null" selected>Tất cả</option>
-                                            <option value="1">Khách hàng mới</option>
-                                            <option value="2">Khách hàng tiềm năng</option>
-                                            <option value="3">Khách hàng thân thiết</option>
-                                            <option value="0">Tất cả khách hàng</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-xxl-2 col-sm-6">
                                         <label>Loại Giảm Giá</label>
                                         <select id="select-promotion-type" class="form-control">
                                             <option value="null" selected>Tất cả</option>
@@ -97,10 +87,10 @@
                                         <thead class="thead-tablefix">
                                         <tr>
                                             <th>#</th>
+                                            <th>Mã</th>
                                             <th>Tên</th>
                                             <th class="text-center">Giá trị giảm giá</th>
                                             <th>Giá trị áp dụng</th>
-
                                             <th>Ngày bắt đầu</th>
                                             <th>Ngày kết thúc</th>
                                             <th class="text-center">Trạng Thái</th>
@@ -139,6 +129,10 @@
             <div class="modal-body row">
                 <table class="table">
                     <tr>
+                        <th>Mã</th>
+                        <td id="makm"></td>
+                    </tr>
+                    <tr>
                         <th>Tên</th>
                         <td id="tenkm"></td>
                     </tr>
@@ -175,87 +169,168 @@
         </div>
     </div>
 </div>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
-<script>
-    const Toast = swal.mixin({
-        toast: true,
-        position: "top-end",
-        iconColor: "white",
-        customClass: {
-            popup: "colored-toast",
-        },
-        showConfirmButton: false,
-        timer: 1500,
-        timerProgressBar: true,
-    });
-    window.onload = function () {
-        loadPromotion(0);
-    }
-    var size = 10;
 
-    async function loadPromotion(page) {
-        var sort = document.getElementById("sort").value;
-        var start = document.getElementById("start").value;
-        var end = document.getElementById("end").value;
-        var promotion_type = $("#select-promotion-type").val();
+<div class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-4 pt-4" style="background-color: #3fc3ee;color: white">
+                <h5 class="modal-title" style="color: white"
+                    id="exampleModalLabel">Thông Tin Đợt Giảm Giá</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-modal"></button>
+            </div>
+            <form class="tablelist-form" novalidate autocomplete="off" id="update-form" method="post"
+                  th:object="${dotgiamgia}">
+                <div class="modal-body p-4">
+                    <div id="alert-error-msg" class="d-none alert alert-danger py-2"></div>
+                    <div class="row">
+                        <input type="hidden" id="id-field"/>
+                        <div class="col-sm-6">
+                            <label for="promotion-code-input" class="form-label">Mã Đợt Giảm Giá</label>
+                            <input type="text" id="promotion-code-input" class="form-control" required
+                                   th:name="ma"/><br>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="promotion-name-input" class="form-label">Tên Đợt Giảm Giá</label>
+                            <input type="text" id="promotion-name-input" class="form-control" required
+                                   th:name="ten"/><br>
+                        </div>
+                        <div class="col-sm-9">
+                            <label for="promotion-value-input" class="form-label">Giá Trị Giảm</label>
+                            <input type="text" id="promotion-value-input" class="form-control" required
+                                   th:name="giaTriGiam"/><br>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="promotion-category-input" class="form-label">Giảm Theo</label>
+                            <select th:name="loaiGiamGia" id="promotion-category-input" class="form-select" required>
+                                <option th:value="true">%</option>
+                                <option th:value="false">VND</option>
+                            </select><br>
+                        </div>
 
-        console.log(promotion_type);
+                        <div class="col-sm-6">
+                            <label for="promotion-bill-input" class="form-label">Giá Trị Đơn Hàng Áp Dụng</label>
+                            <input type="email" id="promotion-bill-input" class="form-control" required
+                                   th:name="giaTriDonHang"/><br>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="promotion-status-input" class="form-label">Trạng Thái</label>
+                            <select class="form-control" required id="promotion-status-input" th:name="trangThai">
+                                <option th:value="true">Kích Hoạt</option>
+                                <option th:value="false">Dừng Kích Hoạt</option>
+                            </select><br></div>
+                        <div class="col-sm-6">
+                            <label for="promotion-startdate-input" class="form-label">Ngày Bắt Đầu</label>
+                            <input type="date" id="promotion-startdate-input" class="form-control" required
+                                   th:name="ngayBatDau"/><br></div>
+                        <div class="col-sm-6">
+                            <label for="promotion-enddate-input" class="form-label">Ngày Kết Thúc</label>
+                            <input type="date" id="promotion-enddate-input" class="form-control" required
+                                   th:name="ngayKetThuc"/><br></div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="promotion-date-input">Ngày Tạo</label>
+                            <input class="form-control" id="promotion-date-input" required
+                                   th:name="ngayTao"
+                                   type="date" disabled/>
+                        </div>
+                    </div>
+                    <hr>
 
-        if (new Date(start) > new Date(end)) {
-            await Toast.fire({
-                icon: "error",
-                title: "Ngày bắt đầu không thể sau ngày kết thúc!",
-                width: 450,
-            });
-            return;
-        }
-
-        var url = '/admin/promotion/findAll-page?page=' + page + '&size=' + size + '&sort=' + sort+ '&promotion_type=' + promotion_type;
-        if (start != null && start !== "" && end != null && end !== "" && start !== 'null' && end !== 'null') {
-            url += '&start=' + start + '&end=' + end;
-        }
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-success" id="add-btn" onclick="showConfirmPopup()">
+                                Sửa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <script>
+        const Toast = swal.mixin({
+            toast: true,
+            position: "top-end",
+            iconColor: "white",
+            customClass: {
+                popup: "colored-toast",
+            },
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
         });
-        var result = await response.json();
-        console.log(result)
-        var list = result.content;
-        var number = result.number;
-        var totalPage = result.totalPages;
-        var main = '';
-        for (let i = 0; i < list.length; i++) {
-            let momentDateStart = moment(list[i].ngayBatDau);
-            let momentDateEnd = moment(list[i].ngayKetThuc);
-            let giaTriApDung = list[i].giaTriDonHang;
-            let trangThaiBadge = (list[i].trangThai === false) ? '<div class="form-check form-switch d-flex justify-content-center" \>\n' +
-                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 1, \'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" />\n' +
-                '</div>' : '<div class="form-check form-switch  d-flex justify-content-center" \>\n' +
-                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0,\'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" checked/>\n' +
-                '</div>';
+        window.onload = function () {
+            loadPromotion(0);
+        }
+        var size = 10;
 
-            main += `<tr>
+        async function loadPromotion(page) {
+            var sort = document.getElementById("sort").value;
+            var start = document.getElementById("start").value;
+            var end = document.getElementById("end").value;
+            var promotion_type = $("#select-promotion-type").val();
+
+            console.log(promotion_type);
+
+            if (new Date(start) > new Date(end)) {
+                await Toast.fire({
+                    icon: "error",
+                    title: "Ngày bắt đầu không thể sau ngày kết thúc!",
+                    width: 450,
+                });
+                return;
+            }
+
+            var url = '/admin/promotion/findAll-page?page=' + page + '&size=' + size + '&sort=' + sort + '&promotion_type=' + promotion_type;
+            if (start != null && start !== "" && end != null && end !== "" && start !== 'null' && end !== 'null') {
+                url += '&start=' + start + '&end=' + end;
+            }
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+            var result = await response.json();
+            console.log(result)
+            var list = result.content;
+            var number = result.number;
+            var totalPage = result.totalPages;
+            var main = '';
+            for (let i = 0; i < list.length; i++) {
+                let momentDateStart = moment(list[i].ngayBatDau);
+                let momentDateEnd = moment(list[i].ngayKetThuc);
+                let giaTriApDung = list[i].giaTriDonHang;
+                let trangThaiBadge = (list[i].trangThai === false) ? '<div class="form-check form-switch d-flex justify-content-center" \>\n' +
+                    '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 1, \'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" />\n' +
+                    '</div>' : '<div class="form-check form-switch  d-flex justify-content-center" \>\n' +
+                    '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0,\'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" checked/>\n' +
+                    '</div>';
+
+                main += `<tr>
                     <td>${i + 1}</td>
+                    <td>${list[i].ma}</td>
                     <td>${list[i].ten}</td>
                     <td class="text-center">${list[i].loaiGiamGia === false ? formatmoney(list[i].giaTriGiam) : list[i].giaTriGiam + '%'}</td>
                     <td>${formatmoney(giaTriApDung)}</td>
-                    <td>${momentDateStart.format('DD/MM/YYYY HH:mm')}</td>
-                    <td>${momentDateEnd.format('DD/MM/YYYY HH:mm')}</td>
+                    <td>${momentDateStart.format('DD/MM/YYYY')}</td>
+                    <td>${momentDateEnd.format('DD/MM/YYYY')}</td>
                     <td>${trangThaiBadge}</td>
                     <td class="sticky-col d-flex justify-content-between">
                         <a onclick="loadChiTiet(${list[i].id})" href="#" data-bs-toggle="modal" data-bs-target="#chitiet"><i class="ri-eye-2-line"></i></a>
-                        <a onclick="nextDetailPromotion(${list[i].id})"><i class="ri-edit-2-line"></i></a>
-
+                            <a onclick="detail(${list[i].id})"
+                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></a>
+                                 </a>
                         <a onclick="sendMail(${list[i].id})"><i class="ri-mail-send-fill"></i></a>
                     </td>
                 </tr>`
-        }
-        document.getElementById("listvoucher").innerHTML = main
-        document.getElementById("pageable").innerHTML = `
+            }
+            document.getElementById("listvoucher").innerHTML = main
+            document.getElementById("pageable").innerHTML = `
                 <div class="pagination-wrap hstack gap-2 d-flex justify-content-center align-items-center">
                        <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPromotion(${number === 0 ? totalPage - 1 : 0})"  >
                        <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
@@ -267,218 +342,264 @@
                        <button class="page-item pagination-next" id="pagination-next" onclick="loadPromotion(${number === totalPage - 1 ? 0 : totalPage - 1})">
                        <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
                 </div>`;
-    }
-
-    async function nextDetailPromotion(id) {
-        $.ajax({
-            url: '/admin/promotion/check-status?id=' + id,
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
-            },
-            success: function (response) {
-                console.log(response);
-                if (response === "success") {
-                    window.location.href = '/admin/add-promotion?id=' + id;
-                } else if (response === "error") {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Thông Báo',
-                        text: 'Không thể cập nhật khuyến mãi vì chương trình đã được áp dụng!',
-                        confirmButtonText: 'OK',
-                    })
-                } else {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Thông Báo',
-                        text: 'Khuyến mãi không tồn tại!',
-                        confirmButtonText: 'OK',
-                    })
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
-    async function sendMail(id) {
-        $.ajax({
-            url: '/api/admin/promotion/send-mail?promotion=' + id,
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
-            },
-            success: function (response) {
-                console.log(response);
-                if (response === "success") {
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Thông Báo',
-                        text: 'Mail đã được gửi đi!',
-                        confirmButtonText: 'OK',
-                    })
-                } else if (response === "out of date") {
-                    swal.fire({
-                        icon: 'warning',
-                        title: 'Thông Báo',
-                        text: 'Khuyến mãi đã kết thúc!',
-                        confirmButtonText: 'OK',
-                    })
-                } else {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Thông Báo',
-                        text: 'Khuyến mãi không tồn tại!',
-                        confirmButtonText: 'OK',
-                    })
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
-    async function loadChiTiet(id) {
-        var url = '/public/promotion/find-by-id?id=' + id;
-
-        const response = await fetch(url, {
-            method: 'GET'
-        });
-        var result = await response.json();
-        let momentDate = moment(result.ngayTao);
-        let giaTriApDung = result.giaTriDonHang;
-        console.log(result)
-        document.getElementById("tenkm").innerHTML = result.ten
-        document.getElementById("ngaybd").innerHTML = result.ngayBatDau
-        document.getElementById("ngaykt").innerHTML = result.ngayKetThuc
-        document.getElementById("loaigg").innerHTML = result.loaiGiamGia === true ? "Giảm giá theo %" : "Giảm giá theo số tiền";
-        document.getElementById("giatg").innerHTML = result.loaiGiamGia === true ? result.giaTriGiam + "%" : formatmoney(result.giaTriGiam)
-        document.getElementById("ngayt").innerHTML = momentDate.format('DD/MM/YYYY HH:mm');
-        document.getElementById("trangThai").innerHTML = result.trangThai === true ? 'Kích Hoạt' : 'Chưa Kích Hoạt';
-        document.getElementById("giatriapdung").innerHTML = formatmoney(giaTriApDung);
-        // document.getElementById("anh").src = result.banner
-    }
-
-    function formatmoney(money) {
-        const VND = new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-        });
-        return VND.format(money);
-    }
-
-    function updateStatus(id, status, start_date, end_date) {
-        let now = new Date();
-
-        let targetDateStart = new Date(start_date);
-        let targetDateEnd = new Date(end_date);
-
-        let text = '';
-        if (status === 1 && now >= targetDateStart) {
-            if (now < targetDateEnd) {
-                text = 'Bạn Có Muốn Kích Chương Trình Hoạt Khuyến Mãi Này?';
-            } else {
-                swal.fire({
-                    icon: 'question',
-                    title: 'Thông Báo',
-                    text: 'Thời gian kết thúc của chương trình khuyến mãi đã qua, không thể kích hoạt!',
-                    confirmButtonText: "OK",
-                })
-                document.getElementById("input-status-" + id).checked = status !== 1;
-                return;
-            }
-        } else if (status === 1 && now < targetDateStart) {
-            text = 'Thời gian bắt đầu của khuyến mãi chưa đến, bạn có muốn kích hoạt?';
-        } else if (status === 0 && now < targetDateEnd) {
-            text = 'Thời gian kết thúc của khuyến mãi chưa đến, bạn có muốn tắt kích hoạt?';
-        } else {
-            text = 'Bạn Có Muốn Bỏ Kích Hoạt Chương Trình Khuyến Mãi Này?';
         }
-        swal.fire({
-            icon: 'question',
-            title: 'Thông Báo',
-            text: text,
-            showCancelButton: true,
-            confirmButtonText: "Có",
-            cancelButtonText: `Không`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/admin/promotion/change-status/' + id + '/' + status,
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    },
-                    success: function (response) {
-                        console.log(response);
-                        if (response === "success") {
-                            (async () => {
-                                await Toast.fire({
-                                    icon: "success",
-                                    title: "Thay đổi trạng thái thành công!",
-                                });
-                            })();
-                        } else if (response === "failure") {
-                            swal.fire({
-                                icon: 'error',
-                                title: 'Thông Báo',
-                                text: 'Không thể thay đổi trạng thái do khuyến mãi đã được áp dụng!',
-                                confirmButtonText: 'OK',
-                            }).then(() => {
-                                document.getElementById("input-status-" + id).checked = status !== 1;
-                            })
-                        } else if (response === "out of date") {
-                            swal.fire({
-                                icon: 'error',
-                                title: 'Thông Báo',
-                                text: 'Không thể kích hoạt do chương trình khuyến mãi đã kết thúc!',
-                                confirmButtonText: 'OK',
-                            }).then(() => {
-                                document.getElementById("input-status-" + id).checked = status !== 1;
-                            })
-                        } else {
-                            swal.fire({
-                                icon: 'error',
-                                title: 'Thông Báo',
-                                text: 'Chường trình khuyến mãi không tồn tại!',
-                                confirmButtonText: 'OK',
-                            }).then(() => {
-                                loadPromotion(0);
-                            })
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', error);
-                    }
-                });
-            } else {
-                document.getElementById("input-status-" + id).checked = status !== 1;
-            }
-        });
-    }
 
-</script>
-<script th:if="${errorNotExist == true}">
-    swal.fire("Không tìm thấy khuyến mãi này!", "", "error");
-</script>
-<script th:if="${error == true}">
-    swal.fire("Khuyến mãi này đã được áp dụng!", "", "error");
-</script>
-<div th:if="${promotionCreated}">
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Thành công!',
-            text: 'Khuyến mãi đã được tạo thành công!'
-        });
+        function detail(Id) {
+            console.log(Id);
+            fetch('/admin/promotion/detail/' + Id, {
+                method: 'GET'
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data);
+                document.getElementById('promotion-code-input').value = data.ma
+                document.getElementById('promotion-name-input').value = data.ten;
+                document.getElementById('promotion-date-input').value = data.ngayTao
+                document.getElementById('promotion-startdate-input').value = data.ngayBatDau;
+                // none
+                document.getElementById('promotion-enddate-input').value = data.ngayKetThuc;
+                document.getElementById('promotion-category-input').value = data.loaiGiamGia;
+                document.getElementById('promotion-value-input').value = data.giaTriGiam;
+                document.getElementById('promotion-bill-input').value = data.giaTriDonHang;
+                document.getElementById('promotion-status-input').value = data.trangThai;
+                // document.getElementById('staff-position-input').value = data.cv.id;
+                document.getElementById('update-form').action = '/admin/promotion/update/' + Id;
+                $('#myModal').modal('show');
+            })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function showConfirmPopup() {
+            swal.fire({
+                title: "Bạn muốn cập nhật thông tin ?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Có",
+                cancelButtonText: "Không"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('update-form').submit();
+                    loadPage(page);
+                }
+                // else if (result.isDenied) {
+                //     // swal.fire("Changes are not saved", "", "info");
+                // }
+            });
+        }
+
+        // async function nextDetailPromotion(id) {
+        //     $.ajax({
+        //         url: '/admin/promotion/check-status?id=' + id,
+        //         method: 'GET',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': 'Bearer ' + localStorage.getItem("token")
+        //         },
+        //         success: function (response) {
+        //             console.log(response);
+        //             if (response === "success") {
+        //                 window.location.href = '/admin/add-promotion?id=' + id;
+        //             } else if (response === "error") {
+        //                 swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Thông Báo',
+        //                     text: 'Không thể cập nhật khuyến mãi vì chương trình đã được áp dụng!',
+        //                     confirmButtonText: 'OK',
+        //                 })
+        //             } else {
+        //                 swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Thông Báo',
+        //                     text: 'Khuyến mãi không tồn tại!',
+        //                     confirmButtonText: 'OK',
+        //                 })
+        //             }
+        //         },
+        //         error: function (xhr, status, error) {
+        //             console.error('Error:', error);
+        //         }
+        //     });
+        // }
+        //
+        // async function sendMail(id) {
+        //     $.ajax({
+        //         url: '/api/admin/promotion/send-mail?promotion=' + id,
+        //         method: 'GET',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': 'Bearer ' + localStorage.getItem("token")
+        //         },
+        //         success: function (response) {
+        //             console.log(response);
+        //             if (response === "success") {
+        //                 swal.fire({
+        //                     icon: 'success',
+        //                     title: 'Thông Báo',
+        //                     text: 'Mail đã được gửi đi!',
+        //                     confirmButtonText: 'OK',
+        //                 })
+        //             } else if (response === "out of date") {
+        //                 swal.fire({
+        //                     icon: 'warning',
+        //                     title: 'Thông Báo',
+        //                     text: 'Khuyến mãi đã kết thúc!',
+        //                     confirmButtonText: 'OK',
+        //                 })
+        //             } else {
+        //                 swal.fire({
+        //                     icon: 'error',
+        //                     title: 'Thông Báo',
+        //                     text: 'Khuyến mãi không tồn tại!',
+        //                     confirmButtonText: 'OK',
+        //                 })
+        //             }
+        //         },
+        //         error: function (xhr, status, error) {
+        //             console.error('Error:', error);
+        //         }
+        //     });
+        // }
+
+        async function loadChiTiet(id) {
+            var url = '/public/promotion/find-by-id?id=' + id;
+
+            const response = await fetch(url, {
+                method: 'GET'
+            });
+            var result = await response.json();
+            let momentDate = moment(result.ngayTao);
+            let giaTriApDung = result.giaTriDonHang;
+            console.log(result)
+            document.getElementById("makm").innerHTML = result.ma
+            document.getElementById("tenkm").innerHTML = result.ten
+            document.getElementById("ngaybd").innerHTML = result.ngayBatDau
+            document.getElementById("ngaykt").innerHTML = result.ngayKetThuc
+            document.getElementById("loaigg").innerHTML = result.loaiGiamGia === true ? "Giảm giá theo %" : "Giảm giá theo số tiền";
+            document.getElementById("giatg").innerHTML = result.loaiGiamGia === true ? result.giaTriGiam + "%" : formatmoney(result.giaTriGiam)
+            document.getElementById("ngayt").innerHTML = momentDate.format('DD/MM/YYYY HH:mm');
+            document.getElementById("trangThai").innerHTML = result.trangThai === true ? 'Kích Hoạt' : 'Chưa Kích Hoạt';
+            document.getElementById("giatriapdung").innerHTML = formatmoney(giaTriApDung);
+        }
+
+        function formatmoney(money) {
+            const VND = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+            });
+            return VND.format(money);
+        }
+
+        function updateStatus(id, status, start_date, end_date) {
+            let now = new Date();
+
+            let targetDateStart = new Date(start_date);
+            let targetDateEnd = new Date(end_date);
+
+            let text = '';
+            if (status === 1 && now >= targetDateStart) {
+                if (now < targetDateEnd) {
+                    text = 'Bạn Có Muốn Kích Chương Trình Hoạt Khuyến Mãi Này?';
+                } else {
+                    swal.fire({
+                        icon: 'question',
+                        title: 'Thông Báo',
+                        text: 'Thời gian kết thúc của chương trình khuyến mãi đã qua, không thể kích hoạt!',
+                        confirmButtonText: "OK",
+                    })
+                    document.getElementById("input-status-" + id).checked = status !== 1;
+                    return;
+                }
+            } else if (status === 1 && now < targetDateStart) {
+                text = 'Thời gian bắt đầu của khuyến mãi chưa đến, bạn có muốn kích hoạt?';
+            } else if (status === 0 && now < targetDateEnd) {
+                text = 'Thời gian kết thúc của khuyến mãi chưa đến, bạn có muốn tắt kích hoạt?';
+            } else {
+                text = 'Bạn Có Muốn Bỏ Kích Hoạt Chương Trình Khuyến Mãi Này?';
+            }
+            swal.fire({
+                icon: 'question',
+                title: 'Thông Báo',
+                text: text,
+                showCancelButton: true,
+                confirmButtonText: "Có",
+                cancelButtonText: `Không`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/admin/promotion/change-status/' + id + '/' + status,
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if (response === "success") {
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "success",
+                                        title: "Thay đổi trạng thái thành công!",
+                                    });
+                                })();
+                            } else if (response === "failure") {
+                                swal.fire({
+                                    icon: 'error',
+                                    title: 'Thông Báo',
+                                    text: 'Không thể thay đổi trạng thái do khuyến mãi đã được áp dụng!',
+                                    confirmButtonText: 'OK',
+                                }).then(() => {
+                                    document.getElementById("input-status-" + id).checked = status !== 1;
+                                })
+                            } else if (response === "out of date") {
+                                swal.fire({
+                                    icon: 'error',
+                                    title: 'Thông Báo',
+                                    text: 'Không thể kích hoạt do chương trình khuyến mãi đã kết thúc!',
+                                    confirmButtonText: 'OK',
+                                }).then(() => {
+                                    document.getElementById("input-status-" + id).checked = status !== 1;
+                                })
+                            } else {
+                                swal.fire({
+                                    icon: 'error',
+                                    title: 'Thông Báo',
+                                    text: 'Chường trình khuyến mãi không tồn tại!',
+                                    confirmButtonText: 'OK',
+                                }).then(() => {
+                                    loadPromotion(0);
+                                })
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                } else {
+                    document.getElementById("input-status-" + id).checked = status !== 1;
+                }
+            });
+        }
+
     </script>
-</div>
-<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
-<div th:replace="admin/fragments/script::script"></div>
+    <script th:if="${errorNotExist == true}">
+        swal.fire("Không tìm thấy khuyến mãi này!", "", "error");
+    </script>
+    <script th:if="${error == true}">
+        swal.fire("Khuyến mãi này đã được áp dụng!", "", "error");
+    </script>
+    <div th:if="${promotionCreated}">
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: 'Khuyến mãi đã được tạo thành công!'
+            });
+        </script>
+    </div>
+    <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+    <div th:replace="admin/fragments/script::script"></div>
 </body>
 </html>

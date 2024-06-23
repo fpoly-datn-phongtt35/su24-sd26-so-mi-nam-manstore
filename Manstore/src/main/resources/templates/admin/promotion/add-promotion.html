@@ -17,8 +17,8 @@
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Khuyến Mãi</a></li>
-                                    <li class="breadcrumb-item active">Thêm Khuyến Mãi</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Đợt Giảm Giá</a></li>
+                                    <li class="breadcrumb-item active">Thêm Đợt Giảm Giá</li>
                                 </ol>
                             </div>
 
@@ -37,9 +37,13 @@
                                     <div class="col-sm-5">
                                         <input th:field="*{id}" type="hidden" class="form-control">
 
-                                        <label class="lb-form">Tên Khuyến Mãi <span
+                                        <label class="lb-form">Mã Đợt Giảm Giá <span
                                                 class="text-danger fw-bold">*</span></label>
-                                        <input th:field="*{tenKhuyenMai}" type="text" class="form-control" id="name">
+                                        <input th:field="*{ma}" type="text" class="form-control" id="ma">
+
+                                        <label class="lb-form">Tên Đợt Giảm Giá <span
+                                                class="text-danger fw-bold">*</span></label>
+                                        <input th:field="*{ten}" type="text" class="form-control" id="name">
                                         <span class="text-danger" th:text="${errorName}"
                                               id="error-name"></span>
                                         <br disabled>
@@ -51,48 +55,35 @@
                                                        id="reduce">
                                             </div>
                                             <div class="col-sm-3">
-                                                <select th:field="*{loaiKM}" class="form-select">
+                                                <select th:field="*{loaiGiamGia}" class="form-select">
                                                     <option value="true">%</option>
                                                     <option value="false">VND</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <span class="text-danger"
-                                              th:text="${errorGiaTriGiam}" id="error-reduce"></span>
+<!--                                        <span class="text-danger"-->
+<!--                                              th:text="${errorGiaTriGiam}" id="error-reduce"></span>-->
 
                                         <br disabled>
-                                        <label class="lb-form">Banner</label>
-                                        <input type="file" onchange="loadAnh()" id="ipanh" class="form-control">
-                                        <input th:field="*{banner}" id="linkanh" type="hidden" class="form-control">
-                                        <img id="imgpreview" th:src="${image}" style="width: 120px">
-                                        <br disabled>
-                                        <label class="lb-form">Khách Hàng Áp Dụng <span
-                                                class="text-danger fw-bold">*</span></label>
-                                        <select th:field="*{loaiKhachHangApDung}" class="form-select">
-                                            <option value="0" selected>Tất Cả Khách Hàng</option>
-                                            <option value="1">Khách Hàng Mới</option>
-                                            <option value="2">Khách Hàng Tiềm Năng</option>
-                                            <option value="3">Khách Hàng Thân Thiết</option>
-                                        </select>
                                     </div>
                                     <div class="col-sm-5">
                                         <label class="lb-form">Ngày bắt đầu <span
                                                 class="text-danger fw-bold">*</span></label>
                                         <input th:field="*{ngayBatDau}" type="datetime-local"
                                                class="form-control start-date" id="start-date-input"/>
-                                        <span class="text-danger"
-                                              th:text="${errorNgayBatDau}" id="error-start-date"></span>
+<!--                                        <span class="text-danger"-->
+<!--                                              th:text="${errorNgayBatDau}" id="error-start-date"></span>-->
                                         <br disabled>
                                         <label class="lb-form">Ngày kết thúc <span
                                                 class="text-danger fw-bold">*</span></label>
                                         <input th:field="*{ngayKetThuc}" type="datetime-local"
                                                class="form-control end-date" id="end-date-input"/>
-                                        <span class="text-danger"
-                                              th:text="${errorNgayKetThuc}" id="error-end-date"></span>
+<!--                                        <span class="text-danger"-->
+<!--                                              th:text="${errorNgayKetThuc}" id="error-end-date"></span>-->
                                         <br disabled>
                                         <label class="lb-form">Giá Trị Đơn Hàng Áp Dụng <span
                                                 class="text-danger fw-bold">*</span></label>
-                                        <select th:field="*{giaTriDonHangApDung}" class="form-select">
+                                        <select th:field="*{giaTriDonHang}" class="form-select">
                                             <option value="100" selected>100.000 VND</option>
                                             <option value="200">200.000 VND</option>
                                             <option value="500">500.000 VND</option>
@@ -100,10 +91,12 @@
                                             <option value="2000">2.000.000 VND</option>
                                             <option value="5000">5.000.000 VND</option>
                                         </select>
-                                        <br disabled="true">
+<!--                                        <input th:field="*{giaTriDonHang}" type="text" class="form-control">-->
+                                        <br disabled>
                                         <br disabled="true">
                                         <div class="d-flex justify-content-end align-items-end">
-                                            <button id="btn-if"
+                                            <button
+                                                    id="btn-if"
                                                     th:text="${promotion.id == null ? 'Thêm Mới' : 'Cập Nhật'}"
                                                     type="button" class="btn btn-success w-25"
                                                     onclick="showConfirmPopup()">
@@ -157,6 +150,7 @@
             cancelButtonText: 'Không'
         }).then((result) => {
             if (result.isConfirmed) {
+                let ma = document.getElementById('ma').value;
                 let name = document.getElementById('name').value;
                 let reduce = document.getElementById('reduce').value;
                 let start = document.getElementById('start-date-input').value;
@@ -192,36 +186,11 @@
             }
         });
     }
-
-    async function loadAnh() {
-        const [file] = ipanh.files
-        if (file) {
-            imgpreview.src = URL.createObjectURL(file)
-        } else {
-            imgpreview.src = '';
-            return;
-        }
-        document.getElementById("btnthem").disabled = true
-        const filePath = document.getElementById('ipanh')
-        const formData = new FormData()
-        formData.append("file", filePath.files[0])
-        var urlUpload = 'http://localhost:8080/admin/upload-file';
-        const res = await fetch(urlUpload, {
-            method: 'POST',
-            body: formData
-        });
-        if (res.status < 300) {
-            document.getElementById("linkanh").value = await res.text();
-            document.getElementById("btnthem").disabled = false
-        }
-        document.getElementById("btnthem").disabled = false
-    }
 </script>
 
 <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
 <div th:replace="admin/fragments/script::script"></div>
 <div th:if="${promotionCreated}">
-
     <script>
         Swal.fire({
             icon: 'success',
@@ -231,7 +200,6 @@
             window.location.href = '/admin/promotion';
         });
     </script>
-
 </div>
 </body>
 </html>

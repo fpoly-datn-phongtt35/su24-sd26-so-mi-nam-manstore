@@ -51,4 +51,3 @@ public class HoaDonServiceImpl implements HoaDonService {
         return hoaDonRepository.findByPromotion(idPromotion);
     }
 }
-}

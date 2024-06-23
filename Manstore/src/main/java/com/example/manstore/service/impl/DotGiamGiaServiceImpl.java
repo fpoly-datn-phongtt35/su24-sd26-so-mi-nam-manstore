@@ -14,10 +14,9 @@ import java.util.Optional;
 
 @Component
 public class DotGiamGiaServiceImpl implements DotGiamGiaService {
+
     @Autowired
     private DotGiamGiaRepository dotGiamGiaRepo;
-
-
 
     @Override
     public Page<DotGiamGia> findAll(LocalDate start, LocalDate end, String typePromotion, Pageable pageable) {
@@ -69,6 +68,11 @@ public class DotGiamGiaServiceImpl implements DotGiamGiaService {
     @Override
     public Optional<DotGiamGia> findById(Integer id) {
         return dotGiamGiaRepo.findById(id);
+    }
+
+    @Override
+    public DotGiamGia create(DotGiamGia dotGiamGia) {
+        return dotGiamGiaRepo.save(dotGiamGia);
     }
 
 

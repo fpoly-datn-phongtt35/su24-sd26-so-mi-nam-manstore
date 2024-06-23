@@ -17,4 +17,6 @@ public interface DotGiamGiaService {
     List<DotGiamGia> getAll();
 
     Optional<DotGiamGia> findById(Integer id);
+
+    DotGiamGia create(DotGiamGia dotGiamGia);
 }
