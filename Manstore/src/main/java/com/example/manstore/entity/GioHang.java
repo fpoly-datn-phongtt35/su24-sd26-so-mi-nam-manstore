@@ -32,6 +32,9 @@ public class GioHang {
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
+    private KhachHang idKhachHang;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idTaiKhoan", nullable = false, referencedColumnName = "id")

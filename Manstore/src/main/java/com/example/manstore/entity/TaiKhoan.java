@@ -33,9 +33,6 @@ public class TaiKhoan {
     @Column(name = "Email", length = 100)
     private String email;
 
-    @Column(name = "PhanQuyen")
-    private Integer phanQuyen;
-
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
