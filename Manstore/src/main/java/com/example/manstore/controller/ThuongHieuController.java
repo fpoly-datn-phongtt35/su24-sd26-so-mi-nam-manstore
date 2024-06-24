@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/trademark")
+@CrossOrigin("*")
 public class ThuongHieuController {
 
     @Autowired
@@ -40,31 +41,70 @@ public class ThuongHieuController {
 
         return new ResponseEntity<>(pageResult, HttpStatus.OK);
     }
-    @GetMapping("/detail/{id}")
-    @ResponseBody
-    public ThuongHieu getThuongHieuDetail(@PathVariable("id") Integer id) {
-        return thuongHieuService.getThuongHieuById(id);
+
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    private String update(Model model) {
+        model.addAttribute("th", new ThuongHieu());
+        return "admin/trademark/trademark-create";
     }
 
-//    @GetMapping("/page")
-//    public ResponseEntity<Page<ThuongHieu>> getThuongHieuPage(@RequestParam int page, @RequestParam int size) {
-//        Page<ThuongHieu> thuongHieuPage = thuongHieuService.pageOfTH(PageRequest.of(page, size));
-//        return ResponseEntity.ok(thuongHieuPage);
-//    }
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String add(Model model, @ModelAttribute("th") ThuongHieu thuongHieu
+    ) {
+        boolean isValid = false;
+        for (ThuongHieu th : thuongHieuService.getAllThuongHieu()) {
+            if (thuongHieu.getTen().equalsIgnoreCase(th.getTen())) {
+                isValid = true;
+                model.addAttribute("errorName", "Tên thương hiệu đã tồn tại!");
+            }
+        }
+        if (thuongHieu.getTen().isBlank()) {
+            isValid = true;
+            model.addAttribute("errorName", "Hãy nhập tên thương hiêu!");
+        }
+        //vòng for check trùng mã
+        for (ThuongHieu th : thuongHieuService.getAllThuongHieu()) {
+            if (thuongHieu.getMa().equalsIgnoreCase(th.getMa())) {
+                isValid = true;
+                model.addAttribute("errorMa", "Mã thương hiệu đã tồn tại!");
+            }
+        }
 
-//    @RequestMapping(value = "/page/{pageNumber}", method = RequestMethod.GET)
-//    private ResponseEntity<?> paginationLoad(@PathVariable("pageNumber") int pageNumber) {
-//        Pageable pageable = PageRequest.of(pageNumber, 2
-////                , Sort.by("id").descending()
-//        );
-//        Page<ThuongHieu> page = thuongHieuService.pageOfTH(pageable);
-//        return new ResponseEntity<>(page, HttpStatus.OK);
-//    }
-//    @RequestMapping(value = "/find-all", method = RequestMethod.GET)
-//    private ResponseEntity<?> findAll() {
-//        List<ThuongHieu> list = thuongHieuService.getAll();
-//        return new ResponseEntity<>(list, HttpStatus.OK);
-//    }
+        if (thuongHieu.getMa().isBlank()) {
+            isValid = true;
+            model.addAttribute("errorMa", "Hãy nhập mã thương hiệu!");
+        }
+
+        if (thuongHieu.getMoTa().isEmpty()) {
+            isValid = true;
+            model.addAttribute("errorMoTa", "Hãy nhập mô tả!");
+        } else if (thuongHieu.getMoTa().length() > 255) {
+            isValid = true;
+            model.addAttribute("errorMoTa", "Tối đa 255 kí tự!");
+        }
+
+        if (!isValid) {
+            thuongHieuService.save(thuongHieu);
+            model.addAttribute("message", true);
+            return "admin/trademark/trademark-create";
+        } else {
+            model.addAttribute("message", false);
+            return "admin/trademark/trademark-create";
+        }
+    }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> edit(Model model, @PathVariable("id") Integer id) {
+        model.addAttribute("th", thuongHieuService.getThuongHieuById(id));
+        return new ResponseEntity<>(thuongHieuService.getThuongHieuById(id), HttpStatus.OK);
+    }
+
+
+
+
+
+
+
 
 
 

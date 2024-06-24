@@ -42,10 +42,24 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-body">
+
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="trademark-ma-input">Mã
+                                            <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="trademark-ma-input"
+                                               placeholder="Mã Thương Hiệu" required th:field="*{ma}"
+                                               onkeyup="validMa()">
+                                        <div class="text-danger fw-bold" th:if="${errorMa}"
+                                             th:text="${errorMa}">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
-                                            <label class="form-label" for="trademark-name-input">Tên Thương Hiệu
+                                            <label class="form-label" for="trademark-name-input">Tên
                                                 <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="trademark-name-input"
                                                    placeholder="Tên Thương Hiệu" required th:field="*{ten}"
@@ -55,34 +69,6 @@
                                             </div>
                                         </div>
                                     </div>
-<!--                                    <div class="col-lg-6 col-sm-12">-->
-<!--                                        <div class="mb-3">-->
-<!--                                            <label class="form-label" for="trademark-email-input">Email-->
-<!--                                                <span class="text-danger">*</span></label>-->
-<!--                                            <input type="text" class="form-control" id="trademark-email-input"-->
-<!--                                                   placeholder="Email" required th:field="*{email}"-->
-<!--                                                   onkeyup="validEmail()">-->
-<!--                                            <div class="text-danger fw-bold" th:if="${errorEmail}"-->
-<!--                                                 th:text="${errorEmail}">-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-                                    <!-- end col -->
-                                </div>
-                                <!-- end row -->
-                                <div class="row">
-<!--                                    <div class="col-lg-6 col-sm-12">-->
-<!--                                        <div class="mb-3">-->
-<!--                                            <label for="trademark-quocgia-input" class="form-label">Quốc Gia-->
-<!--                                                <span class="text-danger">*</span></label>-->
-<!--                                            <input type="text" id="trademark-quocgia-input" class="form-control"-->
-<!--                                                   placeholder="Tên Quốc Gia" th:field="*{quocGia}"-->
-<!--                                                   onkeyup="validQuocGia()"/>-->
-<!--                                            <div class="text-danger fw-bold" th:if="${errorQuocGia}"-->
-<!--                                                 th:text="${errorQuocGia}">-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
                                     <div class="col-lg-6 col-sm-12">
                                         <div class="mb-3">
                                             <label class="form-label" for="supplier-mota-input">Mô Tả
@@ -100,14 +86,6 @@
                             </div>
                             <!-- end row -->
                             <div class="row">
-<!--                                <div class="col-lg-6 col-sm-12">-->
-<!--                                    <div class="mb-3 p-3">-->
-<!--                                        <label class="form-label">Logo</label>-->
-<!--                                        <input type="file" onchange="loadAnh()" id="ipanh" class="form-control">-->
-<!--                                        <input th:field="*{logo}" id="linkanh" type="hidden" class="form-control">-->
-<!--                                        <img id="imgpreview" th:src="${image}" style="height: 100px; margin-top: 20px"/>-->
-<!--                                    </div>-->
-<!--                                </div>-->
                                 <div class="col-lg-6 col-sm-12 d-flex justify-content-start align-items-center">
                                     <div class="mb-3" style="padding-top: 7px;">
                                         <div class="d-flex justify-content-end align-items-end">
@@ -177,17 +155,19 @@
         });
     }
 
-    function validEmail() {
-        var emailInput = document.getElementById('trademark-email-input');
-        var errorEmail = document.getElementById('errorEmail');
+    function validMa() {
+        var maInput = document.getElementById('trademark-ma-input');
+        var errorMa = document.getElementById('errorMa');
 
-        if (emailInput.value.trim() !== '') {
-            errorEmail.style.display = 'none';
-        } else {
-            errorEmail.style.display = 'block';
-        }
-
+        maInput.addEventListener('input', function () {
+            if (maInput.value.trim() !== '') {
+                errorMa.style.display = 'none';
+            } else {
+                errorMa.style.display = 'block';
+            }
+        });
     }
+
 
     function validQuocGia() {
         var quocGiaInput = document.getElementById('trademark-quocgia-input');
@@ -211,26 +191,6 @@
         }
     }
 
-    async function loadAnh() {
-        const [file] = ipanh.files
-        if (file) {
-            imgpreview.src = URL.createObjectURL(file)
-        }
-        document.getElementById("btnthem").disabled = true
-        const filePath = document.getElementById('ipanh')
-        const formData = new FormData()
-        formData.append("file", filePath.files[0])
-        var urlUpload = 'http://localhost:8080/admin/upload-file';
-        const res = await fetch(urlUpload, {
-            method: 'POST',
-            body: formData
-        });
-        if (res.status < 300) {
-            document.getElementById("linkanh").value = await res.text();
-            document.getElementById("btnthem").disabled = false
-        }
-        document.getElementById("btnthem").disabled = false
-    }
 
 </script>
 <script th:if="${message == true}">

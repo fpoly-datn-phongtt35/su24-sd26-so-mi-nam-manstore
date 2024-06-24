@@ -32,6 +32,15 @@ public class AdminUI {
         return "admin/trademark/trademark-list";  // Giao diện danh sách thương hiệu
     }
 
+    @RequestMapping("/size")
+    public String sizeList() {
+        return "admin/size/size-list";  // Giao diện danh sách size
+    }
+
+    @RequestMapping("/color")
+    public String colorList() {
+        return "admin/color/color-list";  // Giao diện danh sách màu
+    }
 
 //    @RequestMapping("/account")
 //    public String account() {

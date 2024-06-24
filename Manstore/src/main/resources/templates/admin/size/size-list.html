@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+<head th:replace="admin/fragments/head::head"></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+      integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"
+/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+  <div th:replace="admin/fragments/header::header"></div>
+  <!-- ========== App Menu ========== -->
+  <div th:replace="admin/fragments/sidebar::sidebar"></div>
+  <!-- Left Sidebar End -->
+  <!-- ============================================================== -->
+  <!-- Start right Content here -->
+  <!-- ============================================================== -->
+  <div class="main-content">
+
+    <div class="page-content">
+      <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+          <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+              <h4 class="mb-sm-0">Size</h4>
+
+              <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                  <li class="breadcrumb-item"><a href="javascript: void(0);">Size</a></li>
+                  <li class="breadcrumb-item active"> Danh Sách Size</li>
+                </ol>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card" id="invoiceList">
+              <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                  <h5 class="card-title mb-0 flex-grow-1">Size</h5>
+                  <div class="flex-shrink-0">
+                    <div class="d-flex gap-2 flex-wrap">
+                      <button class="btn btn-danger btn-icon" id="remove-actions"
+                              onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i>
+                      </button>
+                      <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/size/add}">
+                        Thêm Mới</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+                <form>
+                  <div class="row g-3">
+                    <div class="col-xxl-3 col-sm-12">
+                      <div class="search-box">
+                        <input type="text" class="form-control search bg-light border-light"
+                               placeholder="Search..." id="search-input"
+                               onkeyup="searchSize()">
+                        <i class="ri-search-line search-icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end row-->
+                </form>
+              </div>
+              <div class="card-body">
+                <div>
+                  <div class="gridjs-border-none mb-4">
+                    <table class="table align-middle table-nowrap" id="invoiceTable">
+                      <thead class="text-muted">
+                      <tr>
+                        <th>#</th>
+                        <th>Mã</th>
+                        <th>Tên Size</th>
+                        <th>Mô Tả</th>
+                        <th>Action</th>
+                      </tr>
+                      </thead>
+                      <tbody class="list form-check-all" id="list_Size">
+
+                      </tbody>
+                    </table>
+                    <div class="row">
+                      <div class="col-lg-3"></div>
+                      <div class="col-lg-1"></div>
+                      <div class="col-lg-4">
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination justify-content-center" id="pagination">
+                          </ul>
+                        </nav>
+                      </div>
+                      <div class="col-lg-3"></div>
+                      <div class="col-lg-1"></div>
+                    </div>
+                  </div>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="myModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Chi Tiết Size</h4>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                        </div>
+                      </div>
+
+                      <div class="modal-body">
+                        <form id="" action="" class="my-form" method="post"
+                              th:object="${sizes}">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="row ">
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label for="size-name-input"
+                                           class="form-label">Tên Size</label>
+                                    <input type="text" id="size-name-input"
+                                           class="form-control" required
+                                           th:name="ten"/>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- end row -->
+                              <div class="col-lg-6">
+                                <div class="mb-3">
+                                  <label class="form-label"
+                                         for="size-mota-input">Mô Tả
+                                  </label>
+                                  <textarea type="text" class="form-control"
+                                            id="size-mota-input"
+                                            th:name="moTa"
+                                            readonly></textarea>
+                                </div>
+                              </div>
+                            </div>
+                            <!--end row-->
+                            <!-- end col -->
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                              Đóng
+                            </button>
+                            <!--                                                    <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">-->
+                            <!--                                                        Lưu-->
+                            <!--                                                    </button>-->
+                          </div>
+                          <!-- end row -->
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!--end modal -->
+              </div>
+              <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                   aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Chi Tiết Size</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form id="update-form" action="" class="my-form" method="post"
+                            th:object="${sizes}">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="row ">
+                              <div class="col-lg-6">
+                                <div class="mb-3">
+                                  <label for="size-name-input"
+                                         class="form-label">Tên Size</label>
+                                  <input type="text" id="size-name1-input"
+                                         class="form-control" required
+                                         th:name="ten"/>
+                                  <span id="errorName" class="text-danger" style="display:none;"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <!-- end row -->
+
+                            <div class="row">
+                              <div class="col-lg-6">
+                                <div class="mb-3">
+                                  <label class="form-label"
+                                         for="size-mota1-input">Mô Tả
+                                  </label>
+                                  <textarea type="text" class="form-control"
+                                            id="size-mota1-input"
+                                            th:name="moTa"
+                                  ></textarea>
+                                  <span id="errorDescription" class="text-danger" style="display:none;"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <!--end row-->
+                            <!-- end col -->
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                              Đóng
+                            </button>
+                            <button type="button" id="btnthem"
+                                    class="btn btn-primary" onclick="showConfirmPopup()">
+                              Lưu
+                            </button>
+                          </div>
+                          <!-- end row -->
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!--end modal -->
+              </div>
+            </div>
+
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+
+      </div><!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+  </div>
+  <!-- end main content-->
+
+</div>
+</div>
+</div>
+<!-- END layout-wrapper -->
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script th:inline="javascript">
+
+    window.onload = function () {
+        loadPage();
+    }
+
+    async function loadPage(pageNumber = 0, pageSize = 4) {
+        try {
+            const response = await fetch(`http://localhost:8080/admin/size/list?page=${pageNumber}&size=${pageSize}`);
+            if (!response.ok) {
+                throw new Error(`Lỗi HTTP! trạng thái: ${response.status}`);
+            }
+
+            const result = await response.json();
+            const list = result.content;
+
+            if (!Array.isArray(list)) {
+                throw new Error('Cấu trúc dữ liệu không hợp lệ: list không phải là một mảng');
+            }
+
+            let main = '';
+            list.forEach((item, index) => {
+                main += `<tr>
+            <td>${index + 1}</td>
+            <td>${item.ma}</td>
+            <td>${item.ten}</td>
+            <td>${item.moTa}</td>
+            <td>
+                <div class="hstack gap-3 flex-warp">
+                    <div onclick="detailSize(${item.id})" class="ri-eye-2-line"></div>
+                    <div onclick="editSize(${item.id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                </div>
+            </td>
+        </tr>`;
+            });
+            document.getElementById("list_Size").innerHTML = main;
+
+            // Generate pagination
+            let totalPages = result.totalPages;
+            let pagination = `<div class="pagination-wrap hstack gap-2">
+        <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${pageNumber - 1 < 0 ? 0 : pageNumber - 1})">
+            <i class="mdi mdi-chevron-left align-middle ms-1"></i>
+        </button>
+        <ul class="pagination">`;
+
+            for (let i = 0; i < totalPages; i++) {
+                pagination += `<li class="page-item ${i === pageNumber ? 'active' : ''}"><a class="page-link" onclick="loadPage(${i})">${i + 1}</a></li>`;
+            }
+
+            pagination += `</ul>
+        <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${pageNumber + 1 >= totalPages ? totalPages - 1 : pageNumber + 1})">
+            <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+    </div>`;
+
+            document.getElementById("pagination").innerHTML = pagination;
+
+        } catch (error) {
+            console.error('Lỗi khi tải trang:', error);
+            document.getElementById("list_Size").innerHTML = `<tr><td colspan="5">Lỗi khi tải dữ liệu: ${error.message}</td></tr>`;
+        }
+    }
+
+    function showConfirmPopup() {
+        swal.fire({
+            icon: 'question',
+            title: "Bạn có muốn thêm mới?",
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: `Không`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('create-form').submit();
+            }
+        });
+    }
+    //
+    //
+    // function detailSize(sizeId) {
+    //     fetch(`/admin/size/detail/${sizeId}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             document.getElementById('size-ma-input').value = data.ma;
+    //             document.getElementById('size-name-input').value = data.ten;
+    //             document.getElementById('size-mota-input').value = data.moTa;
+    //             $('#myModal').modal('show');
+    //         })
+    //         .catch(error => console.error('Error:', error));
+    // }
+    //
+    // function editSize(sizeId) {
+    //     fetch(`/admin/size/detail/${sizeId}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             document.getElementById('size-ma-input').value = data.ma;
+    //             document.getElementById('size-name1-input').value = data.ten;
+    //             document.getElementById('size-mota1-input').value = data.moTa;
+    //             document.getElementById('update-form').action = `/admin/size/update/${sizeId}`;
+    //             $('#myModal1').modal('show');
+    //         })
+    //         .catch(error => console.error('Error:', error));
+    // }
+    //
+    //
+    // var page;
+    // var hasError = false;
+    //
+    // window.onload = function () {
+    //     loadPage(0);
+    //     validName();
+    //     validMota();
+    // }
+    // $('#myModal1').on('hidden.bs.modal', function (e) {
+    //     // Xóa các thông báo lỗi
+    //     document.getElementById('errorName').style.display = 'none';
+    //     document.getElementById('errorDescription').style.display = 'none';
+    // });
+    //
+    // function detailSize(sizeId) {
+    //     fetch('/admin/size/detail/' + sizeId, {
+    //         method: 'GET'
+    //     }).then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         return response.json();
+    //     }).then(data => {
+    //         console.log(data);
+    //         document.getElementById('size-ma-input').value = data.ma;
+    //         document.getElementById('size-name-input').value = data.ten;
+    //         document.getElementById('size-mota-input').value = data.moTa;
+    //         document.getElementById('update-form').action = '/api/admin/size/update/' + sizeId;
+    //         $('#myModal').modal('show');
+    //     })
+    //         .catch(error => console.error('Error:', error));
+    // }
+    //
+    // function editSize(sizeId) {
+    //     fetch('/admin/size/detail/' + sizeId, {
+    //         method: 'GET'
+    //     }).then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         return response.json();
+    //     }).then(data => {
+    //         console.log(data);
+    //         document.getElementById('size-ma-input').value = data.ma;
+    //
+    //         document.getElementById('size-name1-input').value = data.ten;
+    //         document.getElementById('size-mota1-input').value = data.moTa;
+    //         document.getElementById('update-form').action = '/admin/size/update/' + sizeId;
+    //         $('#myModal1').modal('show');
+    //     })
+    //         .catch(error => console.error('Error:', error));
+    // }
+    //
+    //
+    // function showConfirmPopup() {
+    //     if(!hasError){
+    //         swal.fire({
+    //             title: "Bạn có muốn lưu thay đổi không?",
+    //             showCancelButton: true,
+    //             confirmButtonText: "Có",
+    //             cancelButtonText: "Không"
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 document.getElementById('update-form').submit();
+    //                 loadPage(0);
+    //             }
+    //         });
+    //     }
+    // }
+    //
+    //
+    // function validName() {
+    //     var nameInput = document.getElementById('size-name1-input');
+    //     var errorName = document.getElementById('errorName');
+    //     nameInput.addEventListener('input', function () {
+    //         var name = nameInput.value.trim();
+    //         if (name === '') {
+    //             errorName.textContent = '* Vui lòng nhập tên size!';
+    //             errorName.style.display = 'block';
+    //             hasError = true;
+    //             document.getElementById("btnthem").disable = true;
+    //         } else {
+    //             errorName.style.display = 'none';
+    //             hasError = false
+    //             document.getElementById("btnthem").disable = false;
+    //
+    //         }
+    //     });
+    // }
+    //
+    // function validMota() {
+    //     var motaInput = document.getElementById('size-mota1-input');
+    //     var errorDescription = document.getElementById('errorDescription');
+    //     motaInput.addEventListener('input', function () {
+    //         var moTa = motaInput.value.trim();
+    //         if ( moTa.length > 225) {
+    //             errorDescription.textContent = '* Mô tả bạn nhập phải nhỏ hơn 225 ký tự!';
+    //             errorDescription.style.display = 'block';
+    //             hasError = true;
+    //             document.getElementById("btnthem").disable = true;
+    //         } else {
+    //             errorDescription.style.display = 'none';
+    //             hasError = false
+    //             document.getElementById("btnthem").disable = false;
+    //
+    //         }
+    //     });
+    //
+    // }
+
+</script>
+<!--<script th:if="${updateSuccess == true}">-->
+<!--    swal.fire("Lưu thay đổi thành công!", "", "success");-->
+<!--</script>-->
+<!--<script th:if="${updateFailure == false}">-->
+<!--    swal.fire("Thay đổi chưa được lưu!", "", "error");-->
+<!--</script>-->
+</html>

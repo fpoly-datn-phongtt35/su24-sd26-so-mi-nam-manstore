@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
+      data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
+
+<head th:replace="admin/fragments/head::head"></head>
+
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper">
+  <div th:replace="admin/fragments/header::header"></div>
+  <!-- ========== App Menu ========== -->
+  <div th:replace="admin/fragments/sidebar::sidebar"></div>
+  <!-- Left Sidebar End -->
+  <!-- ============================================================== -->
+  <!-- Start right Content here -->
+  <!-- ============================================================== -->
+  <div class="main-content">
+
+    <div class="page-content">
+      <div class="container-fluid">
+        <!-- start page title -->
+        <div class="row">
+          <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+              <h4 class="mb-sm-0">Thêm Màu Sắc</h4>
+
+              <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                  <li class="breadcrumb-item"><a href="javascript: void(0);">Màu Sắc</a></li>
+                  <li class="breadcrumb-item active">Thêm Màu Sắc</li>
+                </ol>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- end page title -->
+
+        <form id="create-form" autocomplete="off" class="needs-validation" novalidate method="post"
+              th:action="@{/admin/color/save}" th:object="${mausac}">
+          <div class="row">
+            <div class="card">
+              <div class="card-body">
+
+                <div class="col-lg-6 col-sm-12">
+                  <div class="mb-3">
+                    <label class="form-label" for="color-ma-input">Mã
+                      <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="color-ma-input"
+                           placeholder="Mã size" required th:field="*{ma}"
+                           onkeyup="validMa()">
+                    <div class="text-danger fw-bold" th:if="${errorMa}"
+                         th:text="${errorMa}">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6 col-sm-12">
+                    <div class="mb-3">
+                      <label class="form-label" for="color-name-input">Tên
+                        <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="color-name-input"
+                             placeholder="Tên size" required th:field="*{ten}"
+                             onkeyup="validName()">
+                      <div class="text-danger fw-bold" th:if="${errorName}"
+                           th:text="${errorName}">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <!-- end col -->
+              </div>
+              <!-- end row -->
+              <div class="row">
+                <div class="col-lg-6 col-sm-12 d-flex justify-content-start align-items-center">
+                  <div class="mb-3" style="padding-top: 7px;">
+                    <div class="d-flex justify-content-end align-items-end">
+                      <button type="button" class="btn btn-success w-sm" id="btnthem"
+                              onclick="showConfirmPopup()">Thêm Mới
+                      </button>
+                      <span style="padding: 0 10px;" disabled></span>
+                      <a th:href="@{/admin/color}" class="btn btn-danger w-sm">Quay Lại</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      </form>
+    </div>
+  </div>
+  <!-- end card -->
+
+  <!-- end col -->
+</div>
+<!--end row-->
+
+</div>
+<!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+</div>
+<!-- end main content-->
+</div>
+<!-- END layout-wrapper -->
+<div th:replace="admin/fragments/themeSettings::themeSettings"></div>
+<div th:replace="admin/fragments/script::script"></div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
+<script th:inline="javascript">
+    function showConfirmPopup() {
+        swal.fire({
+            icon: 'question',
+            title: "Bạn có muốn thêm mới?",
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: `Không`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('create-form').submit();
+            }
+        });
+    }
+</script>
+<script th:inline="javascript">
+    function validName() {
+        var nameInput = document.getElementById('color-name-input');
+        var errorName = document.getElementById('errorName');
+
+        nameInput.addEventListener('input', function () {
+            if (nameInput.value.trim() !== '') {
+                errorName.style.display = 'none';
+            } else {
+                errorName.style.display = 'block';
+            }
+        });
+    }
+
+    function validMa() {
+        var maInput = document.getElementById('color-ma-input');
+        var errorMa = document.getElementById('errorMa');
+
+        maInput.addEventListener('input', function () {
+            if (maInput.value.trim() !== '') {
+                errorMa.style.display = 'none';
+            } else {
+                errorMa.style.display = 'block';
+            }
+        });
+    }
+
+
+
+</script>
+<script th:if="${message == true}">
+    swal.fire("Thêm Thành Công!", "", "success").then(() => {
+        window.location.href = '/admin/color';
+    });
+</script>
+
+
+</html>
