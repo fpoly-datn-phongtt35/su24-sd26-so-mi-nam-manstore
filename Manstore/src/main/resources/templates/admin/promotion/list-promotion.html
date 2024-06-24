@@ -77,6 +77,9 @@
                                             <i class="bi bi-filter me-1"></i> Lọc
                                         </button>
                                     </div>
+                                    <div class="col-xxl-2 col-sm-12">
+                                    <a class="btn btn-success w-100 add-btn" th:href="@{/admin/add-promotion}">
+                                        Thêm Mới</a></div>
                                 </div>
                             </div>
                         </div>
@@ -193,25 +196,29 @@
                         <div class="col-sm-6">
                             <label for="promotion-name-input" class="form-label">Tên Đợt Giảm Giá</label>
                             <input type="text" id="promotion-name-input" class="form-control" required
-                                   th:name="ten"/><br>
+                                   th:name="ten"/>
+                            <span id="errorName" class="text-danger" style="display:none;"></span><br>
                         </div>
                         <div class="col-sm-9">
                             <label for="promotion-value-input" class="form-label">Giá Trị Giảm</label>
                             <input type="text" id="promotion-value-input" class="form-control" required
-                                   th:name="giaTriGiam"/><br>
+                                   th:name="giaTriGiam"/>
+                            <span id="errorValue" class="text-danger" style="display:none;"></span><br>
                         </div>
                         <div class="col-sm-3">
                             <label for="promotion-category-input" class="form-label">Giảm Theo</label>
                             <select th:name="loaiGiamGia" id="promotion-category-input" class="form-select" required>
                                 <option th:value="true">%</option>
                                 <option th:value="false">VND</option>
-                            </select><br>
+                            </select>
+                            <span id="errorCategory" class="text-danger" style="display:none;"></span><br>
                         </div>
 
                         <div class="col-sm-6">
                             <label for="promotion-bill-input" class="form-label">Giá Trị Đơn Hàng Áp Dụng</label>
                             <input type="email" id="promotion-bill-input" class="form-control" required
-                                   th:name="giaTriDonHang"/><br>
+                                   th:name="giaTriDonHang"/>
+                            <span id="errorBill" class="text-danger" style="display:none;"></span><br>
                         </div>
                         <div class="col-sm-6">
                             <label for="promotion-status-input" class="form-label">Trạng Thái</label>
@@ -222,11 +229,15 @@
                         <div class="col-sm-6">
                             <label for="promotion-startdate-input" class="form-label">Ngày Bắt Đầu</label>
                             <input type="date" id="promotion-startdate-input" class="form-control" required
-                                   th:name="ngayBatDau"/><br></div>
+                                   th:name="ngayBatDau"/>
+                            <span id="errorStartdate" class="text-danger" style="display:none;"></span><br>
+                        </div>
                         <div class="col-sm-6">
                             <label for="promotion-enddate-input" class="form-label">Ngày Kết Thúc</label>
                             <input type="date" id="promotion-enddate-input" class="form-control" required
-                                   th:name="ngayKetThuc"/><br></div>
+                                   th:name="ngayKetThuc"/>
+                            <span id="errorEnddate" class="text-danger" style="display:none;"></span><br>
+                        </div>
                         <div class="col-sm-6">
                             <label class="form-label" for="promotion-date-input">Ngày Tạo</label>
                             <input class="form-control" id="promotion-date-input" required
@@ -265,6 +276,9 @@
         });
         window.onload = function () {
             loadPromotion(0);
+            validName();
+            validCategory();
+            validValue();
         }
         var size = 10;
 
@@ -384,9 +398,6 @@
                     document.getElementById('update-form').submit();
                     loadPage(page);
                 }
-                // else if (result.isDenied) {
-                //     // swal.fire("Changes are not saved", "", "info");
-                // }
             });
         }
 
@@ -582,6 +593,63 @@
                 }
             });
         }
+
+        function validName() {
+            var nameInput = document.getElementById('promotion-name-input');
+            var errorName = document.getElementById('errorName');
+            nameInput.addEventListener('input', function () {
+                var name = nameInput.value.trim();
+                if (name === '') {
+                    errorName.textContent = '* Vui lòng nhập tên đợt giảm giá!';
+                    errorName.style.display = 'block';
+                    hasError = true;
+                    document.getElementById("add-btn").disabled = true;
+                } else {
+                    errorName.style.display = 'none';
+                    hasError = false
+                    document.getElementById("add-btn").disabled = false;
+
+                }
+            });
+        }
+
+        function validValue() {
+            var valueInput = document.getElementById('promotion-value-input');
+            var errorValue = document.getElementById('errorValue');
+            valueInput.addEventListener('input', function () {
+                var value = valueInput.value.trim();
+                if (value === '') {
+                    errorValue.textContent = '* Vui lòng nhập giá trị giảm!';
+                    errorValue.style.display = 'block';
+                    hasError = true;
+                    document.getElementById("add-btn").disabled = true;
+                } else {
+                    errorValue.style.display = 'none';
+                    hasError = false
+                    document.getElementById("add-btn").disabled = false;
+
+                }
+            });
+        }
+        function validCategory() {
+            var categoryInput = document.getElementById('promotion-category-input');
+            var errorCategory = document.getElementById('errorCategory');
+            categoryInput.addEventListener('input', function () {
+                var category = categoryInput.value.trim();
+                if (category === '') {
+                    errorCategory.textContent = '* Vui lòng nhập tên đợt giảm giá!';
+                    errorCategory.style.display = 'block';
+                    hasError = true;
+                    document.getElementById("add-btn").disabled = true;
+                } else {
+                    errorCategory.style.display = 'none';
+                    hasError = false
+                    document.getElementById("add-btn").disabled = false;
+
+                }
+            });
+        }
+
 
     </script>
     <script th:if="${errorNotExist == true}">
