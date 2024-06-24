@@ -37,25 +37,7 @@ public class DotGiamGiaController {
 
     @RequestMapping("/admin/add-promotion")
     public String addPromotion(Model model, @RequestParam(value = "id", required = false) Integer id) {
-//        if (id == null) {
             model.addAttribute("promotion", new DotGiamGia());
-//        } else {
-//            if (hoaDonService.getByPromotion(String.valueOf(id)).size() == 0) {
-//                Optional<DotGiamGia> dotGiamGia = dotGiamGiaService.findById(id);
-//                if (dotGiamGia.isEmpty()) {
-//                    System.out.println("promotion is null");
-//                    model.addAttribute("errorNotExist", true);
-//                    return "redirect:promotion";
-//                }
-//                model.addAttribute("promotion", dotGiamGia.get());
-//                model.addAttribute("startDate", dotGiamGia.get().getNgayBatDau());
-//                model.addAttribute("endDate", dotGiamGia.get().getNgayKetThuc());
-//            } else {
-//                model.addAttribute("error", true);
-//                System.out.println("promotion has been applied");
-//                return "redirect:promotion";
-//            }
-//        }
         return "admin/promotion/add-promotion";
     }
 
@@ -68,8 +50,7 @@ public class DotGiamGiaController {
             model.addAttribute("errorName", "Tên đợt giảm giá chưa được nhập!");
         }
         if (isValid) {
-            dotGiamGiaService.create(promotion);
-            return "redirect:/admin/promotion";
+            return "admin/promotion/add-promotion";
         }
         promotion.setNgayTao(LocalDate.now());
         promotion.setTrangThai(false);
@@ -89,6 +70,7 @@ public class DotGiamGiaController {
         dotGiamGia.setGiaTriDonHang(dgg.getGiaTriDonHang());
         dotGiamGia.setNgayBatDau(dgg.getNgayBatDau());
         dotGiamGia.setNgayKetThuc(dgg.getNgayKetThuc());
+        dotGiamGia.setNgayTao(dgg.getNgayTao());
         dotGiamGia.setTrangThai(dgg.getTrangThai());
         dotGiamGiaService.create(dgg);
         redirectAttributes.addFlashAttribute("message", true);

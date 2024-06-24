@@ -22,16 +22,21 @@ public class DotGiamGiaServiceImpl implements DotGiamGiaService {
     public Page<DotGiamGia> findAll(LocalDate start, LocalDate end, String typePromotion, Pageable pageable) {
         Page<DotGiamGia> page;
         if (start == null || end == null) {
-//            if (typePromotion.equalsIgnoreCase("null")) {
+            if (typePromotion.equalsIgnoreCase("null")) {
             page = dotGiamGiaRepo.findByDate(LocalDate.of(2000, 1, 1),
                     LocalDate.of(2200, 1, 1), pageable);
             return page;
-//            } else{
-//                boolean type;
-//                type = typePromotion.equalsIgnoreCase("true");
-//                page = dotGiamGiaRepo.findByPromotionType(type, pageable);
-//                return page;
-//            }
+            } else if (!typePromotion.equalsIgnoreCase("null")) {
+                boolean type;
+                type = typePromotion.equalsIgnoreCase("true");
+                page = dotGiamGiaRepo.findByPromotionType(type, pageable);
+                return page;
+            } else{
+                boolean type;
+                type = typePromotion.equalsIgnoreCase("true");
+                page = dotGiamGiaRepo.findByPromotionType(type, pageable);
+                return page;
+            }
         } else {
             LocalDate dateStart = start.atStartOfDay().toLocalDate();
             LocalDate dateEnd = end.atStartOfDay().toLocalDate();
@@ -39,24 +44,24 @@ public class DotGiamGiaServiceImpl implements DotGiamGiaService {
                     dateStart.getDayOfMonth());
             LocalDate lastTime = LocalDate.of(dateEnd.getYear(), dateEnd.getMonth(),
                     dateEnd.getDayOfMonth());
-//            if (typePromotion.equalsIgnoreCase("null")) {
-//                page = dotGiamGiaRepo.findByDate(fisrtTime,
-//                        lastTime, pageable);
-//                return page;
-//            } else if (!typePromotion.equalsIgnoreCase("null")) {
-//                boolean type;
-//                type = typePromotion.equalsIgnoreCase("true");
-//                page = dotGiamGiaRepo.findByDateAndPromotionType(fisrtTime,
-//                        lastTime, type, pageable);
-//                return page;
-//            } else {
+            if (typePromotion.equalsIgnoreCase("null")) {
+                page = dotGiamGiaRepo.findByDate(fisrtTime,
+                        lastTime, pageable);
+                return page;
+            } else if (!typePromotion.equalsIgnoreCase("null")) {
+                boolean type;
+                type = typePromotion.equalsIgnoreCase("true");
+                page = dotGiamGiaRepo.findByDateAndPromotionType(fisrtTime,
+                        lastTime, type, pageable);
+                return page;
+            } else {
             boolean type;
             type = typePromotion.equalsIgnoreCase("true");
             page = dotGiamGiaRepo.findByAll(fisrtTime,
                     lastTime,  type, pageable);
             return page;
-            //}
         }
+    }
     }
 
 

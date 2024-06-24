@@ -69,38 +69,36 @@
                                     <div class="col-sm-5">
                                         <label class="lb-form">Ngày bắt đầu <span
                                                 class="text-danger fw-bold">*</span></label>
-                                        <input th:field="*{ngayBatDau}" type="datetime-local"
+                                        <input th:field="*{ngayBatDau}" type="date"
                                                class="form-control start-date" id="start-date-input"/>
 <!--                                        <span class="text-danger"-->
 <!--                                              th:text="${errorNgayBatDau}" id="error-start-date"></span>-->
                                         <br disabled>
                                         <label class="lb-form">Ngày kết thúc <span
                                                 class="text-danger fw-bold">*</span></label>
-                                        <input th:field="*{ngayKetThuc}" type="datetime-local"
+                                        <input th:field="*{ngayKetThuc}" type="date"
                                                class="form-control end-date" id="end-date-input"/>
 <!--                                        <span class="text-danger"-->
 <!--                                              th:text="${errorNgayKetThuc}" id="error-end-date"></span>-->
                                         <br disabled>
                                         <label class="lb-form">Giá Trị Đơn Hàng Áp Dụng <span
                                                 class="text-danger fw-bold">*</span></label>
-                                        <select th:field="*{giaTriDonHang}" class="form-select">
-                                            <option value="100" selected>100.000 VND</option>
-                                            <option value="200">200.000 VND</option>
-                                            <option value="500">500.000 VND</option>
-                                            <option value="1000">1.000.000 VND</option>
-                                            <option value="2000">2.000.000 VND</option>
-                                            <option value="5000">5.000.000 VND</option>
-                                        </select>
-<!--                                        <input th:field="*{giaTriDonHang}" type="text" class="form-control">-->
+<!--                                        <select th:field="*{giaTriDonHang}" class="form-select">-->
+<!--                                            <option value="100" selected>100.000 VND</option>-->
+<!--                                            <option value="200">200.000 VND</option>-->
+<!--                                            <option value="500">500.000 VND</option>-->
+<!--                                            <option value="1000">1.000.000 VND</option>-->
+<!--                                            <option value="2000">2.000.000 VND</option>-->
+<!--                                            <option value="5000">5.000.000 VND</option>-->
+<!--                                        </select>-->
+                                        <input th:field="*{giaTriDonHang}" type="text" class="form-control">
                                         <br disabled>
                                         <br disabled="true">
                                         <div class="d-flex justify-content-end align-items-end">
-                                            <button
-                                                    id="btn-if"
-                                                    th:text="${promotion.id == null ? 'Thêm Mới' : 'Cập Nhật'}"
-                                                    type="button" class="btn btn-success w-25"
-                                                    onclick="showConfirmPopup()">
-                                            </button>
+                                            <button type="button" class="btn btn-success w-25"
+                                                    onclick="showConfirmPopup()">Thêm</button>
+                                            <span style="padding: 0 8px;" disabled></span>
+                                            <button th:href="@{/admin/promotion}" class="btn btn-danger w-25">Trở lại</button>
                                         </div>
                                     </div>
                                     <div class="col-sm-1"></div>
@@ -150,41 +148,10 @@
             cancelButtonText: 'Không'
         }).then((result) => {
             if (result.isConfirmed) {
-                let ma = document.getElementById('ma').value;
-                let name = document.getElementById('name').value;
-                let reduce = document.getElementById('reduce').value;
-                let start = document.getElementById('start-date-input').value;
-                let end = document.getElementById('end-date-input').value;
-                let error_name = document.getElementById('error-name');
-                let error_reduce = document.getElementById('error-reduce');
-                let error_start = document.getElementById('error-start-date');
-                let error_end = document.getElementById('error-end-date');
-                error_name.innerText = '';
-                error_reduce.innerText = '';
-                error_start.innerText = '';
-                error_end.innerText = '';
-                let error = false;
-                if (name === '') {
-                    error_name.innerText = 'Vui lòng nhập tên khuyến mãi!';
-                    error = true;
-                }
-                if (reduce === '') {
-                    error_reduce.innerText = 'Vui lòng nhập giá trị giảm!';
-                    error = true;
-                }
-                if (start === '') {
-                    error_start.innerText = 'Vui lòng nhập ngày bắt đầu!';
-                    error = true;
-                }
-                if (end === '') {
-                    error_end.innerText = 'Vui lòng nhập ngày kết thúc!';
-                    error = true;
-                }
-                if (error === false) {
+
                     document.getElementById('create-form').submit();
                 }
-            }
-        });
+            });
     }
 </script>
 
