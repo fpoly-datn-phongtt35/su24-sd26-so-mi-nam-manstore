@@ -6,8 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
       integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"
-/>
+      crossorigin="anonymous" referrerpolicy="no-referrer"/>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -40,7 +39,7 @@
               <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                   <li class="breadcrumb-item"><a href="javascript: void(0);">Thương Hiệu</a></li>
-                  <li class="breadcrumb-item active"> Danh Sách Thương Hiệu</li>
+                  <li class="breadcrumb-item active">Danh Sách Thương Hiệu</li>
                 </ol>
               </div>
 
@@ -57,11 +56,8 @@
                   <h5 class="card-title mb-0 flex-grow-1">Thương Hiệu</h5>
                   <div class="flex-shrink-0">
                     <div class="d-flex gap-2 flex-wrap">
-                      <button class="btn btn-danger btn-icon" id="remove-actions"
-                              onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i>
-                      </button>
-                      <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/trademark/add}">
-                        Thêm Mới</a>
+                      <button class="btn btn-danger btn-icon" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                      <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/trademark/add}">Thêm Mới</a>
                     </div>
                   </div>
                 </div>
@@ -71,9 +67,7 @@
                   <div class="row g-3">
                     <div class="col-xxl-3 col-sm-12">
                       <div class="search-box">
-                        <input type="text" class="form-control search bg-light border-light"
-                               placeholder="Search..." id="search-input"
-                               onkeyup="searchTrademark()">
+                        <input type="text" class="form-control search bg-light border-light" placeholder="Search..." id="search-input" onkeyup="searchTrademark()">
                         <i class="ri-search-line search-icon"></i>
                       </div>
                     </div>
@@ -118,38 +112,34 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Chi Tiết Thương Hiệu</h4>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                  aria-label="Close"></button>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                      </div>
 
-                      <div class="modal-body">
-                        <form id="" action="" class="my-form" method="post"
-                              th:object="${th}">
-                          <div class="card">
-                            <div class="card-body">
-                              <div class="row ">
-                                <div class="col-lg-6">
-                                  <div class="mb-3">
-                                    <label for="trademark-name-input"
-                                           class="form-label">Tên
-                                      thương hiệu</label>
-                                    <input type="text" id="trademark-name-input"
-                                           class="form-control" required
-                                           th:name="ten"/>
+                        <div class="modal-body">
+                          <form id="create-form" action="" class="my-form" method="post" th:object="${th}">
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="row ">
+                                  <div class="col-lg-6">
+                                    <div class="mb-3">
+                                      <label for="trademark-ma-input" class="form-label">Mã Thương Hiệu</label>
+                                      <input type="text" id="trademark-ma-input" class="form-control" required th:name="ma" readonly/>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <!-- end row -->
+                                <div class="row ">
+                                  <div class="col-lg-6">
+                                    <div class="mb-3">
+                                      <label for="trademark-name-input" class="form-label">Tên thương hiệu</label>
+                                      <input type="text" id="trademark-name-input" class="form-control" required th:name="ten" readonly/>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- end row -->
                                 <div class="col-lg-6">
                                   <div class="mb-3">
-                                    <label class="form-label"
-                                           for="trademark-mota-input">Mô Tả
-                                    </label>
-                                    <textarea type="text" class="form-control"
-                                              id="trademark-mota-input"
-                                              th:name="moTa"
-                                              readonly></textarea>
+                                    <label class="form-label" for="trademark-mota-input">Mô Tả</label>
+                                    <textarea type="text" class="form-control" id="trademark-mota-input" th:name="moTa" readonly></textarea>
                                   </div>
                                 </div>
                               </div>
@@ -157,21 +147,15 @@
                               <!-- end col -->
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">
-                                Đóng
-                              </button>
-                              <!--                                                    <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">-->
-                              <!--                                                        Lưu-->
-                              <!--                                                    </button>-->
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+<!--                              <button type="button" class="btn btn-primary" onclick="showConfirmPopup('create-form')">Lưu</button>-->
                             </div>
                             <!-- end row -->
-                          </div>
-                        </form>
+                          </form>
+                        </div>
                       </div>
                     </div>
                   </div>
-
                   <!--end modal -->
                 </div>
                 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -180,23 +164,27 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title">Chi Tiết Thương Hiệu</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form id="update-form" action="" class="my-form" method="post"
-                              th:object="${th}">
+                        <form id="update-form" action="" class="my-form" method="post" th:object="${th}">
                           <div class="card">
                             <div class="card-body">
                               <div class="row ">
                                 <div class="col-lg-6">
                                   <div class="mb-3">
-                                    <label for="trademark-name-input"
-                                           class="form-label">Tên
-                                      thương hiệu</label>
-                                    <input type="text" id="trademark-name1-input"
-                                           class="form-control" required
-                                           th:name="ten"/>
+                                    <label for="trademark-ma1-input" class="form-label">Mã</label>
+                                    <input type="text" id="trademark-ma1-input" class="form-control" required th:name="ma" readonly/>
+                                    <span id="errorMa" class="text-danger" style="display:none;"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row ">
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label for="trademark-name1-input" class="form-label">Tên thương hiệu</label>
+                                    <input type="text" id="trademark-name1-input" class="form-control" required th:name="ten"/>
                                     <span id="errorName" class="text-danger" style="display:none;"></span>
-
                                   </div>
                                 </div>
                               </div>
@@ -205,13 +193,8 @@
                               <div class="row">
                                 <div class="col-lg-6">
                                   <div class="mb-3">
-                                    <label class="form-label"
-                                           for="trademark-mota1-input">Mô Tả
-                                    </label>
-                                    <textarea type="text" class="form-control"
-                                              id="trademark-mota1-input"
-                                              th:name="moTa"
-                                    ></textarea>
+                                    <label class="form-label" for="trademark-mota1-input">Mô Tả</label>
+                                    <textarea type="text" class="form-control" id="trademark-mota1-input" th:name="moTa"></textarea>
                                     <span id="errorDescription" class="text-danger" style="display:none;"></span>
                                   </div>
                                 </div>
@@ -220,14 +203,8 @@
                               <!-- end col -->
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary"
-                                      data-bs-dismiss="modal">
-                                Đóng
-                              </button>
-                              <button type="button" id="btnthem"
-                                      class="btn btn-primary" onclick="showConfirmPopup()">
-                                Lưu
-                              </button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                              <button type="button" id="btnthem" class="btn btn-primary" onclick="showConfirmPopup('update-form')">Lưu</button>
                             </div>
                             <!-- end row -->
                           </div>
@@ -235,24 +212,19 @@
                       </div>
                     </div>
                   </div>
-
                   <!--end modal -->
                 </div>
               </div>
-
             </div>
             <!--end col-->
           </div>
           <!--end row-->
-
         </div><!-- container-fluid -->
       </div>
       <!-- End Page-content -->
     </div>
     <!-- end main content-->
-
   </div>
-</div>
 </div>
 <!-- END layout-wrapper -->
 <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
@@ -266,6 +238,7 @@
     window.onload = function () {
         loadPage();
     }
+
     async function loadPage(pageNumber = 0, pageSize = 3) {
         try {
             const response = await fetch(`http://localhost:8080/admin/trademark/list?page=${pageNumber}&size=${pageSize}`);
@@ -292,7 +265,6 @@
                         <div onclick="detailTrademark(${item.id})" class="ri-eye-2-line"></div>
                         <div onclick="editTrademark(${item.id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
                     </div>
-
                 </td>
             </tr>`;
             });
@@ -324,22 +296,20 @@
         }
     }
 
-    function showConfirmPopup() {
+    function showConfirmPopup(formId) {
         swal.fire({
             icon: 'question',
-            title: "Bạn có muốn thêm mới?",
+            title: "Bạn có muốn lưu thay đổi?",
             showCancelButton: true,
             confirmButtonText: "Có",
-            cancelButtonText: `Không`
+            cancelButtonText: "Không"
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('create-form').submit();
+                document.getElementById(formId).submit();
             }
         });
     }
 
-
-    //
     function detailTrademark(trademarkId) {
         fetch(`/admin/trademark/detail/${trademarkId}`)
             .then(response => response.json())
@@ -356,7 +326,7 @@
         fetch(`/admin/trademark/detail/${trademarkId}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('trademark-ma-input').value = data.ma;
+                document.getElementById('trademark-ma1-input').value = data.ma;
                 document.getElementById('trademark-name1-input').value = data.ten;
                 document.getElementById('trademark-mota1-input').value = data.moTa;
                 document.getElementById('update-form').action = `/admin/trademark/update/${trademarkId}`;
@@ -365,145 +335,20 @@
             .catch(error => console.error('Error:', error));
     }
 
+    var hasError = false;
 
-       var page;
-       var hasError = false;
-
-       window.onload = function () {
-           loadPage(0);
-           validName();
-           validEmail();
-           validMota();
-           validQuocgia();
-       }
-       $('#myModal1').on('hidden.bs.modal', function (e) {
-           // Xóa các thông báo lỗi
-           document.getElementById('errorName').style.display = 'none';
-           document.getElementById('errorEmail').style.display = 'none';
-           document.getElementById('errorNational').style.display = 'none';
-           document.getElementById('errorDescription').style.display = 'none';
-       });
-
-       function detailTrademark(trademarkId) {
-           fetch('/admin/trademark/detail/' + trademarkId, {
-               method: 'GET'
-           }).then(response => {
-               if (!response.ok) {
-                   throw new Error('Network response was not ok');
-               }
-               return response.json();
-           }).then(data => {
-               console.log(data);
-               document.getElementById('trademark-ma-input').value = data.ma;
-               document.getElementById('trademark-name-input').value = data.ten;
-               document.getElementById('trademark-mota-input').value = data.moTa;
-               document.getElementById('update-form').action = '/api/admin/trademark/update/' + trademarkId;
-               $('#myModal').modal('show');
-           })
-               .catch(error => console.error('Error:', error));
-       }
-
-       function editTrademark(trademarkId) {
-           fetch('/admin/trademark/detail/' + trademarkId, {
-               method: 'GET'
-           }).then(response => {
-               if (!response.ok) {
-                   throw new Error('Network response was not ok');
-               }
-               return response.json();
-           }).then(data => {
-               console.log(data);
-               document.getElementById('trademark-ma-input').value = data.ma;
-
-               document.getElementById('trademark-name1-input').value = data.ten;
-               document.getElementById('trademark-mota1-input').value = data.moTa;
-               document.getElementById('update-form').action = '/admin/trademark/update/' + trademarkId;
-               $('#myModal1').modal('show');
-           })
-               .catch(error => console.error('Error:', error));
-       }
-
-
-    function showConfirmPopup() {
-        if(!hasError){
-            swal.fire({
-                title: "Bạn có muốn lưu thay đổi không?",
-                showCancelButton: true,
-                confirmButtonText: "Có",
-                cancelButtonText: "Không"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('update-form').submit();
-                    loadPage(0);
-                }
-            });
-        }
+    window.onload = function () {
+        loadPage(0);
+        validName();
+        validMota();
     }
 
+    $('#myModal1').on('hidden.bs.modal', function (e) {
+        // Clear error messages
+        document.getElementById('errorName').style.display = 'none';
+        document.getElementById('errorDescription').style.display = 'none';
+    });
 
-    // async function searchTrademark(pageNumber) {
-    //     var keyword = document.getElementById("search-input").value.trim().toLowerCase();
-    //     var url;
-    //     console.log(keyword);
-    //     console.log(pageNumber);
-    //     pageNumber === undefined ? page = 0 : page = pageNumber;
-    //
-    //     if (pageNumber === undefined && keyword === '') {
-    //         loadPage(0);
-    //     } else if (pageNumber === undefined && keyword !== '') {
-    //         url = "/api/admin/trademark/page/search/" + 0 + "/" + keyword;
-    //         console.log(url);
-    //         console.log(1);
-    //     } else if (pageNumber !== undefined && keyword !== '') {
-    //         url = "/api/admin/trademark/page/search/" + pageNumber + "/" + keyword + "/";
-    //         console.log(url);
-    //         console.log(3);
-    //     }
-    //     const response = await fetch(url, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': 'Bearer '+ localStorage.getItem('token')
-    //         }
-    //     });
-    //     var result = await response.json();
-    //     console.log(result);
-    //     var list = result.content;
-    //     var totalPage = result.totalPages;
-    //     var number = result.number;
-    //     var main = '';
-    //     for (i = 0; i < list.length; i++) {
-    //         main += `<tr >
-    //                         <td scope="row">${i + 1}</td>
-    //                         <td><strong>${list[i].ten}</strong></td>
-    //                         <td>${list[i].email}</td>
-    //                         <td>${list[i].quocGia}</td>
-    //                         <td>
-    //                             <div class="hstack gap-3 flex-warp">
-    //                             <div onclick="detailTrademark(${list[i].id})"
-    //                                  class="ri-eye-2-line"></div>
-    //                              </div>
-    //                         </td>
-    //                         <td>
-    //                         <div onclick="editTrademark(${list[i].id})"
-    //                                  class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
-    //                         </div>
-    //                         </td>
-    //                  </tr>`
-    //     }
-    //     document.getElementById("list_Trademark").innerHTML = main;
-    //     var currentPage = `<div class="pagination-wrap hstack gap-2">
-    //    <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(0)"  >
-    //    <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
-    //    <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
-    //    <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-    //    <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
-    //    <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
-    //    <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-    //    <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${totalPage - 1})">
-    //    <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
-    //   </div>`;
-    //     document.getElementById("pagination").innerHTML = currentPage;
-    // }
     function validName() {
         var nameInput = document.getElementById('trademark-name1-input');
         var errorName = document.getElementById('errorName');
@@ -513,64 +358,33 @@
                 errorName.textContent = '* Vui lòng nhập tên thương hiệu!';
                 errorName.style.display = 'block';
                 hasError = true;
-                document.getElementById("btnthem").disable = true;
+                document.getElementById("btnthem").disabled = true;
             } else {
                 errorName.style.display = 'none';
-                hasError = false
-                document.getElementById("btnthem").disable = false;
-
+                hasError = false;
+                document.getElementById("btnthem").disabled = false;
             }
         });
     }
-    //
-    // function validEmail() {
-    //     var emailInput = document.getElementById('trademark-email1-input');
-    //     var errorEmail = document.getElementById('errorEmail');
-    //     emailInput.addEventListener('input', function () {
-    //         var email = emailInput.value.trim();
-    //         if (email === '') {
-    //             errorEmail.textContent = '* Vui lòng nhập email!';
-    //             errorEmail.style.display = 'block';
-    //             document.getElementById("btnthem").disable = false;
-    //         }else if (!isValidEmail(email)) {
-    //             errorEmail.textContent = '* Vui lòng nhập đúng định dạng email!';
-    //             errorEmail.style.display = 'block';
-    //             hasError = true;
-    //             document.getElementById("btnthem").disable = true;
-    //         } else {
-    //             errorEmail.style.display = 'none';
-    //             hasError = false
-    //             document.getElementById("btnthem").disable = false;
-    //         }
-    //     });
-    // }
-    //
 
-    //
     function validMota() {
         var motaInput = document.getElementById('trademark-mota1-input');
         var errorDescription = document.getElementById('errorDescription');
         motaInput.addEventListener('input', function () {
             var moTa = motaInput.value.trim();
-           if ( moTa.length > 225) {
+            if (moTa.length > 225) {
                 errorDescription.textContent = '* Mô tả bạn nhập phải nhỏ hơn 225 ký tự!';
                 errorDescription.style.display = 'block';
-               hasError = true;
-               document.getElementById("btnthem").disable = true;
-           } else {
-               errorDescription.style.display = 'none';
-               hasError = false
-               document.getElementById("btnthem").disable = false;
-
-           }
+                hasError = true;
+                document.getElementById("btnthem").disabled = true;
+            } else {
+                errorDescription.style.display = 'none';
+                hasError = false;
+                document.getElementById("btnthem").disabled = false;
+            }
         });
-
     }
-    //
-    // function isValidEmail(email) {
-    //     var regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
-    //     return regex.test(email);
-    // }
+
 </script>
 <script th:if="${updateSuccess == true}">
     swal.fire("Lưu thay đổi thành công!", "", "success");

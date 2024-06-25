@@ -5,6 +5,7 @@ import com.example.manstore.entity.ThuongHieu;
 import com.example.manstore.repository.ThuongHieuRepository;
 import com.example.manstore.service.Impl.ThuongHieuServiceImpl;
 import com.example.manstore.service.ThuongHieuService;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,17 +31,23 @@ public class ThuongHieuController {
         model.addAttribute("thuongHieus", thuongHieuService.getAllThuongHieu());
         return "trademark_list";
     }
+
     @GetMapping("/list")
     @ResponseBody
-    public ResponseEntity<?> getAllTH(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<?> getAllTH(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ThuongHieuResponse> pageResult = thuongHieuRepository.findAllTH(pageable);
 
         return new ResponseEntity<>(pageResult, HttpStatus.OK);
     }
+
+
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    private ResponseEntity<?> detail(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok().body(thuongHieuService.getThuongHieuById(id));
+    }
+
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     private String update(Model model) {
@@ -49,8 +56,7 @@ public class ThuongHieuController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String add(Model model, @ModelAttribute("th") ThuongHieu thuongHieu
-    ) {
+    public String add(Model model, @ModelAttribute("th") ThuongHieu thuongHieu) {
         boolean isValid = false;
         for (ThuongHieu th : thuongHieuService.getAllThuongHieu()) {
             if (thuongHieu.getTen().equalsIgnoreCase(th.getTen())) {
@@ -93,19 +99,15 @@ public class ThuongHieuController {
         }
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> edit(Model model, @PathVariable("id") Integer id) {
-        model.addAttribute("th", thuongHieuService.getThuongHieuById(id));
-        return new ResponseEntity<>(thuongHieuService.getThuongHieuById(id), HttpStatus.OK);
+
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    public String update(@PathVariable(value = "id") Integer id, @ModelAttribute("th") ThuongHieu thuongHieu, Model model) {
+        ThuongHieu th = thuongHieuService.getThuongHieuById(id);
+        th.setTen(thuongHieu.getTen());
+        th.setMoTa(thuongHieu.getMoTa());
+        thuongHieuService.update(thuongHieu);
+        model.addAttribute("updateSuccess", true);
+        return "admin/trademark/trademark-list";
     }
-
-
-
-
-
-
-
-
-
 
 }

@@ -46,13 +46,8 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
     }
 
     @Override
-    public ThuongHieu update(Integer id, ThuongHieu thuongHieu) {
-        if (thuongHieuRepository.existsById(id)) {
-            thuongHieu.setId(id);
-            return thuongHieuRepository.save(thuongHieu);
-        } else {
-            return null;
-        }
+    public void update(ThuongHieu thuongHieu) {
+        thuongHieuRepository.save(thuongHieu);
     }
 
     @Override

@@ -42,6 +42,11 @@ public class AdminUI {
         return "admin/color/color-list";  // Giao diện danh sách màu
     }
 
+    @RequestMapping("/designs")
+    public String designsList() {
+        return "admin/designs/designs-list";  // Giao diện danh sách kiểu dáng
+    }
+
 //    @RequestMapping("/account")
 //    public String account() {
 //        return "admin/profile/account";

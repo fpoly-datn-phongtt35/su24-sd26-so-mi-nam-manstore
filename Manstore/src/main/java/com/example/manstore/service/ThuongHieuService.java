@@ -10,7 +10,7 @@ public interface ThuongHieuService {
     List<ThuongHieu> getAllThuongHieu();
     ThuongHieu getThuongHieuById(Integer id);
     ThuongHieu save(ThuongHieu thuongHieu);
-    ThuongHieu update(Integer id, ThuongHieu thuongHieu);
+    void update(ThuongHieu thuongHieu);
     void delete(Integer id);
 
     Page<ThuongHieu> pageOfTH(Pageable pageable);
