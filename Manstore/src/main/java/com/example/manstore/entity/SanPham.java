@@ -1,5 +1,7 @@
 package com.example.manstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -53,36 +55,43 @@ public class SanPham {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDanhMuc", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private DanhMuc idDanhMuc;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idHinhAnh", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private HinhAnh idHinhAnh;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idThuongHieu", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private ThuongHieu idThuongHieu;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idCoAo", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private CoAo idCoAo;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDuoiAo", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private DuoiAo idDuoiAo;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKieuDang", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private KieuDang idKieuDang;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idChatLieu", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private ChatLieu idChatLieu;
 
     @Column(name = "TrangThai")

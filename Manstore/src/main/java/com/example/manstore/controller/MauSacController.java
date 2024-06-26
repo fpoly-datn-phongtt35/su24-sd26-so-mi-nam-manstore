@@ -2,12 +2,14 @@ package com.example.manstore.controller;
 
 import com.example.manstore.dto.respone.MauSacResponse;
 import com.example.manstore.entity.MauSac;
+import com.example.manstore.entity.ThuongHieu;
 import com.example.manstore.repository.MauSacRepository;
 import com.example.manstore.service.Impl.MauSacServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -87,6 +89,38 @@ public class MauSacController {
             model.addAttribute("message", false);
             return "admin/color/color-create";
         }
+    }
+
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    private ResponseEntity<?> detail(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok().body(mauSacService.getMauSacById(id));
+    }
+
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    public String update(@PathVariable(value = "id") Integer id, @ModelAttribute("th") MauSac mauSac, Model model) {
+        MauSac ms = mauSacService.getMauSacById(id);
+        ms.setMa(mauSac.getMa());
+        ms.setTen(mauSac.getTen());
+        mauSacService.update(mauSac);
+        model.addAttribute("updateSuccess", true);
+        return "admin/color/color-list";
+    }
+
+    @GetMapping(value = "/page/search/{pageNumber}/{keyWord}")
+    public ResponseEntity<?> getPageSearchAndFilter(
+            @PathVariable("pageNumber") int pageNumber,
+            @PathVariable("keyWord") String keyWord
+    ) {
+        Pageable pageable = PageRequest.of(pageNumber, 3, Sort.by("id").descending());
+        Page<MauSac> page;
+
+        if (keyWord.equalsIgnoreCase("null")) {
+            page = mauSacService.pageOfMauSac(pageable);
+        } else {
+            page = mauSacRepository.searchMauSac(keyWord, pageable);
+        }
+
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
 

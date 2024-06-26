@@ -16,6 +16,6 @@ public interface ThuongHieuRepository extends JpaRepository<ThuongHieu,Integer> 
 
     @Query("SELECT new com.example.manstore.dto.respone.ThuongHieuResponse(th.id,th.ma,th.ten,th.moTa) FROM ThuongHieu th ")
     public Page<ThuongHieuResponse> findAllTH(Pageable pageable);
-    @Query("SELECT th FROM ThuongHieu th WHERE th.ten LIKE %:keyword%")
+    @Query("SELECT th FROM ThuongHieu th WHERE LOWER(th.ten) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<ThuongHieu> searchTH(@Param("keyword") String keyword, Pageable pageable);
 }

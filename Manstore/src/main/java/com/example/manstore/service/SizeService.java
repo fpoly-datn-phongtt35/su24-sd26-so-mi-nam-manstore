@@ -11,5 +11,7 @@ public interface SizeService {
     Size getSizeById(Integer id);
 
     Size save(Size size);
+
+    void update(Size size);
     Page<Size> pageOfSize(Pageable pageable);
 }

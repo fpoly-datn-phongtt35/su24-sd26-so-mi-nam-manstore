@@ -114,43 +114,36 @@
                           <h4 class="modal-title">Chi Tiết Thương Hiệu</h4>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-
                         <div class="modal-body">
-                          <form id="create-form" action="" class="my-form" method="post" th:object="${th}">
+                          <form id="sizeForm" action="" class="my-form" method="post" th:object="${th}">
                             <div class="card">
                               <div class="card-body">
-                                <div class="row ">
+                                <div class="row">
                                   <div class="col-lg-6">
                                     <div class="mb-3">
-                                      <label for="trademark-ma-input" class="form-label">Mã Thương Hiệu</label>
-                                      <input type="text" id="trademark-ma-input" class="form-control" required th:name="ma" readonly/>
+                                      <label for="trademark-ma-input" class="form-label">Mã</label>
+                                      <input type="text" id="trademark-ma-input" class="form-control" required th:name="ma" readonly />
                                     </div>
                                   </div>
-                                </div>
-                                <div class="row ">
                                   <div class="col-lg-6">
                                     <div class="mb-3">
-                                      <label for="trademark-name-input" class="form-label">Tên thương hiệu</label>
-                                      <input type="text" id="trademark-name-input" class="form-control" required th:name="ten" readonly/>
+                                      <label for="trademark-name-input" class="form-label">Tên Thương Hiệu</label>
+                                      <input type="text" id="trademark-name-input" class="form-control" required th:name="ten" readonly />
                                     </div>
                                   </div>
-                                </div>
-                                <!-- end row -->
-                                <div class="col-lg-6">
-                                  <div class="mb-3">
-                                    <label class="form-label" for="trademark-mota-input">Mô Tả</label>
-                                    <textarea type="text" class="form-control" id="trademark-mota-input" th:name="moTa" readonly></textarea>
+                                  <div class="col-lg-12">
+                                    <div class="mb-3">
+                                      <label class="form-label" for="trademark-mota-input">Mô Tả</label>
+                                      <textarea type="text" class="form-control" id="trademark-mota-input" th:name="moTa" readonly></textarea>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              <!--end row-->
-                              <!-- end col -->
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-<!--                              <button type="button" class="btn btn-primary" onclick="showConfirmPopup('create-form')">Lưu</button>-->
+                              <!-- <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">Lưu</button> -->
                             </div>
-                            <!-- end row -->
                           </form>
                         </div>
                       </div>
@@ -384,6 +377,95 @@
             }
         });
     }
+
+    async function searchTrademark(pageNumber) {
+        var keyword = document.getElementById("search-input").value.trim().toLowerCase();
+        var url;
+        console.log(keyword);
+        console.log(pageNumber);
+
+        var page = pageNumber === undefined ? 0 : pageNumber;
+
+        if (keyword === '') {
+            loadPage(0);
+            return;
+        } else {
+            var encodedKeyword = encodeURIComponent(keyword);
+            url = "/admin/trademark/page/search/" + page + "/" + encodedKeyword;
+        }
+        console.log(url);
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+
+            const result = await response.json();
+            console.log(result);
+
+            // Kiểm tra và log toàn bộ cấu trúc dữ liệu trả về
+            console.log('Full response data:', result);
+
+            var list = result.content;
+            var totalPage = (result.totalPages !== undefined && !isNaN(parseInt(result.totalPages, 10))) ? parseInt(result.totalPages, 10) : NaN;
+            var number = (result.number !== undefined && !isNaN(parseInt(result.number, 10))) ? parseInt(result.number, 10) : NaN;
+            var main = '';
+
+            for (let i = 0; i < list.length; i++) {
+                main += `<tr>
+                    <td scope="row">${i + 1}</td>
+                    <td>${list[i].ma}</td>
+                    <td><strong>${list[i].ten}</strong></td>
+                    <td>${list[i].moTa}</td>
+                    <td>
+                        <div class="hstack gap-3 flex-warp">
+                            <div onclick="detailTrademark(${list[i].id})" class="ri-eye-2-line"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div onclick="editTrademark(${list[i].id})" class="link-info fs-15">
+                            <i class="ri-edit-2-line"></i>
+                        </div>
+                    </td>
+                </tr>`;
+            }
+            document.getElementById("list_Trademark").innerHTML = main;
+
+            if (!isNaN(number) && !isNaN(totalPage)) {
+                var currentPage = `<div class="pagination-wrap hstack gap-2">
+           <button class="page-item pagination-prev" id="pagination-prev" onclick="searchTrademark(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+           <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+           <ul class="pagination listjs-pagination mb-0">`;
+
+                for (let i = 0; i < totalPage; i++) {
+                    currentPage += `<li class="${i === number ? 'active' : ''}"><a class="page" onclick="searchTrademark(${i})">${i + 1}</a></li>`;
+                }
+
+                currentPage += `</ul>
+           <button class="page-item pagination-next" id="pagination-next" onclick="searchTrademark(${number + 1 >= totalPage ? 0 : number + 1})">
+           <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+          </div>`;
+                document.getElementById("pagination").innerHTML = currentPage;
+            } else {
+                console.error('Invalid pagination data:', { number, totalPage });
+                alert('Dữ liệu phân trang không hợp lệ. Vui lòng kiểm tra lại.');
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+            alert('Có lỗi xảy ra trong quá trình tìm kiếm. Vui lòng thử lại sau.');
+        }
+    }
+
+
+
+
 
 </script>
 <script th:if="${updateSuccess == true}">

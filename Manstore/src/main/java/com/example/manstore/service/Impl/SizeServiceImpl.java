@@ -36,6 +36,11 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
+    public void update(Size size) {
+        sizeRepository.save(size);
+    }
+
+    @Override
     public Page<Size> pageOfSize(Pageable pageable) {
         return sizeRepository.findAll(pageable);
     }

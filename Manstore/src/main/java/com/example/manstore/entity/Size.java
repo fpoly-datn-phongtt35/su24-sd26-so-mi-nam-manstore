@@ -1,5 +1,6 @@
 package com.example.manstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Size {
     private String moTa;
 
     @OneToMany(mappedBy = "idSize", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ChiTietSanPham> chiTietSanPhams;
 
 }

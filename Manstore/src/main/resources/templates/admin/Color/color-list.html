@@ -73,7 +73,7 @@
                       <div class="search-box">
                         <input type="text" class="form-control search bg-light border-light"
                                placeholder="Search..." id="search-input"
-                               onkeyup="searchMauSac()">
+                               onkeyup="searchColor()">
                         <i class="ri-search-line search-icon"></i>
                       </div>
                     </div>
@@ -117,58 +117,37 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Chi Tiết Màu Sắc</h4>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                  aria-label="Close"></button>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                      </div>
-
-                      <div class="modal-body">
-                        <form id="" action="" class="my-form" method="post"
-                              th:object="${mausacs}">
-                          <div class="card">
-
-                            <div class="col-lg-6">
-                              <div class="mb-3">
-                                <label class="form-label"
-                                       for="color-ma-input">Mã
-                                </label>
-                                <textarea type="text" class="form-control"
-                                          id="color-ma-input"
-                                          th:name="ma"
-                                          readonly></textarea>
-                              </div>
-                            </div>
-
-                            <div class="card-body">
-                              <div class="row ">
-                                <div class="col-lg-6">
-                                  <div class="mb-3">
-                                    <label for="color-name-input"
-                                           class="form-label">Tên </label>
-                                    <input type="text" id="color-name-input"
-                                           class="form-control" required
-                                           th:name="ten"/>
+                        <div class="modal-body">
+                          <form id="sizeForm" action="" class="my-form" method="post" th:object="${mausac}">
+                            <div class="card">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-lg-6">
+                                    <div class="mb-3">
+                                      <label for="color-ma-input" class="form-label">Mã</label>
+                                      <input type="text" id="color-ma-input" class="form-control" required th:name="ma"
+                                             readonly/>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <div class="mb-3">
+                                      <label for="color-name-input" class="form-label">Tên Màu Sắc</label>
+                                      <input type="text" id="color-name-input" class="form-control" required
+                                             th:name="ten" readonly/>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              <!-- end row -->
-
                             </div>
-                            <!--end row-->
-                            <!-- end col -->
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">
-                              Đóng
-                            </button>
-                            <!--                                                    <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">-->
-                            <!--                                                        Lưu-->
-                            <!--                                                    </button>-->
-                          </div>
-                          <!-- end row -->
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                              <!-- <button type="button" class="btn btn-primary" onclick="showConfirmPopup()">Lưu</button> -->
+                            </div>
+                          </form>
+                        </div>
                       </div>
-                      </form>
                     </div>
                   </div>
                 </div>
@@ -184,15 +163,28 @@
                     </div>
                     <div class="modal-body">
                       <form id="update-form" action="" class="my-form" method="post"
-                            th:object="${mausacs}">
+                            th:object="${mausac}">
                         <div class="card">
                           <div class="card-body">
                             <div class="row ">
                               <div class="col-lg-6">
                                 <div class="mb-3">
-                                  <label for="color-name-input"
+                                  <label for="color-ma1-input"
+                                         class="form-label">Mã</label>
+                                  <input type="text" id="color-ma1-input"
+                                         class="form-control" required
+                                         th:name="ma" readonly/>
+                                  <span id="errorMa" class="text-danger" style="display:none;"></span>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row ">
+                              <div class="col-lg-6">
+                                <div class="mb-3">
+                                  <label for="color-name1-input"
                                          class="form-label">Tên</label>
-                                  <input type="text" id="size-name1-input"
+                                  <input type="text" id="color-name1-input"
                                          class="form-control" required
                                          th:name="ten"/>
                                   <span id="errorName" class="text-danger" style="display:none;"></span>
@@ -200,24 +192,6 @@
                                 </div>
                               </div>
                             </div>
-                            <!-- end row -->
-
-<!--                            <div class="row">-->
-<!--                              <div class="col-lg-6">-->
-<!--                                <div class="mb-3">-->
-<!--                                  <label class="form-label"-->
-<!--                                         for="size-mota1-input">Mô Tả-->
-<!--                                  </label>-->
-<!--                                  <textarea type="text" class="form-control"-->
-<!--                                            id="size-mota1-input"-->
-<!--                                            th:name="moTa"-->
-<!--                                  ></textarea>-->
-<!--                                  <span id="errorDescription" class="text-danger" style="display:none;"></span>-->
-<!--                                </div>-->
-<!--                              </div>-->
-<!--                            </div>-->
-                            <!--end row-->
-                            <!-- end col -->
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary"
@@ -225,7 +199,7 @@
                               Đóng
                             </button>
                             <button type="button" id="btnthem"
-                                    class="btn btn-primary" onclick="showConfirmPopup()">
+                                    class="btn btn-primary" onclick="showConfirmPopup('update-form')">
                               Lưu
                             </button>
                           </div>
@@ -289,7 +263,7 @@
                 <td>${item.ten}</td>
                 <td>
                     <div class="hstack gap-3 flex-warp">
-                        <div onclick="detaiColor(${item.id})" class="ri-eye-2-line"></div>
+                        <div onclick="detailColor(${item.id})" class="ri-eye-2-line"></div>
                         <div onclick="editColor(${item.id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
                     </div>
                 </td>
@@ -323,144 +297,168 @@
     }
 
 
-    function showConfirmPopup() {
+    function showConfirmPopup(formId) {
         swal.fire({
             icon: 'question',
-            title: "Bạn có muốn thêm mới?",
+            title: "Bạn có muốn lưu thay đổi?",
             showCancelButton: true,
             confirmButtonText: "Có",
-            cancelButtonText: `Không`
+            cancelButtonText: "Không"
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('create-form').submit();
+                document.getElementById(formId).submit();
             }
         });
     }
 
-    //
-    //
-    // function detailSize(sizeId) {
-    //     fetch(`/admin/size/detail/${sizeId}`)
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             document.getElementById('size-ma-input').value = data.ma;
-    //             document.getElementById('size-name-input').value = data.ten;
-    //             document.getElementById('size-mota-input').value = data.moTa;
-    //             $('#myModal').modal('show');
-    //         })
-    //         .catch(error => console.error('Error:', error));
-    // }
-    //
-    // function editSize(sizeId) {
-    //     fetch(`/admin/size/detail/${sizeId}`)
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             document.getElementById('size-ma-input').value = data.ma;
-    //             document.getElementById('size-name1-input').value = data.ten;
-    //             document.getElementById('size-mota1-input').value = data.moTa;
-    //             document.getElementById('update-form').action = `/admin/size/update/${sizeId}`;
-    //             $('#myModal1').modal('show');
-    //         })
-    //         .catch(error => console.error('Error:', error));
-    // }
-    //
-    //
-    // var page;
-    // var hasError = false;
-    //
-    // window.onload = function () {
-    //     loadPage(0);
-    //     validName();
-    //     validMota();
-    // }
-    // $('#myModal1').on('hidden.bs.modal', function (e) {
-    //     // Xóa các thông báo lỗi
-    //     document.getElementById('errorName').style.display = 'none';
-    //     document.getElementById('errorDescription').style.display = 'none';
-    // });
-    //
-    // function detailSize(sizeId) {
-    //     fetch('/admin/size/detail/' + sizeId, {
-    //         method: 'GET'
-    //     }).then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-    //         return response.json();
-    //     }).then(data => {
-    //         console.log(data);
-    //         document.getElementById('size-ma-input').value = data.ma;
-    //         document.getElementById('size-name-input').value = data.ten;
-    //         document.getElementById('size-mota-input').value = data.moTa;
-    //         document.getElementById('update-form').action = '/api/admin/size/update/' + sizeId;
-    //         $('#myModal').modal('show');
-    //     })
-    //         .catch(error => console.error('Error:', error));
-    // }
-    //
-    // function editSize(sizeId) {
-    //     fetch('/admin/size/detail/' + sizeId, {
-    //         method: 'GET'
-    //     }).then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-    //         return response.json();
-    //     }).then(data => {
-    //         console.log(data);
-    //         document.getElementById('size-ma-input').value = data.ma;
-    //
-    //         document.getElementById('size-name1-input').value = data.ten;
-    //         document.getElementById('size-mota1-input').value = data.moTa;
-    //         document.getElementById('update-form').action = '/admin/size/update/' + sizeId;
-    //         $('#myModal1').modal('show');
-    //     })
-    //         .catch(error => console.error('Error:', error));
-    // }
-    //
-    //
-    // function showConfirmPopup() {
-    //     if(!hasError){
-    //         swal.fire({
-    //             title: "Bạn có muốn lưu thay đổi không?",
-    //             showCancelButton: true,
-    //             confirmButtonText: "Có",
-    //             cancelButtonText: "Không"
-    //         }).then((result) => {
-    //             if (result.isConfirmed) {
-    //                 document.getElementById('update-form').submit();
-    //                 loadPage(0);
-    //             }
-    //         });
-    //     }
-    // }
-    //
-    //
-    // function validName() {
-    //     var nameInput = document.getElementById('size-name1-input');
-    //     var errorName = document.getElementById('errorName');
-    //     nameInput.addEventListener('input', function () {
-    //         var name = nameInput.value.trim();
-    //         if (name === '') {
-    //             errorName.textContent = '* Vui lòng nhập tên size!';
-    //             errorName.style.display = 'block';
-    //             hasError = true;
-    //             document.getElementById("btnthem").disable = true;
-    //         } else {
-    //             errorName.style.display = 'none';
-    //             hasError = false
-    //             document.getElementById("btnthem").disable = false;
-    //
-    //         }
-    //     });
-    // }
-    // }
+
+    function detailColor(colorId) {
+        fetch(`/admin/color/detail/${colorId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('color-ma-input').value = data.ma;
+                document.getElementById('color-name-input').value = data.ten;
+                $('#myModal').modal('show');
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function editColor(colorId) {
+        fetch(`/admin/color/detail/${colorId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('color-ma1-input').value = data.ma;
+                document.getElementById('color-name1-input').value = data.ten;
+                document.getElementById('update-form').action = `/admin/color/update/${colorId}`;
+                $('#myModal1').modal('show');
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    var hasError = false;
+
+    window.onload = function () {
+        loadPage(0);
+        validName();
+    }
+
+    $('#myModal1').on('hidden.bs.modal', function (e) {
+        // Clear error messages
+        document.getElementById('errorName').style.display = 'none';
+        document.getElementById('errorDescription').style.display = 'none';
+    });
+
+
+    function validName() {
+        var nameInput = document.getElementById('color-name1-input');
+        var errorName = document.getElementById('errorName');
+        nameInput.addEventListener('input', function () {
+            var name = nameInput.value.trim();
+            if (name === '') {
+                errorName.textContent = '* Vui lòng nhập tên size!';
+                errorName.style.display = 'block';
+                hasError = true;
+                document.getElementById("btnthem").disabled = true;
+            } else {
+                errorName.style.display = 'none';
+                hasError = false;
+                document.getElementById("btnthem").disabled = false;
+            }
+        });
+    }
+
+        async function searchColor(pageNumber) {
+            var keyword = document.getElementById("search-input").value.trim().toLowerCase();
+            var url;
+            console.log(keyword);
+            console.log(pageNumber);
+
+            var page = pageNumber === undefined ? 0 : pageNumber;
+
+            if (keyword === '') {
+                loadPage(0);
+                return;
+            } else {
+                var encodedKeyword = encodeURIComponent(keyword);
+                url = "/admin/color/page/search/" + page + "/" + encodedKeyword;
+            }
+            console.log(url);
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+
+                const result = await response.json();
+                console.log(result);
+
+                // Kiểm tra và log toàn bộ cấu trúc dữ liệu trả về
+                console.log('Full response data:', result);
+
+                var list = result.content;
+                var totalPage = (result.totalPages !== undefined && !isNaN(parseInt(result.totalPages, 10))) ? parseInt(result.totalPages, 10) : NaN;
+                var number = (result.number !== undefined && !isNaN(parseInt(result.number, 10))) ? parseInt(result.number, 10) : NaN;
+                var main = '';
+
+                for (let i = 0; i < list.length; i++) {
+                    main += `<tr>
+                    <td scope="row">${i + 1}</td>
+                    <td>${list[i].ma}</td>
+                    <td><strong>${list[i].ten}</strong></td>
+                    <td>
+                        <div class="hstack gap-3 flex-warp">
+                            <div onclick="detailColor(${list[i].id})" class="ri-eye-2-line"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div onclick="editColor(${list[i].id})" class="link-info fs-15">
+                            <i class="ri-edit-2-line"></i>
+                        </div>
+                    </td>
+                </tr>`;
+                }
+                document.getElementById("list_color").innerHTML = main;
+
+                if (!isNaN(number) && !isNaN(totalPage)) {
+                    var currentPage = `<div class="pagination-wrap hstack gap-2">
+           <button class="page-item pagination-prev" id="pagination-prev" onclick="searchColor(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+           <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
+           <ul class="pagination listjs-pagination mb-0">`;
+
+                    for (let i = 0; i < totalPage; i++) {
+                        currentPage += `<li class="${i === number ? 'active' : ''}"><a class="page" onclick="searchColor(${i})">${i + 1}</a></li>`;
+                    }
+
+                    currentPage += `</ul>
+           <button class="page-item pagination-next" id="pagination-next" onclick="searchColor(${number + 1 >= totalPage ? 0 : number + 1})">
+           <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+          </div>`;
+                    document.getElementById("pagination").innerHTML = currentPage;
+                } else {
+                    console.error('Invalid pagination data:', {number, totalPage});
+                    alert('Dữ liệu phân trang không hợp lệ. Vui lòng kiểm tra lại.');
+                }
+            } catch (error) {
+                console.error('Error during fetch:', error);
+                alert('Có lỗi xảy ra trong quá trình tìm kiếm. Vui lòng thử lại sau.');
+            }
+
+    }
+
 
 </script>
-<!--<script th:if="${updateSuccess == true}">-->
-<!--    swal.fire("Lưu thay đổi thành công!", "", "success");-->
-<!--</script>-->
-<!--<script th:if="${updateFailure == false}">-->
-<!--    swal.fire("Thay đổi chưa được lưu!", "", "error");-->
-<!--</script>-->
+<script th:if="${updateSuccess == true}">
+    swal.fire("Lưu thay đổi thành công!", "", "success");
+</script>
+<script th:if="${updateFailure == false}">
+    swal.fire("Thay đổi chưa được lưu!", "", "error");
+</script>
 </html>

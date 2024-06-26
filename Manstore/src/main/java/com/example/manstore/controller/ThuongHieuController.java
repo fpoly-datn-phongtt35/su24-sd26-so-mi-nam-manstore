@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -108,6 +109,25 @@ public class ThuongHieuController {
         thuongHieuService.update(thuongHieu);
         model.addAttribute("updateSuccess", true);
         return "admin/trademark/trademark-list";
+    }
+
+
+
+    @GetMapping(value = "/page/search/{pageNumber}/{keyWord}")
+    public ResponseEntity<?> getPageSearchAndFilter(
+            @PathVariable("pageNumber") int pageNumber,
+            @PathVariable("keyWord") String keyWord
+    ) {
+        Pageable pageable = PageRequest.of(pageNumber, 3, Sort.by("id").descending());
+        Page<ThuongHieu> page;
+
+        if (keyWord.equalsIgnoreCase("null")) {
+            page = thuongHieuService.pageOfTH(pageable);
+        } else {
+            page = thuongHieuRepository.searchTH(keyWord, pageable);
+        }
+
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
 }

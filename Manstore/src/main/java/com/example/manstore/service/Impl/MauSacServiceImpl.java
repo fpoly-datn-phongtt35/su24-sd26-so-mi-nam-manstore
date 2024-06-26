@@ -34,6 +34,11 @@ public class MauSacServiceImpl implements MauSacService {
     }
 
     @Override
+    public void update(MauSac mauSac) {
+        mauSacRepository.save(mauSac);
+    }
+
+    @Override
     public Page<MauSac> pageOfMauSac(Pageable pageable) {
         return mauSacRepository.findAll(pageable);
     }

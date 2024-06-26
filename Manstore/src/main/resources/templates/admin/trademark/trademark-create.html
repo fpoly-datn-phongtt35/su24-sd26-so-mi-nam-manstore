@@ -168,18 +168,6 @@
         });
     }
 
-
-    function validQuocGia() {
-        var quocGiaInput = document.getElementById('trademark-quocgia-input');
-        var errorQG = document.getElementById('errorQuocGia');
-
-        if (quocGiaInput.value.trim() !== '') {
-            errorQG.style.display = 'none';
-        } else {
-            errorQG.style.display = 'block';
-        }
-    }
-
     function validMoTa() {
         var moTaInput = document.getElementById('trademark-mota-input');
         var errorMoTa = document.getElementById('errorMoTa');
@@ -190,7 +178,6 @@
             errorMoTa.style.display = 'block';
         }
     }
-
 
 </script>
 <script th:if="${message == true}">

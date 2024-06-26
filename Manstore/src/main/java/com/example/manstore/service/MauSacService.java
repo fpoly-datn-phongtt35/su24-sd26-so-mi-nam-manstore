@@ -11,5 +11,7 @@ public interface MauSacService {
     MauSac getMauSacById(Integer id);
 
     MauSac save(MauSac mauSac);
+
+    void update(MauSac mauSac);
     Page<MauSac> pageOfMauSac(Pageable pageable);
 }
