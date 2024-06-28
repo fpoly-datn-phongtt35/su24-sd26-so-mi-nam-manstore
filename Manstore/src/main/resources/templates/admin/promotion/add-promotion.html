@@ -17,7 +17,7 @@
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Đợt Giảm Giá</a></li>
+                                    <li class="breadcrumb-item"><a th:href="@{/admin/promotion}">Đợt Giảm Giá</a></li>
                                     <li class="breadcrumb-item active">Thêm Đợt Giảm Giá</li>
                                 </ol>
                             </div>
@@ -40,7 +40,9 @@
                                         <label class="lb-form">Mã Đợt Giảm Giá <span
                                                 class="text-danger fw-bold">*</span></label>
                                         <input th:field="*{ma}" type="text" class="form-control" id="ma">
-
+                                        <span class="text-danger" th:text="${errorCode}"
+                                              id="error-code"></span>
+                                        <br disabled>
                                         <label class="lb-form">Tên Đợt Giảm Giá <span
                                                 class="text-danger fw-bold">*</span></label>
                                         <input th:field="*{ten}" type="text" class="form-control" id="name">
@@ -53,6 +55,8 @@
                                             <div class="col-sm-9">
                                                 <input th:field="*{giaTriGiam}" type="number" class="form-control"
                                                        id="reduce">
+                                                <span class="text-danger"
+                                                      th:text="${errorGiaTriGiam}" id="error-reduce"></span>
                                             </div>
                                             <div class="col-sm-3">
                                                 <select th:field="*{loaiGiamGia}" class="form-select">
@@ -61,8 +65,6 @@
                                                 </select>
                                             </div>
                                         </div>
-<!--                                        <span class="text-danger"-->
-<!--                                              th:text="${errorGiaTriGiam}" id="error-reduce"></span>-->
 
                                         <br disabled>
                                     </div>
@@ -71,32 +73,26 @@
                                                 class="text-danger fw-bold">*</span></label>
                                         <input th:field="*{ngayBatDau}" type="date"
                                                class="form-control start-date" id="start-date-input"/>
-<!--                                        <span class="text-danger"-->
-<!--                                              th:text="${errorNgayBatDau}" id="error-start-date"></span>-->
+                                        <span class="text-danger"
+                                              th:text="${errorNgayBatDau}" id="error-start-date"></span>
                                         <br disabled>
                                         <label class="lb-form">Ngày kết thúc <span
                                                 class="text-danger fw-bold">*</span></label>
                                         <input th:field="*{ngayKetThuc}" type="date"
                                                class="form-control end-date" id="end-date-input"/>
-<!--                                        <span class="text-danger"-->
-<!--                                              th:text="${errorNgayKetThuc}" id="error-end-date"></span>-->
+                                        <span class="text-danger"
+                                              th:text="${errorNgayKetThuc}" id="error-end-date"></span>
                                         <br disabled>
                                         <label class="lb-form">Giá Trị Đơn Hàng Áp Dụng <span
                                                 class="text-danger fw-bold">*</span></label>
-<!--                                        <select th:field="*{giaTriDonHang}" class="form-select">-->
-<!--                                            <option value="100" selected>100.000 VND</option>-->
-<!--                                            <option value="200">200.000 VND</option>-->
-<!--                                            <option value="500">500.000 VND</option>-->
-<!--                                            <option value="1000">1.000.000 VND</option>-->
-<!--                                            <option value="2000">2.000.000 VND</option>-->
-<!--                                            <option value="5000">5.000.000 VND</option>-->
-<!--                                        </select>-->
                                         <input th:field="*{giaTriDonHang}" type="text" class="form-control">
+                                        <span class="text-danger"
+                                              th:text="${errorBill}" id="error-bill"></span>
                                         <br disabled>
                                         <br disabled="true">
                                         <div class="d-flex justify-content-end align-items-end">
                                             <button type="button" class="btn btn-success w-25"
-                                                    onclick="showConfirmPopup()">Thêm</button>
+                                                    onclick="showConfirmPopup()">Thêm mới</button>
                                             <span style="padding: 0 8px;" disabled></span>
                                             <button th:href="@{/admin/promotion}" class="btn btn-danger w-25">Trở lại</button>
                                         </div>
@@ -115,15 +111,13 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.10.5/sweetalert2.all.min.js"></script>
 <script th:inline="javascript">
-    let startDate = /*[[ ${startDate} ]]*/ null;
-    let endDate = /*[[ ${endDate} ]]*/ null;
+    let startDate = [[ ${startDate} ]]* null;
+    let endDate = [[ ${endDate} ]]* null;
 
     document.querySelector('.start-date').value = startDate;
     document.querySelector('.end-date').value = endDate;
 
-    /*<![CDATA[*/
-    let message = /*[[${errorDuplicate}]]*/ '';
-    /*]]>*/
+
 
 </script>
 
@@ -162,7 +156,7 @@
         Swal.fire({
             icon: 'success',
             title: 'Thành công!',
-            text: 'Khuyến mãi đã được tạo thành công!'
+            text: 'Đợt giảm giá đã được tạo thành công!'
         }).then(()=>{
             window.location.href = '/admin/promotion';
         });

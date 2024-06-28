@@ -78,6 +78,7 @@
                                         </button>
                                     </div>
                                     <div class="col-xxl-2 col-sm-12">
+                                        <label>&ThinSpace;</label>
                                     <a class="btn btn-success w-100 add-btn" th:href="@{/admin/add-promotion}">
                                         Thêm Mới</a></div>
                                 </div>
@@ -180,7 +181,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         id="close-modal"></button>
             </div>
-            <form class="tablelist-form" novalidate autocomplete="off" id="update-form" method="post"
+            <form class="tablelist-form" novalidate autocomplete="off" id="update-form" method="post" onsubmit=""
                   th:object="${dotgiamgia}">
                 <div class="modal-body p-4">
                     <div id="alert-error-msg" class="d-none alert alert-danger py-2"></div>
@@ -199,7 +200,7 @@
                         </div>
                         <div class="col-sm-9">
                             <label for="promotion-value-input" class="form-label">Giá Trị Giảm</label>
-                            <input type="text" id="promotion-value-input" class="form-control" required
+                            <input type="number" id="promotion-value-input" class="form-control" required
                                    th:name="giaTriGiam"/>
                             <span id="errorValue" class="text-danger" style="display:none;"></span><br>
                         </div>
@@ -214,7 +215,7 @@
 
                         <div class="col-sm-6">
                             <label for="promotion-bill-input" class="form-label">Giá Trị Đơn Hàng Áp Dụng</label>
-                            <input type="email" id="promotion-bill-input" class="form-control" required
+                            <input type="number" id="promotion-bill-input" class="form-control" required
                                    th:name="giaTriDonHang"/>
                             <span id="errorBill" class="text-danger" style="display:none;"></span><br>
                         </div>
@@ -247,10 +248,10 @@
 
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                             <button type="button" class="btn btn-success" id="add-btn" onclick="showConfirmPopup()">
                                 Sửa
                             </button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
                         </div>
                     </div>
                 </div>
@@ -370,7 +371,7 @@
                 console.log(data);
                 document.getElementById('promotion-code-input').value = data.ma
                 document.getElementById('promotion-name-input').value = data.ten;
-                document.getElementById('promotion-date-input').value = data.ngayTao
+                document.getElementById('promotion-date-input').value = data.ngayTao;
                 document.getElementById('promotion-startdate-input').value = data.ngayBatDau;
                 // none
                 document.getElementById('promotion-enddate-input').value = data.ngayKetThuc;
@@ -416,7 +417,7 @@
             document.getElementById("ngaykt").innerHTML = result.ngayKetThuc
             document.getElementById("loaigg").innerHTML = result.loaiGiamGia === true ? "Giảm giá theo %" : "Giảm giá theo số tiền";
             document.getElementById("giatg").innerHTML = result.loaiGiamGia === true ? result.giaTriGiam + "%" : formatmoney(result.giaTriGiam)
-            document.getElementById("ngaytao").innerHTML = momentDate.format('DD/MM/YYYY HH:mm');
+            document.getElementById("ngaytao").innerHTML = momentDate.format('DD/MM/YYYY');
             document.getElementById("trangThai").innerHTML = result.trangThai === true ? 'Kích Hoạt' : 'Chưa Kích Hoạt';
             document.getElementById("giatriapdung").innerHTML = formatmoney(giaTriApDung);
         }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Repository
 public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia,Integer> {
@@ -22,4 +23,12 @@ public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia,Integer> 
 
     @Query("select v from DotGiamGia v where v.ngayBatDau >= ?1 and v.ngayKetThuc <= ?2 and v.loaiGiamGia = ?3")
     Page<DotGiamGia> findByAll(LocalDate start, LocalDate end, boolean typePromotion, Pageable pageable);
+
+    @Query("select v from DotGiamGia v where v.ten = ?1 and v.id <> ?2")
+    Optional<DotGiamGia> findByNameAndId(String code, Integer id);
+
+    @Query("select v from DotGiamGia v where v.ten = ?1 ")
+    Optional<DotGiamGia> findByName(String name);
+
+
 }
