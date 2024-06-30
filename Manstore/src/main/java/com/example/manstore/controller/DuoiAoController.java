@@ -30,7 +30,7 @@ public class DuoiAoController {
     private DuoiAoRepository duoiAoRepository;
 
     @GetMapping("/getAll")
-    public String getAllThuongHieu(Model model) {
+    public String getAllDuoiAo(Model model) {
         model.addAttribute("duoiAos", duoiAoService.getAllDuoiAo());
         return "shirtTail_list";
     }

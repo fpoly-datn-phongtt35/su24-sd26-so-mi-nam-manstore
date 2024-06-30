@@ -62,6 +62,11 @@ public class AdminUI {
         return "admin/collar/collar-list";  // Giao diện danh sách cổ áo
     }
 
+    @RequestMapping("/material")
+    public String materialList() {
+        return "admin/material/material-list";  // Giao diện danh sách chất liệu
+    }
+
 
 //    @RequestMapping("/account")
 //    public String account() {

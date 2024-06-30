@@ -30,7 +30,7 @@ public class DanhMucController {
     private DanhMucRepository danhMucRepository;
 
     @GetMapping("/getAll")
-    public String getAllThuongHieu(Model model) {
+    public String getAllDanhMuc(Model model) {
         model.addAttribute("danhMucs", danhMucService.getAllDanhMuc());
         return "category_list";
     }

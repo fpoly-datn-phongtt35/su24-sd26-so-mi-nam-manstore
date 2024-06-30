@@ -1,12 +1,10 @@
 package com.example.manstore.controller;
 
 
-import com.example.manstore.dto.respone.CoAoResponse;
-import com.example.manstore.dto.respone.ThuongHieuResponse;
-import com.example.manstore.entity.CoAo;
-import com.example.manstore.entity.ThuongHieu;
-import com.example.manstore.repository.CoAoRepository;
-import com.example.manstore.service.Impl.CoAoServiceImpl;
+import com.example.manstore.dto.respone.ChatLieuResponse;
+import com.example.manstore.entity.ChatLieu;
+import com.example.manstore.repository.ChatLieuRepository;
+import com.example.manstore.service.Impl.ChatLieuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,20 +17,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/admin/collar")
-@CrossOrigin("*")
-public class CoAoController {
+@RequestMapping("/admin/material")
+public class ChatLieuController {
 
     @Autowired
-    private CoAoServiceImpl coAoService;
+    private ChatLieuServiceImpl chatLieuService;
 
     @Autowired
-    private CoAoRepository coAoRepository;
+    private ChatLieuRepository chatLieuRepository;
 
     @GetMapping("/getAll")
-    public String getAllCoAo(Model model) {
-        model.addAttribute("coAos", coAoService.getAllCoAo());
-        return "collar_list";
+    public String getAllChatLieu(Model model) {
+        model.addAttribute("chatLieus", chatLieuService.getAllChatLieu());
+        return "material_list";
     }
 
     @GetMapping("/list")
@@ -40,7 +37,7 @@ public class CoAoController {
     public ResponseEntity<?> getAllTH(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<CoAoResponse> pageResult = coAoRepository.findAllCoAo(pageable);
+        Page<ChatLieuResponse> pageResult = chatLieuRepository.findAllChatLieu(pageable);
 
         return new ResponseEntity<>(pageResult, HttpStatus.OK);
     }
@@ -48,68 +45,69 @@ public class CoAoController {
 
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     private ResponseEntity<?> detail(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok().body(coAoService.getCoAoById(id));
+        return ResponseEntity.ok().body(chatLieuService.getChatLieuById(id));
     }
 
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     private String update(Model model) {
-        model.addAttribute("ca", new ThuongHieu());
-        return "admin/collar/collar-create";
+        model.addAttribute("cl", new ChatLieu());
+        return "admin/material/material-create";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String add(Model model, @ModelAttribute("ca") CoAo coAo) {
+    public String add(Model model, @ModelAttribute("cl")ChatLieu chatLieu) {
         boolean isValid = false;
-        for (CoAo ca : coAoService.getAllCoAo()) {
-            if (coAo.getTen().equalsIgnoreCase(ca.getTen())) {
+        for (ChatLieu cl : chatLieuService.getAllChatLieu()) {
+            if (chatLieu.getTen().equalsIgnoreCase(cl.getTen())) {
                 isValid = true;
-                model.addAttribute("errorName", "Tên cổ áo đã tồn tại!");
+                model.addAttribute("errorName", "Tên chất liệu đã tồn tại!");
             }
         }
-        if (coAo.getTen().isBlank()) {
+        if (chatLieu.getTen().isBlank()) {
             isValid = true;
-            model.addAttribute("errorName", "Hãy nhập tên cồ áo!");
+            model.addAttribute("errorName", "Hãy nhập tên chất liệu!");
         }
         //vòng for check trùng mã
-        for (CoAo ca : coAoService.getAllCoAo()) {
-            if (coAo.getMa().equalsIgnoreCase(ca.getMa())) {
+        for (ChatLieu cl : chatLieuService.getAllChatLieu()) {
+            if (chatLieu.getMa().equalsIgnoreCase(cl.getMa())) {
                 isValid = true;
-                model.addAttribute("errorMa", "Mã cổ áo đã tồn tại!");
+                model.addAttribute("errorMa", "Mã chất liệu đã tồn tại!");
             }
         }
-        if (coAo.getMa().isBlank()) {
+
+        if (chatLieu.getMa().isBlank()) {
             isValid = true;
-            model.addAttribute("errorMa", "Hãy nhập mã cổ áo!");
+            model.addAttribute("errorMa", "Hãy nhập mã chất liệu!");
         }
 
-        if (coAo.getMoTa().isEmpty()) {
+        if (chatLieu.getMoTa().isEmpty()) {
             isValid = true;
             model.addAttribute("errorMoTa", "Hãy nhập mô tả!");
-        } else if (coAo.getMoTa().length() > 255) {
+        } else if (chatLieu.getMoTa().length() > 255) {
             isValid = true;
             model.addAttribute("errorMoTa", "Tối đa 255 kí tự!");
         }
 
         if (!isValid) {
-            coAoService.save(coAo);
+            chatLieuService.save(chatLieu);
             model.addAttribute("message", true);
-            return "admin/collar/collar-create";
+            return "admin/material/material-create";
         } else {
             model.addAttribute("message", false);
-            return "admin/collar/collar-create";
+            return "admin/material/material-create";
         }
     }
 
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String update(@PathVariable(value = "id") Integer id, @ModelAttribute("coAos") CoAo coAo, Model model) {
-        CoAo ca = coAoService.getCoAoById(id);
-        ca.setTen(coAo.getTen());
-        ca.setMoTa(coAo.getMoTa());
-        coAoService.update(coAo);
+    public String update(@PathVariable(value = "id") Integer id, @ModelAttribute("chatLieus") ChatLieu chatLieu, Model model) {
+        ChatLieu cl = chatLieuService.getChatLieuById(id);
+        cl.setTen(chatLieu.getTen());
+        cl.setMoTa(chatLieu.getMoTa());
+        chatLieuService.save(chatLieu);
         model.addAttribute("updateSuccess", true);
-        return "admin/collar/collar-list";
+        return "admin/material/material-list";
     }
 
 
@@ -120,15 +118,14 @@ public class CoAoController {
             @PathVariable("keyWord") String keyWord
     ) {
         Pageable pageable = PageRequest.of(pageNumber, 3, Sort.by("id").descending());
-        Page<CoAo> page;
+        Page<ChatLieu> page;
 
         if (keyWord.equalsIgnoreCase("null")) {
-            page = coAoService.pageOfCoAo(pageable);
+            page = chatLieuService.pageOfCL(pageable);
         } else {
-            page = coAoRepository.searchCA(keyWord, pageable);
+            page = chatLieuRepository.searchCL(keyWord, pageable);
         }
 
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
-
 }
