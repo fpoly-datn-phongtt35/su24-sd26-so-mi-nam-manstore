@@ -6,8 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
       integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"
-/>
+      crossorigin="anonymous" referrerpolicy="no-referrer"/>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -35,12 +34,12 @@
         <div class="row">
           <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-              <h4 class="mb-sm-0">Kiểu Dáng</h4>
+              <h4 class="mb-sm-0">Danh Mục</h4>
 
               <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                  <li class="breadcrumb-item"><a href="javascript: void(0);">Kiểu Dáng</a></li>
-                  <li class="breadcrumb-item active"> Danh Sách Kiểu Dáng</li>
+                  <li class="breadcrumb-item"><a href="javascript: void(0);">Danh Mục</a></li>
+                  <li class="breadcrumb-item active">Danh Sách Danh Mục</li>
                 </ol>
               </div>
 
@@ -54,14 +53,11 @@
             <div class="card" id="invoiceList">
               <div class="card-header border-0">
                 <div class="d-flex align-items-center">
-                  <h5 class="card-title mb-0 flex-grow-1">Size</h5>
+                  <h5 class="card-title mb-0 flex-grow-1">Danh Mục</h5>
                   <div class="flex-shrink-0">
                     <div class="d-flex gap-2 flex-wrap">
-                      <button class="btn btn-danger btn-icon" id="remove-actions"
-                              onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i>
-                      </button>
-                      <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/designs/add}">
-                        Thêm Mới</a>
+                      <button class="btn btn-danger btn-icon" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                      <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/category/add}">Thêm Mới</a>
                     </div>
                   </div>
                 </div>
@@ -71,9 +67,7 @@
                   <div class="row g-3">
                     <div class="col-xxl-3 col-sm-12">
                       <div class="search-box">
-                        <input type="text" class="form-control search bg-light border-light"
-                               placeholder="Search..." id="search-input"
-                               onkeyup="searchDesigns()">
+                        <input type="text" class="form-control search bg-light border-light" placeholder="Search..." id="search-input" onkeyup="searchCategory()">
                         <i class="ri-search-line search-icon"></i>
                       </div>
                     </div>
@@ -89,12 +83,12 @@
                       <tr>
                         <th>#</th>
                         <th>Mã</th>
-                        <th>Tên Kiểu Dáng</th>
+                        <th>Tên Danh Mục</th>
                         <th>Mô Tả</th>
                         <th>Action</th>
                       </tr>
                       </thead>
-                      <tbody class="list form-check-all" id="list_Designs">
+                      <tbody class="list form-check-all" id="list_Category">
 
                       </tbody>
                     </table>
@@ -117,30 +111,30 @@
                     <div class="modal-dialog modal-lg">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h4 class="modal-title">Chi Tiết Kiểu Dáng</h4>
+                          <h4 class="modal-title">Chi Tiết Danh Mục</h4>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          <form id="sizeForm" action="" class="my-form" method="post" th:object="${kieuDangs}">
+                          <form id="sizeForm" action="" class="my-form" method="post" th:object="${danhMucs}">
                             <div class="card">
                               <div class="card-body">
                                 <div class="row">
                                   <div class="col-lg-6">
                                     <div class="mb-3">
-                                      <label for="designs-ma-input" class="form-label">Mã</label>
-                                      <input type="text" id="designs-ma-input" class="form-control" required th:name="ma" readonly />
+                                      <label for="category-ma-input" class="form-label">Mã</label>
+                                      <input type="text" id="category-ma-input" class="form-control" required th:name="ma" readonly />
                                     </div>
                                   </div>
                                   <div class="col-lg-6">
                                     <div class="mb-3">
-                                      <label for="designs-name-input" class="form-label">Tên Kiểu Dáng</label>
-                                      <input type="text" id="designs-name-input" class="form-control" required th:name="ten" readonly />
+                                      <label for="category-name-input" class="form-label">Tên Danh Mục</label>
+                                      <input type="text" id="category-name-input" class="form-control" required th:name="ten" readonly />
                                     </div>
                                   </div>
                                   <div class="col-lg-12">
                                     <div class="mb-3">
-                                      <label class="form-label" for="designs-mota-input">Mô Tả</label>
-                                      <textarea type="text" class="form-control" id="designs-mota-input" th:name="moTa" readonly></textarea>
+                                      <label class="form-label" for="category-mota-input">Mô Tả</label>
+                                      <textarea type="text" class="form-control" id="category-mota-input" th:name="moTa" readonly></textarea>
                                     </div>
                                   </div>
                                 </div>
@@ -155,99 +149,75 @@
                       </div>
                     </div>
                   </div>
-
-                <!--end modal -->
-              </div>
-              <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                   aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">Chi Tiết Kiểu Dáng </h4>
-                    </div>
-                    <div class="modal-body">
-                      <form id="update-form" action="" class="my-form" method="post"
-                            th:object="${kieuDangs}">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="row ">
-                              <div class="col-lg-6">
-                                <div class="mb-3">
-                                  <label for="designs-ma1-input"
-                                         class="form-label">Mã Kiểu Dáng</label>
-                                  <input type="text" id="designs-ma1-input"
-                                         class="form-control" required
-                                         th:name="ma" readonly/>
-                                  <span id="errorMa" class="text-danger" style="display:none;"></span>
+                  <!--end modal -->
+                </div>
+                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Chi Tiết Danh Mục</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form id="update-form" action="" class="my-form" method="post" th:object="${danhMucs}">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="row ">
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label for="category-ma1-input" class="form-label">Mã</label>
+                                    <input type="text" id="category-ma1-input" class="form-control" required th:name="ma" readonly/>
+                                    <span id="errorMa" class="text-danger" style="display:none;"></span>
+                                  </div>
                                 </div>
                               </div>
+                              <div class="row ">
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label for="category-name1-input" class="form-label">Tên Danh Mục</label>
+                                    <input type="text" id="category-name1-input" class="form-control" required th:name="ten"/>
+                                    <span id="errorName" class="text-danger" style="display:none;"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- end row -->
+
+                              <div class="row">
+                                <div class="col-lg-6">
+                                  <div class="mb-3">
+                                    <label class="form-label" for="category-mota1-input">Mô Tả</label>
+                                    <textarea type="text" class="form-control" id="category-mota1-input" th:name="moTa"></textarea>
+                                    <span id="errorDescription" class="text-danger" style="display:none;"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--end row-->
+                              <!-- end col -->
                             </div>
-
-                            <div class="row ">
-                              <div class="col-lg-6">
-                                <div class="mb-3">
-                                  <label for="designs-name-input"
-                                         class="form-label">Tên Kiểu Dáng</label>
-                                  <input type="text" id="designs-name1-input"
-                                         class="form-control" required
-                                         th:name="ten"/>
-                                  <span id="errorName" class="text-danger" style="display:none;"></span>
-                                </div>
-                              </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                              <button type="button" id="btnthem" class="btn btn-primary" onclick="showConfirmPopup('update-form')">Lưu</button>
                             </div>
                             <!-- end row -->
-
-                            <div class="row">
-                              <div class="col-lg-6">
-                                <div class="mb-3">
-                                  <label class="form-label"
-                                         for="designs-mota1-input">Mô Tả
-                                  </label>
-                                  <textarea type="text" class="form-control"
-                                            id="designs-mota1-input"
-                                            th:name="moTa"
-                                  ></textarea>
-                                  <span id="errorDescription" class="text-danger" style="display:none;"></span>
-                                </div>
-                              </div>
-                            </div>
-                            <!--end row-->
-                            <!-- end col -->
                           </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">
-                              Đóng
-                            </button>
-                            <button type="button" id="btnthem"
-                                    class="btn btn-primary" onclick="showConfirmPopup('update-form')">
-                              Lưu
-                            </button>
-                          </div>
-                          <!-- end row -->
-                        </div>
-                      </form>
+                        </form>
+                      </div>
                     </div>
                   </div>
+                  <!--end modal -->
                 </div>
-
-                <!--end modal -->
               </div>
             </div>
-
+            <!--end col-->
           </div>
-          <!--end col-->
-        </div>
-        <!--end row-->
-
-      </div><!-- container-fluid -->
+          <!--end row-->
+        </div><!-- container-fluid -->
+      </div>
+      <!-- End Page-content -->
     </div>
-    <!-- End Page-content -->
+    <!-- end main content-->
   </div>
-  <!-- end main content-->
-
-</div>
-</div>
 </div>
 <!-- END layout-wrapper -->
 <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
@@ -264,7 +234,7 @@
 
     async function loadPage(pageNumber = 0, pageSize = 3) {
         try {
-            const response = await fetch(`http://localhost:8080/admin/designs/list?page=${pageNumber}&size=${pageSize}`);
+            const response = await fetch(`http://localhost:8080/admin/category/list?page=${pageNumber}&size=${pageSize}`);
             if (!response.ok) {
                 throw new Error(`Lỗi HTTP! trạng thái: ${response.status}`);
             }
@@ -279,42 +249,43 @@
             let main = '';
             list.forEach((item, index) => {
                 main += `<tr>
-            <td>${index + 1}</td>
-            <td>${item.ma}</td>
-            <td>${item.ten}</td>
-            <td>${item.moTa}</td>
-            <td>
-                <div class="hstack gap-3 flex-warp">
-                    <div onclick="detailDesigns(${item.id})" class="ri-eye-2-line"></div>
-                    <div onclick="editDesigns(${item.id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
-                </div>
-            </td>
-        </tr>`;
+                <td>${index + 1}</td>
+                <td>${item.ma}</td>
+                <td>${item.ten}</td>
+                <td>${item.moTa}</td>
+                <td>
+                    <div class="hstack gap-3 flex-warp">
+                        <div onclick="detailCategory(${item.id})" class="ri-eye-2-line"></div>
+                        <div onclick="editCategory(${item.id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                    </div>
+                </td>
+            </tr>`;
             });
-            document.getElementById("list_Designs").innerHTML = main;
+            document.getElementById("list_Category").innerHTML = main;
 
             // Generate pagination
             let totalPages = result.totalPages;
             let pagination = `<div class="pagination-wrap hstack gap-2">
-        <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${pageNumber - 1 < 0 ? 0 : pageNumber - 1})">
-            <i class="mdi mdi-chevron-left align-middle ms-1"></i>
-        </button>
-        <ul class="pagination">`;
+            <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${pageNumber - 1 < 0 ? 0 : pageNumber - 1})">
+                <i class="mdi mdi-chevron-left align-middle ms-1"></i>
+            </button>
+            <ul class="pagination">`;
 
             for (let i = 0; i < totalPages; i++) {
                 pagination += `<li class="page-item ${i === pageNumber ? 'active' : ''}"><a class="page-link" onclick="loadPage(${i})">${i + 1}</a></li>`;
             }
 
             pagination += `</ul>
-        <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${pageNumber + 1 >= totalPages ? totalPages - 1 : pageNumber + 1})">
-            <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-    </div>`;
+            <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${pageNumber + 1 >= totalPages ? totalPages - 1 : pageNumber + 1})">
+                <i class="mdi mdi-chevron-right align-middle ms-1"></i>
+            </button>
+        </div>`;
 
             document.getElementById("pagination").innerHTML = pagination;
 
         } catch (error) {
             console.error('Lỗi khi tải trang:', error);
-            document.getElementById("list_Designs").innerHTML = `<tr><td colspan="5">Lỗi khi tải dữ liệu: ${error.message}</td></tr>`;
+            document.getElementById("list_Category").innerHTML = `<tr><td colspan="5">Lỗi khi tải dữ liệu: ${error.message}</td></tr>`;
         }
     }
 
@@ -332,26 +303,26 @@
         });
     }
 
-    function detailDesigns(disignId) {
-        fetch(`/admin/designs/detail/${disignId}`)
+    function detailCategory(categoryId) {
+        fetch(`/admin/category/detail/${categoryId}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('designs-ma-input').value = data.ma;
-                document.getElementById('designs-name-input').value = data.ten;
-                document.getElementById('designs-mota-input').value = data.moTa;
+                document.getElementById('category-ma-input').value = data.ma;
+                document.getElementById('category-name-input').value = data.ten;
+                document.getElementById('category-mota-input').value = data.moTa;
                 $('#myModal').modal('show');
             })
             .catch(error => console.error('Error:', error));
     }
 
-    function editDesigns(designsId) {
-        fetch(`/admin/designs/detail/${designsId}`)
+    function editCategory(categoryId) {
+        fetch(`/admin/category/detail/${categoryId}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('designs-ma1-input').value = data.ma;
-                document.getElementById('designs-name1-input').value = data.ten;
-                document.getElementById('designs-mota1-input').value = data.moTa;
-                document.getElementById('update-form').action = `/admin/designs/update/${designsId}`;
+                document.getElementById('category-ma1-input').value = data.ma;
+                document.getElementById('category-name1-input').value = data.ten;
+                document.getElementById('category-mota1-input').value = data.moTa;
+                document.getElementById('update-form').action = `/admin/category/update/${categoryId}`;
                 $('#myModal1').modal('show');
             })
             .catch(error => console.error('Error:', error));
@@ -371,15 +342,13 @@
         document.getElementById('errorDescription').style.display = 'none';
     });
 
-
-
     function validName() {
-        var nameInput = document.getElementById('designs-name1-input');
+        var nameInput = document.getElementById('category-name1-input');
         var errorName = document.getElementById('errorName');
         nameInput.addEventListener('input', function () {
             var name = nameInput.value.trim();
             if (name === '') {
-                errorName.textContent = '* Vui lòng nhập tên kiểu dáng!';
+                errorName.textContent = '* Vui lòng nhập tên danh mục!';
                 errorName.style.display = 'block';
                 hasError = true;
                 document.getElementById("btnthem").disabled = true;
@@ -391,9 +360,8 @@
         });
     }
 
-
     function validMota() {
-        var motaInput = document.getElementById('designs-mota1-input');
+        var motaInput = document.getElementById('category-mota1-input');
         var errorDescription = document.getElementById('errorDescription');
         motaInput.addEventListener('input', function () {
             var moTa = motaInput.value.trim();
@@ -410,7 +378,7 @@
         });
     }
 
-    async function searchDesigns(pageNumber) {
+    async function searchCategory(pageNumber) {
         var keyword = document.getElementById("search-input").value.trim().toLowerCase();
         var url;
         console.log(keyword);
@@ -423,7 +391,7 @@
             return;
         } else {
             var encodedKeyword = encodeURIComponent(keyword);
-            url = "/admin/designs/page/search/" + page + "/" + encodedKeyword;
+            url = "/admin/category/page/search/" + page + "/" + encodedKeyword;
         }
         console.log(url);
 
@@ -458,30 +426,30 @@
                     <td>${list[i].moTa}</td>
                     <td>
                         <div class="hstack gap-3 flex-warp">
-                            <div onclick="detailDesigns(${list[i].id})" class="ri-eye-2-line"></div>
+                            <div onclick="detailCategory(${list[i].id})" class="ri-eye-2-line"></div>
                         </div>
                     </td>
                     <td>
-                        <div onclick="editDesigns(${list[i].id})" class="link-info fs-15">
+                        <div onclick="editCategory(${list[i].id})" class="link-info fs-15">
                             <i class="ri-edit-2-line"></i>
                         </div>
                     </td>
                 </tr>`;
             }
-            document.getElementById("list_Designs").innerHTML = main;
+            document.getElementById("list_Category").innerHTML = main;
 
             if (!isNaN(number) && !isNaN(totalPage)) {
                 var currentPage = `<div class="pagination-wrap hstack gap-2">
-           <button class="page-item pagination-prev" id="pagination-prev" onclick="searchDesigns(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+           <button class="page-item pagination-prev" id="pagination-prev" onclick="searchCategory(${number - 1 < 0 ? totalPage - 1 : number - 1})">
            <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
            <ul class="pagination listjs-pagination mb-0">`;
 
                 for (let i = 0; i < totalPage; i++) {
-                    currentPage += `<li class="${i === number ? 'active' : ''}"><a class="page" onclick="searchDesigns(${i})">${i + 1}</a></li>`;
+                    currentPage += `<li class="${i === number ? 'active' : ''}"><a class="page" onclick="searchCategory(${i})">${i + 1}</a></li>`;
                 }
 
                 currentPage += `</ul>
-           <button class="page-item pagination-next" id="pagination-next" onclick="searchDesigns(${number + 1 >= totalPage ? 0 : number + 1})">
+           <button class="page-item pagination-next" id="pagination-next" onclick="searchCategory(${number + 1 >= totalPage ? 0 : number + 1})">
            <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
           </div>`;
                 document.getElementById("pagination").innerHTML = currentPage;
@@ -494,6 +462,10 @@
             alert('Có lỗi xảy ra trong quá trình tìm kiếm. Vui lòng thử lại sau.');
         }
     }
+
+
+
+
 
 </script>
 <script th:if="${updateSuccess == true}">

@@ -13,5 +13,7 @@ public interface KieuDangService {
 
     KieuDang save(KieuDang kieuDang);
 
+    void update(KieuDang kieuDang);
+
     Page<KieuDang> pageOfKieuDang(Pageable pageable);
 }

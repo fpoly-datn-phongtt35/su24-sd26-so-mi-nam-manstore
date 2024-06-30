@@ -47,6 +47,22 @@ public class AdminUI {
         return "admin/designs/designs-list";  // Giao diện danh sách kiểu dáng
     }
 
+    @RequestMapping("/shirtTail")
+    public String shirtTailList() {
+        return "admin/shirtTail/shirtTail-list";  // Giao diện danh sách đuôi áo
+    }
+
+    @RequestMapping("/category")
+    public String categoryList() {
+        return "admin/category/category-list";  // Giao diện danh sách danh mục
+    }
+
+    @RequestMapping("/collar")
+    public String collarList() {
+        return "admin/collar/collar-list";  // Giao diện danh sách cổ áo
+    }
+
+
 //    @RequestMapping("/account")
 //    public String account() {
 //        return "admin/profile/account";

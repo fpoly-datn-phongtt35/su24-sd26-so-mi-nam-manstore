@@ -34,6 +34,11 @@ public class KieuDangServiceImpl implements KieuDangService {
     }
 
     @Override
+    public void update(KieuDang kieuDang) {
+        kieuDangRepository.save(kieuDang);
+    }
+
+    @Override
     public Page<KieuDang> pageOfKieuDang(Pageable pageable) {
         return kieuDangRepository.findAll(pageable);
     }
