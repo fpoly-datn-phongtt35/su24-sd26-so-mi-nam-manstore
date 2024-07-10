@@ -59,11 +59,6 @@ public class SanPham {
     private DanhMuc idDanhMuc;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idHinhAnh", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
-    private HinhAnh idHinhAnh;
-
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idThuongHieu", nullable = false, referencedColumnName = "id")
@@ -99,5 +94,8 @@ public class SanPham {
 
     @OneToMany(mappedBy = "idSanPham", fetch = FetchType.LAZY)
     private List<ChiTietSanPham> chiTietSanPhams;
+
+    @Column(name = "DuongDan")
+    private String DuongDan;
 
 }

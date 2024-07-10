@@ -2,165 +2,243 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" data-layout="vertical" data-topbar="light" data-sidebar="light"
       data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-body-image="none">
 <head th:replace="admin/fragments/head::head">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
 <!-- Begin page -->
 <div id="layout-wrapper">
-    <div th:replace="admin/fragments/header::header"></div>
-    <!-- ========== App Menu ========== -->
-    <div th:replace="admin/fragments/sidebar::sidebar"></div>
-    <!-- Left Sidebar End -->
-    <!-- ============================================================== -->
-    <!-- Start right Content here -->
-    <!-- ============================================================== -->
-    <div class="main-content">
+  <div th:replace="admin/fragments/header::header"></div>
+  <!-- ========== App Menu ========== -->
+  <div th:replace="admin/fragments/sidebar::sidebar"></div>
+  <!-- Left Sidebar End -->
+  <!-- ============================================================== -->
+  <!-- Start right Content here -->
+  <!-- ============================================================== -->
+  <div class="main-content">
 
-        <div class="page-content">
-            <div class="container-fluid">
+    <div class="page-content">
+      <div class="container-fluid">
 
-                <!-- start page title -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Thêm Sản Phẩm</h4>
+        <!-- start page title -->
+        <div class="row">
+          <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+              <h4 class="mb-sm-0">Thêm Sản Phẩm</h4>
 
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Sản Phẩm</a></li>
-                                    <li class="breadcrumb-item active">Thêm Sản Phẩm</li>
-                                </ol>
-                            </div>
+              <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                  <li class="breadcrumb-item"><a href="javascript: void(0);">Sản Phẩm</a></li>
+                  <li class="breadcrumb-item active">Thêm Sản Phẩm</li>
+                </ol>
+              </div>
 
-                        </div>
-                    </div>
-                </div>
-                <!-- end page title -->
-
-                <form id="createproduct-form" autocomplete="off" class="needs-validation">
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-8">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row ">
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="product-name-input">Tên Sản Phẩm <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="product-name-input"
-                                                       placeholder="Nhập Tên Sản Phẩm"
-                                                       onkeyup="validName()">
-                                            </div>
-                                            <span id="errorName" class="text-danger fw-bold"></span>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="md-3">
-                                                <label class="form-label">Thương Hiệu <span class="text-danger">*</span></label>
-                                                <select class="form-select mb-3" aria-label=".form-select-lg example"
-                                                        id="product-brand-input"
-                                                        onchange="validBrand()">
-                                                </select>
-                                            </div>
-                                            <span id="errorBrand" class="text-danger fw-bold"></span>
-                                        </div>
-                                    </div>
-                                    <!-- end row -->
-
-                                    <div class="row" style="padding-top: 10px;">
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Danh Mục <span
-                                                        class="text-danger">*</span></label>
-                                                <select class="form-select mb-3" aria-label=".form-select-lg example"
-                                                        id="product-collections-input"
-                                                        onchange="validCollections()">
-                                                    <option selected value="-1">Open this select menu</option>
-                                                    <option value="0">Quần</option>
-                                                    <option value="1">Áo</option>
-                                                </select>
-                                                <span id="errorCollections" class="text-danger fw-bold"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Trạng Thái </label>
-                                                <div class="form-check mb-3">
-                                                    <input class="form-check-input" type="radio" id="radioStatus1"
-                                                           value="0" name="trangThai" checked>
-                                                    <label class="form-check-label" for="radioStatus1">
-                                                        Chưa Mở Bán
-                                                    </label>
-                                                    <br>
-                                                    <input class="form-check-input" type="radio" id="radioStatus2"
-                                                           value="1" name="trangThai">
-                                                    <label class="form-check-label" for="radioStatus2">
-                                                        Đang Mở Bán
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end row-->
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Nhà Cung Cấp <span
-                                                        class="text-danger">*</span></label>
-                                                <select class="form-select mb-3" aria-label=".form-select-lg example"
-                                                        id="product-provider-input"
-                                                        onchange="validProvider()">
-                                                </select>
-                                                <span id="errorProvider" class="text-danger fw-bold"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="product-price-input">Giá <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="input-group has-validation mb-3">
-                                                    <span class="input-group-text" id="product-price-addon">VND</span>
-                                                    <input type="text" class="form-control" id="product-price-input"
-                                                           placeholder="Nhập Giá" aria-label="Price"
-                                                           aria-describedby="product-price-addon"
-                                                           required onkeyup="validPrice()"/>
-                                                </div>
-                                                <span id="errorPrice" class="text-danger fw-bold"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="product-type-input">Môn Thể Thao <span
-                                                        class="text-danger">*</span></label>
-                                                <select class="form-select mb-3" aria-label=".form-select-lg example"
-                                                        id="product-type-input"
-                                                        onchange="validType()">
-                                                </select>
-                                                <span id="errorType" class="text-danger fw-bold"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end card -->
-                            <div class="text-end mb-3">
-                                <a type="button" class="btn btn-danger w-sm" href="/admin/product/product_list"> Quay
-                                    Lại
-                                </a>
-                                <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm Mới
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end row -->
-                </form>
             </div>
-            <!-- End Page-content -->
+          </div>
         </div>
-        <!-- end main content-->
+        <!-- end page title -->
+
+        <form id="createproduct-form" method="post" autocomplete="off" class="needs-validation"
+              th:action="@{/admin/product/save_product}" th:object="${sp}">
+          <div class="row">
+            <div class="col-xl-12 col-lg-8">
+              <div class="card">
+                <div class="card-body">
+                  <!-- Row 1: Tên Sản Phẩm -->
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="mb-3">
+                        <label class="form-label" for="product-name-input">Tên Sản Phẩm <span class="text-danger"
+                                                                                              id="required-name"
+                                                                                              style="display:none;">*</span></label>
+                        <input type="text" class="form-control" id="product-name-input" placeholder="Nhập Tên Sản Phẩm"
+                               onkeyup="validName()">
+                        <span id="errorName" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="mb-3">
+                        <label class="form-label" for="product-image-input">Hình Ảnh <span class="text-danger"
+                                                                                           id="required-image"
+                                                                                           style="display:none;">*</span></label>
+                        <input type="file" class="form-control" id="product-image-input" accept="image/*" multiple
+                               value="" onchange="previewImage(event)" onkeyup="validImage()">
+                        <div id="image-preview-container" class="d-flex g-2 mt-2"></div>
+                        <span id="errorImage" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row 2: Thương Hiệu và Danh Mục -->
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="mb-3">
+                        <label class="form-label">Thương Hiệu <span class="text-danger" id="required-trademark"
+                                                                    style="display:none;">*</span></label>
+                        <select class="form-select mb-3" aria-label=".form-select-lg example"
+                                id="product-trademark-input" onchange="validTrademark()">
+                        </select>
+                        <span id="errorTrademark" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="mb-3">
+                        <label class="form-label">Danh Mục <span class="text-danger" id="required-category"
+                                                                 style="display:none;">*</span></label>
+                        <select class="form-select mb-3" aria-label=".form-select-lg example"
+                                id="product-category-input" onchange="validCategory()">
+                          <option selected value="-1">Open this select menu</option>
+                        </select>
+                        <span id="errorCategory" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row 3: Loại Cổ Áo và Giá -->
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label">Loại Cổ Áo <span class="text-danger" id="required-collar"
+                                                                      style="display:none;">*</span></label>
+                        <select class="form-select mb-3" aria-label=".form-select-lg example" id="product-collar-input"
+                                onchange="validCollar()">
+                        </select>
+                        <span id="errorCollar" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label" for="product-price-input">Đơn Giá<span class="text-danger"
+                                                                                         id="required-price"
+                                                                                         style="display:none;">*</span></label>
+                        <div class="input-group has-validation mb-3">
+                          <span class="input-group-text" id="product-price-addon">VND</span>
+                          <input type="number" class="form-control" id="product-price-input" placeholder="Nhập Giá"
+                                 aria-label="Price" aria-describedby="product-price-addon" required
+                                 onkeyup="validPrice()"/>
+                        </div>
+                        <span id="errorPrice" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row 4: Chất Liệu, Kiểu Dáng, Đuôi Áo -->
+                  <div class="row">
+                    <div class="col-lg-4 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label">Chất Liệu <span class="text-danger" id="required-material"
+                                                                  style="display:none;">*</span></label>
+                        <select class="form-select mb-3" aria-label=".form-select-lg example"
+                                id="product-material-input" onchange="validMaterial()">
+                        </select>
+                        <span id="errorMaterial" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label">Kiểu Dáng <span class="text-danger" id="required-designs"
+                                                                  style="display:none;">*</span></label>
+                        <select class="form-select mb-3" aria-label=".form-select-lg example" id="product-designs-input"
+                                onchange="validDesigns()">
+                        </select>
+                        <span id="errorDesigns" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label">Đuôi Áo <span class="text-danger" id="required-shirtTail"
+                                                                style="display:none;">*</span></label>
+                        <select class="form-select mb-3" aria-label=".form-select-lg example"
+                                id="product-shirtTail-input" onchange="validShirtTail()">
+                        </select>
+                        <span id="errorShirtTail" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row 5: Số Lượng, Ngày Tạo -->
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label" for="product-quantity-input">Số Lượng <span class="text-danger"
+                                                                                              id="required-quantity"
+                                                                                              style="display:none;">*</span></label>
+                        <input type="number" class="form-control" id="product-quantity-input"
+                               placeholder="Nhập Số Lượng" onkeyup="validQuantity()">
+                        <span id="errorQuantity" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label" for="product-createDate-input">Ngày Tạo <span class="text-danger"
+                                                                                                id="required-createDate"
+                                                                                                style="display:none;">*</span></label>
+                        <input type="date" class="form-control" id="product-createDate-input" readonly>
+                        <span id="errorCreateDate" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row 6: Giá Sale, Mô Tả -->
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label" for="product-salePrice-input">Giá Sale <span class="text-danger"
+                                                                                               id="required-salePrice"
+                                                                                               style="display:none;">*</span></label>
+                        <div class="input-group has-validation mb-3">
+                          <span class="input-group-text" id="product-salePrice-addon">VND</span>
+                          <input type="number" class="form-control" id="product-salePrice-input"
+                                 placeholder="Nhập Giá Sale" aria-label="Sale Price"
+                                 aria-describedby="product-salePrice-addon" onkeyup="validSalePrice()"/>
+                        </div>
+                        <span id="errorSalePrice" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label" for="product-description-input">Mô Tả <span class="text-danger"
+                                                                                              id="required-description"
+                                                                                              style="display:none;">*</span></label>
+                        <textarea class="form-control" id="product-description-input" placeholder="Nhập Mô Tả" rows="3"
+                                  onkeyup="validDescription()"></textarea>
+                        <span id="errorDescription" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Row 7: Trạng Thái -->
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="mb-3">
+                        <label class="form-label">Trạng Thái </label>
+                        <div class="form-check mb-3">
+                          <input class="form-check-input" type="radio" id="radioStatus1" value="1" name="trangThai"
+                                 checked>
+                          <label class="form-check-label" for="radioStatus1">
+                            Đang mở bán
+                          </label>
+                          <br>
+                          <input class="form-check-input" type="radio" id="radioStatus2" value="0" name="trangThai">
+                          <label class="form-check-label" for="radioStatus2">
+                            Chưa mở bán
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end card -->
+              <div class="text-end mb-3">
+                <a type="button" class="btn btn-danger w-sm" href="/admin/product/product_list"> Quay Lại</a>
+                <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm Mới</button>
+              </div>
+            </div>
+          </div>
+          <!-- end row -->
+        </form>
+
+      </div>
+      <!-- End Page-content -->
     </div>
-    <!-- END layout-wrapper -->
+    <!-- end main content-->
+  </div>
+  <!-- END layout-wrapper -->
 </div>
 <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
 <div th:replace="admin/fragments/script::script"></div>
@@ -171,8 +249,21 @@
 
     window.onload = function () {
         findDataInSelect();
-        findType();
+
+
+        const today = new Date();
+        const formattedDate = today.toISOString().substr(0, 10);
+        console.log('Ngày hiện tại:', formattedDate); // Kiểm tra giá trị của formattedDate
+
+        // Kiểm tra xem phần tử có tồn tại không
+        const dateInput = document.getElementById('product-createDate-input');
+        if (dateInput) {
+            dateInput.value = formattedDate;
+        } else {
+            console.error('Phần tử product-createDate-input không tồn tại');
+        }
     }
+
 
     function formatMoney(money) {
         const VND = new Intl.NumberFormat('vi-VN', {
@@ -190,97 +281,201 @@
             popup: "colored-toast",
         },
         showConfirmButton: false,
-        timer: 1500,
+        timer: 2000,
         timerProgressBar: true,
     });
 
-    async function findType() {
-        let url = '/api/admin/sport/find-all';
-
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-
-        const data = await response.json();
-
-        console.log(data);
-
-        var sport = '<option selected value="-1">Open this select menu</option>';
-
-        for (let i = 0; i < data.length; i++) {
-            sport += `
-                <option value="${data[i].id}">${data[i].ten}</option>
-            `;
-        }
-
-        document.getElementById('product-type-input').innerHTML = sport;
-    }
-
     async function findDataInSelect() {
-        let urlProvider = '/api/admin/supplier/find-all';
-        let urlBrand = '/api/admin/trademark/find-all';
+        let urlCollar = '/admin/product/collar/getAll';
+        let urlTrademark = '/admin/product/trademark/getAll';
+        let urlCategory = '/admin/product/category/getAll';
+        let urlMaterial = '/admin/product/material/getAll';
+        let urlDesign = '/admin/product/designs/getAll';
+        let urlShirtTail = '/admin/product/shirtTail/getAll';
 
-        const responseProvider = await fetch(urlProvider, {
+        const responseCollar = await fetch(urlCollar, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         })
-        const listProvider = await responseProvider.json();
+        const listCollar = await responseCollar.json();
 
-        const responseBrand = await fetch(urlBrand, {
+        const responseTrademark = await fetch(urlTrademark, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         })
-        const listBrand = await responseBrand.json();
-        console.log(listBrand);
+        const listTrademark = await responseTrademark.json();
+        console.log(listTrademark);
 
-        let brand = `<option selected value="-1">Open this select menu</option>`;
+        const responseCategory = await fetch(urlCategory, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        const listCategory = await responseCategory.json();
+        console.log(listCategory);
 
-        let provider = `<option selected value="-1">Open this select menu</option>`;
+        const responseMaterial = await fetch(urlMaterial, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        const listMaterial = await responseMaterial.json();
+        console.log(listMaterial);
 
-        for (let i = 0; i < listBrand.length; i++) {
-            brand += `
-                   <option value="${listBrand[i].id}">${listBrand[i].ten}</option>
+        const responseDesigns = await fetch(urlDesign, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        const listDesign = await responseDesigns.json();
+        console.log(listDesign);
+
+        const responseShirtTail = await fetch(urlShirtTail, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        const listShirtTal = await responseShirtTail.json();
+        console.log(listShirtTal);
+
+        let trademark = `<option selected value="-1">Chọn Thương Hiệu</option>`;
+
+        let collar = `<option selected value="-1">Chọn Loại Cổ Áo</option>`;
+
+        let category = `<option selected value="-1">Chọn Danh Mục</option>`;
+
+        let material = `<option selected value="-1">Chọn Chất Liệu</option>`;
+
+        let design = `<option selected value="-1">Chọn Kiểu Dáng</option>`;
+
+        let shirtTail = `<option selected value="-1">Chọn Kiểu Đuôi Áo</option>`;
+
+        for (let i = 0; i < listTrademark.length; i++) {
+            trademark += `
+                   <option value="${listTrademark[i].id}">${listTrademark[i].ten}</option>
             `;
         }
-        for (let i = 0; i < listProvider.length; i++) {
-            provider += `
-                   <option value="${listProvider[i].id}">${listProvider[i].ten}</option>
+        for (let i = 0; i < listCollar.length; i++) {
+            collar += `
+                   <option value="${listCollar[i].id}">${listCollar[i].ten}</option>
             `;
         }
 
-        document.getElementById('product-brand-input').innerHTML = brand;
-        document.getElementById('product-provider-input').innerHTML = provider;
+        for (let i = 0; i < listCategory.length; i++) {
+            category += `
+                   <option value="${listCategory[i].id}">${listCategory[i].ten}</option>
+            `;
+        }
+
+        for (let i = 0; i < listMaterial.length; i++) {
+            material += `
+                   <option value="${listMaterial[i].id}">${listMaterial[i].ten}</option>
+            `;
+        }
+
+        for (let i = 0; i < listDesign.length; i++) {
+            design += `
+                   <option value="${listDesign[i].id}">${listDesign[i].ten}</option>
+            `;
+        }
+
+        for (let i = 0; i < listShirtTal.length; i++) {
+            shirtTail += `
+                   <option value="${listShirtTal[i].id}">${listShirtTal[i].ten}</option>
+            `;
+        }
+
+        document.getElementById('product-trademark-input').innerHTML = trademark;
+        document.getElementById('product-collar-input').innerHTML = collar;
+        document.getElementById('product-category-input').innerHTML = category;
+        document.getElementById('product-material-input').innerHTML = material;
+        document.getElementById('product-designs-input').innerHTML = design;
+        document.getElementById('product-shirtTail-input').innerHTML = shirtTail;
     }
+
+
+    function previewImage(event) {
+        var files = event.target.files;
+        var container = document.getElementById('image-preview-container');
+
+        // Xóa các ảnh cũ
+        container.innerHTML = '';
+
+        for (var i = 0; i < files.length; i++) {
+            var reader = new FileReader();
+
+            reader.onload = (function (file) {
+                return function (e) {
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.display = 'flex';
+                    img.style.gap = '10px';
+                    img.style.width = '100px'; // Điều chỉnh kích thước ảnh nếu cần
+                    container.appendChild(img);
+                };
+            })(files[i]);
+
+            reader.readAsDataURL(files[i]);
+        }
+    }
+
 
     function getDataFromForm() {
 
-        var tenSP = document.getElementById('product-name-input').value;
-        var thieu = document.getElementById('product-brand-input').value;
-        var danhMuc = document.getElementById('product-collections-input').value;
-        var theLoai = document.getElementById('product-type-input').value;
+        var ten = document.getElementById('product-name-input').value;
+        var thuongHieu = document.getElementById('product-trademark-input').value;
+        var danhMuc = document.getElementById('product-category-input').value;
+        var chatLieu = document.getElementById('product-material-input').value;
+        var kieuDang = document.getElementById('product-designs-input').value;
+        var duoiAo = document.getElementById('product-shirtTail-input').value;
         var trangThai = document.querySelector('input[name="trangThai"]:checked').value;
-        var ncc = document.getElementById('product-provider-input').value;
-        var donGia = document.getElementById('product-price-input').value;
-
+        var coAo = document.getElementById('product-collar-input').value;
+        var gia = document.getElementById('product-price-input').value;
+        var soLuong = document.getElementById('product-quantity-input').value;
+        var ngayTao = document.getElementById('product-createDate-input').value;
+        var giaSale = document.getElementById('product-salePrice-input').value;
+        var moTa = document.getElementById('product-description-input').value;
+        var hinhAnh = [];
+        for (var i = 0; i < document.getElementById('product-image-input').files.length; i++) {
+            hinhAnh.push(document.getElementById('product-image-input').files[i].name);
+        }
+        // ép kiểu string cho hình ảnh
+        hinhAnh = hinhAnh.toString();
         var formData = {
-            tenSP: tenSP,
-            thieu: thieu,
+            ten: ten,
+            thuongHieu: thuongHieu,
             danhMuc: danhMuc,
+            chatLieu: chatLieu,
+            kieuDang: kieuDang,
+            duoiAo: duoiAo,
             trangThai: trangThai,
-            theLoai: theLoai,
-            ncc: ncc,
-            donGia: donGia,
+            coAo: coAo,
+            gia: gia,
+            soLuong: soLuong,
+            ngayTao: ngayTao,
+            giaSale: giaSale,
+            moTa: moTa,
+            duongDan: hinhAnh
         };
 
         return formData;
+
+
     }
+
+    // nếu submit form thi in ra data
+    document.getElementById('createproduct-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        console.log(getDataFromForm());
+    });
 
     function showConfirmPopup() {
 
@@ -292,30 +487,102 @@
 
         console.log(data);
 
-        if (data.tenSP === '') {
+        if (data.ten === '') {
+            document.getElementById('required-name').style.display = 'inline';
             document.getElementById('errorName').innerText = 'Vui lòng điền tên!';
             isValid += 1;
+        } else {
+            document.getElementById('required-name').style.display = 'none';
         }
-        if (data.thieu === '-1') {
-            document.getElementById('errorBrand').innerText = 'Vui lòng chọn thương hiệu!';
+
+        if (data.thuongHieu === '-1') {
+            document.getElementById('required-trademark').style.display = 'inline';
+            document.getElementById('errorTrademark').innerText = 'Vui lòng chọn thương hiệu!';
             isValid += 1;
+        } else {
+            document.getElementById('required-trademark').style.display = 'none';
         }
-        if (data.ncc === '-1') {
-            document.getElementById('errorProvider').innerText = 'Vui lòng chọn nhà cung cấp!';
+
+        if (data.chatLieu === '-1') {
+            document.getElementById('required-material').style.display = 'inline';
+            document.getElementById('errorMaterial').innerText = 'Vui lòng chọn chất liệu!';
             isValid += 1;
+        } else {
+            document.getElementById('required-material').style.display = 'none';
         }
-        if (data.theLoai === '-1') {
-            document.getElementById('errorType').innerText = 'Vui lòng chọn thể loại!';
+
+        if (data.kieuDang === '-1') {
+            document.getElementById('required-designs').style.display = 'inline';
+            document.getElementById('errorDesigns').innerText = 'Vui lòng chọn kiểu dáng!';
             isValid += 1;
+        } else {
+            document.getElementById('required-designs').style.display = 'none';
         }
+
+        if (data.duoiAo === '-1') {
+            document.getElementById('required-shirtTail').style.display = 'inline';
+            document.getElementById('errorShirtTail').innerText = 'Vui lòng chọn đuôi áo!';
+            isValid += 1;
+        } else {
+            document.getElementById('required-shirtTail').style.display = 'none';
+        }
+
+        if (data.coAo === '-1') {
+            document.getElementById('required-collar').style.display = 'inline';
+            document.getElementById('errorCollar').innerText = 'Vui lòng chọn loại cổ áo!';
+            isValid += 1;
+        } else {
+            document.getElementById('required-collar').style.display = 'none';
+        }
+
         if (data.danhMuc === '-1') {
-            document.getElementById('errorCollections').innerText = 'Vui lòng chọn danh mục!';
+            document.getElementById('required-category').style.display = 'inline';
+            document.getElementById('errorCategory').innerText = 'Vui lòng chọn danh mục!';
             isValid += 1;
+        } else {
+            document.getElementById('required-category').style.display = 'none';
         }
-        if (data.donGia === '') {
-            document.getElementById('errorPrice').innerText = 'Vui lòng điền đơn giá!';
+
+        if (data.gia === '' || data.donGia < 70000) {
+            document.getElementById('required-price').style.display = 'inline';
+            document.getElementById('errorPrice').innerText = 'Vui lòng điền đơn giá và phải >= 70.000 VND!';
             isValid += 1;
+        } else {
+            document.getElementById('required-price').style.display = 'none';
         }
+
+        if (data.soLuong === '') {
+            document.getElementById('required-quantity').style.display = 'inline';
+            document.getElementById('errorQuantity').innerText = 'Vui lòng điền số lượng!';
+            isValid += 1;
+        } else {
+            document.getElementById('required-quantity').style.display = 'none';
+        }
+
+        if (data.giaSale >= data.donGia) {
+            document.getElementById('required-salePrice').style.display = 'inline';
+            document.getElementById('errorSalePrice').innerText = 'Giá sale phải nhỏ hơn đơn giá!';
+            isValid += 1;
+        } else {
+            document.getElementById('required-salePrice').style.display = 'none';
+        }
+
+        // if (data.moTa === '') {
+        //     document.getElementById('required-description').style.display = 'inline';
+        //     document.getElementById('errorDescription').innerText = 'Vui lòng điền mô tả!';
+        //     isValid += 1;
+        // } else {
+        //     document.getElementById('required-description').style.display = 'none';
+        // }
+
+        if (data.hinhAnh === '') {
+            document.getElementById('required-image').style.display = 'inline';
+            document.getElementById('errorImage').innerText = 'Vui lòng chọn hình ảnh!';
+            isValid += 1;
+        } else {
+            document.getElementById('required-image').style.display = 'none';
+        }
+
         console.log(isValid);
         if (isValid === 0) {
             swal.fire({
@@ -326,7 +593,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/api/admin/product/save_product',
+                        url: '/admin/product/save_product',
                         method: 'POST',
                         contentType: 'application/json',
                         headers: {
@@ -342,16 +609,17 @@
                                     confirmButtonText: "Ok",
                                 }).then(() => {
                                     window.location.href = '/admin/product/product_list';
+
                                 });
                             } else {
                                 for (i = 0; i < response.length; i++) {
                                     if (response[i].statusText === 'failure') {
                                         if (response[i].message === 'errorFormatName') {
-                                            if (regex.test(data.tenSP)) {
+                                            if (regex.test(data.ten)) {
                                                 (async () => {
                                                     await Toast.fire({
                                                         icon: "error",
-                                                        title: "Tên tối thiếu 10 kí tự,tối đa 50 kí tự!",
+                                                        title: "Tên tối thiếu 4 kí tự,tối đa 50 kí tự!",
                                                     });
                                                 })();
                                             } else {
@@ -359,10 +627,6 @@
                                                     await Toast.fire({
                                                         icon: "error",
                                                         title: "Tên phải bắt đầu bằng chữ!",
-                                                    });
-                                                    await Toast.fire({
-                                                        icon: "error",
-                                                        title: "Tên tối thiếu 10 kí tự,tối đa 50 kí tự!",
                                                     });
                                                 })();
                                             }
@@ -383,11 +647,11 @@
                                                 });
                                             })();
                                         }
-                                        if (response[i].message === 'errorPriceMoreThan') {
+                                        if (response[i].message === 'errorFormatSalePrice') {
                                             (async () => {
                                                 await Toast.fire({
                                                     icon: "error",
-                                                    title: "Đơn giá không quá 5.000.000VND!",
+                                                    title: "Giá Sale phải nhỏ hơn đơn giá!",
                                                 });
                                             })();
                                         }
@@ -433,51 +697,129 @@
         });
     }
 
-    function validType() {
-        var typeInput = document.getElementById('product-type-input');
-        var errorType = document.getElementById('errorType');
+    function validCategory() {
+        var categoryInput = document.getElementById('product-category-input');
+        var errorCategory = document.getElementById('errorCategory');
 
-        if (typeInput.value !== "-1") {
-            errorType.style.display = 'none';
+        if (categoryInput.value !== "-1") {
+            errorCategory.style.display = 'none';
         } else {
-            errorType.style.display = 'block';
+            errorCategory.style.display = 'block';
         }
 
     }
 
-    function validCollections() {
-        var collectionsInput = document.getElementById('product-collections-input');
-        var errorCollections = document.getElementById('errorCollections');
+    function validCollar() {
+        var collarInput = document.getElementById('product-collar-input');
+        var errorCollar = document.getElementById('errorCollar');
 
-        if (collectionsInput.value !== "-1") {
-            errorCollections.style.display = 'none';
+        if (collarInput.value !== "-1") {
+            errorCollar.style.display = 'none';
         } else {
-            errorCollections.style.display = 'block';
-        }
-
-    }
-
-    function validProvider() {
-        var providerInput = document.getElementById('product-provider-input');
-        var errorProvider = document.getElementById('errorProvider');
-
-        if (providerInput.value !== "-1") {
-            errorProvider.style.display = 'none';
-        } else {
-            errorProvider.style.display = 'block';
+            errorCollar.style.display = 'block';
         }
     }
 
-    function validBrand() {
-        var brandInput = document.getElementById('product-brand-input');
-        var errorBrand = document.getElementById('errorBrand');
+    function validTrademark() {
+        var trademarkInput = document.getElementById('product-trademark-input');
+        var errorTrademark = document.getElementById('errorTrademark');
 
-        if (brandInput.value !== "-1") {
-            errorBrand.style.display = 'none';
+        if (trademarkInput.value !== "-1") {
+            errorTrademark.style.display = 'none';
         } else {
-            errorBrand.style.display = 'block';
+            errorTrademark.style.display = 'block';
         }
     }
+
+    function validMaterial() {
+        const materialInput = document.getElementById('product-material-input');
+        const errorMaterial = document.getElementById('errorMaterial');
+        if (materialInput.value === "-1") {
+            errorMaterial.textContent = "Vui lòng chọn chất liệu.";
+            return false;
+        } else {
+            errorMaterial.textContent = "";
+            return true;
+        }
+    }
+
+    function validDesigns() {
+        const designsInput = document.getElementById('product-designs-input');
+        const errorDesigns = document.getElementById('errorDesigns');
+        if (designsInput.value === "-1") {
+            errorDesigns.textContent = "Vui lòng chọn kiểu dáng.";
+            return false;
+        } else {
+            errorDesigns.textContent = "";
+            return true;
+        }
+    }
+
+    function validShirtTail() {
+        const shirtTailInput = document.getElementById('product-shirtTail-input');
+        const errorShirtTail = document.getElementById('errorShirtTail');
+        if (shirtTailInput.value === "-1") {
+            errorShirtTail.textContent = "Vui lòng chọn đuôi áo.";
+            return false;
+        } else {
+            errorShirtTail.textContent = "";
+            return true;
+        }
+    }
+
+    function validQuantity() {
+        var quantityInput = document.getElementById('product-quantity-input');
+        var errorQuantity = document.getElementById('errorQuantity');
+
+        quantityInput.addEventListener('input', function () {
+            if (quantityInput.value.trim() !== '') {
+                errorQuantity.style.display = 'none';
+            } else {
+                errorQuantity.style.display = 'block';
+            }
+        });
+    }
+
+    function validSalePrice() {
+        var salePriceInput = document.getElementById('product-salePrice-input');
+        var errorSalePrice = document.getElementById('errorSalePrice');
+
+        salePriceInput.addEventListener('input', function () {
+            if (salePriceInput.value.trim() !== '') {
+                errorSalePrice.style.display = 'none';
+            } else {
+                errorSalePrice.style.display = 'block';
+            }
+        });
+    }
+
+    function validDescription() {
+        var descriptionInput = document.getElementById('product-description-input');
+        var errorDescription = document.getElementById('errorDescription');
+
+        descriptionInput.addEventListener('input', function () {
+            if (descriptionInput.value.trim() !== '') {
+                errorDescription.style.display = 'none';
+            } else {
+                errorDescription.style.display = 'block';
+            }
+        });
+    }
+
+    //valid duong dan
+    function validImage() {
+        var imageInput = document.getElementById('product-image-input');
+        var errorImage = document.getElementById('errorImage');
+
+        imageInput.addEventListener('input', function () {
+            if (imageInput.value.trim() !== '') {
+                errorImage.style.display = 'none';
+            } else {
+                errorImage.style.display = 'block';
+            }
+        });
+    }
+
 
 </script>
 <script th:if="${message == true}">
