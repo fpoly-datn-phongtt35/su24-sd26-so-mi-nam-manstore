@@ -85,16 +85,18 @@
                                         <br disabled>
                                         <label class="lb-form">Giá Trị Đơn Hàng Áp Dụng <span
                                                 class="text-danger fw-bold">*</span></label>
-                                        <input th:field="*{giaTriDonHang}" type="text" class="form-control">
+                                        <input th:field="*{giaTriDonHang}" type="number" class="form-control">
                                         <span class="text-danger"
                                               th:text="${errorBill}" id="error-bill"></span>
                                         <br disabled>
                                         <br disabled="true">
                                         <div class="d-flex justify-content-end align-items-end">
                                             <button type="button" class="btn btn-success w-25"
-                                                    onclick="showConfirmPopup()">Thêm mới</button>
+                                                    onclick="showConfirmPopup()">Thêm mới
+                                            </button>
                                             <span style="padding: 0 8px;" disabled></span>
-                                            <button th:href="@{/admin/promotion}" class="btn btn-danger w-25">Trở lại</button>
+                                            <button th:href="@{/admin/promotion}" class="btn btn-danger w-25">Trở lại
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="col-sm-1"></div>
@@ -111,12 +113,11 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.10.5/sweetalert2.all.min.js"></script>
 <script th:inline="javascript">
-    let startDate = [[ ${startDate} ]]* null;
-    let endDate = [[ ${endDate} ]]* null;
+    let startDate = [[ ${startDate}]] * null;
+    let endDate = [[ ${endDate}]] * null;
 
     document.querySelector('.start-date').value = startDate;
     document.querySelector('.end-date').value = endDate;
-
 
 
 </script>
@@ -143,9 +144,9 @@
         }).then((result) => {
             if (result.isConfirmed) {
 
-                    document.getElementById('create-form').submit();
-                }
-            });
+                document.getElementById('create-form').submit();
+            }
+        });
     }
 </script>
 
@@ -157,7 +158,7 @@
             icon: 'success',
             title: 'Thành công!',
             text: 'Đợt giảm giá đã được tạo thành công!'
-        }).then(()=>{
+        }).then(() => {
             window.location.href = '/admin/promotion';
         });
     </script>

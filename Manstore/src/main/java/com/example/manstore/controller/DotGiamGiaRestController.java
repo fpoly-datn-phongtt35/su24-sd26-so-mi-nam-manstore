@@ -50,32 +50,33 @@ public class DotGiamGiaRestController {
         return ResponseEntity.ok().body(dotGiamGiaService.findById(id));
     }
 
-    @RequestMapping(value = "/admin/promotion/check-status", method = RequestMethod.GET)
-    public ResponseEntity<?> checkPromotion(@RequestParam(value = "id", required = false) Integer id) {
-        if (hoaDonService.getByPromotion(String.valueOf(id)).size() == 0) {
-            Optional<DotGiamGia> dgg = dotGiamGiaService.findById(id);
-            if (dgg.isEmpty()) {
-                System.out.println("promotion is null");
-                return new ResponseEntity<>("not exist", HttpStatus.OK);
-            }
-            return new ResponseEntity<>("success", HttpStatus.OK);
-
-        } else {
-            return new ResponseEntity<>("error", HttpStatus.OK);
-        }
-    }
+//    @RequestMapping(value = "/admin/promotion/check-status", method = RequestMethod.GET)
+//    public ResponseEntity<?> checkPromotion(@RequestParam(value = "id", required = false) Integer id) {
+//        if (hoaDonService.getByPromotion(String.valueOf(id)).size() == 0) {
+//            Optional<DotGiamGia> dgg = dotGiamGiaService.findById(id);
+//            if (dgg.isEmpty()) {
+//                System.out.println("promotion is null");
+//                return new ResponseEntity<>("not exist", HttpStatus.OK);
+//            }
+//            return new ResponseEntity<>("success", HttpStatus.OK);
+//
+//        } else {
+//            return new ResponseEntity<>("error", HttpStatus.OK);
+//        }
+//    }
 
     @GetMapping("/admin/promotion/change-status/{id}/{status}")
     public ResponseEntity<?> changeStatus(@PathVariable("id") Integer id, @PathVariable("status") int status) {
-        List<HoaDon> count = hoaDonService.getByPromotion(String.valueOf(id));
+//        List<HoaDon> count = hoaDonService.getByPromotion(String.valueOf(id));
         DotGiamGia dgg = dotGiamGiaRepository.findById(id).isPresent() ? dotGiamGiaRepository.findById(id).get() : null;
         if (dgg != null) {
             if (dgg.getNgayKetThuc().isBefore(LocalDate.now()) && status == 1) {
                 return new ResponseEntity<>("out of date", HttpStatus.OK);
             }
-            if (count.size() > 0) {
-                return new ResponseEntity<>("failure", HttpStatus.OK);
-            } else {
+//            if (count.size() > 0) {
+//                return new ResponseEntity<>("failure", HttpStatus.OK);
+//            }
+            else {
                 dgg.setTrangThai(status == 0);
                 dotGiamGiaService.create(dgg);
                 return new ResponseEntity<>("success", HttpStatus.OK);

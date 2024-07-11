@@ -47,6 +47,7 @@ public class DotGiamGiaController {
     public String addPromotionAction(@Valid @ModelAttribute("promotion") DotGiamGia promotion, Model model) {
 
         boolean isValid = false;
+
         if (promotion.getMa().isEmpty()) {
             isValid = true;
             model.addAttribute("errorCode", "Mã đợt giảm giá chưa được nhập!");
@@ -73,27 +74,31 @@ public class DotGiamGiaController {
             model.addAttribute("errorName", "Tên đợt giảm giá quá dài!");
         }
 
-        if (promotion.getNgayBatDau() == null) {
+       if (promotion.getNgayBatDau() == null) {
             isValid = true;
             model.addAttribute("errorNgayBatDau", "Ngày bắt đầu chưa được chọn!");
         }
-        if (promotion.getNgayKetThuc() == null) {
-            isValid = true;
-            model.addAttribute("errorNgayKetThuc", "Ngày bắt đầu chưa được chọn!");
-            model.addAttribute("startDate", promotion.getNgayBatDau());
-        }
-        if (promotion.getNgayBatDau().isBefore(LocalDate.now())) {
+       else if (promotion.getNgayBatDau().isBefore(LocalDate.now())) {
             isValid = true;
             model.addAttribute("errorNgayBatDau", "Ngày bắt đầu không được trước ngày hiện tại!");
+        } else if (promotion.getNgayBatDau().isAfter(promotion.getNgayKetThuc())) {
+            isValid = true;
+            model.addAttribute("errorNgayBatDau", "Ngày bắt đầu phải trước ngày kết thúc!");
             model.addAttribute("startDate", promotion.getNgayBatDau());
             model.addAttribute("endDate", promotion.getNgayKetThuc());
         }
-        if (promotion.getNgayKetThuc().compareTo(promotion.getNgayBatDau()) == 0 || promotion.getNgayKetThuc().isBefore(promotion.getNgayBatDau())) {
+         if (promotion.getNgayKetThuc() == null) {
+            isValid = true;
+            model.addAttribute("errorNgayKetThuc", "Ngày kết thúc chưa được chọn!");
+            model.addAttribute("startDate", promotion.getNgayBatDau());
+        }
+         else if (promotion.getNgayKetThuc().compareTo(promotion.getNgayBatDau()) == 0 || promotion.getNgayKetThuc().isBefore(promotion.getNgayBatDau())) {
             isValid = true;
             model.addAttribute("errorNgayKetThuc", "Ngày kết thúc phải sau ngày bắt đầu!");
             model.addAttribute("startDate", promotion.getNgayBatDau());
             model.addAttribute("endDate", promotion.getNgayKetThuc());
         }
+
         if (promotion.getId() != null) {
             if (dotGiamGiaRepository.findByNameAndId(promotion.getTen(), promotion.getId()).isPresent()) {
                 isValid = true;
@@ -109,32 +114,34 @@ public class DotGiamGiaController {
                 model.addAttribute("endDate", promotion.getNgayKetThuc());
             }
         }
-        if (promotion.getGiaTriGiam() <= 0) {
+
+        if (promotion.getGiaTriGiam() == null) {
+            isValid = true;
+            model.addAttribute("errorGiaTriGiam", "Giá trị giảm chưa được nhập!");
+        }
+        else if (promotion.getGiaTriGiam() <= 5) {
             isValid = true;
             model.addAttribute("startDate", promotion.getNgayBatDau());
             model.addAttribute("endDate", promotion.getNgayKetThuc());
-            model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải lớn hơn 0!");
+            model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải lớn hơn 5%!");
         }
-        if (promotion.getGiaTriGiam() >= 50 && promotion.getLoaiGiamGia()) {
+        else if (promotion.getGiaTriGiam() > 50 && promotion.getLoaiGiamGia()) {
             isValid = true;
             model.addAttribute("startDate", promotion.getNgayBatDau());
             model.addAttribute("endDate", promotion.getNgayKetThuc());
             model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải nhỏ hơn 50%!");
         }
-        if (!promotion.getLoaiGiamGia()) {
-            if (promotion.getGiaTriGiam() <= 5000) {
+        else if (promotion.getGiaTriGiam() < 5000) {
                 isValid = true;
                 model.addAttribute("startDate", promotion.getNgayBatDau());
                 model.addAttribute("endDate", promotion.getNgayKetThuc());
                 model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải tối thiểu 5.000 vnđ!");
             }
-            double valueCompare = Double.parseDouble(promotion.getGiaTriDonHang() + "000");
-            if (promotion.getGiaTriGiam() > (valueCompare * 0.1)) {
-                isValid = true;
-                model.addAttribute("startDate", promotion.getNgayBatDau());
-                model.addAttribute("endDate", promotion.getNgayKetThuc());
-                model.addAttribute("errorGiaTriGiam", "Giảm giá tiền không quá 50% giá trị đơn hàng áp dụng!");
-            }
+
+
+        if (promotion.getGiaTriDonHang() == null) {
+            isValid = true;
+            model.addAttribute("errorBill", "Giá trị đơn hàng chưa được nhập!");
         }
 
         if (isValid) {
@@ -158,35 +165,10 @@ public class DotGiamGiaController {
         dotGiamGia.setGiaTriDonHang(dgg.getGiaTriDonHang());
         dotGiamGia.setNgayBatDau(dgg.getNgayBatDau());
         dotGiamGia.setNgayKetThuc(dgg.getNgayKetThuc());
-        dotGiamGia.setNgayTao(dgg.getNgayTao());
         dotGiamGia.setTrangThai(dgg.getTrangThai());
         dotGiamGiaService.create(dgg);
         redirectAttributes.addFlashAttribute("message", true);
         return "redirect:/admin/promotion";
     }
 
-    @PostMapping("/admin/promotion/validation")
-    public ResponseEntity<?> validation(@ModelAttribute("promotion") DotGiamGia promotion) {
-        if (promotion.getId() == null) {
-            List<DotGiamGia> listAll = dotGiamGiaService.getAll();
-            for (DotGiamGia dgg : listAll
-            ) {
-                if (!promotion.getNgayBatDau().isBefore(dgg.getNgayBatDau()) && !promotion.getNgayBatDau().isAfter(dgg.getNgayKetThuc())) {
-                    return new ResponseEntity<>("failure", HttpStatus.OK);
-                }
-            }
-            return new ResponseEntity<>("success", HttpStatus.OK);
-        } else {
-            DotGiamGia dotGiamGia = dotGiamGiaRepository.findById(promotion.getId()).get();
-            List<DotGiamGia> listAll = dotGiamGiaService.getAll();
-            listAll.remove(dotGiamGia);
-            for (DotGiamGia dgg : listAll
-            ) {
-                if (!promotion.getNgayBatDau().isBefore(dgg.getNgayBatDau()) && !promotion.getNgayBatDau().isAfter(dgg.getNgayKetThuc())) {
-                    return new ResponseEntity<>("failure", HttpStatus.OK);
-                }
-            }
-            return new ResponseEntity<>("success", HttpStatus.OK);
-        }
-    }
 }
