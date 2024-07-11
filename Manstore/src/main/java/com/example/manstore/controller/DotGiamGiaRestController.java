@@ -67,23 +67,14 @@ public class DotGiamGiaRestController {
 
     @GetMapping("/admin/promotion/change-status/{id}/{status}")
     public ResponseEntity<?> changeStatus(@PathVariable("id") Integer id, @PathVariable("status") int status) {
-//        List<HoaDon> count = hoaDonService.getByPromotion(String.valueOf(id));
-        DotGiamGia dgg = dotGiamGiaRepository.findById(id).isPresent() ? dotGiamGiaRepository.findById(id).get() : null;
-        if (dgg != null) {
-            if (dgg.getNgayKetThuc().isBefore(LocalDate.now()) && status == 1) {
-                return new ResponseEntity<>("out of date", HttpStatus.OK);
-            }
-//            if (count.size() > 0) {
-//                return new ResponseEntity<>("failure", HttpStatus.OK);
-//            }
-            else {
-                dgg.setTrangThai(status == 0);
-                dotGiamGiaService.create(dgg);
-                return new ResponseEntity<>("success", HttpStatus.OK);
-            }
+        boolean isExist = dotGiamGiaService.findById(Integer.valueOf(id)).isPresent();
+        if (isExist) {
+            DotGiamGia dgg = dotGiamGiaService.findById(Integer.valueOf(id)).get();
+            dgg.setTrangThai(Boolean.parseBoolean(String.valueOf(status)));
+            dotGiamGiaService.create(dgg);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("fail", HttpStatus.OK);
         }
-        return new ResponseEntity<>("promotion not exists", HttpStatus.OK);
     }
-
-
 }
