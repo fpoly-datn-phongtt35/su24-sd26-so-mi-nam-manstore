@@ -2,6 +2,8 @@ package com.example.manstore.controller;
 
 
 import com.example.manstore.dto.custom.ResponseCustom;
+import com.example.manstore.dto.request.ChiTietSanPhamRequest;
+import com.example.manstore.dto.request.ChiTietSanPhamValidationRequest;
 import com.example.manstore.dto.request.SanPhamRequest;
 import com.example.manstore.dto.respone.SanPhanResponse;
 import com.example.manstore.entity.*;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/product")
@@ -34,6 +37,18 @@ public class SanPhamController {
 
     @Autowired
     private SanPhamRepository sanPhamRepository;
+
+    @Autowired
+    private ChiTietSanPhamImpl chiTietSanPhamService;
+
+    @Autowired
+    private ChiTietSanPhamRepository chiTietSanPhamRepository;
+
+    @Autowired
+    private MauSacServiceImpl mauSacService;
+
+    @Autowired
+    private SizeServiceImpl sizeService;
 
     @Autowired
     private ThuongHieuServiceImpl thuongHieuService;
@@ -115,6 +130,21 @@ public class SanPhamController {
     }
 
 
+    @GetMapping("/color/getAll")
+    @ResponseBody
+    public ResponseEntity<List<MauSac>> getAllColor() {
+        List<MauSac> colors = mauSacService.getAllMauSac();
+        return new ResponseEntity<>(colors, HttpStatus.OK);
+    }
+
+    @GetMapping("/size/getAll")
+    @ResponseBody
+    public ResponseEntity<List<Size>> getAllSize() {
+        List<Size> sizes = sizeService.getAllSize();
+        return new ResponseEntity<>(sizes, HttpStatus.OK);
+    }
+
+
     @GetMapping("/list")
     @ResponseBody
     public ResponseEntity<?> getAllSP(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
@@ -144,8 +174,6 @@ public class SanPhamController {
 
     @RequestMapping(value = "/save_product", method = RequestMethod.POST)
     private ResponseEntity<?> saveProduct(@RequestBody SanPhamRequest dto) {
-
-
         System.out.println("Received SanPhamRequest: " + dto.toString());
         System.out.println("Gia: " + dto.getGia());
         System.out.println("Gia Sale: " + dto.getGiaSale());
@@ -271,6 +299,176 @@ public class SanPhamController {
     }
 
 
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    private ResponseEntity<?> updateProduct(@RequestBody SanPhamRequest dto, @PathVariable("id") String id) {
+
+        if (id == null || id.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID cannot be null or empty");
+        }
+
+        String regexName = "^[a-zA-ZÀ-Ỹà-ỹ][a-zA-Z0-9À-Ỹà-ỹ ]{3,50}$";
+        Pattern patternName = Pattern.compile(regexName);
+
+        List<ResponseCustom> listResponse = new ArrayList<>();
+        Optional<SanPham> optionalSanPham = sanPhamService.getSanPhamById(Integer.parseInt(id));
+        if (!optionalSanPham.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+        }
+
+        SanPham sp = optionalSanPham.get();
+        boolean isValid = true;
+
+        List<SanPham> getAllProduct = sanPhamService.getAllSanPham();
+        getAllProduct.remove(sp);
+
+        for (SanPham product : getAllProduct) {
+            if (product.getTen().equals(dto.getTen())) {
+                isValid = false;
+                ResponseCustom response = new ResponseCustom();
+                response.setMessage("errorDuplicateName");
+                response.setStatusText("failure");
+                listResponse.add(response);
+                break;
+            }
+        }
+
+        if (dto.getTen() == null || dto.getTen().isEmpty()) {
+            isValid = false;
+            ResponseCustom responseCustom = new ResponseCustom();
+            responseCustom.setStatusText("failure");
+            responseCustom.setMessage("errorEmptyName");
+            listResponse.add(responseCustom);
+        } else {
+            Matcher matcherName = patternName.matcher(dto.getTen());
+            if (!matcherName.matches()) {
+                isValid = false;
+                ResponseCustom responseCustom = new ResponseCustom();
+                responseCustom.setStatusText("failure");
+                responseCustom.setMessage("errorFormatName");
+                listResponse.add(responseCustom);
+            }
+        }
+
+        if (dto.getSoLuong() < 0) {
+            isValid = false;
+            ResponseCustom responseCustom = new ResponseCustom();
+            responseCustom.setStatusText("failure");
+            responseCustom.setMessage("errorInvalidQuantity");
+            listResponse.add(responseCustom);
+        }
+
+        if (dto.getGia() == null) {
+            isValid = false;
+            ResponseCustom responseCustom = new ResponseCustom();
+            responseCustom.setStatusText("failure");
+            responseCustom.setMessage("errorPriceFormat");
+            listResponse.add(responseCustom);
+        } else {
+            BigDecimal gia = new BigDecimal(String.valueOf(dto.getGia()));
+            if (gia.compareTo(new BigDecimal("70000")) < 0) {
+                isValid = false;
+                ResponseCustom responseCustom = new ResponseCustom();
+                responseCustom.setStatusText("failure");
+                responseCustom.setMessage("errorPriceLessThan");
+                listResponse.add(responseCustom);
+            }
+
+            if (dto.getGiaSale() != null) {
+                BigDecimal giaSale = new BigDecimal(String.valueOf(dto.getGiaSale()));
+                if (giaSale.compareTo(gia) >= 0) {
+                    isValid = false;
+                    ResponseCustom responseCustom = new ResponseCustom();
+                    responseCustom.setStatusText("failure");
+                    responseCustom.setMessage("errorFormatSalePrice");
+                    listResponse.add(responseCustom);
+                }
+            }
+        }
+
+        if (isValid) {
+            try {
+                sp.setTen(dto.getTen());
+                sp.setSoLuong(dto.getSoLuong());
+                sp.setGia(dto.getGia());
+                sp.setGiaSale(dto.getGiaSale());
+                sp.setMoTa(dto.getMoTa());
+                sp.setTrangThai(dto.getTrangThai());
+                sanPhamService.save(sp);
+                return ResponseEntity.ok("success");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error: " + e.getMessage());
+            }
+        } else {
+            return ResponseEntity.ok(listResponse);
+        }
+    }
+
+
+    @GetMapping("/product_detail/{id}/{pageNumber}")
+    public ResponseEntity<?> getProductDetail(@PathVariable("id") String id, @PathVariable("pageNumber") int pageNumber, @RequestParam(value = "color", required = false, defaultValue = "0") String color, @RequestParam(value = "size", required = false, defaultValue = "0") String size) {
+        Page<ChiTietSanPham> page = chiTietSanPhamService.Filter(pageNumber, color, size, id);
+        return ResponseEntity.ok().body(page);
+    }
+
+    @RequestMapping(value = "/save_product_detail/validation/{id}", method = RequestMethod.POST)
+    private ResponseEntity<?> validationProductDetail(@RequestBody() List<ChiTietSanPhamRequest> listSPCT, @PathVariable("id") String id) {
+
+        List<ChiTietSanPhamValidationRequest> arrayProductValidation = new ArrayList<>();
+        if (sanPhamService.getSanPhamById(Integer.parseInt(id)).isPresent()) {
+            for (ChiTietSanPhamRequest dto : listSPCT) {
+                ChiTietSanPham chiTietSanPham = new ChiTietSanPham();
+                SanPham sp = sanPhamService.getSanPhamById(Integer.parseInt(id)).get();
+                chiTietSanPham.setIdSanPham(sp);
+                chiTietSanPham.setNgayTao(LocalDate.now());
+                chiTietSanPham.setSoluong(Integer.parseInt(dto.getSoluong()));
+                chiTietSanPham.setIdMauSac(mauSacService.getMauSacById(Integer.parseInt(dto.getMauSac())));
+                chiTietSanPham.setIdSize(sizeService.getSizeById(Integer.parseInt(dto.getSize())));
+                //Tạo 1 object để trả về lỗi cho giao diện xử lý
+                ChiTietSanPhamValidationRequest productValidation = new ChiTietSanPhamValidationRequest();
+                productValidation.setMauSac(dto.getMauSac());
+                productValidation.setSize(dto.getSize());
+                productValidation.setSoluong(dto.getSoluong());
+
+                for (ChiTietSanPham ctspLoopFor : chiTietSanPhamService.getListCTSPById(id)) {
+                    boolean isValidMauSac = ctspLoopFor.getIdMauSac().getId() == chiTietSanPham.getIdMauSac().getId();
+                    boolean isValidSize = ctspLoopFor.getIdSize().getId() == chiTietSanPham.getIdSize().getId();
+                    if (isValidMauSac && isValidSize) {
+                        productValidation.setValid(true);
+                        arrayProductValidation.add(productValidation);
+                        break;
+                    } else {
+                        productValidation.setValid(false);
+                        arrayProductValidation.add(productValidation);
+                    }
+                }
+            }
+        } else {
+            return ResponseEntity.ok("failure");
+        }
+        List<ChiTietSanPhamValidationRequest> arrayProductValidationWithOutDuplicate = arrayProductValidation.stream().distinct().collect(Collectors.toList());
+        System.out.println(arrayProductValidationWithOutDuplicate.toString());
+        return ResponseEntity.ok(arrayProductValidationWithOutDuplicate);
+    }
+
+    @RequestMapping(value = "/save_product_detail/save/{id}", method = RequestMethod.POST)
+    private ResponseEntity<?> saveProductDetail(@RequestBody() List<ChiTietSanPhamValidationRequest> listSPCT
+            , @PathVariable("id") String id) {
+        if (sanPhamService.getSanPhamById(Integer.parseInt(id)).isPresent()) {
+            for (ChiTietSanPhamValidationRequest dto : listSPCT) {
+                ChiTietSanPham chiTietSanPham = new ChiTietSanPham();
+                SanPham sp = sanPhamService.getSanPhamById(Integer.parseInt(id)).get();
+                chiTietSanPham.setIdSanPham(sp);
+                chiTietSanPham.setNgayTao(LocalDate.now());
+                chiTietSanPham.setSoluong(Integer.parseInt(dto.getSoluong()));
+                chiTietSanPham.setIdMauSac(mauSacService.getMauSacById(Integer.parseInt(dto.getMauSac())));
+                chiTietSanPham.setIdSize(sizeService.getSizeById(Integer.parseInt(dto.getSize())));
+                chiTietSanPham.setTrangThai(dto.getTrangThai());
+                chiTietSanPhamService.save(chiTietSanPham);
+            }
+        }
+        return ResponseEntity.ok("success");
+    }
 
 
 

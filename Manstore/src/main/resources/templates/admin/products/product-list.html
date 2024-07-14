@@ -63,7 +63,7 @@
                         <select class="form-control mb-3"
                                 aria-label=".form-select-lg example"
                                 id="filter-category"
-                                onchange="loadPage(0)">
+                                onchange="loadSelect()">
                           <option value="-1" selected>Tất Cả</option>
                         </select>
                       </div>
@@ -201,7 +201,7 @@
                         <div class="mb-3">
                           <label class="form-label" for="product-name-update-input">Tên Sản Phẩm</label>
                           <input type="text" class="form-control" id="product-name-update-input"
-                                 placeholder="Enter product name" onkeyup="validName()">
+                                 placeholder="Nhập tên" onkeyup="validName()">
                         </div>
                         <span id="error-name-update" class="text-danger fw-bold"></span>
                       </div>
@@ -234,7 +234,7 @@
                             <input type="number" class="form-control" id="product-priceSale-update-input"
                                    placeholder="Nhập giá sale" aria-label="Price"
                                    aria-describedby="product-priceSale-addon"
-                                   required onkeyup="validPrice()">
+                                   required onkeyup="validPriceSale()">
                           </div>
                         </div>
                         <span id="error-priceSale-update" class="text-danger fw-bold"></span>
@@ -243,7 +243,7 @@
                         <div class="mb-3">
                           <label class="form-label" for="product-quantity-update-input">Số lượng</label>
                           <input type="number" class="form-control" id="product-quantity-update-input"
-                                 placeholder="Nhập số lượng" onkeyup="">
+                                 placeholder="Nhập số lượng" onkeyup="validQuantity()">
                         </div>
                         <span id="error-quantity-update" class="text-danger fw-bold"></span>
                       </div>
@@ -310,11 +310,11 @@
                         <div class="mb-3">
                           <label class="form-label">Trạng Thái</label>
                           <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" id="radioStatus1" value="0"
+                            <input class="form-check-input" type="radio" id="radioStatus1" value="1"
                                    name="status-update">
                             <label class="form-check-label" for="radioStatus1">Đang mở bán</label>
                             <br>
-                            <input class="form-check-input" type="radio" id="radioStatus2" value="1"
+                            <input class="form-check-input" type="radio" id="radioStatus2" value="0"
                                    name="status-update">
                             <label class="form-check-label" for="radioStatus2">Chưa mở bán</label>
                           </div>
@@ -354,7 +354,7 @@
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Danh Sách Sản Phẩm Chi Tiết</h4>
+              <h4 class="modal-title">Danh Sách Chi Tiết Sản Phẩm</h4>
               <button type="button" class="btn-close" data-bs-dismiss="modal"
                       aria-label="Close"></button>
             </div>
@@ -377,14 +377,14 @@
                                 id="filter-color"
                                 onchange="viewProductDetail(idProduct,undefined)">
                           <option value="0" selected>Tất Cả</option>
-                          <option value="1">Đen</option>
-                          <option value="2">Trắng</option>
-                          <option value="3">Đỏ</option>
-                          <option value="4">Xám</option>
-                          <option value="5">Xanh Lục</option>
-                          <option value="6">Tím Xanh</option>
-                          <option value="7">Xanh Da Trời</option>
-                          <option value="8">Vàng</option>
+<!--                          <option value="1">Đen</option>-->
+<!--                          <option value="2">Trắng</option>-->
+<!--                          <option value="3">Đỏ</option>-->
+<!--                          <option value="4">Xám</option>-->
+<!--                          <option value="5">Xanh Lục</option>-->
+<!--                          <option value="6">Tím Xanh</option>-->
+<!--                          <option value="7">Xanh Da Trời</option>-->
+<!--                          <option value="8">Vàng</option>-->
                         </select>
                       </div>
                       <div class="col-md-6">
@@ -394,12 +394,12 @@
                                 id="filter-size"
                                 onchange="viewProductDetail(idProduct,undefined)">
                           <option value="0" selected>Tất Cả</option>
-                          <option value="s">S</option>
-                          <option value="m">M</option>
-                          <option value="l">L</option>
-                          <option value="xl">XL</option>
-                          <option value="xxl">XXL</option>
-                          <option value="2xl">2XL</option>
+<!--                          <option value="s">S</option>-->
+<!--                          <option value="m">M</option>-->
+<!--                          <option value="l">L</option>-->
+<!--                          <option value="xl">XL</option>-->
+<!--                          <option value="xxl">XXL</option>-->
+<!--                          <option value="2xl">2XL</option>-->
                         </select>
                       </div>
                     </div>
@@ -412,9 +412,12 @@
                     <thead class="table-light">
                     <tr>
                       <th scope="col">ID</th>
+                      <th scope="col">Tên Sản Phẩm</th>
+                      <th scope="col">Ngày Tạo</th>
+                      <th scope="col">Số Lượng</th>
                       <th scope="col">Màu Sắc</th>
                       <th scope="col">Size</th>
-                      <th scope="col">Số Lượng</th>
+                      <th scope="col">Trạng Thái</th>
                       <th scope="col">Action</th>
                     </tr>
                     </thead>
@@ -449,41 +452,17 @@
     </div>
   </div>
 </div>
+
+<!-- form add chi tiet san pham-->
 <div class="modal" id="myModalView" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Thêm Sản Phẩm Chi Tiết</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" style="margin-bottom: 20px;">
         <form id="save_product_detail" action="" class="my-form" method="post">
-          <div class="card p-2" style="height: 115px;">
-            <div class="row">
-              <div class="col-md-5 d-flex" style="padding-top: 25px;">
-                <div class="flex-shrink-0 me-3 ms-auto">
-                  <div class="avatar-sm">
-                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                      <i class="bi bi-list-ul"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex-grow-1">
-                  <h5 class="card-title mb-1">General Information</h5>
-                  <p class="text-muted mb-0">Fill all information below.</p>
-                </div>
-              </div>
-              <div class="col-md-7 d-flex justify-content-center align-items-center justify-content-sm-between">
-                <div class="row" style="padding-bottom: 10px">
-                  <div class="col-md-6">
-                  </div>
-                  <div class="col-md-6">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="card p-2">
             <div class="row ">
               <div class="col-lg-6">
@@ -495,78 +474,10 @@
               </div>
               <div class="col-lg-6">
                 <div class="mb-3">
-                  <div class="col-xl-6">
-                    <div class="color-picker">
-                      <label class="form-label">Màu Sắc</label>
-                      <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
-                        <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                            data-bs-placement="top"
-                            data-bs-original-title="Xanh Lục Bảo">
-                          <input type="checkbox" value="5" id="color-1"
-                                 name="product-color-input">
-                          <label class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                 for="color-1"></label>
-                        </li>
-                        <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                            data-bs-placement="top"
-                            data-bs-original-title="Xám">
-                          <input type="checkbox" value="4" id="color-2"
-                                 name="product-color-input">
-                          <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                 for="color-2"
-                                 style="background-color: rgb(169,169,169); border: none;"></label>
-                        </li>
-                        <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                            data-bs-placement="top"
-                            data-bs-original-title="Vàng">
-                          <input type="checkbox" value="8" id="color-3"
-                                 name="product-color-input">
-                          <label class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                 for="color-3"></label>
-                        </li>
-                        <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                            data-bs-placement="top" data-bs-original-title="Đỏ">
-                          <input type="checkbox" value="3" id="color-4"
-                                 name="product-color-input">
-                          <label class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                 for="color-4"></label>
-                        </li>
-                        <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                            data-bs-placement="top"
-                            data-bs-original-title="Xanh Da Trời">
-                          <input type="checkbox" value="7" id="color-5"
-                                 name="product-color-input">
-                          <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                 for="color-5"></label>
-                        </li>
-                        <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                            data-bs-placement="top"
-                            data-bs-original-title="Tím Xanh">
-                          <input type="checkbox" value="6"
-                                 id="color-6" name="product-color-input">
-                          <label class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                 for="color-6"
-                                 data-bs-original-title="Tím Xanh"></label>
-                        </li>
-                        <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                            data-bs-placement="top"
-                            data-bs-original-title="Đen">
-                          <input type="checkbox" value="1" id="color-7"
-                                 name="product-color-input">
-                          <label class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                 for="color-7"></label>
-                        </li>
-                        <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                            data-bs-placement="top"
-                            data-bs-original-title="Trắng">
-                          <input type="checkbox" value="2" id="color-8"
-                                 name="product-color-input">
-                          <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                 for="color-8"></label>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                  <label class="form-label">Màu Sắc</label>
+                  <select class="form-select mb-3" id="product-color-detail-input">
+                  </select>
+                  <span id="errorColor" class="text-danger fw-bold"></span>
                 </div>
               </div>
             </div>
@@ -585,67 +496,34 @@
               </div>
               <div class="col-lg-6">
                 <div class="mb-3">
-                  <div class="col-xl-6">
-                    <div class="mt-4">
-                      <label class="form-label">Size :</label>
-                      <div class="d-flex flex-wrap gap-2 size-picker">
-                        <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                             data-bs-placement="top">
-                          <input type="checkbox" class="btn-check"
-                                 id="productsize-radio1" value="s"
-                                 name="product-detail-size-input">
-                          <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                 for="productsize-radio1">S</label>
-                        </div>
+                  <label class="form-label">Size</label>
+                  <select class="form-select mb-3" id="product-size-detail-input" >
+                  </select>
+                  <span id="errorSize" class="text-danger fw-bold"></span>
+                </div>
+              </div>
+            </div>
 
-                        <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                             data-bs-placement="top">
-                          <input type="checkbox" class="btn-check"
-                                 id="productsize-radio2" value="m"
-                                 name="product-detail-size-input">
-                          <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                 for="productsize-radio2">M</label>
-                        </div>
-                        <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                             data-bs-placement="top">
-                          <input type="checkbox" class="btn-check"
-                                 id="productsize-radio3" value="l"
-                                 name="product-detail-size-input">
-                          <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                 for="productsize-radio3">L</label>
-                        </div>
-
-                        <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                             data-bs-placement="top">
-                          <input type="checkbox" class="btn-check"
-                                 id="productsize-radio4" value="xl"
-                                 name="product-detail-size-input">
-                          <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                 for="productsize-radio4">XL</label>
-                        </div>
-                        <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                             data-bs-placement="top">
-                          <input type="checkbox" class="btn-check"
-                                 id="productsize-radio5" value="xxl"
-                                 name="product-detail-size-input">
-                          <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                 for="productsize-radio5">XXL</label>
-                        </div>
-
-                        <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                             data-bs-placement="top">
-                          <input type="checkbox" class="btn-check"
-                                 id="productsize-radio6" value="2xl"
-                                 name="product-detail-size-input">
-                          <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                 for="productsize-radio6">2XL</label>
-                        </div>
-                      </div>
-                    </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <label class="form-label">Trạng Thái </label>
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" id="add-detail-radioStatus1" value="1" name="trangThai"
+                           checked>
+                    <label class="form-check-label" for="add-detail-radioStatus1">
+                      Còn Hàng
+                    </label>
+                    <br>
+                    <input class="form-check-input" type="radio" id="add-detail-radioStatus2" value="0" name="trangThai">
+                    <label class="form-check-label" for="add-detail-radioStatus2">
+                      Hết Hàng
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </form>
       </div>
@@ -658,11 +536,12 @@
           Lưu
         </button>
       </div>
-      <!-- end col -->
     </div>
-    <!-- end row -->
   </div>
 </div>
+
+
+<!-- form edit chi tiet san pham-->
 <div class="modal" id="myModalEdit" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -673,35 +552,9 @@
       </div>
       <div class="modal-body" style="margin-bottom: 20px;">
         <form id="edit_product_detail" action="" class="my-form" method="post">
-          <div class="card p-2" style="height: 100px;">
-            <div class="row">
-              <div class="col-md-10 d-flex align-items-center" style="padding-top: 10px">
-                <div class="flex-shrink-0 me-3 ms-auto">
-                  <div class="avatar-sm">
-                    <div class="avatar-title rounded-circle bg-light text-primary fs-20">
-                      <i class="ri-file-warning-line"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex-grow-1">
-                  <h5 class="card-title mb-1">Chú ý</h5>
-                  <p class="text-muted mb-0">Khi thay đổi ảnh, tất cả sản phẩm chi tiết có cùng màu đều được thay
-                    đổi!</p>
-                </div>
-              </div>
-              <div class="col-md-2 d-flex justify-content-center align-items-center justify-content-sm-between">
-                <div class="row" style="padding-bottom: 10px">
-                  <div class="col-md-6">
-                  </div>
-                  <div class="col-md-6">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="card p-2">
             <div class="card-body">
-              <div class="row ">
+              <div class="row">
                 <div class="col-lg-6">
                   <div class="mb-3">
                     <label class="form-label">Tên Sản Phẩm</label>
@@ -711,190 +564,53 @@
                 </div>
                 <div class="col-lg-6">
                   <div class="mb-3">
-                    <div class="col-xl-6">
-                      <div class="color-picker">
-                        <label class="form-label">Màu Sắc</label>
-                        <ul class="clothe-colors list-unstyled hstack gap-2 mb-0 flex-wrap">
-                          <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              data-bs-original-title="Xanh Lục Bảo">
-                            <input type="radio" value="5" id="color-5-update"
-                                   name="ms">
-                            <label class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                   for="color-5-update"></label>
-                          </li>
-                          <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              data-bs-original-title="Xám">
-                            <input type="radio" value="4" id="color-4-update"
-                                   name="ms">
-                            <label class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                   for="color-4-update"
-                                   style="background-color: rgb(169,169,169); border: none;"></label>
-                          </li>
-                          <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              data-bs-original-title="Vàng">
-                            <input type="radio" value="8" id="color-8-update"
-                                   name="ms">
-                            <label class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                   for="color-8-update"></label>
-                          </li>
-                          <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              data-bs-placement="top" data-bs-original-title="Đỏ">
-                            <input type="radio" value="3" id="color-3-update"
-                                   name="ms">
-                            <label class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                   for="color-3-update"></label>
-                          </li>
-                          <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              data-bs-original-title="Xanh Da Trời">
-                            <input type="radio" value="7" id="color-7-update"
-                                   name="ms">
-                            <label class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                   for="color-7-update"></label>
-                          </li>
-                          <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              data-bs-original-title="Tím Xanh">
-                            <input type="radio" value="6"
-                                   id="color-6-update" name="ms">
-                            <label class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                   for="color-6-update"
-                                   data-bs-original-title="Tím Xanh"></label>
-                          </li>
-                          <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              data-bs-original-title="Đen">
-                            <input type="radio" value="1" id="color-1-update"
-                                   name="ms">
-                            <label class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                   for="color-1-update"></label>
-                          </li>
-                          <li data-bs-toggle="tooltip" data-bs-trigger="hover"
-                              data-bs-placement="top"
-                              data-bs-original-title="Trắng">
-                            <input type="radio" value="2" id="color-2-update"
-                                   name="ms">
-                            <label class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle color-label"
-                                   for="color-2-update"></label>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                    <label class="form-label">Màu Sắc</label>
+                    <select class="form-select" id="color-select-edit"></select>
                   </div>
                 </div>
               </div>
-              <!-- end row -->
 
               <div class="row">
-                <div class="col-lg-6" style="padding-top: 20px;">
+                <div class="col-lg-6">
                   <div class="mb-3">
                     <label class="form-label">Số Lượng</label>
-                    <input type="text" class="form-control"
-                           id="productdetail-count-input-edit"
-                           placeholder="Enter Count" aria-label="Count"
-                           aria-describedby="product-count-addon"
-                           required th:name="soLuong">
+                    <input type="text" class="form-control" id="productdetail-count-input-edit"
+                           placeholder="Nhập số lượng" aria-label="Count"
+                           aria-describedby="product-count-addon" required th:name="soLuong">
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="mb-3">
-                    <div class="col-xl-6">
-                      <div class="mt-4">
-                        <label class="form-label">Size :</label>
-                        <div class="d-flex flex-wrap gap-2 size-picker">
-                          <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                               data-bs-placement="top">
-                            <input type="radio" class="btn-check"
-                                   id="productsize-radio-update-s" value="s"
-                                   name="size-update">
-                            <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                   for="productsize-radio-update-s">S</label>
-                          </div>
+                    <label class="form-label">Size</label>
+                    <select class="form-select" id="size-select-edit"></select>
+                  </div>
+                </div>
+              </div>
 
-                          <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                               data-bs-placement="top">
-                            <input type="radio" class="btn-check"
-                                   id="productsize-radio-update-m" value="m"
-                                   name="size-update">
-                            <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                   for="productsize-radio-update-m">M</label>
-                          </div>
-                          <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                               data-bs-placement="top">
-                            <input type="radio" class="btn-check"
-                                   id="productsize-radio-update-l" value="l"
-                                   name="size-update">
-                            <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                   for="productsize-radio-update-l">L</label>
-                          </div>
-
-                          <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                               data-bs-placement="top">
-                            <input type="radio" class="btn-check"
-                                   id="productsize-radio-update-xl" value="xl"
-                                   name="size-update">
-                            <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                   for="productsize-radio-update-xl">XL</label>
-                          </div>
-
-                          <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                               data-bs-placement="top">
-                            <input type="radio" class="btn-check"
-                                   id="productsize-radio-update-xxl" value="xxl"
-                                   name="size-update">
-                            <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                   for="productsize-radio-update-xxl">XXL</label>
-                          </div>
-
-                          <div data-bs-toggle="tooltip" data-bs-trigger="hover"
-                               data-bs-placement="top">
-                            <input type="radio" class="btn-check"
-                                   id="productsize-radio-update-2xl" value="2xl"
-                                   name="size-update">
-                            <label class="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                   for="productsize-radio-update-2xl">2XL</label>
-                          </div>
-                        </div>
-                      </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="mb-3">
+                    <label class="form-label">Trạng Thái </label>
+                    <div class="form-check mb-3">
+                      <input class="form-check-input" type="radio" id="update-RadioStatus1" value="1" name="trangThai">
+                      <label class="form-check-label" for="update-RadioStatus1">Còn Hàng</label>
+                      <br>
+                      <input class="form-check-input" type="radio" id="update-RadioStatus2" value="0" name="trangThai">
+                      <label class="form-check-label" for="update-RadioStatus2">Hết Hàng</label>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-lg-6" style="padding-top: 20px">
-                  <div class="input-group mb-3">
-                    <label class="input-group-text" for="inputFile" id="text-label"></label>
-                    <input type="file" class="form-control" id="inputFile"
-                           name="file" style="display: none">
-                    <input id="linkPicture" type="hidden" class="form-control">
-                  </div>
-                </div>
-                <div class="col-lg-6" style="padding-top: 20px">
-                  <div class="input-group mb-3 d-flex justify-content-center align-items-center">
-                    <img id="preview" src="" style="max-width: 200px; max-height: 100%;">
-                    <i class="ri-file-image-line" id="icon-default"></i>
-                  </div>
-                </div>
-              </div>
+
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Đóng
-        </button>
-        <button type="button" class="btn btn-primary"
-                onclick="showConfirmPopupUpdate()">
-          Lưu
-        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" onclick="showConfirmPopupUpdate()">Lưu</button>
       </div>
-      <!-- end col -->
     </div>
-    <!-- end row -->
   </div>
 </div>
 
@@ -977,39 +693,27 @@
             const [responseCategory, responseTrademark, responseCollar, responseShirtTail, responseDesigns, responseMaterial] = await Promise.all([
                 fetch(urlCategory, {
                     method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
+                    headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
                 }),
                 fetch(urlTrademark, {
                     method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
+                    headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
                 }),
                 fetch(urlCollar, {
                     method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
+                    headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
                 }),
                 fetch(urlShirtTail, {
                     method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
+                    headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
                 }),
                 fetch(urlDesigns, {
                     method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
+                    headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
                 }),
                 fetch(urlMaterial, {
                     method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
+                    headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
                 })
             ]);
 
@@ -1033,25 +737,12 @@
             let designsOptions = `<option selected value="-1">Chọn thiết kế</option>`;
             let materialOptions = `<option selected value="-1">Chọn chất liệu</option>`;
 
-
-            listCategory.forEach(item => {
-                categoryOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-            listTrademark.forEach(item => {
-                trademarkOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-            listCollar.forEach(item => {
-                collarOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-            listShirtTail.forEach(item => {
-                shirtTailOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-            listDesigns.forEach(item => {
-                designsOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-            listMaterial.forEach(item => {
-                materialOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
+            listCategory.forEach(item => categoryOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listTrademark.forEach(item => trademarkOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listCollar.forEach(item => collarOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listShirtTail.forEach(item => shirtTailOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listDesigns.forEach(item => designsOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listMaterial.forEach(item => materialOptions += `<option value="${item.id}">${item.ten}</option>`);
 
             document.getElementById('product-category-update-input').innerHTML = categoryOptions;
             document.getElementById('product-brand-update-input').innerHTML = trademarkOptions;
@@ -1059,7 +750,6 @@
             document.getElementById('product-shirtTail-update-input').innerHTML = shirtTailOptions;
             document.getElementById('product-designs-update-input').innerHTML = designsOptions;
             document.getElementById('product-material-update-input').innerHTML = materialOptions;
-
 
         } catch (error) {
             console.error('Error:', error);
@@ -1092,13 +782,11 @@
     }
 
     async function detailProduct(productId) {
-        console.log(productId);
         try {
+            idProduct = productId;
             const response = await fetch('/admin/product/detail/' + productId, {
                 method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
-                }
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
             });
 
             if (!response.ok) {
@@ -1106,11 +794,7 @@
             }
 
             const data = await response.json();
-            console.log(data);
-
-            // Cập nhật các trường khác trước khi gọi findDataInSelect
             document.getElementById('product-name-update-input').value = data.ten;
-            // document.getElementById('product-image-update-input').value = data.hinhAnh;
             document.getElementById('product-price-update-input').value = data.gia;
             document.getElementById('product-priceSale-update-input').value = data.giaSale;
             document.getElementById('product-quantity-update-input').value = data.soLuong;
@@ -1122,36 +806,31 @@
                 document.getElementById('radioStatus2').checked = true;
             }
 
-            // Gọi hàm findDataInSelect với dữ liệu sản phẩm để cập nhật các select
             await findDataInSelect(data);
-
-            // Cập nhật giá trị cho select thuongHieu
-            let selectThuongHieu = document.getElementById('product-brand-update-input');
-            if (data.thuongHieu) {
-                console.log('thuongHieu id:', data.thuongHieu.id); // Kiểm tra giá trị của data.thuongHieu.id
-                for (let i = 0; i < selectThuongHieu.options.length; i++) {
-                    console.log('Option value:', selectThuongHieu.options[i].value); // In ra giá trị của mỗi option
-                    if (selectThuongHieu.options[i].value == data.thuongHieu.id) {
-                        selectThuongHieu.options[i].selected = true;
-                        break;
-                    }
+            console.log(data);
+            //gán giá trị cho các thẻ select
+            if (data) {
+                if (data.idThuongHieu) {
+                    document.getElementById('product-brand-update-input').value = data.idThuongHieu.id;
+                }
+                if (data.idDanhMuc) {
+                    document.getElementById('product-category-update-input').value = data.idDanhMuc.id;
+                }
+                if (data.idCoAo) {
+                    document.getElementById('product-collar-update-input').value = data.idCoAo.id;
+                }
+                if (data.idDuoiAo) {
+                    document.getElementById('product-shirtTail-update-input').value = data.idDuoiAo.id;
+                }
+                if (data.idKieuDang) {
+                    document.getElementById('product-designs-update-input').value = data.idKieuDang.id;
+                }
+                if (data.idChatLieu) {
+                    document.getElementById('product-material-update-input').value = data.idChatLieu.id;
                 }
             }
 
-// Cập nhật giá trị cho select danhMuc
-            let selectDanhMuc = document.getElementById('product-category-update-input');
-            if (data.danhMuc) {
-                console.log('danhMuc id:', data.danhMuc.id); // Kiểm tra giá trị của data.danhMuc.id
-                for (let i = 0; i < selectDanhMuc.options.length; i++) {
-                    console.log('Option value:', selectDanhMuc.options[i].value); // In ra giá trị của mỗi option
-                    if (selectDanhMuc.options[i].value == data.danhMuc.id) {
-                        selectDanhMuc.options[i].selected = true;
-                        break;
-                    }
-                }
-            }
             document.getElementById('error-name-update').innerText = '';
-            // document.getElementById('error-image-update').innerText = '';
             document.getElementById('error-brand-update').innerText = '';
             document.getElementById('error-collar-update').innerText = '';
             document.getElementById('error-category-update').innerText = '';
@@ -1164,7 +843,6 @@
             console.error('Error:', error);
         }
     }
-
     // Gọi hàm loadSelect khi trang được tải
     window.onload = async function () {
         await loadSelect();
@@ -1183,14 +861,10 @@
 
         try {
             const [responseTrademark, responseCategory, responseCollar, responseShirtTail, responseDesigns, responseMaterial] = await Promise.all(
-                Object.values(urls).map(url =>
-                    fetch(url, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem("token")
-                        }
-                    })
-                )
+                Object.values(urls).map(url => fetch(url, {
+                    method: 'GET',
+                    headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
+                }))
             );
 
             if (!responseTrademark.ok) throw new Error('Failed to fetch trademarks');
@@ -1218,29 +892,12 @@
                 materialOptions: '<option selected value="-1">-----</option>',
             };
 
-            listTrademark.forEach(item => {
-                options.trademarkOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-
-            listCategory.forEach(item => {
-                options.categoryOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-
-            listCollar.forEach(item => {
-                options.collarOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-
-            listShirtTail.forEach(item => {
-                options.shirtTailOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-
-            listDesigns.forEach(item => {
-                options.designsOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
-
-            listMaterial.forEach(item => {
-                options.materialOptions += `<option value="${item.id}">${item.ten}</option>`;
-            });
+            listTrademark.forEach(item => options.trademarkOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listCategory.forEach(item => options.categoryOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listCollar.forEach(item => options.collarOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listShirtTail.forEach(item => options.shirtTailOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listDesigns.forEach(item => options.designsOptions += `<option value="${item.id}">${item.ten}</option>`);
+            listMaterial.forEach(item => options.materialOptions += `<option value="${item.id}">${item.ten}</option>`);
 
             document.getElementById('product-brand-update-input').innerHTML = options.trademarkOptions;
             document.getElementById('product-category-update-input').innerHTML = options.categoryOptions;
@@ -1249,34 +906,12 @@
             document.getElementById('product-designs-update-input').innerHTML = options.designsOptions;
             document.getElementById('product-material-update-input').innerHTML = options.materialOptions;
 
-            // Kiểm tra và đặt giá trị cho các ô chọn
-            if (data && data.thuongHieu) {
-                const brandSelect = document.getElementById('product-brand-update-input');
-                for (let i = 0; i < brandSelect.options.length; i++) {
-                    if (brandSelect.options[i].value == data.thuongHieu.id) {
-                        brandSelect.selectedIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            if (data && data.danhMuc) {
-                const categorySelect = document.getElementById('product-category-update-input');
-                for (let i = 0; i < categorySelect.options.length; i++) {
-                    if (categorySelect.options[i].value == data.danhMuc.id) {
-                        categorySelect.selectedIndex = i;
-                        break;
-                    }
-                }
-            }
 
         } catch (error) {
             console.error('Error:', error);
             alert('There was an error loading data. Please try again later.');
         }
     }
-
-
 
     $('#myModal').on('show.bs.modal', function (e) {
         findDataInSelect();
@@ -1285,36 +920,200 @@
 
     async function editProductDetail(idProductDetail) {
         try {
-            const response = await fetch('/admin/product_detail/detail/' + idProductDetail,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
-                });
+            const response = await fetch('/admin/product_detail/detail/' + idProductDetail, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
             console.log(data);
+
+            if (!data.idSanPham || !data.idSanPham.ten) {
+                throw new Error('Invalid data structure');
+            }
+
             idProduct_Detail = idProductDetail;
-            document.getElementById('product-name-input-edit').value = data.sp.tenSP;
-            document.getElementById('productdetail-count-input-edit').value = data.soLuong;
+            document.getElementById('product-name-input-edit').value = data.idSanPham.ten;
+            document.getElementById('productdetail-count-input-edit').value = data.soluong;
+            console.log(data.soluong);
 
-            const colorId = data.ms.id;
-            document.getElementById('color-' + colorId + '-update').checked = true;
+            const colorId = data.idMauSac.id;
+            const sizeId = data.idSize.id;
+            const trangThai = data.trangThai;
 
-            const sizeName = data.size;
-            document.getElementById('productsize-radio-update-' + sizeName.toLowerCase()).checked = true;
+            await loadColors(colorId);
+            await loadSizes(sizeId);
 
-            const idProduct = data.sp.id;
-            await findPicture(idProduct, colorId);
+            const radioStatus1 = document.getElementById('update-RadioStatus1');
+            const radioStatus2 = document.getElementById('update-RadioStatus2');
+
+            if (radioStatus1 && radioStatus2) {
+                if (trangThai === 1) {
+                    radioStatus1.checked = true;
+                } else {
+                    radioStatus2.checked = true;
+                }
+            } else {
+                console.error('Radio buttons for status not found.');
+            }
+
             $('#myModalEdit').modal('show');
             $('#myModalTable').modal('hide');
         } catch (error) {
             console.error('Error:', error);
         }
     }
+
+    async function showConfirmPopupUpdate() {
+        try {
+            // Collect data from form
+            const productDetailData = {
+                soluong: document.getElementById('productdetail-count-input-edit').value,
+                mauSac: document.getElementById('color-select-edit').value,
+                size: document.getElementById('size-select-edit').value,
+                trangThai: document.querySelector('input[name="trangThai"]:checked').value
+            };
+
+            // Validate data
+            if (!productDetailData.soluong || productDetailData.soluong <= 0) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Vui lòng nhập số lượng hợp lệ!",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+
+            if (!productDetailData.mauSac) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Vui lòng chọn màu sắc!",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+
+            if (!productDetailData.size) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Vui lòng chọn kích thước!",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+
+            // Confirm update action
+            const result = await Swal.fire({
+                icon: 'question',
+                title: "Lưu các thay đổi?",
+                showCancelButton: true,
+                confirmButtonText: "Có",
+                cancelButtonText: "Không"
+            });
+
+            if (!result.isConfirmed) {
+                return;
+            }
+
+            // Send AJAX request to update product details
+            const response = await fetch('/admin/product_detail/update/' + idProduct_Detail, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
+                body: JSON.stringify(productDetailData)
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+                if (responseData.message === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: "Cập nhật thành công!",
+                        confirmButtonText: "OK"
+                    }).then(() => {
+                        // Refresh the product details view
+                        viewProductDetail(idProduct, pageProductDetail);
+                        $('#myModalEdit').modal('hide');
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: responseData.message,
+                        confirmButtonText: "OK"
+                    });
+                }
+            } else {
+                throw new Error(responseData.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Đã xảy ra lỗi. Vui lòng thử lại!',
+                confirmButtonText: "OK"
+            });
+        }
+    }
+
+
+    async function loadColors(selectedColorId) {
+        try {
+            const response = await fetch('/admin/product/color/getAll', {
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem("token") }
+            });
+            const data = await response.json();
+            const colorSelect = document.getElementById("color-select-edit");
+            colorSelect.innerHTML = '';
+            data.forEach(color => {
+                const option = document.createElement("option");
+                option.value = color.id;
+                option.text = color.ten;
+                if (color.id === selectedColorId) {
+                    option.selected = true;
+                }
+                colorSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error loading colors:', error);
+        }
+    }
+
+    async function loadSizes(selectedSizeId) {
+        try {
+            const response = await fetch('/admin/product/size/getAll', {
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem("token") }
+            });
+            const data = await response.json();
+            const sizeSelect = document.getElementById("size-select-edit");
+            sizeSelect.innerHTML = '';
+            data.forEach(size => {
+                const option = document.createElement("option");
+                option.value = size.id;
+                option.text = size.ten;
+                if (size.id === selectedSizeId) {
+                    option.selected = true;
+                }
+                sizeSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error loading sizes:', error);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        loadColors();
+        loadSizes();
+    });
+
 
     $('#myModalEdit').on('hidden.bs.modal', function (e) {
         $('#myModalTable').modal('show');
@@ -1413,52 +1212,23 @@
     }
 
     function showConfirmPopup() {
-
         var data = getDataFromForm();
-
         var isValid = 0;
-
         var regex = /^[A-Za-z]/;
-
-        console.log(data);
 
         if (data.ten === '') {
             document.getElementById('error-name-update').innerText = 'Vui lòng điền tên!';
-            isValid += 1;
-        }
-        if (data.thuongHieu === '-1') {
-            document.getElementById('error-brand-update').innerText = 'Vui lòng chọn thương hiệu!';
-            isValid += 1;
-        }
-        if (data.coAo === '-1') {
-            document.getElementById('error-provider-update').innerText = 'Vui lòng chọn loại cổ áo!';
-            isValid += 1;
-        }
-        if (data.danhMuc === '-1') {
-            document.getElementById('error-category-update').innerText = 'Vui lòng chọn danh mục!';
             isValid += 1;
         }
         if (data.gia === '') {
             document.getElementById('error-price-update').innerText = 'Vui lòng điền đơn giá!';
             isValid += 1;
         }
-        if (data.duoiAo === '') {
-            document.getElementById('error-shirTail-update').innerText = 'Vui lòng điền loại đuôi áo!';
-            isValid += 1;
-        }
-        if (data.soLuong === -1) {
+        if (data.soLuong === '') {
             document.getElementById('error-quantity-update').innerText = 'Vui lòng điền số lượng!';
             isValid += 1;
         }
-        if (data.kieuDang === -1) {
-            document.getElementById('error-desgins-update').innerText = 'Vui lòng điền kiểu dáng!';
-            isValid += 1;
-        }
-        if (data.chatLieu === -1) {
-            document.getElementById('error-material-update').innerText = 'Vui lòng điền chất liệu!';
-            isValid += 1;
-        }
-        console.log(isValid);
+
         if (isValid === 0) {
             swal.fire({
                 icon: 'question',
@@ -1469,15 +1239,12 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/api/admin/product/update/' + idProduct,
+                        url: '/admin/product/update/' + idProduct,
                         method: 'POST',
                         contentType: 'application/json',
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem("token")
-                        },
+                        headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")},
                         data: JSON.stringify(data),
                         success: function (response) {
-                            console.log(response);
                             if (response === 'success') {
                                 swal.fire({
                                     icon: 'success',
@@ -1490,64 +1257,47 @@
                                     }
                                 });
                             } else {
-                                for (i = 0; i < response.length; i++) {
-                                    if (response[i].statusText === 'failure') {
-                                        if (response[i].message === 'errorFormatName') {
-                                            if (regex.test(data.tenSP)) {
-                                                (async () => {
-                                                    await Toast.fire({
-                                                        icon: "error",
-                                                        title: "Tên tối thiếu 10 kí tự,tối đa 50 kí tự!",
-                                                    });
-                                                })();
+                                response.forEach(item => {
+                                    if (item.statusText === 'failure') {
+                                        if (item.message === 'errorFormatName') {
+                                            if (regex.test(data.ten)) {
+                                                Toast.fire({
+                                                    icon: "error",
+                                                    title: "Tên tối thiếu 4 kí tự,tối đa 50 kí tự!",
+                                                });
                                             } else {
-                                                (async () => {
-                                                    await Toast.fire({
-                                                        icon: "error",
-                                                        title: "Tên phải bắt đầu bằng chữ!",
-                                                    });
-                                                    await Toast.fire({
-                                                        icon: "error",
-                                                        title: "Tên tối thiếu 10 kí tự,tối đa 50 kí tự!",
-                                                    });
-                                                })();
+                                                Toast.fire({
+                                                    icon: "error",
+                                                    title: "Tên phải bắt đầu bằng chữ!",
+                                                });
                                             }
                                         }
-                                        if (response[i].message === 'errorDuplicateName') {
-                                            (async () => {
-                                                await Toast.fire({
-                                                    icon: "error",
-                                                    title: "Tên sản phẩm đã tồn tại!",
-                                                });
-                                            })();
+                                        if (item.message === 'errorDuplicateName') {
+                                            Toast.fire({
+                                                icon: "error",
+                                                title: "Tên sản phẩm đã tồn tại!",
+                                            });
                                         }
-                                        if (response[i].message === 'errorFormatPrice') {
-                                            (async () => {
-                                                await Toast.fire({
-                                                    icon: "error",
-                                                    title: "Định dạng đơn giá không đúng!",
-                                                });
-                                            })();
+                                        if (item.message === 'errorInvalidQuantity') {
+                                            Toast.fire({
+                                                icon: "error",
+                                                title: "Số lượng không được < 0!",
+                                            });
                                         }
-                                        if (response[i].message === 'errorPriceLessThan') {
-                                            (async () => {
-                                                await Toast.fire({
-                                                    icon: "error",
-                                                    title: "Đơn giá không dưới 70.000VND!",
-                                                });
-                                            })();
+                                        if (item.message === 'errorPriceLessThan') {
+                                            Toast.fire({
+                                                icon: "error",
+                                                title: "Đơn giá không dưới 70.000VND!",
+                                            });
                                         }
-                                        if (response[i].message === 'errorPriceMoreThan') {
-                                            (async () => {
-                                                await Toast.fire({
-                                                    icon: "error",
-                                                    title: "Đơn giá không quá 5.000.000VND!",
-                                                });
-                                            })();
+                                        if (item.message === 'errorFormatSalePrice') {
+                                            Toast.fire({
+                                                icon: "error",
+                                                title: "Giá sale phải < đơn giá!",
+                                            });
                                         }
                                     }
-                                }
-                                // end loop for
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
@@ -1559,50 +1309,118 @@
         }
     }
 
+
+    document.addEventListener("DOMContentLoaded", function() {
+        loadColors();
+        loadSizes();
+    });
+
+    // Hàm để làm mới nội dung của các thẻ select
+    function refreshSelects() {
+        var colorSelect = document.getElementById("product-color-detail-input");
+        var sizeSelect = document.getElementById("product-size-detail-input");
+        colorSelect.innerHTML = ''; // Xóa nội dung cũ
+        sizeSelect.innerHTML = ''; // Xóa nội dung cũ
+        loadColorsAddDetail();
+        loadSizesAddDetail();
+    }
+
+    // Gọi hàm refreshSelects khi modal được mở
+    $('#myModalView').on('shown.bs.modal', function () {
+        refreshSelects();
+    });
+
+    function loadColorsAddDetail() {
+        $.ajax({
+            url: '/admin/product/color/getAll', // URL để lấy dữ liệu màu sắc
+            method: 'GET',
+            success: function(response) {
+                console.log('color:' + JSON.stringify(response));
+                var colorSelect = document.getElementById("product-color-detail-input");
+                response.forEach(function(color) {
+                    var option = document.createElement("option");
+                    option.value = color.id;
+                    option.text = color.ten; // Đảm bảo thuộc tính này đúng với dữ liệu trả về từ API
+                    colorSelect.appendChild(option);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function loadSizesAddDetail() {
+        $.ajax({
+            url: '/admin/product/size/getAll', // URL để lấy dữ liệu kích thước
+            method: 'GET',
+            success: function(response) {
+                console.log('size:' + JSON.stringify(response));
+                var sizeSelect = document.getElementById("product-size-detail-input");
+                response.forEach(function(size) {
+                    var option = document.createElement("option");
+                    option.value = size.id;
+                    option.text = size.ten; // Đảm bảo thuộc tính này đúng với dữ liệu trả về từ API
+                    sizeSelect.appendChild(option);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
     function showConfirmPopupSave() {
         var count = document.getElementById("product-detail-count-input").value;
         var spct;
         var selectedColors = [];
-        var colorCheckboxes = document.querySelectorAll('input[name="product-color-input"]:checked');
-        colorCheckboxes.forEach(function (checkbox) {
-            selectedColors.push(checkbox.value);
-        });
-
         var selectedSizes = [];
-        var sizeCheckboxes = document.querySelectorAll('input[name="product-detail-size-input"]:checked');
-        sizeCheckboxes.forEach(function (checkbox) {
-            selectedSizes.push(checkbox.value);
-        });
+        var trangThai = document.querySelector('input[name="trangThai"]:checked').value;
+
+        var colorSelect = document.getElementById("product-color-detail-input");
+        for (var i = 0; i < colorSelect.options.length; i++) {
+            if (colorSelect.options[i].selected) {
+                selectedColors.push(colorSelect.options[i].value);
+            }
+        }
+
+        var sizeSelect = document.getElementById("product-size-detail-input");
+        for (var i = 0; i < sizeSelect.options.length; i++) {
+            if (sizeSelect.options[i].selected) {
+                selectedSizes.push(sizeSelect.options[i].value);
+            }
+        }
+
         if (count === '') {
             swal.fire({
                 icon: "warning",
                 title: "Bạn Chưa Nhập Số Lượng Sản Phẩm?",
                 confirmButtonText: "OK"
-            })
+            });
         } else if (isNaN(count)) {
             swal.fire({
                 icon: "warning",
                 title: "Hãy nhập đúng số lượng!",
                 confirmButtonText: "OK"
-            })
+            });
         } else if (count <= 50 || count >= 2000) {
             swal.fire({
                 icon: "warning",
-                title: "Số lượng phải lớn hơn 50 và bé hơn 2000!",
+                title: "Số lượng phải lớn hơn 50 và bé hơn 1000!",
                 confirmButtonText: "OK"
-            })
+            });
         } else if (selectedColors.length === 0) {
             swal.fire({
                 icon: "warning",
                 title: "Bạn Chưa Chọn Màu Sắc?",
-                confirmButtonText: "OK",
-            })
+                confirmButtonText: "OK"
+            });
         } else if (selectedSizes.length === 0) {
             swal.fire({
                 icon: "warning",
                 title: "Bạn Chưa Chọn Size?",
-                confirmButtonText: "OK",
-            })
+                confirmButtonText: "OK"
+            });
         } else {
             swal.fire({
                 icon: 'question',
@@ -1612,46 +1430,28 @@
                 cancelButtonText: "Không"
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     var productArray = [];
 
-                    if (selectedColors.length > selectedSizes.length) {
-                        for (i = 0; i < selectedColors.length; i++) {
-                            for (y = 0; y < selectedSizes.length; y++) {
-                                spct = {
-                                    sl: count,
-                                    ms: selectedColors[i],
-                                    size: selectedSizes[y]
-                                }
-                                productArray.push(spct);
-                            }
-                        }
-                    } else {
-                        for (i = 0; i < selectedSizes.length; i++) {
-                            for (y = 0; y < selectedColors.length; y++) {
-                                spct = {
-                                    sl: count,
-                                    ms: selectedColors[y],
-                                    size: selectedSizes[i]
-                                }
-                                productArray.push(spct);
-                            }
-                        }
-                    }
-                    var uniqueArr = productArray.reduce(function (acc, curr) {
-                        if (acc.indexOf(curr) === -1) {
-                            acc.push(curr);
-                        }
-                        return acc;
-                    }, []);
+                    selectedColors.forEach(color => {
+                        selectedSizes.forEach(size => {
+                            spct = {
+                                soluong: count,
+                                mauSac: color,
+                                size: size,
+                                trangThai: trangThai
+                            };
+                            productArray.push(spct);
+                        });
+                    });
+
                     $.ajax({
-                        url: '/api/admin/product/save_product_detail/validation/' + idProduct,
+                        url: '/admin/product/save_product_detail/validation/' + idProduct,
                         method: 'POST',
                         contentType: 'application/json',
                         headers: {
                             'Authorization': 'Bearer ' + localStorage.getItem("token")
                         },
-                        data: JSON.stringify(uniqueArr),
+                        data: JSON.stringify(productArray),
                         success: function (response) {
                             var countIsValid = {
                                 true: 0,
@@ -1665,27 +1465,24 @@
                                     countIsValid.false++;
                                 }
                             });
-                            console.log("false : " + countIsValid.false);
-                            console.log("true : " + countIsValid.true);
+
                             if (countIsValid.true > 0 && countIsValid.false === 0) {
                                 swal.fire({
                                     icon: "error",
                                     title: "Các Sản Phẩm Bạn Muốn Thêm Đã Tồn Tại!",
                                     text: "Vui Lòng Kiểm Tra Và Thử Lại!",
                                     showCancelButton: true
-                                })
-                            }
-                            if (countIsValid.true > 0 && countIsValid.false > 0) {
+                                });
+                            } else if (countIsValid.true > 0 && countIsValid.false > 0) {
                                 swal.fire({
                                     icon: "error",
                                     title: "Có " + countIsValid.true + " Sản Phẩm Bạn Muốn Thêm Đã Tồn Tại!",
                                     text: "Vui Lòng Kiểm Tra Và Thử Lại!",
                                     showCancelButton: true
-                                })
-                            }
-                            if (countIsValid.true === 0 && countIsValid.false > 0) {
+                                });
+                            } else if (countIsValid.true === 0 && countIsValid.false > 0) {
                                 $.ajax({
-                                    url: '/api/admin/product/save_product_detail/save/' + idProduct,
+                                    url: '/admin/product/save_product_detail/save/' + idProduct,
                                     method: 'POST',
                                     contentType: 'application/json',
                                     headers: {
@@ -1693,22 +1490,15 @@
                                     },
                                     data: JSON.stringify(response),
                                     success: function (response) {
-                                        console.log(response);
                                         if (response === "success") {
                                             swal.fire({
                                                 icon: "success",
                                                 title: "Thêm Thành Công!",
                                                 confirmButtonText: "Ok"
-                                            })
-                                            viewProductDetail(idProduct, 0);
-                                            document.querySelectorAll('input').forEach(function (input) {
-                                                if (input.getAttribute('name') === 'product-color-input') {
-                                                    input.checked = false;
-                                                }
-                                                if (input.getAttribute('name') === 'product-detail-size-input') {
-                                                    input.checked = false;
-                                                }
                                             });
+                                            viewProductDetail(idProduct, 0);
+                                            colorSelect.selectedIndex = -1;
+                                            sizeSelect.selectedIndex = -1;
                                             document.getElementById('product-detail-count-input').value = '';
                                             $('#myModalView').modal('hide');
                                             loadPage(page);
@@ -1718,33 +1508,25 @@
                                         console.error('Error:', error);
                                     }
                                 });
-                            }
-                            if (countIsValid.true === 0 && countIsValid.false === 0) {
+                            } else if (countIsValid.true === 0 && countIsValid.false === 0) {
                                 $.ajax({
-                                    url: '/api/admin/product/save_product_detail/save/' + idProduct,
+                                    url: '/admin/product/save_product_detail/save/' + idProduct,
                                     method: 'POST',
                                     contentType: 'application/json',
                                     headers: {
                                         'Authorization': 'Bearer ' + localStorage.getItem("token")
                                     },
-                                    data: JSON.stringify(uniqueArr),
+                                    data: JSON.stringify(productArray),
                                     success: function (response) {
-                                        console.log(response);
                                         if (response === "success") {
                                             swal.fire({
                                                 icon: "success",
                                                 title: "Thêm Thành Công!",
                                                 confirmButtonText: "Ok"
-                                            })
-                                            viewProductDetail(idProduct, 0);
-                                            document.querySelectorAll('input').forEach(function (input) {
-                                                if (input.getAttribute('name') === 'product-color-input') {
-                                                    input.checked = false;
-                                                }
-                                                if (input.getAttribute('name') === 'product-detail-size-input') {
-                                                    input.checked = false;
-                                                }
                                             });
+                                            viewProductDetail(idProduct, 0);
+                                            colorSelect.selectedIndex = -1;
+                                            sizeSelect.selectedIndex = -1;
                                             document.getElementById('product-detail-count-input').value = '';
                                             $('#myModalView').modal('hide');
                                             loadPage(page);
@@ -1764,170 +1546,6 @@
             });
         }
     }
-
-    async function showConfirmPopupUpdate() {
-        if (isPictureUploaded === true && sourceImg === undefined) {
-            await (async () => {
-                await Toast.fire({
-                    icon: "warning",
-                    title: "Ảnh Chưa Được Tải Xong!",
-                    timer: 3000
-                });
-            })();
-        } else {
-            swal.fire({
-                icon: 'question',
-                title: "Bạn có muốn lưu thay đổi?",
-                showCancelButton: true,
-                confirmButtonText: "Lưu",
-                cancelButtonText: 'Quay lại'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    console.log(sourceImg);
-                    var count = document.getElementById("productdetail-count-input-edit").value;
-                    var color;
-                    var size;
-                    const colorInput = document.querySelectorAll('input[name="ms"]:checked');
-                    if (colorInput.length > 0) {
-                        color = colorInput[0].value;
-                    }
-                    const sizeInput = document.querySelectorAll('input[name="size-update"]:checked');
-                    if (sizeInput.length > 0) {
-                        size = sizeInput[0].value;
-                    }
-                    var spct = {
-                        sl: count,
-                        ms: color,
-                        size: size,
-                        imgSrc: sourceImg
-                    }
-                    if (count === '') {
-                        swal.fire({
-                            title: "Hãy Nhập Số Lượng!",
-                            icon: 'warning'
-                        })
-                    }
-                    console.log(spct);
-                    $.ajax({
-                        url: '/api/admin/product_detail/update/' + idProduct_Detail,
-                        method: 'POST',
-                        contentType: 'application/json',
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem("token")
-                        },
-                        data: JSON.stringify(spct),
-                        success: function (response, status) {
-                            console.log(response);
-                            if (status === "success" && response !== "No Valid") {
-                                swal.fire({
-                                    title: response + "!",
-                                    icon: 'warning'
-                                })
-                            }
-                            if (status === "success" && response === "No Valid") {
-                                swal.fire({
-                                    title: "Sản Phẩm Chi Tiết Đã Được Cập Nhật!",
-                                    icon: 'success'
-                                })
-                                $('#myModalEdit').modal('hide');
-                                viewProductDetail(idProduct, pageProductDetail);
-                                isPictureUploaded = false;
-                                sourceImg = 'null';
-                                loadPage(page);
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', error);
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-    // async function loadPage(pageNumber) {
-    //     let keyword = document.getElementById("search-product-input").value.trim().toLowerCase();
-    //     let status = document.getElementById("filter-status").value;
-    //     let collection = document.getElementById("filter-collections").value;
-    //     let sort = $("#sort").val();
-    //     let supplier = $("#filter-supplier").val();
-    //     let trademark = $("#filter-trademark").val();
-    //
-    //     console.log('page number', pageNumber)
-    //
-    //     var url = "/admin/product/page?page=" + pageNumber + '&size=' + 3 + '&sort=' + sort;
-    //     if (keyword !== '') {
-    //         url += '&keyWord=' + keyword + '&status=' + status + '&collection=' + collection + '&supplier=' + supplier + '&trademark=' + trademark;
-    //     } else {
-    //         url += '&status=' + status + '&collection=' + collection + '&supplier=' + supplier + '&trademark=' + trademark;
-    //     }
-    //
-    //     console.log(url)
-    //
-    //     const response = await fetch(url, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': 'Bearer ' + localStorage.getItem("token")
-    //         }
-    //     });
-    //     page = pageNumber;
-    //     var result = await response.json();
-    //     console.log(result);
-    //     var list = result.content;
-    //     var totalPage = result.totalPages;
-    //     var number = result.number;
-    //     var main = '';
-    //     for (let i = 0; i < list.length; i++) {
-    //         var urlDetailPD = '/api/client/product_detail/detailPD/' + list[i].id;
-    //         const responseDetailPD = await fetch(urlDetailPD, {
-    //             method: 'GET'
-    //         });
-    //
-    //         const data = await responseDetailPD.json();
-    //
-    //         let quantity = 0;
-    //         if (data.length > 0) {
-    //             for (let j = 0; j < data.length; j++) {
-    //                 quantity += data[j].soLuong;
-    //             }
-    //         }
-    //         var trangThaiBadge = (list[i].trangThai === 0) ? '<div class="form-check form-switch" \>\n' +
-    //             '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 1)" />\n' +
-    //             '</div>' : '<div class="form-check form-switch" \>\n' +
-    //             '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0)" checked/>\n' +
-    //             '</div>';
-    //         main += `<tr >
-    //                         <td scope="row">${list[i].maSP}</td>
-    //                         <td scope="row">${list[i].tenSP}</td>
-    //                         <td scope="row">${quantity}</td>
-    //                         <td scope="row">${formatMoney(list[i].gia)}</td>
-    //                         <td scope="row">${list[i].danhMuc === 0 ? 'Quần' : 'Áo'}</td>
-    //                         <td scope="row">${list[i].ncc.ten}</td>
-    //                         <td scope="row">${list[i].thieu.ten}</td>
-    //                         <td>${trangThaiBadge}</td>
-    //                         <td>
-    //                             <div class="hstack gap-3 flex-warp">
-    //                             <div onclick="detailProduct(${list[i].id})"
-    //                                  class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
-    //                             <div onclick="viewProductDetail(${list[i].id},0)"><i class="ri-eye-2-line"></i></div>
-    //                              </div>
-    //                         </td>
-    //                  </tr>`
-    //     }
-    //     document.getElementById("list_Product").innerHTML = main;
-    //     document.getElementById("pagination").innerHTML = `
-    //             <div class="pagination-wrap hstack gap-2">
-    //                    <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number === 0 ? totalPage - 1 : 0})"  >
-    //                    <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
-    //                    <button class="page-item pagination-prev" id="pagination-prev" onclick="loadPage(${number - 1 < 0 ? totalPage - 1 : number - 1})">
-    //                    <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-    //                    <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
-    //                    <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number + 1 === totalPage ? 0 : number + 1})">
-    //                    <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-    //                    <button class="page-item pagination-next" id="pagination-next" onclick="loadPage(${number === totalPage - 1 ? 0 : totalPage - 1})">
-    //                    <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
-    //             </div>`;
-    // }
 
     window.onload = function () {
         loadPage(0);
@@ -2037,7 +1655,7 @@
                 return response.json();
             }).then(data => {
                 console.log(data);
-                document.getElementById('product-detail-name-input').value = data.tenSP;
+                document.getElementById('product-detail-name-input').value = data.ten;
                 $('#myModalView').modal('show');
             })
                 .catch(error => console.error('Error:', error));
@@ -2050,63 +1668,72 @@
 
         var colorName = $('#filter-color :selected').text();
 
-        var baseUrl;
+        var baseUrl = `/admin/product/product_detail/${Idproduct}/${pageNumber || 0}?color=${color}&size=${size}`;
 
-        if (pageNumber === undefined) {
-            baseUrl = "/admin/product/product_detail/" + Idproduct + "/" + 0 + "?color=" + color + "&size=" + size;
-        }
-        if (pageNumber !== undefined) {
-            baseUrl = "/admin/product/product_detail/" + Idproduct + '/' + pageNumber + "?color=" + color + "&size=" + size;
-        }
+        var url = `/admin/product/product_detail/${Idproduct}/0?color=0&size=0`;
 
-        var url = "/admin/product/product_detail/" + Idproduct + "/" + 0 + "?color=" + 0 + "&size=" + 0;
+        try {
+            const response_check = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
 
-        const response_check = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
-            }
-        });
+            const checkResult = await response_check.json();
+            let checkList = checkResult.content;
 
+            idProduct = Idproduct;
+            pageProductDetail = pageNumber;
 
-        const checkResult = await response_check.json();
+            const response = await fetch(baseUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
 
-        let checkList = checkResult.content;
+            const result = await response.json();
+            console.log(result);  // Kiểm tra dữ liệu trả về từ API
 
-        idProduct = Idproduct;
-        pageProductDetail = pageNumber;
+            const list = result.content;
+            console.log(list[0]);  // Kiểm tra phần tử đầu tiên của list
 
-        const response = await fetch(baseUrl, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
-            }
-        });
-        var result = await response.json();
-        var list = result.content;
-        console.log(list);
-        var totalPage = result.totalPages;
-        var number = result.number;
-        var main = '';
-        $('#myModalTable').modal('show');
-        if (list.length > 0) {
-            for (i = 0; i < list.length; i++) {
-                main += `<tr >
-                            <td scope="row">${list[i].id}</td>
-                            <td scope="row">${list[i].ms.ten}</td>
-                            <td scope="row">${list[i].size}</td>
-                            <td scope="row">${list[i].soLuong}</td>
-                            <td>
-                                <div class="hstack gap-3 flex-warp">
-                                <div onclick="editProductDetail(${list[i].id})"
-                                     class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
-                                 </div>
-                            </td>
-                     </tr>`
-            }
-        } else {
-            if (checkList.length === 0) {
-                main = `
+            const totalPage = result.totalPages;
+            const number = result.number;
+            let main = '';
+            $('#myModalTable').modal('show');
+
+            if (list.length > 0) {
+                for (let i = 0; i < list.length; i++) {
+                    let id = list[i]?.id || '';
+                    let tenSanPham = list[i]?.idSanPham?.ten || 'N/A';
+                    let ngayTao = list[i]?.ngayTao || 'N/A';
+                    let soluong = list[i]?.soluong || 0;
+                    let tenMauSac = list[i]?.idMauSac?.ten || 'N/A';
+                    let tenSize = list[i]?.idSize?.ten || 'N/A';
+                    let trangThai = list[i]?.trangThai === 1 ? 'Còn Hàng' : 'Hết Hàng';
+
+                    main += `<tr>
+                        <td scope="row">${id}</td>
+                        <td scope="row">${tenSanPham}</td>
+                        <td scope="row">${ngayTao}</td>
+                        <td scope="row">${soluong}</td>
+                        <td scope="row">${tenMauSac}</td>
+                        <td scope="row">${tenSize}</td>
+                        <td scope="row">${trangThai}</td>
+                        <td>
+                            <div class="hstack gap-3 flex-warp">
+                                <div onclick="editProductDetail(${id})" class="link-info fs-15">
+                                    <i class="ri-edit-2-line"></i>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>`;
+                }
+            } else {
+                if (checkList.length === 0) {
+                    main = `
                 <tr>
                     <td></td>
                     <td>
@@ -2115,8 +1742,8 @@
                     <td></td>
                 </tr>
             `;
-            } else if (checkList.length > 0 && color === "0" && size !== "0") {
-                main = `
+                } else if (checkList.length > 0 && color === "0" && size !== "0") {
+                    main = `
                 <tr>
                     <td></td>
                     <td>
@@ -2125,8 +1752,8 @@
                     <td></td>
                 </tr>
             `;
-            } else if (checkList.length > 0 && color !== "0" && size === "0") {
-                main = `
+                } else if (checkList.length > 0 && color !== "0" && size === "0") {
+                    main = `
                 <tr>
                     <td></td>
                     <td>
@@ -2135,8 +1762,8 @@
                     <td></td>
                 </tr>
             `;
-            } else {
-                main = `
+                } else {
+                    main = `
                 <tr>
                     <td></td>
                     <td>
@@ -2145,22 +1772,35 @@
                     <td></td>
                 </tr>
             `;
+                }
             }
+
+            document.getElementById("list_Product_Detail").innerHTML = main;
+
+            // Tạo nút phân trang
+            var currentPage = `<div class="pagination-wrap hstack gap-2">
+            <button class="page-item pagination-prev" id="pagination-prev" onclick="viewProductDetail(${Idproduct},${number - 1 < 0 ? totalPage - 1 : number - 1})">
+                <i class="mdi mdi-chevron-left align-middle ms-1"></i>
+            </button>
+            <ul class="pagination listjs-pagination mb-0">`;
+
+            for (let i = 0; i < totalPage; i++) {
+                currentPage += `<li class="${i === number ? 'active' : ''}"><a class="page" onclick="viewProductDetail(${Idproduct},${i})">${i + 1}</a></li>`;
+            }
+
+            currentPage += `</ul>
+            <button class="page-item pagination-next" id="pagination-next" onclick="viewProductDetail(${Idproduct},${number + 1 >= totalPage ? 0 : number + 1})">
+                <i class="mdi mdi-chevron-right align-middle ms-1"></i>
+            </button>
+        </div>`;
+
+            document.getElementById("pagination2").innerHTML = currentPage;
+
+        } catch (error) {
+            console.error('Error:', error);
         }
-        document.getElementById("list_Product_Detail").innerHTML = main;
-        document.getElementById("pagination2").innerHTML = `
-                <div class="pagination-wrap hstack gap-2">
-                       <button class="page-item pagination-prev" id="pagination-prev" onclick="viewProductDetail(${Idproduct},${number === 0 ? totalPage - 1 : 0})">
-                       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
-                       <button class="page-item pagination-prev" id="pagination-prev" onclick="viewProductDetail(${Idproduct},${number - 1 < 0 ? totalPage - 1 : number - 1})">
-                       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-                       <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page">${number + 1}</a></li></ul>
-                       <button class="page-item pagination-next" id="pagination-next" onclick="viewProductDetail(${Idproduct},${number + 1 === totalPage ? 0 : number + 1})">
-                       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-                       <button class="page-item pagination-next" id="pagination-next" onclick="viewProductDetail(${Idproduct},${totalPage - 1 === number ? 0 : totalPage - 1})">
-                       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button>
-                </div>`;
     }
+
 
     function formatMoney(money) {
         const VND = new Intl.NumberFormat('vi-VN', {
@@ -2221,35 +1861,25 @@
                 }
             }
         });
+
     }
+
+
 </script>
 <script th:inline="javascript">
 
-    async function findType() {
-        let url = '/api/admin/sport/find-all';
+    function validPriceSale() {
+        var priceSaleInput = document.getElementById('product-priceSale-update-input');
+        var errorPriceSale = document.getElementById('error-priceSale-update');
 
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
+        priceSaleInput.addEventListener('input', function () {
+            if (priceSaleInput.value.trim() !== '') {
+                errorPriceSale.style.display = 'none';
+            } else {
+                errorPriceSale.style.display = 'block';
             }
-        })
-
-        const data = await response.json();
-
-        console.log(data);
-
-        var sport = '<option selected value="-1">Open this select menu</option>';
-
-        for (let i = 0; i < data.length; i++) {
-            sport += `
-                <option value="${data[i].id}">${data[i].ten}</option>
-            `;
-        }
-
-        document.getElementById('product-type-update-input').innerHTML = sport;
+        });
     }
-
 
     function validPrice() {
         var priceInput = document.getElementById('product-price-update-input');
@@ -2260,6 +1890,19 @@
                 errorPrice.style.display = 'none';
             } else {
                 errorPrice.style.display = 'block';
+            }
+        });
+    }
+
+    function validQuantity() {
+        var quantityInput = document.getElementById('product-quantity-update-input');
+        var errorQuantity = document.getElementById('error-quantity-update');
+
+        quantityInput.addEventListener('input', function () {
+            if (quantityInput.value.trim() !== '') {
+                errorQuantity.style.display = 'none';
+            } else {
+                errorQuantity.style.display = 'block';
             }
         });
     }

@@ -6,6 +6,7 @@ import com.example.manstore.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
+    @EntityGraph(attributePaths = {"idThuongHieu", "idDanhMuc", "idCoAo", "idDuoiAo", "idKieuDang", "idChatLieu"})
     public Optional<SanPham> getSanPhamById(Integer id) {
         return sanPhamRepository.findById(id);
     }

@@ -1,6 +1,7 @@
 package com.example.manstore.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,8 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 @Table(name = "Size")
 public class Size {
     @Id
@@ -35,6 +38,7 @@ public class Size {
 
     @OneToMany(mappedBy = "idSize", fetch = FetchType.LAZY)
     @JsonIgnore
+    @JsonIgnoreProperties({"idMauSac", "hibernateLazyInitializer", "handler"})
     private List<ChiTietSanPham> chiTietSanPhams;
 
 }
