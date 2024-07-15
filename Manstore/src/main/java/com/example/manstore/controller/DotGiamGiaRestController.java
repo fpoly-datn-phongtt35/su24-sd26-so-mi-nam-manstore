@@ -1,21 +1,20 @@
 package com.example.manstore.controller;
 
 import com.example.manstore.entity.DotGiamGia;
-import com.example.manstore.entity.HoaDon;
 import com.example.manstore.repository.DotGiamGiaRepository;
 import com.example.manstore.service.DotGiamGiaService;
 import com.example.manstore.service.HoaDonService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,31 +49,27 @@ public class DotGiamGiaRestController {
         return ResponseEntity.ok().body(dotGiamGiaService.findById(id));
     }
 
-//    @RequestMapping(value = "/admin/promotion/check-status", method = RequestMethod.GET)
-//    public ResponseEntity<?> checkPromotion(@RequestParam(value = "id", required = false) Integer id) {
-//        if (hoaDonService.getByPromotion(String.valueOf(id)).size() == 0) {
-//            Optional<DotGiamGia> dgg = dotGiamGiaService.findById(id);
-//            if (dgg.isEmpty()) {
-//                System.out.println("promotion is null");
-//                return new ResponseEntity<>("not exist", HttpStatus.OK);
-//            }
-//            return new ResponseEntity<>("success", HttpStatus.OK);
-//
-//        } else {
-//            return new ResponseEntity<>("error", HttpStatus.OK);
-//        }
-//    }
-
     @GetMapping("/admin/promotion/change-status/{id}/{status}")
     public ResponseEntity<?> changeStatus(@PathVariable("id") Integer id, @PathVariable("status") int status) {
-        boolean isExist = dotGiamGiaService.findById(Integer.valueOf(id)).isPresent();
-        if (isExist) {
-            DotGiamGia dgg = dotGiamGiaService.findById(Integer.valueOf(id)).get();
-            dgg.setTrangThai(Boolean.parseBoolean(String.valueOf(status)));
-            dotGiamGiaService.create(dgg);
-            return new ResponseEntity<>("success", HttpStatus.OK);
+        //List<DonHang> count = donHangService.getByPromotion(String.valueOf(id));
+        Optional<DotGiamGia> dgg = dotGiamGiaRepository.findById(id);
+
+        if (dgg.isPresent()) {
+            DotGiamGia dotGiamGia = dgg.get();
+
+            if (dotGiamGia.getNgayKetThuc().isBefore(LocalDate.now()) && status == 1) {
+                return ResponseEntity.status(HttpStatus.OK).body("out of date");
+//        }
+//
+//        if (count.size() > 0) {
+//            return ResponseEntity.status(HttpStatus.OK).body("failure");
+            } else {
+                dotGiamGia.setTrangThai(status == 1);
+                dotGiamGiaService.create(dotGiamGia);
+                return ResponseEntity.status(HttpStatus.OK).body("success");
+            }
         } else {
-            return new ResponseEntity<>("fail", HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body("promotion not exists");
         }
     }
 }

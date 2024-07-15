@@ -87,17 +87,17 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive table-card mb-1">
-                                    <table class="table table-striped tablefix">
+                                    <table class="table align-middle table-nowrap">
                                         <thead class="table-light">
                                         <tr>
-                                            <th>#</th>
-                                            <th>Mã</th>
-                                            <th>Tên</th>
-                                            <th class="text-center">Giá trị giảm giá</th>
-                                            <th>Giá trị áp dụng</th>
-                                            <th>Ngày bắt đầu</th>
-                                            <th>Ngày kết thúc</th>
-                                            <th class="text-center">Trạng thái</th>
+                                            <th class="sticky-col text-center">Stt</th>
+                                            <th class="sticky-col text-center">Mã</th>
+                                            <th class="sticky-col text-center">Tên</th>
+                                            <th class="sticky-col text-center">Giá trị giảm giá</th>
+                                            <th class="sticky-col text-center">Giá trị áp dụng</th>
+                                            <th class="sticky-col text-center">Ngày bắt đầu</th>
+                                            <th class="sticky-col text-center">Ngày kết thúc</th>
+                                            <th class="sticky-col text-center">Trạng thái</th>
                                             <th class="sticky-col text-center">Hành động</th>
                                         </tr>
                                         </thead>
@@ -274,8 +274,8 @@
         loadPromotion(0);
         validName();
         validCode();
-        validateStart();
-        validateEnd();
+        // validateStart();
+        // validateEnd();
         // validBill();
         // validate();
     }
@@ -328,18 +328,17 @@
   </div>`;
 
             main += `<tr>
-                    <td>${i + 1}</td>
-                    <td>${list[i].ma}</td>
-                    <td>${list[i].ten}</td>
+                    <td scope="row" class="text-center">${i + 1}</td>
+                    <td scope="row" class="text-center">${list[i].ma}</td>
+                    <td scope="row" class="text-center">${list[i].ten}</td>
                     <td class="text-center">${list[i].loaiGiamGia === false ? formatmoney(list[i].giaTriGiam) : list[i].giaTriGiam + '%'}</td>
-                    <td>${formatmoney(giaTriApDung)}</td>
-                    <td>${momentDateStart.format('DD/MM/YYYY')}</td>
-                    <td>${momentDateEnd.format('DD/MM/YYYY')}</td>
-                    <td>${trangThaiBadge}</td>
-                    <td class="sticky-col d-flex justify-content-between">
-                        <a onclick="loadChiTiet(${list[i].id})" href="#" data-bs-toggle="modal" data-bs-target="#chitiet"><i class="ri-eye-2-line"></i></a>
+                    <td scope="row" class="text-center">${formatmoney(giaTriApDung)}</td>
+                    <td scope="row" class="text-center">${momentDateStart.format('DD/MM/YYYY')}</td>
+                    <td scope="row" class="text-center">${momentDateEnd.format('DD/MM/YYYY')}</td>
+                    <td scope="row" class="text-center">${trangThaiBadge}</td>
+                    <td class="text-center">
+                        <a onclick="loadChiTiet(${list[i].id})" class="link-info fs-15"><i class="ri-eye-2-line"></i></a>
                         <a onclick="detail(${list[i].id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></a>
-
                     </td>
                 </tr>`
         }
