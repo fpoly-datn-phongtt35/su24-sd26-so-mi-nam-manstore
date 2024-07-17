@@ -51,20 +51,11 @@
                         <select class="form-control mb-3"
                                 aria-label=".form-select-lg example"
                                 id="sort"
-                                onchange="loadPage(0)">
-                          <option value="ngayTao,desc" selected>Mới nhất</option>
-                          <option value="ngayTao,asc">Cũ nhất</option>
+                                onchange="sorted(0)">
+                          <option value="ngayTao,asc" selected >Cũ nhất</option>
+                          <option value="ngayTao,desc">Mới nhất</option>
                           <option value="gia,desc">Giá giảm dần</option>
                           <option value="gia,asc">Giá tăng dần</option>
-                        </select>
-                      </div>
-                      <div class="col-md-2">
-                        <label class="form-label">Danh Mục</label>
-                        <select class="form-control mb-3"
-                                aria-label=".form-select-lg example"
-                                id="filter-category"
-                                onchange="loadSelect()">
-                          <option value="-1" selected>Tất Cả</option>
                         </select>
                       </div>
                       <div class="col-md-2">
@@ -72,37 +63,21 @@
                         <select class="form-control mb-3"
                                 aria-label=".form-select-lg example"
                                 id="filter-status"
-                                onchange="loadPage(0)">
+                                onchange="statusCheck()">
                           <option value="-1" selected>Tất Cả</option>
-                          <option value="0">Hết Hàng</option>
-                          <option value="1">Còn Hàng</option>
-                        </select>
-                      </div>
-                      <!--                                            <div class="col-md-3">-->
-                      <!--                                                <label class="form-label">Nhà Cung Cấp</label>-->
-                      <!--                                                <select class="form-control mb-3"-->
-                      <!--                                                        aria-label=".form-select-lg example"-->
-                      <!--                                                        id="filter-supplier"-->
-                      <!--                                                        onchange="loadPage(0)">-->
-                      <!--                                                </select>-->
-                      <!--                                            </div>-->
-                      <div class="col-md-3">
-                        <label class="form-label">Thương Hiệu</label>
-                        <select class="form-control mb-3"
-                                aria-label=".form-select-lg example"
-                                id="filter-trademark"
-                                onchange="loadPage(0)">
+                          <option value="1">Đang mở bán</option>
+                          <option value="0">Chưa mở bán</option>
                         </select>
                       </div>
                     </div>
                   </div>
 
                   <div class="col-md-4 d-flex justify-content-center align-items-center p-0">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                       <div class="search-box ms-2">
                         <input type="text" class="form-control" autocomplete="off"
                                id="search-product-input" placeholder="Tìm Kiếm"
-                               onkeyup="loadPage(0)"/>
+                               onkeyup="searchProductByNameOrCode()"/>
                         <i class="ri-search-line search-icon"></i>
                       </div>
                     </div>
@@ -292,7 +267,7 @@
                           <label class="form-label">Danh Mục</label>
                           <select class="form-select mb-3" aria-label=".form-select-lg example"
                                   id="product-category-update-input" onchange="validCollections()">
-                            <option selected value="-1">Open this select menu</option>
+                            <!--                            <option selected value="-1">Open this select menu</option>-->
                           </select>
                           <span id="error-category-update" class="text-danger fw-bold"></span>
                         </div>
@@ -355,51 +330,42 @@
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Danh Sách Chi Tiết Sản Phẩm</h4>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"
-                      aria-label="Close"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <div class="card p-2" style="height: 115px;">
                 <div class="row">
                   <div class="col-md-6 d-flex justify-content-center align-items-center justify-content-sm-start">
-                    <button class="btn btn-success"
-                            id="add-product-detail-btn" onclick="showModalAddProductDetail()">
-                      <i class="ri-add-line align-bottom me-1"></i>
-                      Thêm Sản Phẩm Chi Tiết
+                    <button class="btn btn-success" id="add-product-detail-btn" onclick="showModalAddProductDetail()">
+                      <i class="ri-add-line align-bottom me-1"></i> Thêm Sản Phẩm Chi Tiết
                     </button>
                   </div>
                   <div class="col-md-6 d-flex justify-content-center align-items-center justify-content-sm-between">
                     <div class="row" style="padding-bottom: 10px">
-                      <div class="col-md-6">
+                      <div class="col-md-6" style="display: none;">
                         <label class="form-label">Màu Sắc</label>
-                        <select class="form-select mb-3"
-                                aria-label=".form-select-lg example"
-                                id="filter-color"
-                                onchange="viewProductDetail(idProduct,undefined)">
+                        <select class="form-select mb-3" aria-label=".form-select-lg example" id="filter-color" onchange="viewProductDetail(idProduct,undefined)">
                           <option value="0" selected>Tất Cả</option>
-<!--                          <option value="1">Đen</option>-->
-<!--                          <option value="2">Trắng</option>-->
-<!--                          <option value="3">Đỏ</option>-->
-<!--                          <option value="4">Xám</option>-->
-<!--                          <option value="5">Xanh Lục</option>-->
-<!--                          <option value="6">Tím Xanh</option>-->
-<!--                          <option value="7">Xanh Da Trời</option>-->
-<!--                          <option value="8">Vàng</option>-->
+                          <option value="1">Đen</option>
+                          <option value="2">Trắng</option>
+                          <option value="3">Đỏ</option>
+                          <option value="4">Xám</option>
+                          <option value="5">Xanh Lục</option>
+                          <option value="6">Tím Xanh</option>
+                          <option value="7">Xanh Da Trời</option>
+                          <option value="8">Vàng</option>
                         </select>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6" style="display: none;">
                         <label class="form-label">Size</label>
-                        <select class="form-select mb-3"
-                                aria-label=".form-select-lg example"
-                                id="filter-size"
-                                onchange="viewProductDetail(idProduct,undefined)">
+                        <select class="form-select mb-3" aria-label=".form-select-lg example" id="filter-size" onchange="viewProductDetail(idProduct,undefined)">
                           <option value="0" selected>Tất Cả</option>
-<!--                          <option value="s">S</option>-->
-<!--                          <option value="m">M</option>-->
-<!--                          <option value="l">L</option>-->
-<!--                          <option value="xl">XL</option>-->
-<!--                          <option value="xxl">XXL</option>-->
-<!--                          <option value="2xl">2XL</option>-->
+                          <option value="s">S</option>
+                          <option value="m">M</option>
+                          <option value="l">L</option>
+                          <option value="xl">XL</option>
+                          <option value="xxl">XXL</option>
+                          <option value="2xl">2XL</option>
                         </select>
                       </div>
                     </div>
@@ -440,9 +406,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                Đóng
-              </button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
           </div>
           <!-- end col -->
@@ -464,7 +428,7 @@
       <div class="modal-body" style="margin-bottom: 20px;">
         <form id="save_product_detail" action="" class="my-form" method="post">
           <div class="card p-2">
-            <div class="row ">
+            <div class="row">
               <div class="col-lg-6">
                 <div class="mb-3">
                   <label class="form-label">Tên Sản Phẩm</label>
@@ -484,38 +448,36 @@
             <!-- end row -->
 
             <div class="row">
-              <div class="col-lg-6" style="padding-top: 20px">
+              <div class="col-lg-6">
                 <div class="mb-3">
                   <label class="form-label">Số Lượng</label>
-                  <input type="text" class="form-control"
-                         id="product-detail-count-input"
+                  <input type="text" class="form-control" id="product-detail-count-input"
                          placeholder="Enter count" aria-label="Count"
-                         aria-describedby="product-count-addon"
-                         required th:name="soLuong">
+                         aria-describedby="product-count-addon" required th:name="soLuong">
                 </div>
               </div>
               <div class="col-lg-6">
                 <div class="mb-3">
                   <label class="form-label">Size</label>
-                  <select class="form-select mb-3" id="product-size-detail-input" >
+                  <select class="form-select mb-3" id="product-size-detail-input">
                   </select>
                   <span id="errorSize" class="text-danger fw-bold"></span>
                 </div>
               </div>
             </div>
+            <!-- end row -->
 
-            <div class="row">
+            <div class="row" style="display: none">
               <div class="col-lg-12">
                 <div class="mb-3">
                   <label class="form-label">Trạng Thái </label>
                   <div class="form-check mb-3">
-                    <input class="form-check-input" type="radio" id="add-detail-radioStatus1" value="1" name="trangThai"
-                           checked>
+                    <input class="form-check-input" type="radio" id="add-detail-radioStatus1" value="1" name="trangThai">
                     <label class="form-check-label" for="add-detail-radioStatus1">
                       Còn Hàng
                     </label>
                     <br>
-                    <input class="form-check-input" type="radio" id="add-detail-radioStatus2" value="0" name="trangThai">
+                    <input class="form-check-input" type="radio" id="add-detail-radioStatus2" value="0" name="trangThai" checked>
                     <label class="form-check-label" for="add-detail-radioStatus2">
                       Hết Hàng
                     </label>
@@ -523,6 +485,7 @@
                 </div>
               </div>
             </div>
+            <!-- end row -->
 
           </div>
         </form>
@@ -542,6 +505,7 @@
 
 
 <!-- form edit chi tiet san pham-->
+<!-- HTML part for update modal -->
 <div class="modal" id="myModalEdit" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -569,14 +533,13 @@
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-lg-6">
                   <div class="mb-3">
                     <label class="form-label">Số Lượng</label>
                     <input type="text" class="form-control" id="productdetail-count-input-edit"
                            placeholder="Nhập số lượng" aria-label="Count"
-                           aria-describedby="product-count-addon" required th:name="soLuong">
+                           aria-describedby="product-count-addon" required>
                   </div>
                 </div>
                 <div class="col-lg-6">
@@ -586,7 +549,6 @@
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-lg-12">
                   <div class="mb-3">
@@ -595,13 +557,12 @@
                       <input class="form-check-input" type="radio" id="update-RadioStatus1" value="1" name="trangThai">
                       <label class="form-check-label" for="update-RadioStatus1">Còn Hàng</label>
                       <br>
-                      <input class="form-check-input" type="radio" id="update-RadioStatus2" value="0" name="trangThai">
+                      <input class="form-check-input" type="radio" id="update-RadioStatus2" value="0" name="trangThai" checked>
                       <label class="form-check-label" for="update-RadioStatus2">Hết Hàng</label>
                     </div>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </form>
@@ -658,7 +619,7 @@
         try {
             await loadSelect();
             await loadPage(0);
-            await findDataInSelect();
+            // await findDataInSelect();
         } catch (error) {
             console.error('Error during initial loading:', error);
             alert('An error occurred during the initial loading. Please try again.');
@@ -667,11 +628,9 @@
 
 
     function resetFilter() {
-        document.getElementById('sort').value = 'ngayTao,desc';
-        document.getElementById('filter-collections').value = '-1';
+        document.getElementById('sort').value = 'ngayTao,asc';
         document.getElementById('filter-status').value = '-1';
-        document.getElementById('filter-category').value = '-1';
-        document.getElementById('filter-trademark').value = '-1';
+        document.getElementById('search-product-input').value = '';
 
         loadPage(0);
     }
@@ -781,68 +740,6 @@
         }
     }
 
-    async function detailProduct(productId) {
-        try {
-            idProduct = productId;
-            const response = await fetch('/admin/product/detail/' + productId, {
-                method: 'GET',
-                headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            document.getElementById('product-name-update-input').value = data.ten;
-            document.getElementById('product-price-update-input').value = data.gia;
-            document.getElementById('product-priceSale-update-input').value = data.giaSale;
-            document.getElementById('product-quantity-update-input').value = data.soLuong;
-            document.getElementById('product-description-update-input').value = data.moTa;
-
-            if (data.trangThai === 1) {
-                document.getElementById('radioStatus1').checked = true;
-            } else if (data.trangThai === 0) {
-                document.getElementById('radioStatus2').checked = true;
-            }
-
-            await findDataInSelect(data);
-            console.log(data);
-            //gán giá trị cho các thẻ select
-            if (data) {
-                if (data.idThuongHieu) {
-                    document.getElementById('product-brand-update-input').value = data.idThuongHieu.id;
-                }
-                if (data.idDanhMuc) {
-                    document.getElementById('product-category-update-input').value = data.idDanhMuc.id;
-                }
-                if (data.idCoAo) {
-                    document.getElementById('product-collar-update-input').value = data.idCoAo.id;
-                }
-                if (data.idDuoiAo) {
-                    document.getElementById('product-shirtTail-update-input').value = data.idDuoiAo.id;
-                }
-                if (data.idKieuDang) {
-                    document.getElementById('product-designs-update-input').value = data.idKieuDang.id;
-                }
-                if (data.idChatLieu) {
-                    document.getElementById('product-material-update-input').value = data.idChatLieu.id;
-                }
-            }
-
-            document.getElementById('error-name-update').innerText = '';
-            document.getElementById('error-brand-update').innerText = '';
-            document.getElementById('error-collar-update').innerText = '';
-            document.getElementById('error-category-update').innerText = '';
-            document.getElementById('error-price-update').innerText = '';
-            document.getElementById('error-priceSale-update').innerText = '';
-            document.getElementById('error-quantity-update').innerText = '';
-            document.getElementById('error-description-update').innerText = '';
-            $('#myModal').modal('show');
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
     // Gọi hàm loadSelect khi trang được tải
     window.onload = async function () {
         await loadSelect();
@@ -877,7 +774,7 @@
             const [listTrademark, listCategory, listCollar, listShirtTail, listDesigns, listMaterial] = await Promise.all([
                 responseTrademark.json(),
                 responseCategory.json(),
-                responseCollar.json(),
+                responseCollar.json(), // Lấy danh sách cổ áo
                 responseShirtTail.json(),
                 responseDesigns.json(),
                 responseMaterial.json()
@@ -906,7 +803,6 @@
             document.getElementById('product-designs-update-input').innerHTML = options.designsOptions;
             document.getElementById('product-material-update-input').innerHTML = options.materialOptions;
 
-
         } catch (error) {
             console.error('Error:', error);
             alert('There was an error loading data. Please try again later.');
@@ -916,6 +812,69 @@
     $('#myModal').on('show.bs.modal', function (e) {
         findDataInSelect();
     });
+
+    async function detailProduct(productId) {
+        try {
+            idProduct = productId;
+            const response = await fetch('/admin/product/detail/' + productId, {
+                method: 'GET',
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log('Product details fetched:', data);
+
+            if (!data.id || !data.ten) {
+                throw new Error('Invalid product data structure');
+            }
+
+            document.getElementById('product-name-update-input').value = data.ten;
+            document.getElementById('product-price-update-input').value = data.gia;
+            document.getElementById('product-priceSale-update-input').value = data.giaSale;
+            document.getElementById('product-quantity-update-input').value = data.soLuong;
+            document.getElementById('product-description-update-input').value = data.moTa;
+
+            if (data.trangThai === 1) {
+                document.getElementById('radioStatus1').checked = true;
+            } else if (data.trangThai === 0) {
+                document.getElementById('radioStatus2').checked = true;
+            }
+
+            // await findDataInSelect(data);
+
+            // Thiết lập giá trị cho các thẻ select
+            // Giả sử bạn có một thẻ select với id là 'product-collar-update-input'
+            let selectElement = document.getElementById('product-collar-update-input');
+
+// Giả sử bạn muốn thiết lập option có giá trị là data.idCoAo.id làm option được chọn
+            let valueToSelect = data.idCoAo.ten; // giả sử data.idCoAo.id là giá trị bạn muốn chọn
+
+// Duyệt qua tất cả các option của thẻ select
+            for (let i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].value == valueToSelect) {
+                    // Nếu giá trị của option bằng với giá trị bạn muốn chọn, thiết lập thuộc tính selected cho option đó
+                    selectElement.options[i].selected = true;
+                    break;
+                }
+            }
+
+            document.getElementById('error-name-update').innerText = '';
+            document.getElementById('error-brand-update').innerText = '';
+            document.getElementById('error-collar-update').innerText = '';
+            document.getElementById('error-category-update').innerText = '';
+            document.getElementById('error-price-update').innerText = '';
+            document.getElementById('error-priceSale-update').innerText = '';
+            document.getElementById('error-quantity-update').innerText = '';
+            document.getElementById('error-description-update').innerText = '';
+            $('#myModal').modal('show');
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
 
     async function editProductDetail(idProductDetail) {
@@ -970,7 +929,6 @@
 
     async function showConfirmPopupUpdate() {
         try {
-            // Collect data from form
             const productDetailData = {
                 soluong: document.getElementById('productdetail-count-input-edit').value,
                 mauSac: document.getElementById('color-select-edit').value,
@@ -978,7 +936,6 @@
                 trangThai: document.querySelector('input[name="trangThai"]:checked').value
             };
 
-            // Validate data
             if (!productDetailData.soluong || productDetailData.soluong <= 0) {
                 Swal.fire({
                     icon: "warning",
@@ -1006,7 +963,7 @@
                 return;
             }
 
-            // Confirm update action
+
             const result = await Swal.fire({
                 icon: 'question',
                 title: "Lưu các thay đổi?",
@@ -1019,7 +976,6 @@
                 return;
             }
 
-            // Send AJAX request to update product details
             const response = await fetch('/admin/product_detail/update/' + idProduct_Detail, {
                 method: 'POST',
                 headers: {
@@ -1038,7 +994,6 @@
                         title: "Cập nhật thành công!",
                         confirmButtonText: "OK"
                     }).then(() => {
-                        // Refresh the product details view
                         viewProductDetail(idProduct, pageProductDetail);
                         $('#myModalEdit').modal('hide');
                     });
@@ -1067,7 +1022,7 @@
         try {
             const response = await fetch('/admin/product/color/getAll', {
                 method: 'GET',
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem("token") }
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
             });
             const data = await response.json();
             const colorSelect = document.getElementById("color-select-edit");
@@ -1090,7 +1045,7 @@
         try {
             const response = await fetch('/admin/product/size/getAll', {
                 method: 'GET',
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem("token") }
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem("token")}
             });
             const data = await response.json();
             const sizeSelect = document.getElementById("size-select-edit");
@@ -1109,7 +1064,7 @@
         }
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         loadColors();
         loadSizes();
     });
@@ -1310,7 +1265,7 @@
     }
 
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         loadColors();
         loadSizes();
     });
@@ -1334,17 +1289,17 @@
         $.ajax({
             url: '/admin/product/color/getAll', // URL để lấy dữ liệu màu sắc
             method: 'GET',
-            success: function(response) {
+            success: function (response) {
                 console.log('color:' + JSON.stringify(response));
                 var colorSelect = document.getElementById("product-color-detail-input");
-                response.forEach(function(color) {
+                response.forEach(function (color) {
                     var option = document.createElement("option");
                     option.value = color.id;
                     option.text = color.ten; // Đảm bảo thuộc tính này đúng với dữ liệu trả về từ API
                     colorSelect.appendChild(option);
                 });
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('Error:', error);
             }
         });
@@ -1354,17 +1309,17 @@
         $.ajax({
             url: '/admin/product/size/getAll', // URL để lấy dữ liệu kích thước
             method: 'GET',
-            success: function(response) {
+            success: function (response) {
                 console.log('size:' + JSON.stringify(response));
                 var sizeSelect = document.getElementById("product-size-detail-input");
-                response.forEach(function(size) {
+                response.forEach(function (size) {
                     var option = document.createElement("option");
                     option.value = size.id;
                     option.text = size.ten; // Đảm bảo thuộc tính này đúng với dữ liệu trả về từ API
                     sizeSelect.appendChild(option);
                 });
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('Error:', error);
             }
         });
@@ -1631,6 +1586,254 @@
         } catch (error) {
             console.error('Lỗi khi tải trang:', error);
             document.getElementById("list_Product").innerHTML = `<tr><td colspan="10">Lỗi khi tải dữ liệu: ${error.message}</td></tr>`;
+        }
+    }
+
+    async function searchProductByNameOrCode(pageNumber) {
+        var keyword = document.getElementById("search-product-input").value.trim().toLowerCase();
+        var url;
+        console.log(keyword);
+        console.log(pageNumber);
+
+        var page = pageNumber === undefined ? 0 : pageNumber;
+
+        if (keyword === '') {
+            loadPage(0);
+            return;
+        } else {
+            var encodedKeyword = encodeURIComponent(keyword);
+            url = "/admin/product/page/search/" + page + "/" + encodedKeyword;
+        }
+
+        console.log(url);
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+
+            const result = await response.json();
+            console.log(result);
+
+            // Kiểm tra và log toàn bộ cấu trúc dữ liệu trả về
+            console.log('Full response data:', result);
+
+            var list = result.content;
+            var totalPage = (result.totalPages !== undefined && !isNaN(parseInt(result.totalPages, 10))) ? parseInt(result.totalPages, 10) : NaN;
+            var number = (result.number !== undefined && !isNaN(parseInt(result.number, 10))) ? parseInt(result.number, 10) : NaN;
+            var main = '';
+
+
+            for (let i = 0; i < list.length; i++) {
+
+                let imagePath = "https://via.placeholder.com/150"; // Default image path
+                if (list[i].duongDan) {
+                    let imagePaths = list[i].duongDan.split(",").map(path => path.replace("public", "").trim());
+                    if (imagePaths.length > 0) {
+                        imagePath = `http://localhost:8080/assets/images/products/${imagePaths[0]}`;
+                    }
+                }
+
+                let danhMuc = list[i].idDanhMuc ? list[i].idDanhMuc.ten : '';
+                let thuongHieu = list[i].idThuongHieu ? list[i].idThuongHieu.ten : '';
+
+                main += `<tr>
+                <td scope="row">${list[i].id}</td>
+                <td><strong>${list[i].ma}</strong></td>
+                <td><strong>${list[i].ten}</strong></td>
+                 <td>
+                    <div class="d-flex g-0">
+                        <img src="${imagePath}" alt="product-img" class="avatar-md rounded bg-light">
+                    </div>
+                </td>
+                <td>${list[i].soLuong}</td>
+                <td>${list[i].ngayTao}</td>
+                <td>${list[i].gia}</td>
+                <td>${danhMuc}</td>
+                <td>${thuongHieu}</td>
+                <td>${list[i].trangThai == 1 ? 'Đang mở bán' : 'Chưa mở bán'}</td>
+                <td>
+                    <div class="hstack gap-3 flex-warp">
+                        <div onclick="viewProductDetail(${list[i].id})" class="ri-eye-2-line"></div>
+                        <div onclick="detailProduct(${list[i].id})" class="link-info fs-15">
+                            <i class="ri-edit-2-line"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>`;
+            }
+            document.getElementById("list_Product").innerHTML = main;
+
+            if (!isNaN(number) && !isNaN(totalPage)) {
+                var currentPage = `<div class="pagination-wrap hstack gap-2">
+                <button class="page-item pagination-prev" id="pagination-prev" onclick="searchProductByNameOrCode(${number - 1 < 0 ? totalPage - 1 : number - 1})">
+                    <i class="mdi mdi-chevron-left align-middle ms-1"></i>
+                </button>
+                <ul class="pagination listjs-pagination mb-0">`;
+
+                for (let i = 0; i < totalPage; i++) {
+                    currentPage += `<li class="${i === number ? 'active' : ''}"><a class="page" onclick="searchProductByNameOrCode(${i})">${i + 1}</a></li>`;
+                }
+
+                currentPage += `</ul>
+                <button class="page-item pagination-next" id="pagination-next" onclick="searchProductByNameOrCode(${number + 1 >= totalPage ? 0 : number + 1})">
+                    <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
+                </div>`;
+                document.getElementById("pagination").innerHTML = currentPage;
+            } else {
+                console.error('Invalid pagination data:', {number, totalPage});
+                alert('Dữ liệu phân trang không hợp lệ. Vui lòng kiểm tra lại.');
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error);
+            alert('Có lỗi xảy ra trong quá trình tìm kiếm. Vui lòng thử lại sau.');
+        }
+    }
+
+    async function sorted(pageNumber = 0, pageSize = 3) {
+        const sortSelect = document.getElementById("sort");
+        const sortValue = sortSelect.value.split(',');
+        const sortField = sortValue[0];
+        const sortDirection = sortValue[1];
+
+        console.log(`Sorting by: ${sortField} ${sortDirection}`);
+
+
+        const url = `/admin/product/sorted?page=${pageNumber}&size=${pageSize}&sort=${sortField},${sortDirection}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Lỗi HTTP! trạng thái: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            // Kiểm tra nếu result.content là một mảng
+            if (Array.isArray(result.content)) {
+                const list = result.content;
+                let main = '';
+
+                list.forEach(item => {
+                    let hinhAnh = item.duongDan ? item.duongDan.split(",")[0].replace("public", "") : "https://via.placeholder.com/150";
+                    main += `<tr>
+                    <td>${item.id}</td>
+                    <td>${item.ma}</td>
+                    <td>${item.ten}</td>
+                    <td><img src="http://localhost:8080/assets/images/products/${hinhAnh}" alt="product-img" class="avatar-md rounded bg-light"></td>
+                    <td>${item.soLuong}</td>
+                    <td>${item.ngayTao}</td>
+                    <td>${item.gia}</td>
+                    <td>${item.danhMuc}</td>
+                    <td>${item.thuongHieu}</td>
+                    <td>${item.trangThai == 1 ? "Đang mở bán" : "Chưa mở bán"}</td>
+                    <td>
+                        <div class="hstack gap-3 flex-warp">
+                            <div onclick="viewProductDetail(${item.id})" class="ri-eye-2-line"></div>
+                            <div onclick="detailProduct(${item.id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                        </div>
+                    </td>
+                </tr>`;
+                });
+
+                document.getElementById("list_Product").innerHTML = main;
+
+                let totalPages = result.totalPages;
+                let pagination = `<div class="pagination-wrap hstack gap-2">
+                <button class="page-item pagination-prev" id="pagination-prev" onclick="sorted(${pageNumber - 1})" ${pageNumber === 0 ? 'disabled' : ''}>
+                    <i class="mdi mdi-chevron-left align-middle ms-1"></i>
+                </button>
+                <ul class="pagination">`;
+
+                for (let i = 0; i < totalPages; i++) {
+                    pagination += `<li class="page-item ${i === pageNumber ? 'active' : ''}"><a class="page-link" onclick="sorted(${i})">${i + 1}</a></li>`;
+                }
+
+                pagination += `</ul>
+                <button class="page-item pagination-next" id="pagination-next" onclick="sorted(${pageNumber + 1})" ${pageNumber + 1 >= totalPages ? 'disabled' : ''}>
+                    <i class="mdi mdi-chevron-right align-middle ms-1"></i>
+                </button>
+            </div>`;
+
+                document.getElementById("pagination").innerHTML = pagination;
+            } else {
+                console.error('result.content is not an array:', result.content);
+            }
+
+        } catch (error) {
+            console.error('Lỗi khi tải trang:', error);
+            document.getElementById("list_Product").innerHTML = `<tr><td colspan="10">Lỗi khi tải dữ liệu: ${error.message}</td></tr>`;
+        }
+    }
+
+    async function statusCheck(pageNumber = 0) {
+        let status = document.getElementById('filter-status').value;
+
+        let url = (status === '-1') ? `/admin/product/list?page=${pageNumber}&size=3` : `/admin/product/status?page=${pageNumber}&size=3&trangThai=${status}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            if (Array.isArray(result.content)) {
+                let main = '';
+                result.content.forEach(item => {
+                    let hinhAnh = item.duongDan ? item.duongDan.split(",")[0].replace("public", "") : "https://via.placeholder.com/150";
+                    main += `<tr>
+                        <td>${item.id}</td>
+                        <td>${item.ma}</td>
+                        <td>${item.ten}</td>
+                        <td><img src="http://localhost:8080/assets/images/products/${hinhAnh}" alt="product-img" class="avatar-md rounded bg-light"></td>
+                        <td>${item.soLuong}</td>
+                        <td>${item.ngayTao}</td>
+                        <td>${item.gia}</td>
+                        <td>${item.danhMuc}</td>
+                        <td>${item.thuongHieu}</td>
+                        <td>${item.trangThai == 1 ? "Đang mở bán" : "Chưa mở bán"}</td>
+                        <td>
+                            <div class="hstack gap-3 flex-wrap">
+                                <div onclick="viewProductDetail(${item.id})" class="ri-eye-2-line"></div>
+                                <div onclick="detailProduct(${item.id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></div>
+                            </div>
+                        </td>
+                    </tr>`;
+                });
+                document.getElementById("list_Product").innerHTML = main;
+
+                let totalPages = result.totalPages;
+                let pagination = `<div class="pagination-wrap hstack gap-2">
+                    <button class="page-item pagination-prev" id="pagination-prev" onclick="statusCheck(${pageNumber - 1})" ${pageNumber === 0 ? 'disabled' : ''}>
+                        <i class="mdi mdi-chevron-left align-middle ms-1"></i>
+                    </button>
+                    <ul class="pagination">`;
+
+                for (let i = 0; i < totalPages; i++) {
+                    pagination += `<li class="page-item ${i === pageNumber ? 'active' : ''}"><a class="page-link" onclick="statusCheck(${i})">${i + 1}</a></li>`;
+                }
+
+                pagination += `</ul>
+                    <button class="page-item pagination-next" id="pagination-next" onclick="statusCheck(${pageNumber + 1})" ${pageNumber + 1 >= totalPages ? 'disabled' : ''}>
+                        <i class="mdi mdi-chevron-right align-middle ms-1"></i>
+                    </button>
+                </div>`;
+
+                document.getElementById("pagination").innerHTML = pagination;
+            } else {
+                console.error('result.content is not an array:', result.content);
+            }
+        } catch (error) {
+            console.error('Error fetching products by status:', error);
         }
     }
 

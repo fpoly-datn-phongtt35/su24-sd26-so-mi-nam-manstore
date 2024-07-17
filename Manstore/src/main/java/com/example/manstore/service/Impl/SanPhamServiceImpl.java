@@ -17,15 +17,25 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Autowired
     private SanPhamRepository sanPhamRepository;
+
     @Override
     public List<SanPham> getAllSanPham() {
         return sanPhamRepository.findAll();
     }
 
     @Override
-    @EntityGraph(attributePaths = {"idThuongHieu", "idDanhMuc", "idCoAo", "idDuoiAo", "idKieuDang", "idChatLieu"})
     public Optional<SanPham> getSanPhamById(Integer id) {
-        return sanPhamRepository.findById(id);
+        return sanPhamRepository.findById(id)
+                .map(sanPham -> {
+                    // Nạp các thuộc tính liên quan
+                    sanPham.getIdDanhMuc();
+                    sanPham.getIdThuongHieu();
+                    sanPham.getIdCoAo();
+                    sanPham.getIdDuoiAo();
+                    sanPham.getIdKieuDang();
+                    sanPham.getIdChatLieu();
+                    return sanPham;
+                });
     }
 
     @Override
@@ -52,7 +62,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     @Override
-    public Page<SanPham> SearchSPByName(String keyword, Pageable pageable) {
-        return sanPhamRepository.searchSanPhamByName(keyword,pageable);
+    public Page<SanPham> SearchSPByNameOrCode(String keyword, Pageable pageable) {
+        return sanPhamRepository.searchSanPhamByNameOrCode(keyword, pageable);
     }
 }

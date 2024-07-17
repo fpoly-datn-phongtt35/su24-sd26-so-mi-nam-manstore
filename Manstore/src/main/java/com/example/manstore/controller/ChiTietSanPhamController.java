@@ -41,27 +41,23 @@ public class ChiTietSanPhamController {
         chiTietSanPham.setIdSize(sizeService.getSizeById(Integer.parseInt(spct.getSize())));
         chiTietSanPham.setTrangThai(spct.getTrangThai());
 
-        String idProduct = String.valueOf(chiTietSanPham.getIdSanPham().getId());
-
         List<ChiTietSanPham> list = chiTietSanPhamService.getListCTSPById(String.valueOf(chiTietSanPham.getIdSanPham().getId()));
         list.remove(chiTietSanPham);
-        String valid = "valid is null";
+        String valid = "No Valid";
         for (ChiTietSanPham ctspFor : list) {
             boolean isValidMauSac = ctspFor.getIdMauSac().getId() == chiTietSanPham.getIdMauSac().getId();
             boolean isValidSize = ctspFor.getIdSize().getId() == chiTietSanPham.getIdSize().getId();
             if (isValidMauSac && isValidSize) {
                 valid = "Sản Phẩm Chi tiết đã tồn tại";
                 break;
-            } else {
-                valid = "No Valid";
             }
         }
-        if (valid.equalsIgnoreCase("No Valid")) {
+
+        if (valid.equals("No Valid")) {
             chiTietSanPhamService.save(chiTietSanPham);
             return ResponseEntity.ok(Collections.singletonMap("message", "success"));
         } else {
             return ResponseEntity.ok(Collections.singletonMap("message", valid));
         }
     }
-
 }

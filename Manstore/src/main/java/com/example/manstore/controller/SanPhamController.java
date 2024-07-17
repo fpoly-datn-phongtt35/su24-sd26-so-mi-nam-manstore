@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -155,6 +156,49 @@ public class SanPhamController {
         return new ResponseEntity<>(pageResult, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/page/search/{pageNumber}/{keyWord}")
+    public ResponseEntity<?> searchSPByNameOrCode(
+            @PathVariable("pageNumber") int pageNumber,
+            @PathVariable("keyWord") String keyWord) {
+        Pageable pageable = PageRequest.of(pageNumber, 3, Sort.by("id").descending());
+        Page<SanPham> page;
+
+        if (keyWord.equalsIgnoreCase("null")){
+            page = sanPhamService.pageOfSP(pageable);
+        } else {
+            page = sanPhamService.SearchSPByNameOrCode(keyWord, pageable);
+        }
+        return new ResponseEntity<>(page, HttpStatus.OK);
+    }
+
+    @GetMapping("/sorted")
+    @ResponseBody
+    public ResponseEntity<?> sorted(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "ngayTao,desc") String sort) {
+
+        String[] sortParams = sort.split(",");
+        String sortField = sortParams[0];
+        Sort.Direction direction = sortParams[1].equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+        Page<SanPhanResponse> pageResult = sanPhamRepository.findAllSP(pageable);
+
+        return new ResponseEntity<>(pageResult, HttpStatus.OK);
+    }
+
+    @GetMapping("/status")
+    @ResponseBody
+    public ResponseEntity<?> getProductsByStatus(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam int trangThai) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SanPhanResponse> pageResult = sanPhamRepository.findAllByTrangThai(trangThai, pageable);
+        return new ResponseEntity<>(pageResult, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/product_detail", method = RequestMethod.GET)
     private String viewProductDetail() {
         return "admin/products/product-detailed";
@@ -162,7 +206,13 @@ public class SanPhamController {
 
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     private ResponseEntity<?> detailProduct(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok().body(sanPhamService.getSanPhamById(id));
+        Optional<SanPham> sanPhamOpt = sanPhamService.getSanPhamById(id);
+
+        if (sanPhamOpt.isPresent()) {
+            return ResponseEntity.ok().body(sanPhamOpt.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+        }
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -406,7 +456,10 @@ public class SanPhamController {
 
 
     @GetMapping("/product_detail/{id}/{pageNumber}")
-    public ResponseEntity<?> getProductDetail(@PathVariable("id") String id, @PathVariable("pageNumber") int pageNumber, @RequestParam(value = "color", required = false, defaultValue = "0") String color, @RequestParam(value = "size", required = false, defaultValue = "0") String size) {
+    public ResponseEntity<?> getProductDetail(@PathVariable("id") String id,
+                                              @PathVariable("pageNumber") int pageNumber,
+                                              @RequestParam(value = "color", required = false, defaultValue = "0") String color,
+                                              @RequestParam(value = "size", required = false, defaultValue = "0") String size) {
         Page<ChiTietSanPham> page = chiTietSanPhamService.Filter(pageNumber, color, size, id);
         return ResponseEntity.ok().body(page);
     }
@@ -424,11 +477,13 @@ public class SanPhamController {
                 chiTietSanPham.setSoluong(Integer.parseInt(dto.getSoluong()));
                 chiTietSanPham.setIdMauSac(mauSacService.getMauSacById(Integer.parseInt(dto.getMauSac())));
                 chiTietSanPham.setIdSize(sizeService.getSizeById(Integer.parseInt(dto.getSize())));
+                chiTietSanPham.setTrangThai(dto.getTrangThai());
                 //Tạo 1 object để trả về lỗi cho giao diện xử lý
                 ChiTietSanPhamValidationRequest productValidation = new ChiTietSanPhamValidationRequest();
                 productValidation.setMauSac(dto.getMauSac());
                 productValidation.setSize(dto.getSize());
                 productValidation.setSoluong(dto.getSoluong());
+                productValidation.setTrangThai(dto.getTrangThai());
 
                 for (ChiTietSanPham ctspLoopFor : chiTietSanPhamService.getListCTSPById(id)) {
                     boolean isValidMauSac = ctspLoopFor.getIdMauSac().getId() == chiTietSanPham.getIdMauSac().getId();
@@ -469,8 +524,6 @@ public class SanPhamController {
         }
         return ResponseEntity.ok("success");
     }
-
-
 
 
 }

@@ -15,7 +15,7 @@ public interface SanPhamService {
     Boolean update(SanPham sanPham);
     Boolean delete(Integer id);
     Page<SanPham> pageOfSP(Pageable pageable);
-    Page<SanPham> SearchSPByName(String keyword, Pageable pageable);
+    Page<SanPham> SearchSPByNameOrCode(String keyword, Pageable pageable);
 //    Page<SanPham> searchSPByDanhMuc(String keword, Pageable pageable,String danhMuc);
 //    Page<SanPham> searchSPByThuongHieu(String keword, Pageable pageable,String thuongHieu);
 

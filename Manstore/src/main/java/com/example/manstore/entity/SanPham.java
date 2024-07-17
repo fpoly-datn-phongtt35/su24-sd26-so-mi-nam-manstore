@@ -25,7 +25,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "SanPham")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
 public class SanPham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,38 +58,38 @@ public class SanPham {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDanhMuc", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private DanhMuc idDanhMuc;
 
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idThuongHieu", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private ThuongHieu idThuongHieu;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idCoAo", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private CoAo idCoAo;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDuoiAo", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private DuoiAo idDuoiAo;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKieuDang", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private KieuDang idKieuDang;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idChatLieu", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
+    @JsonManagedReference
     private ChatLieu idChatLieu;
 
     @Column(name = "TrangThai")
