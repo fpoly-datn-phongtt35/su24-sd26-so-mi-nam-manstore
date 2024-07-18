@@ -238,6 +238,9 @@
                                    th:name="ngayKetThuc"/>
                             <span id="errorEnddate" class="text-danger" style="display:none;"></span><br>
                         </div>
+
+                        <input type="hidden" id="promotion-date-input" class="form-control" required
+                               th:name="ngayTao"/>
                     </div>
                     <hr>
 
@@ -337,7 +340,7 @@
                     <td scope="row" class="text-center">${momentDateEnd.format('DD/MM/YYYY')}</td>
                     <td scope="row" class="text-center">${trangThaiBadge}</td>
                     <td class="text-center">
-                        <a onclick="loadChiTiet(${list[i].id})" class="link-info fs-15"><i class="ri-eye-2-line"></i></a>
+                        <a onclick="loadChiTiet(${list[i].id})" href="#" data-bs-toggle="modal" data-bs-target="#chitiet" class="link-info fs-15"><i class="ri-eye-2-line"></i></a>
                         <a onclick="detail(${list[i].id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></a>
                     </td>
                 </tr>`
@@ -371,7 +374,7 @@
             document.getElementById('promotion-code-input').value = data.ma
             document.getElementById('promotion-name-input').value = data.ten;
             document.getElementById('promotion-startdate-input').value = data.ngayBatDau;
-            // none
+            document.getElementById('promotion-date-input').value = data.ngayTao;
             document.getElementById('promotion-enddate-input').value = data.ngayKetThuc;
             document.getElementById('promotion-category-input').value = data.loaiGiamGia;
             document.getElementById('promotion-value-input').value = data.giaTriGiam;
