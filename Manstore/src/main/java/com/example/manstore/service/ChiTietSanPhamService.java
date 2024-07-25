@@ -1,0 +1,25 @@
+package com.example.manstore.service;
+
+import com.example.manstore.entity.ChiTietSanPham;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
+public interface ChiTietSanPhamService {
+
+    List<ChiTietSanPham> getAllCTSP();
+
+    Page<ChiTietSanPham> pageOfCTSP(Pageable pageable, String id);
+
+    void save(ChiTietSanPham chiTietSanPham);
+
+    void update(ChiTietSanPham chiTietSanPham);
+
+    ChiTietSanPham getCTSPById(Integer id);
+    List<ChiTietSanPham> getListCTSPById(String id);
+
+    Page<ChiTietSanPham> Filter(int page, String color, String size, String id);
+
+
+}

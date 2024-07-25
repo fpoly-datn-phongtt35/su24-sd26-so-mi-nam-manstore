@@ -1,5 +1,7 @@
 package com.example.manstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "KieuDang")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class KieuDang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +38,7 @@ public class KieuDang {
     private String moTa;
 
     @OneToMany(mappedBy = "idKieuDang", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<SanPham> sanPhams;
 
 }
