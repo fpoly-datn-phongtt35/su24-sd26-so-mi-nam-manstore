@@ -443,6 +443,12 @@ public class SanPhamController {
                 sp.setGiaSale(dto.getGiaSale());
                 sp.setMoTa(dto.getMoTa());
                 sp.setTrangThai(dto.getTrangThai());
+                sp.setIdDanhMuc(danhMucRepository.findById(dto.getDanhMuc()).get());
+                sp.setIdThuongHieu(thuongHieuRepository.findById(dto.getThuongHieu()).get());
+                sp.setIdCoAo(coAoRepository.findById(dto.getCoAo()).get());
+                sp.setIdDuoiAo(duoiAoRepository.findById(dto.getDuoiAo()).get());
+                sp.setIdKieuDang(kieuDangRepository.findById(dto.getKieuDang()).get());
+                sp.setIdChatLieu(chatLieuRepository.findById(dto.getChatLieu()).get());
                 sanPhamService.save(sp);
                 return ResponseEntity.ok("success");
             } catch (Exception e) {
@@ -468,6 +474,7 @@ public class SanPhamController {
     private ResponseEntity<?> validationProductDetail(@RequestBody() List<ChiTietSanPhamRequest> listSPCT, @PathVariable("id") String id) {
 
         List<ChiTietSanPhamValidationRequest> arrayProductValidation = new ArrayList<>();
+
         if (sanPhamService.getSanPhamById(Integer.parseInt(id)).isPresent()) {
             for (ChiTietSanPhamRequest dto : listSPCT) {
                 ChiTietSanPham chiTietSanPham = new ChiTietSanPham();
@@ -477,12 +484,15 @@ public class SanPhamController {
                 chiTietSanPham.setSoluong(Integer.parseInt(dto.getSoluong()));
                 chiTietSanPham.setIdMauSac(mauSacService.getMauSacById(Integer.parseInt(dto.getMauSac())));
                 chiTietSanPham.setIdSize(sizeService.getSizeById(Integer.parseInt(dto.getSize())));
+                chiTietSanPham.setDuongDan(dto.getDuongDan());
                 chiTietSanPham.setTrangThai(dto.getTrangThai());
+
                 //Tạo 1 object để trả về lỗi cho giao diện xử lý
                 ChiTietSanPhamValidationRequest productValidation = new ChiTietSanPhamValidationRequest();
                 productValidation.setMauSac(dto.getMauSac());
                 productValidation.setSize(dto.getSize());
                 productValidation.setSoluong(dto.getSoluong());
+                productValidation.setDuongDan(dto.getDuongDan());
                 productValidation.setTrangThai(dto.getTrangThai());
 
                 for (ChiTietSanPham ctspLoopFor : chiTietSanPhamService.getListCTSPById(id)) {
@@ -518,6 +528,7 @@ public class SanPhamController {
                 chiTietSanPham.setSoluong(Integer.parseInt(dto.getSoluong()));
                 chiTietSanPham.setIdMauSac(mauSacService.getMauSacById(Integer.parseInt(dto.getMauSac())));
                 chiTietSanPham.setIdSize(sizeService.getSizeById(Integer.parseInt(dto.getSize())));
+                chiTietSanPham.setDuongDan(dto.getDuongDan());
                 chiTietSanPham.setTrangThai(dto.getTrangThai());
                 chiTietSanPhamService.save(chiTietSanPham);
             }

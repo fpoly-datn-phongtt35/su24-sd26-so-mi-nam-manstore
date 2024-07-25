@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
 
-    @Query("SELECT new com.example.manstore.dto.respone.SanPhanResponse(sp.id, sp.ma, sp.ten, sp.soLuong, sp.ngayTao, sp.gia, sp.giaSale, sp.idDanhMuc.ten,sp.DuongDan, sp.idThuongHieu.ten, sp.idCoAo.ten, sp.idDuoiAo.ten, sp.idKieuDang.ten, sp.idChatLieu.ten, sp.trangThai) FROM SanPham sp")
+    @Query("SELECT new com.example.manstore.dto.respone.SanPhanResponse(sp.id, sp.ma, sp.ten, sp.soLuong, sp.ngayTao, sp.gia, sp.giaSale,sp.idDanhMuc.id,sp.idDanhMuc.ten,sp.DuongDan,sp.idThuongHieu.id,sp.idThuongHieu.ten,sp.idDuoiAo.id,sp.idDuoiAo.ten,sp.idKieuDang.id,sp.idKieuDang.ten,sp.idChatLieu.id,sp.idChatLieu.ten,sp.trangThai) FROM SanPham sp")
     public Page<SanPhanResponse> findAllSP(Pageable pageable);
 
     @Query("SELECT sp FROM SanPham sp WHERE LOWER(sp.ten) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(sp.ma) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<SanPham> searchSanPhamByNameOrCode(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT new com.example.manstore.dto.respone.SanPhanResponse(sp.id, sp.ma, sp.ten, sp.soLuong, sp.ngayTao, sp.gia, sp.giaSale, sp.idDanhMuc.ten,sp.DuongDan, sp.idThuongHieu.ten, sp.idCoAo.ten, sp.idDuoiAo.ten, sp.idKieuDang.ten, sp.idChatLieu.ten, sp.trangThai) " +
+    @Query("SELECT new com.example.manstore.dto.respone.SanPhanResponse(sp.id, sp.ma, sp.ten, sp.soLuong, sp.ngayTao, sp.gia, sp.giaSale,sp.idDanhMuc.id,sp.idDanhMuc.ten,sp.DuongDan,sp.idThuongHieu.id,sp.idThuongHieu.ten,sp.idDuoiAo.id,sp.idDuoiAo.ten,sp.idKieuDang.id,sp.idKieuDang.ten,sp.idChatLieu.id,sp.idChatLieu.ten,sp.trangThai) " +
             "FROM SanPham sp " +
             "ORDER BY " +
             "CASE WHEN :sortField = 'ngayTao' AND :sortDirection = 'asc' THEN sp.ngayTao END ASC, " +
@@ -32,7 +32,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
     );
 
     //query lọc sản phẩm theo trạng thái
-    @Query("SELECT new com.example.manstore.dto.respone.SanPhanResponse(sp.id, sp.ma, sp.ten, sp.soLuong, sp.ngayTao, sp.gia, sp.giaSale, sp.idDanhMuc.ten,sp.DuongDan, sp.idThuongHieu.ten, sp.idCoAo.ten, sp.idDuoiAo.ten, sp.idKieuDang.ten, sp.idChatLieu.ten, sp.trangThai) FROM SanPham sp WHERE sp.trangThai = :trangThai")
+    @Query("SELECT new com.example.manstore.dto.respone.SanPhanResponse(sp.id, sp.ma, sp.ten, sp.soLuong, sp.ngayTao, sp.gia, sp.giaSale,sp.idDanhMuc.id,sp.idDanhMuc.ten,sp.DuongDan,sp.idThuongHieu.id,sp.idThuongHieu.ten,sp.idDuoiAo.id,sp.idDuoiAo.ten,sp.idKieuDang.id,sp.idKieuDang.ten,sp.idChatLieu.id,sp.idChatLieu.ten,sp.trangThai) FROM SanPham sp WHERE sp.trangThai = :trangThai")
     public Page<SanPhanResponse> findAllByTrangThai(@Param("trangThai") int trangThai, Pageable pageable);
 
 

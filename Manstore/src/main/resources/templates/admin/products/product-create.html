@@ -202,7 +202,7 @@
                     </div>
                   </div>
                   <!-- Row 7: Trạng Thái -->
-                  <div class="row">
+                  <div class="row" style="display: none">
                     <div class="col-lg-12">
                       <div class="mb-3">
                         <label class="form-label">Trạng Thái </label>
@@ -575,13 +575,13 @@
         //     document.getElementById('required-description').style.display = 'none';
         // }
 
-        if (data.hinhAnh === '') {
-            document.getElementById('required-image').style.display = 'inline';
-            document.getElementById('errorImage').innerText = 'Vui lòng chọn hình ảnh!';
-            isValid += 1;
-        } else {
-            document.getElementById('required-image').style.display = 'none';
-        }
+        // if (data.hinhAnh === '') {
+        //     document.getElementById('required-image').style.display = 'inline';
+        //     document.getElementById('errorImage').innerText = 'Vui lòng chọn hình ảnh!';
+        //     isValid += 1;
+        // } else {
+        //     document.getElementById('required-image').style.display = 'none';
+        // }
 
         console.log(isValid);
         if (isValid === 0) {
