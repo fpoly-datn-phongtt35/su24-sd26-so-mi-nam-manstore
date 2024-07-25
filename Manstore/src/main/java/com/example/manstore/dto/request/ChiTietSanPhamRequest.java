@@ -16,6 +16,8 @@ public class ChiTietSanPhamRequest {
     private String soluong;
     private String size;
     private String mauSac;
+
+    private String duongDan;
     private Integer trangThai;
 
     @Override
@@ -24,6 +26,7 @@ public class ChiTietSanPhamRequest {
                 ", soluong='" + soluong + '\'' +
                 ", size='" + size + '\'' +
                 ", mauSac='" + mauSac + '\'' +
+                ", duongDan='" + duongDan + '\'' +
                 ", trangThai='" + trangThai + '\'' +
                 '}';
     }

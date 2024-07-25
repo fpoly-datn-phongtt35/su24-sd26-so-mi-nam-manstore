@@ -35,11 +35,19 @@ public class ChiTietSanPhamController {
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public ResponseEntity<?> saveProductDetail(@RequestBody ChiTietSanPhamRequest spct, @PathVariable("id") String id) {
+
+        System.out.println("ID Product: " + id);
+        System.out.println("productDetail: " + spct);
+
         ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getCTSPById(Integer.parseInt(id));
         chiTietSanPham.setSoluong(Integer.parseInt(spct.getSoluong()));
         chiTietSanPham.setIdMauSac(mauSacService.getMauSacById(Integer.parseInt(spct.getMauSac())));
         chiTietSanPham.setIdSize(sizeService.getSizeById(Integer.parseInt(spct.getSize())));
         chiTietSanPham.setTrangThai(spct.getTrangThai());
+
+        if (spct.getDuongDan() != null && !spct.getDuongDan().isEmpty()) {
+            chiTietSanPham.setDuongDan(spct.getDuongDan());
+        }
 
         List<ChiTietSanPham> list = chiTietSanPhamService.getListCTSPById(String.valueOf(chiTietSanPham.getIdSanPham().getId()));
         list.remove(chiTietSanPham);

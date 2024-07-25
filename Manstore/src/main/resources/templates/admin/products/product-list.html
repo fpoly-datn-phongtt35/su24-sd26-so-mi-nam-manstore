@@ -52,7 +52,7 @@
                                 aria-label=".form-select-lg example"
                                 id="sort"
                                 onchange="sorted(0)">
-                          <option value="ngayTao,asc" selected >Cũ nhất</option>
+                          <option value="ngayTao,asc" selected>Cũ nhất</option>
                           <option value="ngayTao,desc">Mới nhất</option>
                           <option value="gia,desc">Giá giảm dần</option>
                           <option value="gia,asc">Giá tăng dần</option>
@@ -335,16 +335,23 @@
             <div class="modal-body">
               <div class="card p-2" style="height: 115px;">
                 <div class="row">
-                  <div class="col-md-6 d-flex justify-content-center align-items-center justify-content-sm-start">
+                  <div class="col-md-4 d-flex justify-content-center align-items-center justify-content-sm-start">
                     <button class="btn btn-success" id="add-product-detail-btn" onclick="showModalAddProductDetail()">
                       <i class="ri-add-line align-bottom me-1"></i> Thêm Sản Phẩm Chi Tiết
                     </button>
                   </div>
-                  <div class="col-md-6 d-flex justify-content-center align-items-center justify-content-sm-between">
+                  <div class="col-md-3 d-flex justify-content-center align-items-center justify-content-sm-between">
+                    <div class="row" style="padding-bottom: 25px">
+                      <label class="form-label">Tên Sản Phẩm</label>
+                    <input type="text" class="form-control" id="productDetail-name" readonly>
+                    </div>
+                  </div>
+                  <div class="col-md-4 d-flex justify-content-center align-items-center justify-content-sm-between">
                     <div class="row" style="padding-bottom: 10px">
-                      <div class="col-md-6" style="display: none;">
+                      <div class="col-md-6">
                         <label class="form-label">Màu Sắc</label>
-                        <select class="form-select mb-3" aria-label=".form-select-lg example" id="filter-color" onchange="viewProductDetail(idProduct,undefined)">
+                        <select class="form-select mb-3" aria-label=".form-select-lg example" id="filter-color"
+                                onchange="viewProductDetail(idProduct,undefined)">
                           <option value="0" selected>Tất Cả</option>
                           <option value="1">Đen</option>
                           <option value="2">Trắng</option>
@@ -356,16 +363,17 @@
                           <option value="8">Vàng</option>
                         </select>
                       </div>
-                      <div class="col-md-6" style="display: none;">
+                      <div class="col-md-6">
                         <label class="form-label">Size</label>
-                        <select class="form-select mb-3" aria-label=".form-select-lg example" id="filter-size" onchange="viewProductDetail(idProduct,undefined)">
+                        <select class="form-select mb-3" aria-label=".form-select-lg example" id="filter-size"
+                                onchange="viewProductDetail(idProduct,undefined)">
                           <option value="0" selected>Tất Cả</option>
-                          <option value="s">S</option>
-                          <option value="m">M</option>
-                          <option value="l">L</option>
-                          <option value="xl">XL</option>
-                          <option value="xxl">XXL</option>
-                          <option value="2xl">2XL</option>
+                          <option value="1">S</option>
+                          <option value="2">M</option>
+                          <option value="3">L</option>
+                          <option value="4">XL</option>
+                          <option value="5">XXL</option>
+                          <option value="6">2XL</option>
                         </select>
                       </div>
                     </div>
@@ -378,12 +386,10 @@
                     <thead class="table-light">
                     <tr>
                       <th scope="col">ID</th>
-                      <th scope="col">Tên Sản Phẩm</th>
-                      <th scope="col">Ngày Tạo</th>
+                      <th scope="col">Ảnh</th>
                       <th scope="col">Số Lượng</th>
                       <th scope="col">Màu Sắc</th>
                       <th scope="col">Size</th>
-                      <th scope="col">Trạng Thái</th>
                       <th scope="col">Action</th>
                     </tr>
                     </thead>
@@ -453,7 +459,7 @@
                   <label class="form-label">Số Lượng</label>
                   <input type="text" class="form-control" id="product-detail-count-input"
                          placeholder="Enter count" aria-label="Count"
-                         aria-describedby="product-count-addon" required th:name="soLuong">
+                         aria-describedby="product-count-addon" required>
                 </div>
               </div>
               <div class="col-lg-6">
@@ -472,12 +478,13 @@
                 <div class="mb-3">
                   <label class="form-label">Trạng Thái </label>
                   <div class="form-check mb-3">
-                    <input class="form-check-input" type="radio" id="add-detail-radioStatus1" value="1" name="trangThai">
+                    <input class="form-check-input" type="radio" id="add-detail-radioStatus1" value="1"
+                           name="trangThai" checked>
                     <label class="form-check-label" for="add-detail-radioStatus1">
                       Còn Hàng
                     </label>
                     <br>
-                    <input class="form-check-input" type="radio" id="add-detail-radioStatus2" value="0" name="trangThai" checked>
+                    <input class="form-check-input" type="radio" id="add-detail-radioStatus2" value="0" name="trangThai" >
                     <label class="form-check-label" for="add-detail-radioStatus2">
                       Hết Hàng
                     </label>
@@ -485,8 +492,22 @@
                 </div>
               </div>
             </div>
-            <!-- end row -->
 
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label" for="product-image-input">Hình Ảnh <span class="text-danger"
+                                                                                     id="required-image"
+                                                                                     style="display:none;">*</span></label>
+                  <input type="file" class="form-control" id="product-image-input" accept="image/*" multiple
+                         value="" onchange="previewImageProductDetail(event)">
+                  <div id="image-preview-container-productDetail" class="d-flex g-2 mt-2"></div>
+                  <span id="errorImage" class="text-danger fw-bold"></span>
+                </div>
+              </div>
+            </div>
+            <!-- end row -->
+            <input type="hidden" id="image-path-input" name="duongDan">
           </div>
         </form>
       </div>
@@ -511,8 +532,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Cập Nhật Sản Phẩm Chi Tiết</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" style="margin-bottom: 20px;">
         <form id="edit_product_detail" action="" class="my-form" method="post">
@@ -550,6 +570,19 @@
                 </div>
               </div>
               <div class="row">
+                <div class="col-lg-6">
+                  <div class="mb-3">
+                    <label class="form-label" for="product-image-input-edit">Hình Ảnh <span class="text-danger"
+                                                                                            id="required-image-edit"
+                                                                                            style="display:none;">*</span></label>
+                    <input type="file" class="form-control" id="product-image-input-edit" accept="image/*" multiple
+                           value="" onchange="previewImageProductDetailEdit(event)">
+                    <div id="image-preview-container-productDetail-edit" class="d-flex g-2 mt-2"></div>
+                    <span id="errorImageEdit" class="text-danger fw-bold"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="display: none">
                 <div class="col-lg-12">
                   <div class="mb-3">
                     <label class="form-label">Trạng Thái </label>
@@ -557,12 +590,13 @@
                       <input class="form-check-input" type="radio" id="update-RadioStatus1" value="1" name="trangThai">
                       <label class="form-check-label" for="update-RadioStatus1">Còn Hàng</label>
                       <br>
-                      <input class="form-check-input" type="radio" id="update-RadioStatus2" value="0" name="trangThai" checked>
+                      <input class="form-check-input" type="radio" id="update-RadioStatus2" value="0" name="trangThai">
                       <label class="form-check-label" for="update-RadioStatus2">Hết Hàng</label>
                     </div>
                   </div>
                 </div>
               </div>
+              <input type="hidden" id="image-path-input-edit" name="duongDan">
             </div>
           </div>
         </form>
@@ -715,28 +749,53 @@
         }
     }
 
-    function previewImage(event) {
-        var files = event.target.files;
-        var container = document.getElementById('image-preview');
+    function previewImageProductDetail(event) {
+        var imagePreviewContainer = document.getElementById('image-preview-container-productDetail');
+        imagePreviewContainer.innerHTML = '';
 
-        // Xóa các ảnh cũ
-        container.innerHTML = '';
+        var files = event.target.files;
+        var imagePaths = [];
 
         for (var i = 0; i < files.length; i++) {
+            var file = files[i];
             var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.className = 'avatar-md rounded bg-light';
+                    imagePreviewContainer.appendChild(imgElement);
 
-            reader.onload = (function (file) {
-                return function (e) {
-                    var img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.display = 'flex';
-                    img.style.gap = '10px';
-                    img.style.width = '100px'; // Điều chỉnh kích thước ảnh nếu cần
-                    container.appendChild(img);
+                    imagePaths.push(file.name);
+                    document.getElementById('image-path-input').value = imagePaths.join(',');
                 };
-            })(files[i]);
+            })(file);
+            reader.readAsDataURL(file);
+        }
+    }
 
-            reader.readAsDataURL(files[i]);
+    function previewImageProductDetailEdit(event) {
+        var imagePreviewContainer = document.getElementById('image-preview-container-productDetail-edit');
+        imagePreviewContainer.innerHTML = '';
+
+        var files = event.target.files;
+        var imagePaths = [];
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.className = 'avatar-md rounded bg-light';
+                    imagePreviewContainer.appendChild(imgElement);
+
+                    imagePaths.push(file.name);
+                    document.getElementById('image-path-input-edit').value = imagePaths.join(',');
+                };
+            })(file);
+            reader.readAsDataURL(file);
         }
     }
 
@@ -746,7 +805,7 @@
         loadPage(0);
     };
 
-    async function findDataInSelect(data) {
+    async function findDataInSelect() {
         let urls = {
             urlTrademark: '/admin/product/trademark/getAll',
             urlCategory: '/admin/product/category/getAll',
@@ -809,11 +868,12 @@
         }
     }
 
-    $('#myModal').on('show.bs.modal', function (e) {
-        findDataInSelect();
-    });
+    // $('#myModal').on('show.bs.modal', function (e) {
+    //     findDataInSelect();
+    // });
 
     async function detailProduct(productId) {
+        await findDataInSelect();
         try {
             idProduct = productId;
             const response = await fetch('/admin/product/detail/' + productId, {
@@ -838,29 +898,22 @@
             document.getElementById('product-quantity-update-input').value = data.soLuong;
             document.getElementById('product-description-update-input').value = data.moTa;
 
+
             if (data.trangThai === 1) {
                 document.getElementById('radioStatus1').checked = true;
             } else if (data.trangThai === 0) {
                 document.getElementById('radioStatus2').checked = true;
             }
 
-            // await findDataInSelect(data);
 
             // Thiết lập giá trị cho các thẻ select
-            // Giả sử bạn có một thẻ select với id là 'product-collar-update-input'
-            let selectElement = document.getElementById('product-collar-update-input');
+            document.getElementById('product-collar-update-input').value = data.idCoAo.id;
+            document.getElementById('product-shirtTail-update-input').value = data.idDuoiAo.id;
+            document.getElementById('product-designs-update-input').value = data.idKieuDang.id;
+            document.getElementById('product-material-update-input').value = data.idChatLieu.id;
+            document.getElementById('product-category-update-input').value = data.idDanhMuc.id;
+            document.getElementById('product-brand-update-input').value = data.idThuongHieu.id;
 
-// Giả sử bạn muốn thiết lập option có giá trị là data.idCoAo.id làm option được chọn
-            let valueToSelect = data.idCoAo.ten; // giả sử data.idCoAo.id là giá trị bạn muốn chọn
-
-// Duyệt qua tất cả các option của thẻ select
-            for (let i = 0; i < selectElement.options.length; i++) {
-                if (selectElement.options[i].value == valueToSelect) {
-                    // Nếu giá trị của option bằng với giá trị bạn muốn chọn, thiết lập thuộc tính selected cho option đó
-                    selectElement.options[i].selected = true;
-                    break;
-                }
-            }
 
             document.getElementById('error-name-update').innerText = '';
             document.getElementById('error-brand-update').innerText = '';
@@ -871,6 +924,7 @@
             document.getElementById('error-quantity-update').innerText = '';
             document.getElementById('error-description-update').innerText = '';
             $('#myModal').modal('show');
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -885,9 +939,11 @@
                     'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
             });
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+
             const data = await response.json();
             console.log(data);
 
@@ -898,7 +954,6 @@
             idProduct_Detail = idProductDetail;
             document.getElementById('product-name-input-edit').value = data.idSanPham.ten;
             document.getElementById('productdetail-count-input-edit').value = data.soluong;
-            console.log(data.soluong);
 
             const colorId = data.idMauSac.id;
             const sizeId = data.idSize.id;
@@ -920,6 +975,20 @@
                 console.error('Radio buttons for status not found.');
             }
 
+            // Show current images
+            const imagePreviewContainer = document.getElementById('image-preview-container-productDetail-edit');
+            imagePreviewContainer.innerHTML = '';
+            if (data.duongDan) {
+                const imagePaths = data.duongDan.split(',');
+                imagePaths.forEach(path => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = `/assets/images/products/${path.trim()}`;
+                    imgElement.className = 'avatar-md rounded bg-light';
+                    imagePreviewContainer.appendChild(imgElement);
+                });
+                document.getElementById('image-path-input-edit').value = imagePaths.join(',');
+            }
+
             $('#myModalEdit').modal('show');
             $('#myModalTable').modal('hide');
         } catch (error) {
@@ -927,13 +996,26 @@
         }
     }
 
+     function selectStatusUpdate(option) {
+        if (option === 1) {
+            document.getElementById('update-RadioStatus1').checked = true;
+            document.getElementById('update-RadioStatus2').checked = false;
+        } else {
+            document.getElementById('update-RadioStatus2').checked = true;
+            document.getElementById('update-RadioStatus1').checked = false;
+        }
+
+     }
+
+
     async function showConfirmPopupUpdate() {
         try {
             const productDetailData = {
                 soluong: document.getElementById('productdetail-count-input-edit').value,
                 mauSac: document.getElementById('color-select-edit').value,
                 size: document.getElementById('size-select-edit').value,
-                trangThai: document.querySelector('input[name="trangThai"]:checked').value
+                trangThai: parseInt(document.querySelector('input[name="trangThai"]').value),
+                duongDan: document.getElementById('image-path-input-edit').value
             };
 
             if (!productDetailData.soluong || productDetailData.soluong <= 0) {
@@ -962,7 +1044,6 @@
                 });
                 return;
             }
-
 
             const result = await Swal.fire({
                 icon: 'question',
@@ -1016,7 +1097,6 @@
             });
         }
     }
-
 
     async function loadColors(selectedColorId) {
         try {
@@ -1074,62 +1154,6 @@
         $('#myModalTable').modal('show');
     });
 
-    // async function findPicture(idProduct, idColor) {
-    //     const pictureResponse = await fetch('/api/admin/product_detail/picture/' + idProduct + '/' + idColor, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': 'Bearer ' + localStorage.getItem("token")
-    //         }
-    //     });
-    //     var labelElement = document.getElementById("text-label");
-    //     console.log(pictureResponse);
-    //     if (pictureResponse.status === 200) {
-    //         const pictureData = await pictureResponse.json();
-    //         console.log(pictureData);
-    //
-    //         document.getElementById("linkPicture").value = pictureData[0].linkAnh;
-    //         document.getElementById("preview").src = pictureData[0].linkAnh;
-    //         labelElement.textContent = 'Thay ảnh khác';
-    //     } else {
-    //         document.getElementById("linkPicture").value = '';
-    //         document.getElementById("preview").src = '';
-    //         document.getElementById("inputFile").src = '';
-    //         labelElement.textContent = 'Tải ảnh lên';
-    //     }
-    // }
-    //
-    // async function loadPicture(event) {
-    //
-    //     var formData = new FormData();
-    //     formData.append("file", $("#inputFile")[0].files[0]);
-    //
-    //     // hiển thị preview sau khi user chọn ảnh
-    //     var input = event.target;
-    //     var reader = new FileReader();
-    //
-    //     reader.onload = function () {
-    //         var img = document.getElementById('preview');
-    //         img.src = reader.result;
-    //     };
-    //
-    //     reader.readAsDataURL(input.files[0]);
-    //
-    //     // call api upload file với form data đã tạo trước đó
-    //     var urlUpload = '/admin/upload-file';
-    //     isPictureUploaded = true;
-    //     const res = await fetch(urlUpload, {
-    //         method: 'POST',
-    //         body: formData
-    //     });
-    //     if (res.status < 300) {
-    //         const resText = await res.text();
-    //         document.getElementById("linkPicture").value = resText;
-    //         sourceImg = resText;
-    //     }
-    //     event.target.value = '';
-    // }
-    //
-    // document.getElementById('inputFile').addEventListener('change', loadPicture);
 
     function getDataFromForm() {
 
@@ -1290,7 +1314,7 @@
             url: '/admin/product/color/getAll', // URL để lấy dữ liệu màu sắc
             method: 'GET',
             success: function (response) {
-                console.log('color:' + JSON.stringify(response));
+                // console.log('color:' + JSON.stringify(response));
                 var colorSelect = document.getElementById("product-color-detail-input");
                 response.forEach(function (color) {
                     var option = document.createElement("option");
@@ -1310,7 +1334,7 @@
             url: '/admin/product/size/getAll', // URL để lấy dữ liệu kích thước
             method: 'GET',
             success: function (response) {
-                console.log('size:' + JSON.stringify(response));
+                // console.log('size:' + JSON.stringify(response));
                 var sizeSelect = document.getElementById("product-size-detail-input");
                 response.forEach(function (size) {
                     var option = document.createElement("option");
@@ -1331,7 +1355,6 @@
         var selectedColors = [];
         var selectedSizes = [];
         var trangThai = document.querySelector('input[name="trangThai"]:checked').value;
-
         var colorSelect = document.getElementById("product-color-detail-input");
         for (var i = 0; i < colorSelect.options.length; i++) {
             if (colorSelect.options[i].selected) {
@@ -1346,6 +1369,8 @@
             }
         }
 
+        var duongDan = document.getElementById('image-path-input').value;
+
         if (count === '') {
             swal.fire({
                 icon: "warning",
@@ -1358,10 +1383,10 @@
                 title: "Hãy nhập đúng số lượng!",
                 confirmButtonText: "OK"
             });
-        } else if (count <= 50 || count >= 2000) {
+        } else if (count <= 0 || count >= 2000) {
             swal.fire({
                 icon: "warning",
-                title: "Số lượng phải lớn hơn 50 và bé hơn 1000!",
+                title: "Số lượng phải lớn hơn 0 và bé hơn 2000!",
                 confirmButtonText: "OK"
             });
         } else if (selectedColors.length === 0) {
@@ -1393,6 +1418,7 @@
                                 soluong: count,
                                 mauSac: color,
                                 size: size,
+                                duongDan: duongDan,
                                 trangThai: trangThai
                             };
                             productArray.push(spct);
@@ -1479,6 +1505,11 @@
                                                 title: "Thêm Thành Công!",
                                                 confirmButtonText: "Ok"
                                             });
+                                            // Xóa hình ảnh đã chọn
+                                            document.getElementById('product-image-input').value = '';
+                                            document.getElementById('image-preview-container-productDetail').innerHTML = '';
+                                            document.getElementById('image-path-input').value = '';
+
                                             viewProductDetail(idProduct, 0);
                                             colorSelect.selectedIndex = -1;
                                             sizeSelect.selectedIndex = -1;
@@ -1523,6 +1554,7 @@
 
             let main = '';
             list.forEach((item, index) => {
+                console.log(item);
                 var hinhAnh = item.duongDan;
                 if (hinhAnh != null) {
                     hinhAnh = hinhAnh.split(",");
@@ -1550,8 +1582,8 @@
                 <td>${item.soLuong}</td>
                 <td>${item.ngayTao}</td>
                 <td>${item.gia}</td>
-                <td>${item.danhMuc}</td>
-                <td>${item.thuongHieu}</td>
+                <td>${item.tenDanhMuc}</td>
+                <td>${item.tenThuongHieu}</td>
                 <td>${item.trangThai == 1 ? "Đang mở bán" : "Chưa mở bán"}</td>
                 <td>
                     <div class="hstack gap-3 flex-warp">
@@ -1731,8 +1763,8 @@
                     <td>${item.soLuong}</td>
                     <td>${item.ngayTao}</td>
                     <td>${item.gia}</td>
-                    <td>${item.danhMuc}</td>
-                    <td>${item.thuongHieu}</td>
+                    <td>${item.tenDanhMuc}</td>
+                    <td>${item.tenThuongHieu}</td>
                     <td>${item.trangThai == 1 ? "Đang mở bán" : "Chưa mở bán"}</td>
                     <td>
                         <div class="hstack gap-3 flex-warp">
@@ -1798,8 +1830,8 @@
                         <td>${item.soLuong}</td>
                         <td>${item.ngayTao}</td>
                         <td>${item.gia}</td>
-                        <td>${item.danhMuc}</td>
-                        <td>${item.thuongHieu}</td>
+                        <td>${item.tenDanhMuc}</td>
+                        <td>${item.tenThuongHieu}</td>
                         <td>${item.trangThai == 1 ? "Đang mở bán" : "Chưa mở bán"}</td>
                         <td>
                             <div class="hstack gap-3 flex-wrap">
@@ -1876,6 +1908,21 @@
         var url = `/admin/product/product_detail/${Idproduct}/0?color=0&size=0`;
 
         try {
+            // Fetch product details to get the product name
+            const productResponse = await fetch(`/admin/product/detail/${Idproduct}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+
+            if (!productResponse.ok) {
+                throw new Error('Failed to fetch product details');
+            }
+
+            const productData = await productResponse.json();
+            document.getElementById('productDetail-name').value = productData.ten || 'N/A';
+
             const response_check = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -1897,10 +1944,7 @@
             });
 
             const result = await response.json();
-            console.log(result);  // Kiểm tra dữ liệu trả về từ API
-
             const list = result.content;
-            console.log(list[0]);  // Kiểm tra phần tử đầu tiên của list
 
             const totalPage = result.totalPages;
             const number = result.number;
@@ -1910,71 +1954,73 @@
             if (list.length > 0) {
                 for (let i = 0; i < list.length; i++) {
                     let id = list[i]?.id || '';
-                    let tenSanPham = list[i]?.idSanPham?.ten || 'N/A';
-                    let ngayTao = list[i]?.ngayTao || 'N/A';
+                    let hinhAnh = list[i]?.duongDan;
                     let soluong = list[i]?.soluong || 0;
                     let tenMauSac = list[i]?.idMauSac?.ten || 'N/A';
                     let tenSize = list[i]?.idSize?.ten || 'N/A';
-                    let trangThai = list[i]?.trangThai === 1 ? 'Còn Hàng' : 'Hết Hàng';
+
+                    if (hinhAnh != null) {
+                        hinhAnh = hinhAnh.split(",");
+                        for (let j = 0; j < hinhAnh.length; j++) {
+                            hinhAnh[j] = hinhAnh[j].replace("public", "");
+                        }
+                        hinhAnh = `<img src='http://localhost:8080/assets/images/products/${hinhAnh[0]}' alt='product-img' class='avatar-md rounded bg-light'>`;
+                    } else {
+                        hinhAnh = "<img src='https://via.placeholder.com/150' alt='product-img' class='avatar-md rounded bg-light'>";
+                    }
 
                     main += `<tr>
-                        <td scope="row">${id}</td>
-                        <td scope="row">${tenSanPham}</td>
-                        <td scope="row">${ngayTao}</td>
-                        <td scope="row">${soluong}</td>
-                        <td scope="row">${tenMauSac}</td>
-                        <td scope="row">${tenSize}</td>
-                        <td scope="row">${trangThai}</td>
-                        <td>
-                            <div class="hstack gap-3 flex-warp">
-                                <div onclick="editProductDetail(${id})" class="link-info fs-15">
-                                    <i class="ri-edit-2-line"></i>
-                                </div>
+                    <td scope="row">${id}</td>
+                    <td scope="row">${hinhAnh}</td>
+                    <td scope="row">${soluong}</td>
+                    <td scope="row">${tenMauSac}</td>
+                    <td scope="row">${tenSize}</td>
+                    <td>
+                        <div class="hstack gap-3 flex-warp">
+                            <div onclick="editProductDetail(${id})" class="link-info fs-15">
+                                <i class="ri-edit-2-line"></i>
                             </div>
-                        </td>
-                    </tr>`;
+                        </div>
+                    </td>
+                </tr>`;
                 }
             } else {
                 if (checkList.length === 0) {
                     main = `
-                <tr>
-                    <td></td>
-                    <td>
-                        <div class="form-label">Sản Phẩm Này Chưa Có Sản Phẩm Chi Tiết!</div>
-                    </td>
-                    <td></td>
-                </tr>
-            `;
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div class="form-label">Sản Phẩm Này Chưa Có Sản Phẩm Chi Tiết!</div>
+                        </td>
+                        <td></td>
+                    </tr>`;
                 } else if (checkList.length > 0 && color === "0" && size !== "0") {
                     main = `
-                <tr>
-                    <td></td>
-                    <td>
-                        <div class="form-label">Sản Phẩm Này Chưa Có Size ${size} !</div>
-                    </td>
-                    <td></td>
-                </tr>
-            `;
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div class="form-label">Sản Phẩm Này Chưa Có Size ${size} !</div>
+                        </td>
+                        <td></td>
+                    </tr>`;
                 } else if (checkList.length > 0 && color !== "0" && size === "0") {
                     main = `
-                <tr>
-                    <td></td>
-                    <td>
-                        <div class="form-label">Sản Phẩm Này Chưa Có Màu ${colorName} !</div>
-                    </td>
-                    <td></td>
-                </tr>
-            `;
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div class="form-label">Sản Phẩm Này Chưa Có Màu ${colorName} !</div>
+                        </td>
+                        <td></td>
+                    </tr>`;
                 } else {
                     main = `
-                <tr>
-                    <td></td>
-                    <td>
-                        <div class="form-label">Sản Phẩm Này Chưa Có Màu ${colorName} và Size ${size} !</div>
-                    </td>
-                    <td></td>
-                </tr>
-            `;
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div class="form-label">Sản Phẩm Này Chưa Có Màu ${colorName} và Size ${size} !</div>
+                        </td>
+                        <td></td>
+                    </tr>`;
                 }
             }
 
