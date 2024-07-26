@@ -119,11 +119,20 @@ public class DotGiamGiaController {
             model.addAttribute("startDate", promotion.getNgayBatDau());
             model.addAttribute("endDate", promotion.getNgayKetThuc());
             model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải nhỏ hơn 50%!");
-        } else if (promotion.getGiaTriGiam() < 5000 && !promotion.getLoaiGiamGia()) {
-            isValid = true;
-            model.addAttribute("startDate", promotion.getNgayBatDau());
-            model.addAttribute("endDate", promotion.getNgayKetThuc());
-            model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải tối thiểu 5.000 vnđ!");
+        }
+
+        else if (!promotion.getLoaiGiamGia()) {
+            if (promotion.getGiaTriGiam() > (promotion.getGiaTriDonHang() * 0.5)) {
+                isValid = true;
+                model.addAttribute("startDate", promotion.getNgayBatDau());
+                model.addAttribute("endDate", promotion.getNgayKetThuc());
+                model.addAttribute("errorGiaTriGiam", "Giá trị giảm không được lớn hơn 50% giá trị đơn hàng!");
+            } else if (promotion.getGiaTriGiam() < 1000 && !promotion.getLoaiGiamGia()) {
+                isValid = true;
+                model.addAttribute("startDate", promotion.getNgayBatDau());
+                model.addAttribute("endDate", promotion.getNgayKetThuc());
+                model.addAttribute("errorGiaTriGiam", "Giá trị giảm phải tối thiểu 1.000 vnđ!");
+            }
         }
 
         if (promotion.getGiaTriDonHang() == null) {
