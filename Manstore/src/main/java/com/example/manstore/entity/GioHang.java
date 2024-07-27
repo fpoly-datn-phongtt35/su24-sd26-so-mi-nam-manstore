@@ -32,10 +32,9 @@ public class GioHang {
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idTaiKhoan", nullable = false, referencedColumnName = "id")
-    private TaiKhoan idTaiKhoan;
+    @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
+    private KhachHang idKhachHang;
 
     @OneToMany(mappedBy = "idGioHang", fetch = FetchType.LAZY)
     private List<GioHangChiTiet> gioHangChiTiets;
