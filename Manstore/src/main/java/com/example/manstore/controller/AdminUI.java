@@ -22,6 +22,52 @@ public class AdminUI {
         return "admin/products/product-create";
     }
 
+//    @RequestMapping("/trademark")
+//    public String trademarkList() {
+//        return "admin/trademark/trademark-list";
+//    }
+//
+    @RequestMapping("/trademark")
+    public String trademarkList() {
+        return "admin/trademark/trademark-list";  // Giao diện danh sách thương hiệu
+    }
+
+    @RequestMapping("/size")
+    public String sizeList() {
+        return "admin/size/size-list";  // Giao diện danh sách size
+    }
+
+    @RequestMapping("/color")
+    public String colorList() {
+        return "admin/color/color-list";  // Giao diện danh sách màu
+    }
+
+    @RequestMapping("/designs")
+    public String designsList() {
+        return "admin/designs/designs-list";  // Giao diện danh sách kiểu dáng
+    }
+
+    @RequestMapping("/shirtTail")
+    public String shirtTailList() {
+        return "admin/shirtTail/shirtTail-list";  // Giao diện danh sách đuôi áo
+    }
+
+    @RequestMapping("/category")
+    public String categoryList() {
+        return "admin/category/category-list";  // Giao diện danh sách danh mục
+    }
+
+    @RequestMapping("/collar")
+    public String collarList() {
+        return "admin/collar/collar-list";  // Giao diện danh sách cổ áo
+    }
+
+    @RequestMapping("/material")
+    public String materialList() {
+        return "admin/material/material-list";  // Giao diện danh sách chất liệu
+    }
+
+
 //    @RequestMapping("/account")
 //    public String account() {
 //        return "admin/profile/account";

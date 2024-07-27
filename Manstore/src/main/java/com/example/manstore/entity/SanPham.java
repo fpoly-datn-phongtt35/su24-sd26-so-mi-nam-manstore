@@ -1,5 +1,8 @@
 package com.example.manstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -20,6 +23,8 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "SanPham")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SanPham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,42 +58,48 @@ public class SanPham {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDanhMuc", nullable = false, referencedColumnName = "id")
+    @JsonManagedReference
     private DanhMuc idDanhMuc;
 
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idHinhAnh", nullable = false, referencedColumnName = "id")
-    private HinhAnh idHinhAnh;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idThuongHieu", nullable = false, referencedColumnName = "id")
+    @JsonManagedReference
     private ThuongHieu idThuongHieu;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idCoAo", nullable = false, referencedColumnName = "id")
+    @JsonManagedReference
     private CoAo idCoAo;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDuoiAo", nullable = false, referencedColumnName = "id")
+    @JsonManagedReference
     private DuoiAo idDuoiAo;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKieuDang", nullable = false, referencedColumnName = "id")
+    @JsonManagedReference
     private KieuDang idKieuDang;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idChatLieu", nullable = false, referencedColumnName = "id")
+    @JsonManagedReference
     private ChatLieu idChatLieu;
 
     @Column(name = "TrangThai")
     private Integer trangThai;
 
     @OneToMany(mappedBy = "idSanPham", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"idSanPham", "hibernateLazyInitializer", "handler"})
     private List<ChiTietSanPham> chiTietSanPhams;
+
+    @Column(name = "DuongDan")
+    private String DuongDan;
 
 }
