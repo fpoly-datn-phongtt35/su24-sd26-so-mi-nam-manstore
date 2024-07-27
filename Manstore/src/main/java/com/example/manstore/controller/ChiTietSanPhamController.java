@@ -32,6 +32,10 @@ public class ChiTietSanPhamController {
     private ResponseEntity<?> getProductDetailById(@PathVariable("id") String id) {
         return ResponseEntity.ok().body(chiTietSanPhamService.getCTSPById(Integer.parseInt(id)));
     }
+    @RequestMapping(value = "/detailTSL/{id}", method = RequestMethod.GET)
+    private ResponseEntity<?> getAllProductDetailById(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok().body(chiTietSanPhamService.getAllCTSPById(id));
+    }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public ResponseEntity<?> saveProductDetail(@RequestBody ChiTietSanPhamRequest spct, @PathVariable("id") String id) {

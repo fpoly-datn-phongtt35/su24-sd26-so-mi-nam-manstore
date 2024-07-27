@@ -23,6 +23,11 @@ public class SanPhamServiceImpl implements SanPhamService {
         return sanPhamRepository.findAll();
     }
 
+//    @Override
+//    public Integer getTotalQuantityForProduct(Integer idSanPham) {
+//        return sanPhamRepository.findTotalQuantityBySanPhamId(idSanPham);
+//    }
+
     @Override
     public Optional<SanPham> getSanPhamById(Integer id) {
         return sanPhamRepository.findById(id)
