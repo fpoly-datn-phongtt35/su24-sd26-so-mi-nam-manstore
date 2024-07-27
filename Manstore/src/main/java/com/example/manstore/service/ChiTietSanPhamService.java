@@ -10,6 +10,8 @@ public interface ChiTietSanPhamService {
 
     List<ChiTietSanPham> getAllCTSP();
 
+    List<ChiTietSanPham> getAllCTSPById(Integer id);
+
     Page<ChiTietSanPham> pageOfCTSP(Pageable pageable, String id);
 
     void save(ChiTietSanPham chiTietSanPham);

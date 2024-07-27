@@ -24,6 +24,11 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     }
 
     @Override
+    public List<ChiTietSanPham> getAllCTSPById(Integer id) {
+        return ctspRepository.getListSpctByIdSp(String.valueOf(id));
+    }
+
+    @Override
     public Page<ChiTietSanPham> pageOfCTSP(Pageable pageable, String id) {
         return ctspRepository.pageOfCTSP(pageable, id);
     }

@@ -152,29 +152,6 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Row 5: Số Lượng, Ngày Tạo -->
-                  <div class="row">
-                    <div class="col-lg-6 col-sm-6">
-                      <div class="mb-3">
-                        <label class="form-label" for="product-quantity-input">Số Lượng <span class="text-danger"
-                                                                                              id="required-quantity"
-                                                                                              style="display:none;">*</span></label>
-                        <input type="number" class="form-control" id="product-quantity-input"
-                               placeholder="Nhập Số Lượng" onkeyup="validQuantity()">
-                        <span id="errorQuantity" class="text-danger fw-bold"></span>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-6">
-                      <div class="mb-3">
-                        <label class="form-label" for="product-createDate-input">Ngày Tạo <span class="text-danger"
-                                                                                                id="required-createDate"
-                                                                                                style="display:none;">*</span></label>
-                        <input type="date" class="form-control" id="product-createDate-input" readonly>
-                        <span id="errorCreateDate" class="text-danger fw-bold"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Row 6: Giá Sale, Mô Tả -->
                   <div class="row">
                     <div class="col-lg-6 col-sm-6">
                       <div class="mb-3">
@@ -190,6 +167,18 @@
                         <span id="errorSalePrice" class="text-danger fw-bold"></span>
                       </div>
                     </div>
+                    <div class="col-lg-6 col-sm-6">
+                      <div class="mb-3">
+                        <label class="form-label" for="product-createDate-input">Ngày Tạo <span class="text-danger"
+                                                                                                id="required-createDate"
+                                                                                                style="display:none;">*</span></label>
+                        <input type="date" class="form-control" id="product-createDate-input" readonly>
+                        <span id="errorCreateDate" class="text-danger fw-bold"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
                     <div class="col-lg-6 col-sm-6">
                       <div class="mb-3">
                         <label class="form-label" for="product-description-input">Mô Tả <span class="text-danger"
@@ -439,7 +428,7 @@
         var trangThai = document.querySelector('input[name="trangThai"]:checked').value;
         var coAo = document.getElementById('product-collar-input').value;
         var gia = document.getElementById('product-price-input').value;
-        var soLuong = document.getElementById('product-quantity-input').value;
+        // var soLuong = document.getElementById('product-quantity-input').value;
         var ngayTao = document.getElementById('product-createDate-input').value;
         var giaSale = document.getElementById('product-salePrice-input').value;
         var moTa = document.getElementById('product-description-input').value;
@@ -459,7 +448,7 @@
             trangThai: trangThai,
             coAo: coAo,
             gia: gia,
-            soLuong: soLuong,
+            // soLuong: soLuong,
             ngayTao: ngayTao,
             giaSale: giaSale,
             moTa: moTa,
@@ -549,14 +538,6 @@
             isValid += 1;
         } else {
             document.getElementById('required-price').style.display = 'none';
-        }
-
-        if (data.soLuong === '') {
-            document.getElementById('required-quantity').style.display = 'inline';
-            document.getElementById('errorQuantity').innerText = 'Vui lòng điền số lượng!';
-            isValid += 1;
-        } else {
-            document.getElementById('required-quantity').style.display = 'none';
         }
 
         if (data.giaSale >= data.donGia) {
@@ -767,18 +748,18 @@
         }
     }
 
-    function validQuantity() {
-        var quantityInput = document.getElementById('product-quantity-input');
-        var errorQuantity = document.getElementById('errorQuantity');
-
-        quantityInput.addEventListener('input', function () {
-            if (quantityInput.value.trim() !== '') {
-                errorQuantity.style.display = 'none';
-            } else {
-                errorQuantity.style.display = 'block';
-            }
-        });
-    }
+    // function validQuantity() {
+    //     var quantityInput = document.getElementById('product-quantity-input');
+    //     var errorQuantity = document.getElementById('errorQuantity');
+    //
+    //     quantityInput.addEventListener('input', function () {
+    //         if (quantityInput.value.trim() !== '') {
+    //             errorQuantity.style.display = 'none';
+    //         } else {
+    //             errorQuantity.style.display = 'block';
+    //         }
+    //     });
+    // }
 
     function validSalePrice() {
         var salePriceInput = document.getElementById('product-salePrice-input');

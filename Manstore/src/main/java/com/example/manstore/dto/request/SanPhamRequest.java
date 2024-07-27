@@ -22,7 +22,6 @@ public class SanPhamRequest {
     private BigDecimal giaSale;
     private String moTa;
     private Integer danhMuc;
-//    private String hinhAnh;
     private Integer thuongHieu;
     private Integer coAo;
     private Integer duoiAo;
@@ -42,7 +41,7 @@ public class SanPhamRequest {
                 ", giaSale=" + giaSale +
                 ", moTa='" + moTa + '\'' +
                 ", danhMuc=" + danhMuc +
-//                ", hinhAnh=" + hinhAnh +
+                ", duongDan=" + duongDan +
                 ", thuongHieu=" + thuongHieu +
                 ", coAo=" + coAo +
                 ", duoiAo=" + duoiAo +

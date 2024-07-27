@@ -199,6 +199,28 @@ public class SanPhamController {
         return new ResponseEntity<>(pageResult, HttpStatus.OK);
     }
 
+    @GetMapping("/categoryFilter")
+    @ResponseBody
+    public ResponseEntity<?> getProductsByCategory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam int idDanhMuc) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SanPhanResponse> pageResult = sanPhamRepository.findAllByDanhMuc(idDanhMuc, pageable);
+        return new ResponseEntity<>(pageResult, HttpStatus.OK);
+    }
+
+    @GetMapping("/trademarkFilter")
+    @ResponseBody
+    public ResponseEntity<?> getProductsByTrademark(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam int idThuongHieu) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SanPhanResponse> pageResult = sanPhamRepository.findAllByThuongHieu(idThuongHieu, pageable);
+        return new ResponseEntity<>(pageResult, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/product_detail", method = RequestMethod.GET)
     private String viewProductDetail() {
         return "admin/products/product-detailed";
@@ -272,9 +294,6 @@ public class SanPhamController {
             responseCustom.setMessage("errorFormatName");
             listResponse.add(responseCustom);
         }
-        if (dto.getSoLuong() == -1) {
-            isValid = false;
-        }
         if (dto.getDanhMuc() == null || danhMucRepository.findById(dto.getDanhMuc()).isEmpty()) {
             isValid = false;
         }
@@ -325,7 +344,6 @@ public class SanPhamController {
         if (isValid) {
             try {
                 sp.setTen(dto.getTen());
-                sp.setSoLuong(dto.getSoLuong());
                 sp.setGia(dto.getGia());
                 sp.setGiaSale(dto.getGiaSale());
                 sp.setMoTa(dto.getMoTa());
@@ -399,14 +417,6 @@ public class SanPhamController {
             }
         }
 
-        if (dto.getSoLuong() < 0) {
-            isValid = false;
-            ResponseCustom responseCustom = new ResponseCustom();
-            responseCustom.setStatusText("failure");
-            responseCustom.setMessage("errorInvalidQuantity");
-            listResponse.add(responseCustom);
-        }
-
         if (dto.getGia() == null) {
             isValid = false;
             ResponseCustom responseCustom = new ResponseCustom();
@@ -438,7 +448,6 @@ public class SanPhamController {
         if (isValid) {
             try {
                 sp.setTen(dto.getTen());
-                sp.setSoLuong(dto.getSoLuong());
                 sp.setGia(dto.getGia());
                 sp.setGiaSale(dto.getGiaSale());
                 sp.setMoTa(dto.getMoTa());
@@ -449,6 +458,7 @@ public class SanPhamController {
                 sp.setIdDuoiAo(duoiAoRepository.findById(dto.getDuoiAo()).get());
                 sp.setIdKieuDang(kieuDangRepository.findById(dto.getKieuDang()).get());
                 sp.setIdChatLieu(chatLieuRepository.findById(dto.getChatLieu()).get());
+                sp.setDuongDan(dto.getDuongDan());
                 sanPhamService.save(sp);
                 return ResponseEntity.ok("success");
             } catch (Exception e) {

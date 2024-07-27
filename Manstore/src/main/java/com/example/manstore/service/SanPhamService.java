@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface SanPhamService {
 
     List<SanPham> getAllSanPham();
+
+//    Integer getTotalQuantityForProduct(Integer idSanPham);
     Optional<SanPham> getSanPhamById(Integer id);
     Boolean save(SanPham sanPham);
     Boolean update(SanPham sanPham);
