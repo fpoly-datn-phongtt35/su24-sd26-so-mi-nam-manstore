@@ -40,45 +40,45 @@
 
                 <div class="row" id="usersList">
                     <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row g-lg-2 g-4">
-                                    <div class="col-lg-3">
-                                        <div class="search-box">
-                                            <input class="form-control search bg-light border-light" id="search-input"
-                                                   onkeyup="searchCustomer()" placeholder="Tìm kiếm khách hàng..."
-                                                   type="text">
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-3">
-                                        <label class="" style="margin-top: 10px">Sắp xếp theo : </label>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-3">
-                                        <select class="form-control" id="filter-sort" onchange="searchCustomer()"
-                                                required>
-                                                <option value="0">Mới nhất</option>
-                                                <option value="3">Cũ nhất</option>
-                                                <option value="1">Ngày sinh tăng dần</option>
-                                                <option value="2">Ngày sinh giảm dần</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-3 me-5">
-                                        <select class="form-control mb-3" id="filter-gender"
-                                                onchange="searchCustomer()">
-                                            <option value="-1">Giới tính</option>
-                                            <option value="0">Nam</option>
-                                            <option value="1">Nữ</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-auto col-sm-3 ms-auto">
-                                        <a class="btn btn-primary w-100 add-btn" th:href="@{/admin/customer/add}">
-                                            Thêm mới
-                                        </a>
-                                    </div>
-                                </div>
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row g-lg-2 g-4">
+                            <div class="col-lg-3">
+                              <div class="search-box">
+                                <input class="form-control search bg-light border-light" id="search-input" onkeyup="searchCustomer()" placeholder="Tìm kiếm khách hàng..." type="text">
+                                <i class="ri-search-line search-icon"></i>
+                              </div>
                             </div>
+                            <div class="col-lg-auto col-sm-3">
+                              <label class="" style="margin-top: 10px">Sắp xếp theo : </label>
+                            </div>
+                            <div class="col-lg-auto col-sm-3">
+                              <select class="form-control" id="filter-sort" onchange="searchCustomer()" required>
+                                <option value="0">Mới nhất</option>
+                                <option value="3">Cũ nhất</option>
+                                <option value="1">Ngày sinh tăng dần</option>
+                                <option value="2">Ngày sinh giảm dần</option>
+                              </select>
+                            </div>
+                            <div class="col-lg-auto col-sm-3 me-5">
+                              <select class="form-control mb-3" id="filter-gender" onchange="searchCustomer()">
+                                <option value="-1">Giới tính</option>
+                                <option value="0">Nam</option>
+                                <option value="1">Nữ</option>
+                              </select>
+                            </div>
+                            <div class="col-lg-auto col-sm-6 ms-auto d-flex justify-content-end">
+                              <button class="btn btn-success me-2" onclick="resetFilter()" style="height: 41px;">
+                                <i class="bi bi-arrow-clockwise"></i>
+                              </button>
+                              <a class="btn btn-primary add-btn" th:href="@{/admin/customer/add}" style="height: 41px; line-height: 26px;">
+                                Thêm mới
+                              </a>
+                            </div>
+                          </div>
                         </div>
+                      </div>
+
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive table-card mb-1">
@@ -129,7 +129,7 @@
                                             <label class="form-label" for="customer-maKH-input">Mã Khách Hàng
                                             </label>
                                             <input class="form-control" disabled id="customer-maKH-input"
-                                                   placeholder="" th:name="maKH" type="text">
+                                                   placeholder="" th:name="ma" type="text">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -137,7 +137,7 @@
                                             <label class="form-label" for="customer-name-input"> Họ Tên
                                             </label>
                                             <input class="form-control" id="customer-name-input" disabled
-                                                   placeholder="" th:name="hoTen" type="text">
+                                                   placeholder="" th:name="ten" type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -222,6 +222,14 @@
         loadPage(0);
     }
 
+    function resetFilter() {
+        document.getElementById("search-input").value = '';
+        document.getElementById("filter-sort").value = '0';
+        document.getElementById("filter-gender").value = '-1';
+
+        loadPage(0);
+    }
+
     function detailCustomer(customerId) {
         fetch('/admin/customer/detail/' + customerId, {
             method: 'GET'
@@ -232,8 +240,8 @@
             return response.json();
         }).then(data => {
             console.log(data);
-            document.getElementById('customer-maKH-input').value = data.maKH;
-            document.getElementById('customer-name-input').value = data.hoTen;
+            document.getElementById('customer-maKH-input').value = data.ma;
+            document.getElementById('customer-name-input').value = data.ten;
             document.getElementById('customer-sdt-input').value = data.sdt;
             document.getElementById('customer-ngaySinh-input').value = data.ngaySinh;
             document.getElementById('customer-email-input').value = data.email;
@@ -248,7 +256,7 @@
                 }
             })
 
-            document.getElementById('update-form').action = '/api/admin/customer/update/' + customerId;
+            document.getElementById('update-form').action = '/admin/customer/update/' + customerId;
             $('#myModal').modal('show');
         })
             .catch(error => console.error('Error:', error));
@@ -270,7 +278,7 @@
     }
 
     async function loadPage(pageNumber) {
-        var url = "/api/admin/customer/page/" + pageNumber;
+        var url = "/admin/customer/page/" + pageNumber;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -288,8 +296,8 @@
 
             main += `<tr >
                              <td scope="row">${i + 1}</td>
-                            <td scope="row">${list[i].maKH}</td>
-                            <td scope="row">${list[i].hoTen}</td>
+                            <td scope="row">${list[i].ma}</td>
+                            <td scope="row">${list[i].ten}</td>
                              <td scope="row">${list[i].sdt}</td>
                              <td scope="row">${list[i].ngaySinh}</td>
                                  <td scope="row">${list[i].email}</td>
@@ -315,87 +323,73 @@
                <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button></div>`;
     }
 
-    async function searchCustomer(pageNumber) {
-        var keyword = document.getElementById("search-input").value.trim().toLowerCase();
-        var gender = document.getElementById("filter-gender").value;
-        var sort = document.getElementById("filter-sort").value;
-        var url;
-        console.log(keyword);
-        console.log(pageNumber);
-        pageNumber === undefined ? page = 0 : page = pageNumber;
+    async function searchCustomer(pageNumber = 0) {
+        const keyword = document.getElementById("search-input").value.trim().toLowerCase();
+        const gender = document.getElementById("filter-gender").value;
+        const sort = document.getElementById("filter-sort").value;
 
-        if (pageNumber === undefined && keyword === '' && gender === "-1") {
-            loadPage(0);
-        } else if (pageNumber === undefined && keyword !== '' && gender === "-1") {
-            url = "/api/admin/customer/page/search/" + 0 + "/" + keyword + "/" + -1 + "/" + sort;
-            console.log(url);
-            console.log(1);
-        } else if (pageNumber === undefined && keyword === '' && gender !== "-1") {
-            url = "/api/admin/customer/page/search/" + 0 + "/" + "null" + "/" + gender + "/" + sort;
-            console.log(url);
-            console.log(2);
-        } else if (pageNumber === undefined && keyword !== '' && gender !== "-1") {
-            url = "/api/admin/customer/page/search/" + 0 + "/" + keyword + "/" + gender + "/" + sort;
-            console.log(url);
-            console.log(6);
-        } else if (pageNumber !== undefined && keyword !== '' && gender === "-1") {
-            url = "/api/admin/customer/page/search/" + pageNumber + "/" + keyword + "/" + -1 + "/" + sort;
-            console.log(url);
-            console.log(3);
-        } else if (pageNumber !== undefined && keyword === '' && gender !== "-1") {
-            url = "/api/admin/customer/page/search/" + pageNumber + "/" + "null" + "/" + gender + "/" + sort;
-            console.log(url);
-            console.log(4);
-        } else if (pageNumber !== undefined && keyword !== '' && gender !== "-1") {
-            url = "/api/admin/customer/page/search/" + pageNumber + "/" + keyword + "/" + gender + "/" + sort;
-            console.log(url);
-            console.log(5);
+        let url = `/admin/customer/page/search/${pageNumber}/`;
+        url += keyword ? `${keyword}/` : 'null/';
+        url += `${gender}/${sort}`;
+
+        console.log(url);
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+            const result = await response.json();
+            console.log(result);
+            renderCustomers(result);
+        } catch (error) {
+            console.error('Error:', error);
         }
+    }
 
-        // else {
-        //     url = "/api/admin/invoice/page/search/" + pageNumber + "/" + keyword;
-        // }
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        });
-        var result = await response.json();
-        console.log(result);
-        var list = result.content;
-        var totalPage = result.totalPages;
-        var number = result.number;
-        var main = '';
-        for (i = 0; i < list.length; i++) {
-            main += `<tr >
-                             <td scope="row">${i + 1}</td>
-                            <td scope="row">${list[i].maKH}</td>
-                            <td scope="row">${list[i].hoTen}</td>
-                             <td scope="row">${list[i].sdt}</td>
-                             <td scope="row">${list[i].ngaySinh}</td>
-                             <td scope="row">${list[i].email}</td>
-                            <td scope="row">${list[i].gioiTinh == true ? 'Nam' : 'Nữ'}</td>
-                             <td>
-                                <div class="hstack gap-3 flex-warp">
-                                <div onclick="detailCustomer(${list[i].id})"
-                                     class="ri-eye-line"></div>
-                                 </div>
-                            </td>
-         </tr>`
+    function renderCustomers(result) {
+        const list = result.content;
+        const totalPage = result.totalPages;
+        const number = result.number;
+        let main = '';
+
+        for (let i = 0; i < list.length; i++) {
+            main += `<tr>
+            <td scope="row">${i + 1}</td>
+            <td scope="row">${list[i].ma}</td>
+            <td scope="row">${list[i].ten}</td>
+            <td scope="row">${list[i].sdt}</td>
+            <td scope="row">${list[i].ngaySinh}</td>
+            <td scope="row">${list[i].email}</td>
+            <td scope="row">${list[i].gioiTinh == true ? 'Nam' : 'Nữ'}</td>
+            <td>
+                <div class="hstack gap-3 flex-warp">
+                    <div onclick="detailCustomer(${list[i].id})" class="ri-eye-line"></div>
+                </div>
+            </td>
+        </tr>`;
         }
         document.getElementById("list_Customer").innerHTML = main;
-        var currentPage = `<div class="pagination-wrap hstack gap-2">
-       <button class="page-item pagination-prev " id="pagination-start" onclick="searchCustomer(0)"  >
-       <i class="mdi mdi-chevron-double-left align-middle ms-1"></i> </button>
-       <button class="page-item pagination-prev " id="pagination-prev" onclick="searchCustomer(${number - 1})">
-       <i class="mdi mdi-chevron-left align-middle ms-1"></i> </button>
-      <ul class="pagination listjs-pagination mb-0" id="pageNum"><li class="active"><a class="page">${number + 1}</a></li></ul>
-       <button class="page-item pagination-next " id="pagination-next" onclick="searchCustomer(${number + 1})">
-       <i class="mdi mdi-chevron-right align-middle ms-1"></i></button>
-       <button class="page-item pagination-next" id="pagination-end"  onclick="searchCustomer(${totalPage - 1})">
-       <i class="mdi mdi-chevron-double-right align-middle ms-1"></i></button></div>`;
+
+        const currentPage = `<div class="pagination-wrap hstack gap-2">
+        <button class="page-item pagination-prev" id="pagination-start" onclick="searchCustomer(0)">
+            <i class="mdi mdi-chevron-double-left align-middle ms-1"></i>
+        </button>
+        <button class="page-item pagination-prev" id="pagination-prev" onclick="searchCustomer(${number - 1})">
+            <i class="mdi mdi-chevron-left align-middle ms-1"></i>
+        </button>
+        <ul class="pagination listjs-pagination mb-0" id="pageNum"><li class="active"><a class="page">${number + 1}</a></li></ul>
+        <button class="page-item pagination-next" id="pagination-next" onclick="searchCustomer(${number + 1})">
+            <i class="mdi mdi-chevron-right align-middle ms-1"></i>
+        </button>
+        <button class="page-item pagination-next" id="pagination-end" onclick="searchCustomer(${totalPage - 1})">
+            <i class="mdi mdi-chevron-double-right align-middle ms-1"></i>
+        </button>
+    </div>`;
         document.getElementById("pagination").innerHTML = currentPage;
+
         if (number === 0 && number === totalPage - 1) {
             document.getElementById('pagination-start').style.display = "none";
             document.getElementById('pagination-prev').style.display = "none";

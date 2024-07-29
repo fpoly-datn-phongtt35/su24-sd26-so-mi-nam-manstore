@@ -1,5 +1,6 @@
 package com.example.manstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,15 +23,12 @@ public class DiaChi {
     private Integer id;
 
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
     private KhachHang idKhachHang;
 
-    @Column(name = "Ma", length = 50)
-    private String ma;
-
-
-    @Column(name = "Tinh_TP", length = 50)
+    @Column(name = "Tinh_ThanhPho", length = 50)
     private String tinhTp;
 
     @Column(name = "Quan_Huyen", length = 50)
@@ -39,7 +37,13 @@ public class DiaChi {
     @Column(name = "Xa_Phuong_ThiTran", length = 50)
     private String xaPhuongThitran;
 
-    @Column(name = "MoTa", length = 500)
-    private String moTa;
+    @Column(name = "SDT", length = 10)
+    private String sdt;
+
+    @Column(name = "DiaChiCuThe", length = 500)
+    private String diaChiCuThe;
+
+    @Column(name = "TenNguoiNhan", length = 250)
+    private String tenNguoiNhan;
 
 }
