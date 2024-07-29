@@ -1,5 +1,6 @@
 package com.example.manstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -46,6 +47,7 @@ public class NhanVien {
     @Column(name = "GioiTinh")
     private Integer gioiTinh;
 
+    @JsonManagedReference
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idPhanQuyen", nullable = false, referencedColumnName = "id")

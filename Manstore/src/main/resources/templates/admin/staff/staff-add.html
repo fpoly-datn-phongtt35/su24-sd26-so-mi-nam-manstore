@@ -24,8 +24,9 @@
                             <h4 class="mb-sm-0">Thêm mới nhân viên</h4>
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Nhân viên</a></li>
-                                    <li class="breadcrumb-item active">Thêm mới</li>
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{/admin/staff}">Nhân viên</a></li>
+                                    <li class="breadcrumb-item active">Thêm nhân viên</li>
                                 </ol>
                             </div>
                         </div>
@@ -44,35 +45,9 @@
                                             <label class="form-label" for="staff-name-input">Họ tên <span
                                                     style="color:red;">*</span></label>
                                             <input type="text" class="form-control" id="staff-name-input"
-                                                   placeholder="Họ tên" required th:field="*{hoTen}"
+                                                   placeholder="Họ tên" required th:field="*{ten}"
                                                    onkeyup="validName()">
                                             <div class="text-danger" th:if="${errorName}" th:text="${errorName}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-sm-12">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="staff-phone-input">Số điện thoại <span
-                                                    style="color:red;">*</span></label>
-                                            <input type="text" class="form-control" id="staff-phone-input"
-                                                   placeholder="Số điện thoại" required th:field="*{sdt}"
-                                                   onkeyup="validPhone()">
-                                            <div class="text-danger" th:if="${errorPhone}" th:text="${errorPhone}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end col -->
-                                </div>
-                                <!-- end row -->
-                                <div class="row">
-                                    <div class="col-lg-6 col-sm-12">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="staff-email-input">Email <span
-                                                    style="color:red;">*</span></label>
-                                            <input type="text" class="form-control" id="staff-email-input"
-                                                   placeholder="Email"
-                                                   required th:field="*{email}" onkeyup="validEmail()">
-                                            <div class="text-danger" th:if="${errorEmail}" th:text="${errorEmail}">
                                             </div>
                                         </div>
                                     </div>
@@ -90,36 +65,56 @@
                                     <!-- end col -->
                                 </div>
                                 <!-- end row -->
-                                <!--                                <div class="row">-->
-                                <!--                                    <div class="col-lg-6 col-sm-12">-->
-                                <!--                                        <div class="mb-3">-->
-                                <!--                                            <label class="form-label" for="staff-position-input">Chức vụ <span-->
-                                <!--                                                    style="color:red;">*</span></label>-->
-                                <!--                                            <select class="form-control" required id="staff-position-input"-->
-                                <!--                                                    th:field="*{cv}" onchange="validPosition()">-->
-                                <!--                                                <option value="0">Chức vụ</option>-->
-                                <!--                                                <option th:each="position:${chucVu}" th:value="${position.id}"-->
-                                <!--                                                        th:text="${position.tenChucVu}"></option>-->
-                                <!--                                            </select>-->
-                                <!--                                            <div class="text-danger" th:if="${errorPosition}"-->
-                                <!--                                                 th:text="${errorPosition}">-->
-                                <!--                                            </div>-->
-                                <!--                                        </div>-->
-                                <!--                                    </div>-->
-                                <!--                                    <div class="col-lg-6 col-sm-12">-->
-                                <!--                                        <div class="mb-3">-->
-                                <!--                                            <label class="form-label" for="staff-image-input">Hình ảnh</label>-->
-                                <!--                                            <input type="file" class="form-control" id="staff-image-input"-->
-                                <!--                                                   placeholder="Hình ảnh" required th:field="*{anhNhanVien}">-->
-                                <!--                                            &lt;!&ndash;                                            <div class="text-danger">&ndash;&gt;-->
-                                <!--                                            &lt;!&ndash;                                                &ndash;&gt;-->
-                                <!--                                            &lt;!&ndash;                                            </div>&ndash;&gt;-->
-                                <!--                                        </div>-->
-                                <!--                                    </div>-->
-                                <!-- end col -->
-                                <!--                                </div>-->
-                                <!-- end row -->
-                                <!--                            </div>-->
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="staff-phone-input">Số điện thoại <span
+                                                    style="color:red;">*</span></label>
+                                            <input type="text" class="form-control" id="staff-phone-input"
+                                                   placeholder="Số điện thoại" required th:field="*{sdt}"
+                                                   onkeyup="validPhone()">
+                                            <div class="text-danger" th:if="${errorPhone}" th:text="${errorPhone}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="staff-email-input">Email <span
+                                                    style="color:red;">*</span></label>
+                                            <input type="text" class="form-control" id="staff-email-input"
+                                                   placeholder="Email"
+                                                   required th:field="*{email}" onkeyup="validEmail()">
+                                            <div class="text-danger" th:if="${errorEmail}" th:text="${errorEmail}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="staff-adreess-input">Địa chỉ <span
+                                                    style="color:red;">*</span></label>
+                                            <input type="text" class="form-control" id="staff-adreess-input"
+                                                   placeholder="Địa chỉ" required th:field="*{diaChi}">
+                                            <div class="text-danger" th:if="${errorAdreess}" th:text="${errorAdreess}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Giới tính <span
+                                                    style="color:red;">*</span></label>
+                                                <br>
+                                                <input class="form-check-input" type="radio" id="nam" value="0"
+                                                       th:name="gioiTinh" checked="checked">
+                                                <label class="form-check-label" for="nam">Nam</label>
+
+                                                <input class="form-check-input" type="radio" value="1" id="nu"
+                                                       th:name="gioiTinh">
+                                                <label class="form-check-label" for="nu">Nữ</label>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                            </div>
                             </div>
                             <!-- end card -->
                             <div class="text-end mb-3">
