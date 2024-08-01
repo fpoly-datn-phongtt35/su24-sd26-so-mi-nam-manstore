@@ -61,7 +61,7 @@ public class KhachHang implements UserDetails {
     private String email;
 
     @Column(name = "NgaySinh")
-    private Date ngaySinh;
+    private LocalDate ngaySinh;
 
     @Column(name = "GioiTinh")
     private boolean gioiTinh;

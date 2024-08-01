@@ -1,4 +1,4 @@
-package com.example.manstore.service.impl;
+package com.example.manstore.service.Impl;
 
 import com.example.manstore.entity.NhanVien;
 import com.example.manstore.repository.NhanVienRepository;

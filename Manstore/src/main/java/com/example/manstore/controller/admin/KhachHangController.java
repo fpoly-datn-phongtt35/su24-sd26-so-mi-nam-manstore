@@ -13,9 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -42,8 +43,8 @@ public class KhachHangController {
     @Autowired
     private DiaChiRepository dcrp;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     @RequestMapping(value = "/page/{pageNumber}", method = RequestMethod.GET)
@@ -224,10 +225,10 @@ public class KhachHangController {
             kh.setTen(khachHang.getTen());
             kh.setEmail(khachHang.getEmail());
             kh.setGioiTinh(khachHang.isGioiTinh());
-            kh.setNgaySinh(sqlDate);
+            kh.setNgaySinh(sqlDate.toLocalDate());
             kh.setMatKhau("12345");
             kh.setNgayTao(LocalDate.now());
-//            kh.setMaHoaMatKhau(passwordEncoder.encode(kh.getMatKhau()));
+            kh.setMaHoaMatKhau(passwordEncoder.encode(kh.getMatKhau()));
             diaChi.setIdKhachHang(kh);
             khsv.save(kh);
             dcrp.save(diaChi);

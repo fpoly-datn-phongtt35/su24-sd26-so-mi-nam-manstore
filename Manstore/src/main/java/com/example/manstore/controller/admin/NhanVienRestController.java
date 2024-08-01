@@ -1,4 +1,4 @@
-package com.example.manstore.controller;
+package com.example.manstore.controller.admin;
 
 import com.example.manstore.entity.NhanVien;
 import com.example.manstore.service.NhanVienService;

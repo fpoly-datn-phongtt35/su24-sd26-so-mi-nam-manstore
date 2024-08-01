@@ -1,4 +1,4 @@
-package com.example.manstore.controller;
+package com.example.manstore.controller.admin;
 
 import com.example.manstore.dto.respone.MauSacResponse;
 import com.example.manstore.entity.MauSac;

@@ -81,7 +81,7 @@ public class SecurController {
         }
         khachHang.setMaHoaMatKhau(passwordEncoder.encode(khachHang.getMatKhau()));
         khachHang.setNgayTao(LocalDate.now());
-        khachHang.setNgaySinh(new Date(System.currentTimeMillis()));
+//        khachHang.setNgaySinh(new Date(System.currentTimeMillis()));
         khachHang.setGioiTinh(false);
         List<KhachHang> list = khachHangRepository.findAll();
         List<Integer> integerList = new ArrayList<>();

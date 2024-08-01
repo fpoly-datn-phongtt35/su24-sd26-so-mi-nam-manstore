@@ -1,4 +1,4 @@
-package com.example.manstore.controller;
+package com.example.manstore.controller.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

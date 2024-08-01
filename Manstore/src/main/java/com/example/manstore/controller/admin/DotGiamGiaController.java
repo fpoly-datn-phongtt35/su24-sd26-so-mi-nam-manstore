@@ -1,4 +1,4 @@
-package com.example.manstore.controller;
+package com.example.manstore.controller.admin;
 
 import com.example.manstore.entity.DotGiamGia;
 import com.example.manstore.repository.DotGiamGiaRepository;

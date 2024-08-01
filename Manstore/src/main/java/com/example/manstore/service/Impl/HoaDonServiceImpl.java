@@ -1,4 +1,4 @@
-package com.example.manstore.service.impl;
+package com.example.manstore.service.Impl;
 
 import com.example.manstore.entity.HoaDon;
 import com.example.manstore.repository.HoaDonRepository;
