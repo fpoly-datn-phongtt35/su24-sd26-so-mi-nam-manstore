@@ -45,13 +45,13 @@ public class DotGiamGia {
     private Boolean loaiGiamGia;
 
     @Column(name = "GiaTriGiam")
-    private Integer giaTriGiam;
+    private Float giaTriGiam;
 
     @Column(name = "GiaTriDonHang")
     private Double giaTriDonHang;
 
     @Column(name = "TrangThai")
-    private Integer trangThai;
+    private Boolean trangThai;
 
     @OneToMany(mappedBy = "idDotGiamGia", fetch = FetchType.LAZY)
     private List<HoaDon> hoaDons;

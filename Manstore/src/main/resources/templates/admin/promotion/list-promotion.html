@@ -49,10 +49,10 @@
                                     <div class="col-xxl-2 col-sm-6">
                                         <label>Sắp xếp</label>
                                         <select onchange="loadPromotion(0)" id="sort" class="form-control">
-                                            <option value="ngayTao,desc">Mới nhất</option>
-                                            <option value="ngayTao,asc">Cũ nhất</option>
-                                            <option value="giaTriDonHangApDung,asc">Giá trị áp dụng tăng dần</option>
-                                            <option value="giaTriDonHangApDung,desc">Giá trị áp dụng giảm dần</option>
+                                            <option value="id,desc">Mới nhất</option>
+                                            <option value="id,asc">Cũ nhất</option>
+                                            <option value="giaTriDonHang,asc">Giá trị áp dụng tăng dần</option>
+                                            <option value="giaTriDonHang,desc">Giá trị áp dụng giảm dần</option>
                                         </select>
                                     </div>
                                     <div class="col-xxl-2 col-sm-6">
@@ -62,16 +62,6 @@
                                     <div class="col-xxl-2 col-sm-6">
                                         <label>Ngày Kết Thúc</label>
                                         <input id="end" type="date" class="form-control">
-                                    </div>
-                                    <div class="col-xxl-2 col-sm-6">
-                                        <label>Khách Hàng Áp Dụng</label>
-                                        <select id="select-customer-type" class="form-control">
-                                            <option value="null" selected>Tất cả</option>
-                                            <option value="1">Khách hàng mới</option>
-                                            <option value="2">Khách hàng tiềm năng</option>
-                                            <option value="3">Khách hàng thân thiết</option>
-                                            <option value="0">Tất cả khách hàng</option>
-                                        </select>
                                     </div>
                                     <div class="col-xxl-2 col-sm-6">
                                         <label>Loại Giảm Giá</label>
@@ -87,24 +77,28 @@
                                             <i class="bi bi-filter me-1"></i> Lọc
                                         </button>
                                     </div>
+                                    <div class="col-xxl-2 col-sm-12">
+                                        <label>&ThinSpace;</label>
+                                        <a class="btn btn-success w-100 add-btn" th:href="@{/admin/add-promotion}">
+                                            Thêm Mới</a></div>
                                 </div>
                             </div>
                         </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive table-card mb-1">
-                                    <table class="table table-striped tablefix">
-                                        <thead class="thead-tablefix">
+                                    <table class="table align-middle table-nowrap">
+                                        <thead class="table-light">
                                         <tr>
-                                            <th>#</th>
-                                            <th>Tên</th>
-                                            <th class="text-center">Giá trị giảm giá</th>
-                                            <th>Giá trị áp dụng</th>
-                                            <th class="text-center">Khách hàng áp dụng</th>
-                                            <th>Ngày bắt đầu</th>
-                                            <th>Ngày kết thúc</th>
-                                            <th class="text-center">Trạng Thái</th>
-                                            <th class="sticky-col text-center">Action</th>
+                                            <th class="sticky-col text-center">Stt</th>
+                                            <th class="sticky-col text-center">Mã</th>
+                                            <th class="sticky-col text-center">Tên</th>
+                                            <th class="sticky-col text-center">Giá trị giảm giá</th>
+                                            <th class="sticky-col text-center">Giá trị áp dụng</th>
+                                            <th class="sticky-col text-center">Ngày bắt đầu</th>
+                                            <th class="sticky-col text-center">Ngày kết thúc</th>
+                                            <th class="sticky-col text-center">Trạng thái</th>
+                                            <th class="sticky-col text-center">Hành động</th>
                                         </tr>
                                         </thead>
                                         <tbody id="listvoucher">
@@ -112,10 +106,8 @@
                                     </table>
                                 </div>
                                 <nav aria-label="Page navigation example">
-                                    <ul class="pagination" id="pageable">
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <ul class="pagination justify-content-center" id="pageable">
+
                                     </ul>
                                 </nav>
 
@@ -133,11 +125,15 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Chi Tiết Khuyến Mãi</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Chi Tiết Đợt Giảm Giá</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body row">
                 <table class="table">
+                    <tr>
+                        <th>Mã</th>
+                        <td id="makm"></td>
+                    </tr>
                     <tr>
                         <th>Tên</th>
                         <td id="tenkm"></td>
@@ -163,19 +159,101 @@
                         <td id="giatriapdung"></td>
                     </tr>
                     <tr>
-                        <th>Khách hàng áp dụng</th>
-                        <td id="khachhangapdung"></td>
-                    </tr>
-                    <tr>
                         <th>Giá trị giảm</th>
                         <td id="giatg"></td>
                     </tr>
                     <tr>
                         <th>Ngày tạo</th>
-                        <td id="ngayt"></td>
+                        <td id="ngaytao"></td>
                     </tr>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-4 pt-4" style="background-color: #3fc3ee;color: white">
+                <h5 class="modal-title" style="color: white"
+                    id="exampleModalLabel">Thông Tin Đợt Giảm Giá</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-modal"></button>
+            </div>
+            <form class="tablelist-form" novalidate autocomplete="off" id="update-form" method="post"
+                  th:object="${dotgiamgia}">
+                <div class="modal-body p-4">
+                    <div id="alert-error-msg" class="d-none alert alert-danger py-2"></div>
+                    <div class="row">
+                        <input type="hidden" id="id-field"/>
+                        <div class="col-sm-6">
+                            <label for="promotion-code-input" class="form-label">Mã Đợt Giảm Giá</label>
+                            <input type="text" id="promotion-code-input" class="form-control" required
+                                   th:name="ma"/>
+                            <span id="errorCode" class="text-danger" style="display:none;"></span><br>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="promotion-name-input" class="form-label">Tên Đợt Giảm Giá</label>
+                            <input type="text" id="promotion-name-input" class="form-control" required
+                                   th:name="ten"/>
+                            <span id="errorName" class="text-danger" style="display:none;"></span><br>
+                        </div>
+                        <div class="col-sm-9">
+                            <label for="promotion-value-input" class="form-label">Giá Trị Giảm</label>
+                            <input type="number" id="promotion-value-input" class="form-control" required
+                                   th:name="giaTriGiam"/>
+                            <span id="errorValue" class="text-danger" style="display:none;"></span><br>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="promotion-category-input" class="form-label">Giảm Theo</label>
+                            <select th:name="loaiGiamGia" id="promotion-category-input" class="form-select" required>
+                                <option th:value="true">%</option>
+                                <option th:value="false">VND</option>
+                            </select>
+                            <span id="errorCategory" class="text-danger" style="display:none;"></span><br>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="promotion-bill-input" class="form-label">Giá Trị Đơn Hàng Áp Dụng</label>
+                            <input type="number" id="promotion-bill-input" class="form-control" required
+                                   th:name="giaTriDonHang"/>
+                            <span id="errorBill" class="text-danger" style="display:none;"></span><br>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="promotion-status-input" class="form-label">Trạng Thái</label>
+                            <select class="form-control" required id="promotion-status-input" th:name="trangThai">
+                                <option th:value="true">Kích Hoạt</option>
+                                <option th:value="false">Dừng Kích Hoạt</option>
+                            </select><br></div>
+                        <div class="col-sm-6">
+                            <label for="promotion-startdate-input" class="form-label">Ngày Bắt Đầu</label>
+                            <input type="date" id="promotion-startdate-input" class="form-control" required
+                                   th:name="ngayBatDau"/>
+                            <span id="errorStartdate" class="text-danger" style="display:none;"></span><br>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="promotion-enddate-input" class="form-label">Ngày Kết Thúc</label>
+                            <input type="date" id="promotion-enddate-input" class="form-control" required
+                                   th:name="ngayKetThuc"/>
+                            <span id="errorEnddate" class="text-danger" style="display:none;"></span><br>
+                        </div>
+
+                        <input type="hidden" id="promotion-date-input" class="form-control" required
+                               th:name="ngayTao"/>
+                    </div>
+                    <hr>
+
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-success" id="add-btn" onclick="showConfirmPopup()">
+                                Sửa
+                            </button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -194,19 +272,25 @@
         timer: 1500,
         timerProgressBar: true,
     });
+
     window.onload = function () {
         loadPromotion(0);
+        validName();
+        validCode();
+        // validateStart();
+        // validateEnd();
+        // validBill();
+        // validate();
     }
-    var size = 10;
 
     async function loadPromotion(page) {
         var sort = document.getElementById("sort").value;
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
-        var customer_type = $("#select-customer-type").val();
         var promotion_type = $("#select-promotion-type").val();
+        var size = 5;
 
-        console.log(customer_type, promotion_type);
+        console.log(promotion_type);
 
         if (new Date(start) > new Date(end)) {
             await Toast.fire({
@@ -217,15 +301,15 @@
             return;
         }
 
-        var url = '/admin/dot-giam-gia/findAll-page?page=' + page + '&size=' + size + '&sort=' + sort + '&customer_type=' + customer_type + '&promotion_type=' + promotion_type;
+        var url = '/admin/promotion/findAll-page?page=' + page + '&size=' + size + '&sort=' + sort + '&promotion_type=' + promotion_type;
         if (start != null && start !== "" && end != null && end !== "" && start !== 'null' && end !== 'null') {
             url += '&start=' + start + '&end=' + end;
         }
         const response = await fetch(url, {
             method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
+            // headers: {
+            //     'Authorization': 'Bearer ' + localStorage.getItem('token')
+            // }
         });
         var result = await response.json();
         console.log(result)
@@ -236,36 +320,28 @@
         for (let i = 0; i < list.length; i++) {
             let momentDateStart = moment(list[i].ngayBatDau);
             let momentDateEnd = moment(list[i].ngayKetThuc);
-            let giaTriApDung = list[i].giatriDH;
-            let trangThaiBadge = (list[i].trangThai === false) ? '<div class="form-check form-switch d-flex justify-content-center" \>\n' +
-                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 1, \'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" />\n' +
-                '</div>' : '<div class="form-check form-switch  d-flex justify-content-center" \>\n' +
-                '<input class="form-check-input form-control-icon" id="input-status-' + list[i].id + '" type="checkbox" onchange="updateStatus(' + list[i].id + ', 0,\'' + list[i].ngayBatDau + '\',\'' + list[i].ngayKetThuc + '\')" checked/>\n' +
-                '</div>';
-            let typeOfCustomer = '';
-            if (list[i].loaiKhachHangApDung === 0) {
-                typeOfCustomer = 'Tất cả';
-            } else if (list[i].loaiKhachHangApDung === 1) {
-                typeOfCustomer = 'Khách hàng mới';
-            } else if (list[i].loaiKhachHangApDung === 2) {
-                typeOfCustomer = 'Khách hàng tiềm năng';
-            } else {
-                typeOfCustomer = 'Khách hàng thân thiết';
-            }
-            main += `<tr>
-                    <td>${i + 1}</td>
-                    <td>${list[i].ten}</td>
-                    <td class="text-center">${list[i].loaiGG === false ? formatmoney(list[i].giatriGiam) : list[i].giatriGiam + '%'}</td>
-                    <td>${formatmoney(giaTriApDung)}</td>
-                    <td class="text-center">${typeOfCustomer}</td>
-                    <td>${momentDateStart.format('DD/MM/YYYY HH:mm')}</td>
-                    <td>${momentDateEnd.format('DD/MM/YYYY HH:mm')}</td>
-                    <td>${trangThaiBadge}</td>
-                    <td class="sticky-col d-flex justify-content-between">
-                        <a onclick="loadChiTiet(${list[i].id})" href="#" data-bs-toggle="modal" data-bs-target="#chitiet"><i class="ri-eye-2-line"></i></a>
-                        <a onclick="nextDetailPromotion(${list[i].id})"><i class="ri-edit-2-line"></i></a>
+            let giaTriApDung = list[i].giaTriDonHang;
+            let trangThaiBadge = `
+    <div class="form-check form-switch d-flex justify-content-center">
+    <input class="form-check-input form-control-icon"
+           id="input-status-${list[i].id}"
+           type="checkbox"
+           onchange="updateStatus(${list[i].id}, ${list[i].trangThai ? 0 : 1}, '${list[i].ngayBatDau}', '${list[i].ngayKetThuc}')"
+           ${list[i].trangThai ? 'checked' : ''}/>
+  </div>`;
 
-                        <a onclick="sendMail(${list[i].id})"><i class="ri-mail-send-fill"></i></a>
+            main += `<tr>
+                    <td scope="row" class="text-center">${i + 1}</td>
+                    <td scope="row" class="text-center">${list[i].ma}</td>
+                    <td scope="row" class="text-center">${list[i].ten}</td>
+                    <td class="text-center">${list[i].loaiGiamGia === false ? formatmoney(list[i].giaTriGiam) : list[i].giaTriGiam + '%'}</td>
+                    <td scope="row" class="text-center">${formatmoney(giaTriApDung)}</td>
+                    <td scope="row" class="text-center">${momentDateStart.format('DD/MM/YYYY')}</td>
+                    <td scope="row" class="text-center">${momentDateEnd.format('DD/MM/YYYY')}</td>
+                    <td scope="row" class="text-center">${trangThaiBadge}</td>
+                    <td class="text-center">
+                        <a onclick="loadChiTiet(${list[i].id})" href="#" data-bs-toggle="modal" data-bs-target="#chitiet" class="link-info fs-15"><i class="ri-eye-2-line"></i></a>
+                        <a onclick="detail(${list[i].id})" class="link-info fs-15"><i class="ri-edit-2-line"></i></a>
                     </td>
                 </tr>`
         }
@@ -284,78 +360,47 @@
                 </div>`;
     }
 
-    async function nextDetailPromotion(id) {
-        $.ajax({
-            url: '/admin/promotion/check-status?id=' + id,
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
-            },
-            success: function (response) {
-                console.log(response);
-                if (response === "success") {
-                    window.location.href = '/admin/add-promotion?id=' + id;
-                } else if (response === "error") {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Thông Báo',
-                        text: 'Không thể cập nhật khuyến mãi vì chương trình đã được áp dụng!',
-                        confirmButtonText: 'OK',
-                    })
-                } else {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Thông Báo',
-                        text: 'Khuyến mãi không tồn tại!',
-                        confirmButtonText: 'OK',
-                    })
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
+    function detail(Id) {
+        console.log(Id);
+        fetch('/admin/promotion/detail/' + Id, {
+            method: 'GET'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            document.getElementById('promotion-code-input').value = data.ma
+            document.getElementById('promotion-name-input').value = data.ten;
+            document.getElementById('promotion-startdate-input').value = data.ngayBatDau;
+            document.getElementById('promotion-date-input').value = data.ngayTao;
+            document.getElementById('promotion-enddate-input').value = data.ngayKetThuc;
+            document.getElementById('promotion-category-input').value = data.loaiGiamGia;
+            document.getElementById('promotion-value-input').value = data.giaTriGiam;
+            document.getElementById('promotion-bill-input').value = data.giaTriDonHang;
+            document.getElementById('promotion-status-input').value = data.trangThai;
+            document.getElementById('update-form').action = '/admin/promotion/update/' + Id;
+            $('#myModal').modal('show');
+        })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function showConfirmPopup() {
+        swal.fire({
+            title: "Bạn muốn cập nhật thông tin ?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Có",
+            cancelButtonText: "Không"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('update-form').submit();
+                loadPage(page);
             }
         });
     }
 
-    async function sendMail(id) {
-        $.ajax({
-            url: '/api/admin/promotion/send-mail?promotion=' + id,
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem("token")
-            },
-            success: function (response) {
-                console.log(response);
-                if (response === "success") {
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Thông Báo',
-                        text: 'Mail đã được gửi đi!',
-                        confirmButtonText: 'OK',
-                    })
-                } else if (response === "out of date") {
-                    swal.fire({
-                        icon: 'warning',
-                        title: 'Thông Báo',
-                        text: 'Khuyến mãi đã kết thúc!',
-                        confirmButtonText: 'OK',
-                    })
-                } else {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Thông Báo',
-                        text: 'Khuyến mãi không tồn tại!',
-                        confirmButtonText: 'OK',
-                    })
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
 
     async function loadChiTiet(id) {
         var url = '/public/promotion/find-by-id?id=' + id;
@@ -365,28 +410,17 @@
         });
         var result = await response.json();
         let momentDate = moment(result.ngayTao);
-        let giaTriApDung = result.giaTriDonHangApDung + '000';
-        let typeOfCustomer = '';
-        if (result.loaiKhachHangApDung === 0) {
-            typeOfCustomer = 'Tất cả';
-        } else if (result.loaiKhachHangApDung === 1) {
-            typeOfCustomer = 'Khách hàng mới';
-        } else if (result.loaiKhachHangApDung === 2) {
-            typeOfCustomer = 'Khách hàng tiềm năng';
-        } else {
-            typeOfCustomer = 'Khách hàng thân thiết';
-        }
+        let giaTriApDung = result.giaTriDonHang;
         console.log(result)
-        document.getElementById("tenkm").innerHTML = result.tenKhuyenMai
+        document.getElementById("makm").innerHTML = result.ma
+        document.getElementById("tenkm").innerHTML = result.ten
         document.getElementById("ngaybd").innerHTML = result.ngayBatDau
         document.getElementById("ngaykt").innerHTML = result.ngayKetThuc
-        document.getElementById("loaigg").innerHTML = result.loaiKM === true ? "Giảm giá theo %" : "Giảm giá theo số tiền";
-        document.getElementById("giatg").innerHTML = result.loaiKM === true ? result.giaTriGiam + "%" : formatmoney(result.giaTriGiam)
-        document.getElementById("ngayt").innerHTML = momentDate.format('DD/MM/YYYY HH:mm');
+        document.getElementById("loaigg").innerHTML = result.loaiGiamGia === true ? "Giảm giá theo %" : "Giảm giá theo số tiền";
+        document.getElementById("giatg").innerHTML = result.loaiGiamGia === true ? result.giaTriGiam + "%" : formatmoney(result.giaTriGiam)
+        document.getElementById("ngaytao").innerHTML = momentDate.format('DD/MM/YYYY');
         document.getElementById("trangThai").innerHTML = result.trangThai === true ? 'Kích Hoạt' : 'Chưa Kích Hoạt';
-        document.getElementById("khachhangapdung").innerText = typeOfCustomer;
         document.getElementById("giatriapdung").innerHTML = formatmoney(giaTriApDung);
-        // document.getElementById("anh").src = result.banner
     }
 
     function formatmoney(money) {
@@ -396,6 +430,7 @@
         });
         return VND.format(money);
     }
+
 
     function updateStatus(id, status, start_date, end_date) {
         let now = new Date();
@@ -436,13 +471,14 @@
                 $.ajax({
                     url: '/admin/promotion/change-status/' + id + '/' + status,
                     method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    },
+                    // headers: {
+                    //     'Content-Type': 'application/json',
+                    //     'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    // },
                     success: function (response) {
                         console.log(response);
                         if (response === "success") {
+                            document.getElementById("input-status-" + id).checked = (status === 1);
                             (async () => {
                                 await Toast.fire({
                                     icon: "success",
@@ -487,6 +523,113 @@
             }
         });
     }
+
+    function validName() {
+        var nameInput = document.getElementById('promotion-name-input');
+        var errorName = document.getElementById('errorName');
+        nameInput.addEventListener('input', function () {
+            var name = nameInput.value.trim();
+            if (name === '') {
+                errorName.textContent = '* Vui lòng nhập tên đợt giảm giá!';
+                errorName.style.display = 'block';
+                hasError = true;
+                document.getElementById("add-btn").disabled = true;
+            } else if (name.length > 50) {
+                errorName.textContent = '* Tên đợt giảm giá quá dài!';
+                errorName.style.display = 'block';
+                hasError = true;
+                document.getElementById("add-btn").disabled = true;
+            } else {
+                errorName.style.display = 'none';
+                hasError = false
+                document.getElementById("add-btn").disabled = false;
+
+            }
+        });
+    }
+
+    function validCode() {
+        var codeInput = document.getElementById('promotion-code-input');
+        var errorCode = document.getElementById('errorCode');
+        codeInput.addEventListener('input', function () {
+            var code = codeInput.value.trim();
+            if (code === '') {
+                errorCode.textContent = '* Vui lòng nhập mã đợt giảm giá!';
+                errorCode.style.display = 'block';
+                hasError = true;
+                document.getElementById("add-btn").disabled = true;
+            } else if (code.length > 50) {
+                errorCode.textContent = '* Mã đợt giảm giá quá dài!';
+                errorCode.style.display = 'block';
+                hasError = true;
+                document.getElementById("add-btn").disabled = true;
+            } else {
+                errorCode.style.display = 'none';
+                hasError = false
+                document.getElementById("add-btn").disabled = false;
+
+            }
+        });
+    }
+
+    function validateStart() {
+        var ngayBatDau = document.getElementById("promotion-startdate-input").value;
+        var errorStartdate = document.getElementById("errorStartdate");
+
+        document.addEventListener('input', function () {
+            // var startDate = new Date(ngayBatDau);
+            // var endDate = new Date(ngayKetThuc);
+            if (!ngayBatDau) {
+                errorStartdate.textContent = '* Vui lòng chọn ngày bắt đầu!';
+                errorStartdate.style.display = 'block';
+
+                hasError = true;
+                document.getElementById("add-btn").disabled = true;
+            } else {
+                errorStartdate.style.display = 'none';
+
+                hasError = false
+                document.getElementById("add-btn").disabled = false;
+            }
+        });
+    }
+
+    function validateEnd() {
+        var ngayKetThuc = document.getElementById("promotion-enddate-input").value;
+        var errorEnddate = document.getElementById("errorEnddate");
+
+        document.addEventListener('input', function () {
+            if (!ngayKetThuc) {
+                errorEnddate.textContent = '* Vui lòng chọn ngày kết thúc';
+                errorEnddate.style.display = 'block';
+
+                hasError = true;
+                document.getElementById("add-btn").disabled = true;
+            } else {
+                errorEnddate.style.display = 'none';
+
+                hasError = false
+                document.getElementById("add-btn").disabled = false;
+            }
+
+            // if (startDate > endDate){
+            //     errorStartdate.textContent = '* Ngày bắt đầu phải trước ngày kết thúc!';
+            //     errorStartdate.style.display = 'block';
+            //
+            //     errorEnddate.textContent = '* Ngày kết thúc phải trước ngày bắt đầu!';
+            //     errorEnddate.style.display = 'block';
+            //
+            //     hasError = true;
+            //     document.getElementById("add-btn").disabled = true;
+            // } else {
+            //     errorStartdate.style.display = 'none';
+            //     errorEnddate.style.display = 'none';
+            //     hasError = false
+            //     document.getElementById("add-btn").disabled = false;
+            // }
+        });
+    }
+
 
 </script>
 <script th:if="${errorNotExist == true}">
