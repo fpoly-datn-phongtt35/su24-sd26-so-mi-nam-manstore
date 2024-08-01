@@ -29,12 +29,12 @@
                                         <img src="../assets/images/auth/img-1.png" alt="" class="img-fluid">
                                     </div>
                                     <div class="col-lg-8 col-9">
-                                        <h1 class="text-white lh-base fw-lighter">Chào Mừng Đến Với Toner Store</h1>
+                                        <h1 class="text-white lh-base fw-lighter">Chào Mừng Đến Với Man Store</h1>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p class="text-muted fs-15">Đăng nhập để tiếp tục với Toner.</p>
+                                <p class="text-muted fs-15">Đăng nhập để tiếp tục với ManStore.</p>
                                 <div class="p-2">
                                     <form action="javascript:login()">
 
@@ -142,8 +142,8 @@
                     localStorage.removeItem("userId");
                 }
                 localStorage.setItem("userId", userItem.id);
-                localStorage.setItem("userName", userItem.hoTen);
-                localStorage.setItem("avatarUser", userItem.anhKhachHang);
+                localStorage.setItem("userName", userItem.ten);
+                // localStorage.setItem("avatarUser", userItem.anhKhachHang);
                 window.location.href = '/client/product';
             }
             if (role === "ADMIN") {
@@ -162,8 +162,8 @@
                     localStorage.removeItem("adminId");
                 }
                 localStorage.setItem("adminId", userItem.id);
-                localStorage.setItem("adminName", userItem.hoTen);
-                window.location.href = '/admin/sell-off';
+                localStorage.setItem("adminName", userItem.ten);
+                window.location.href = '/admin/staff';
             }
         } catch (error) {
             swal.fire({

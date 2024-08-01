@@ -1,10 +1,14 @@
-package com.example.manstore.controller;
+package com.example.manstore.controller.admin;
 
 import com.example.manstore.entity.NhanVien;
 import com.example.manstore.service.NhanVienService;
 import com.example.manstore.service.PhanQuyenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +27,8 @@ public class NhanVienController {
     @Autowired
     PhanQuyenService phanQuyenService;
 
-//    @Autowired
-//    PasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    @Autowired
+    PasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @GetMapping()
     public String getAll(Model model) {
@@ -59,7 +63,7 @@ public class NhanVienController {
             }
         }
         nhanVien.setMatKhau("12345");
-//        nhanVien.setMaHoaMatKhau(encoder.encode("12345"));
+        nhanVien.setMaHoaMatKhau(encoder.encode("12345"));
         if (nhanVien.getDiaChi().isEmpty()) {
             isValid = true;
             model.addAttribute("errorAdreess", "Địa chỉ trống!");

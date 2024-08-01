@@ -1,4 +1,4 @@
-package com.example.manstore.controller;
+package com.example.manstore.controller.admin;
 
 
 import com.example.manstore.dto.request.KhachHangRequest;
@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -223,7 +224,7 @@ public class KhachHangController {
             kh.setTen(khachHang.getTen());
             kh.setEmail(khachHang.getEmail());
             kh.setGioiTinh(khachHang.isGioiTinh());
-            kh.setNgaySinh(sqlDate.toLocalDate());
+            kh.setNgaySinh(sqlDate);
             kh.setMatKhau("12345");
             kh.setNgayTao(LocalDate.now());
 //            kh.setMaHoaMatKhau(passwordEncoder.encode(kh.getMatKhau()));
