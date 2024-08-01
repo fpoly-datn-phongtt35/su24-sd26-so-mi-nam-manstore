@@ -1,4 +1,4 @@
-package com.example.manstore.controller;
+package com.example.manstore.controller.admin;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
