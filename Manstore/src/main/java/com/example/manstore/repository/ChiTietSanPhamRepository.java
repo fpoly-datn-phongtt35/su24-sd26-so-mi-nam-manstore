@@ -37,4 +37,15 @@ public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham, 
     @EntityGraph(attributePaths = {"idSanPham", "idMauSac", "idSize"})
     @Query("SELECT s FROM ChiTietSanPham s WHERE s.idMauSac.id = :color AND s.idSize.id = :size AND s.idSanPham.id = :id")
     Page<ChiTietSanPham> FilterByAllAndProduct(@Param("color") String color, @Param("size") Integer size, @Param("id") String id, Pageable pageable);
+
+    @Query("select s from ChiTietSanPham s where s.idSanPham.id=:id and s.idMauSac.id =:ms ")
+    List<ChiTietSanPham> findListProductByColor(@Param("id") String id, @Param("ms") String ms);
+
+    @Query("select s from ChiTietSanPham s where s.idSanPham.id=:id and s.idMauSac.id =:ms and s.idSize =:size ")
+    ChiTietSanPham findIdProductByColorAndSize(@Param("id") String id, @Param("ms") String ms, @Param("size") String size);
+
+
+    @Query("select s from ChiTietSanPham s where (s.idSanPham.ten like %:keyword% or s.idSanPham.ma like %:keyword%) and s.idSanPham.trangThai = 1")
+    List<ChiTietSanPham> search(@Param("keyword") String keyword);
+
 }

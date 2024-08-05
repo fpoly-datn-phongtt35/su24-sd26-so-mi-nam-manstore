@@ -67,7 +67,7 @@
                         <!-- Hidden-->
                         <input id="productId" th:value="${sanPham.id}" type="hidden">
                         <!-- Hidden-->
-                        <h4 class="lh-base mb-1" th:text="${sanPham.tenSP}"></h4>
+                        <h4 class="lh-base mb-1" th:text="${sanPham.ten}"></h4>
                         <h5 class="fs-24 mb-4 text-secondary" id="price"></h5>
                     </div>
                     <div class="d-flex align-items-center mb-4">
@@ -138,23 +138,31 @@
                         <table class="table table-sm table-borderless align-middle" id="description">
                             <tr>
                                 <th>Mã</th>
-                                <td th:text="${sanPham.maSP}"></td>
+                                <td th:text="${sanPham.ma}"></td>
                             </tr>
                             <tr>
-                                <th>Loại</th>
-                                <td th:text="${sanPham.loaiSanPham==0?'Quần':'Áo'}"></td>
-                            </tr>
-                            <tr>
-                                <th>Nhà cung cấp</th>
-                                <td th:text="${sanPham.ncc.ten}"></td>
-                            </tr>
-                            <tr>
-                                <th>Môn thể thao</th>
-                                <td th:text="${sanPham.tl.ten}"></td>
+                                <th>Danh mục</th>
+                                <td th:text="${sanPham.idDanhMuc.ten}"></td>
                             </tr>
                             <tr>
                                 <th>Thương hiệu</th>
-                                <td th:text="${sanPham.thieu.ten}"></td>
+                                <td th:text="${sanPham.idThuongHieu.ten}"></td>
+                            </tr>
+                            <tr>
+                                <th>Cổ áo</th>
+                                <td th:text="${sanPham.idCoAo.ten}"></td>
+                            </tr>
+                            <tr>
+                                <th>Đuôi áo</th>
+                                <td th:text="${sanPham.idDuoiAo.ten}"></td>
+                            </tr>
+                            <tr>
+                                <th>Kiểu dáng</th>
+                                <td th:text="${sanPham.idKieuDang.ten}"></td>
+                            </tr>
+                            <tr>
+                                <th>Chất liệu</th>
+                                <td th:text="${sanPham.idChatLieu.ten}"></td>
                             </tr>
                         </table>
                         <p class="text-muted fs-15" th:text="${sanPham.moTa}"></p>
@@ -184,7 +192,7 @@
 <script th:inline="javascript">
     let product = /*[[ ${sanPham} ]]*/ null;
     console.log(product);
-    document.getElementById('price').innerText = formatmoney(product.donGia);
+    document.getElementById('price').innerText = formatmoney(product.gia);
 </script>
 <script>
 
@@ -728,7 +736,7 @@
                     let dto = {
                         id: result.id,
                         idSanPham: result.sp.id,
-                        tenSanPham: result.sp.tenSP,
+                        tenSanPham: result.sp.ten,
                         idMauSac: result.ms.id,
                         mauSac: result.ms.ten,
                         size: result.size,

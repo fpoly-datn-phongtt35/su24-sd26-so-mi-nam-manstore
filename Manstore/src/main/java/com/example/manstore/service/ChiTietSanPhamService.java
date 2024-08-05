@@ -19,9 +19,18 @@ public interface ChiTietSanPhamService {
     void update(ChiTietSanPham chiTietSanPham);
 
     ChiTietSanPham getCTSPById(Integer id);
+
+    List<ChiTietSanPham> findListProductByColor(String id,String ms);
+
     List<ChiTietSanPham> getListCTSPById(String id);
 
     Page<ChiTietSanPham> Filter(int page, String color, String size, String id);
+
+    ChiTietSanPham findIdProductByColorAndSize(String id,String ms,String size);
+
+    List<ChiTietSanPham> search(String keyword);
+
+
 
 
 }

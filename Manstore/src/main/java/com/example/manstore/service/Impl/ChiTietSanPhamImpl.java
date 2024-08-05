@@ -52,6 +52,11 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     }
 
     @Override
+    public List<ChiTietSanPham> findListProductByColor(String id, String ms) {
+        return ctspRepository.findListProductByColor(id,ms);
+    }
+
+    @Override
     public List<ChiTietSanPham> getListCTSPById(String id) {
         return ctspRepository.getListSpctByIdSp(id);
     }
@@ -78,4 +83,15 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
         }
         return pagination;
     }
+
+    @Override
+    public ChiTietSanPham findIdProductByColorAndSize(String id, String ms, String size) {
+        return ctspRepository.findIdProductByColorAndSize(id,ms,size);
+    }
+
+    @Override
+    public List<ChiTietSanPham> search(String keyword) {
+        return ctspRepository.search(keyword);
+    }
+
 }

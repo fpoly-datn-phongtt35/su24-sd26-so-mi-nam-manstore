@@ -184,7 +184,7 @@
                              id="type-of-customer" style="width: 150px; overflow: hidden">
                         </div>
                         <div>
-                            <h5 class="fs-18" th:text="${account.hoTen}"></h5>
+                            <h5 class="fs-18" th:text="${account.ten}"></h5>
                             <div class="text-muted"><i class="bi bi-geo-alt"></i>
                                 <snap id="account-address"></snap>
                             </div>
@@ -264,7 +264,7 @@
                                                     <td>
                                                         Họ Và Tên
                                                     </td>
-                                                    <td class="fw-medium" th:text="${account.hoTen}">
+                                                    <td class="fw-medium" th:text="${account.ten}">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -272,7 +272,7 @@
                                                         Ngày sinh
                                                     </td>
                                                     <td class="fw-medium"
-                                                        th:text="${#dates.format(account.ngaySinh, 'dd/MM/yyyy')}">
+                                                        th:text="${account.ngaySinh}">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -291,10 +291,17 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
+                                                        Giới tính
+                                                    </td>
+                                                    <td class="fw-medium" th:text="${account.gioiTinh == true ? 'Nam' : 'Nữ'}">m
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                                         Ngày tham gia
                                                     </td>
                                                     <td class="fw-medium"
-                                                        th:text="${#temporals.format(account.ngayTao, 'dd/MM/yyyy')}">
+                                                        th:text="${account.ngayTao}">
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -399,7 +406,7 @@
                                                     <div class="col-lg-4">
                                                         <div class="auth-pass-inputgroup mb-3 position-relative">
                                                             <label class="form-label" for="oldpasswordInput">Mật khẩu
-                                                                cữ</label>
+                                                                hiện tại</label>
                                                             <div class="input-group input-group-append">
                                                                 <input type="password" class="form-control"
                                                                        placeholder="Mật khẩu hiện tại"
@@ -518,7 +525,7 @@
                                 <label class="form-label" for="nameInput">Họ và tên</label>
                                 <input class="form-control" id="nameInput"
                                        placeholder="Enter your fullname"
-                                       th:name="hoTen" th:value="${account.hoTen}" type="text">
+                                       th:name="ten" th:value="${account.ten}" type="text">
                                 <span class="text-danger" id="error-fullname"></span>
                             </div>
                         </div>
@@ -891,7 +898,7 @@
                                                 <h6 class="text-muted text-uppercase fw-semibold fs-14 mb-3">Thông tin
                                                     đặt hàng</h6>
                                                 <p class="fw-medium mb-2 fs-16" id="order-name"
-                                                   th:text="${account.hoTen}"></p>
+                                                   th:text="${account.ten}"></p>
                                                 <p class="text-muted mb-1" id="order-address-line"></p>
                                                 <p class="text-muted mb-1"><span>SDT: </span><span id="order-phone-no"
                                                                                                    th:text="${account.sdt}"></span>
@@ -1088,15 +1095,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.23.0/axios.min.js"></script>
 <script th:inline="javascript">
     let account = /*[[ ${account} ]]*/ null;
-    if (account.anhKhachHang !== null) {
-        document.getElementById('user-avatar').src = account.anhKhachHang;
-        document.getElementById('users-img-field').src = account.anhKhachHang;
-        document.getElementById('src-img').value = account.anhKhachHang;
-    } else {
+    // if (account.anhKhachHang !== null) {
+    //     document.getElementById('user-avatar').src = account.anhKhachHang;
+    //     document.getElementById('users-img-field').src = account.anhKhachHang;
+    //     document.getElementById('src-img').value = account.anhKhachHang;
+    // } else {
         document.getElementById('user-avatar').src = '/assets/images/users/user-dummy-img.jpg';
         document.getElementById('users-img-field').src = '/assets/images/users/user-dummy-img.jpg';
         document.getElementById('src-img').value = null;
-    }
+    // }
 </script>
 <script>
     const Toast = swal.mixin({
@@ -1192,34 +1199,34 @@
         const data = await response.json();
         console.log(data);
 
-        let classification = '';
-        if (data.loaiKhachHang === 1) {
-            classification = `
-                <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
-                    <span class="badge bg-success">Khách Hàng Mới</span>
-                </div>
-            `;
-        } else if (data.loaiKhachHang === 2) {
-            classification = `
-                <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
-                    <span class="badge bg-info">Khách Hàng Tiềm Năng</span>
-                </div>
-            `;
-        } else if (data.loaiKhachHang === 3) {
-            classification = `
-                <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
-                    <span class="badge bg-danger">Khách Hàng Thân Thiết</span>
-                </div>
-            `;
-        } else {
-            classification = `
-                <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
-                    <span class="badge bg-success">Khách Hàng Mới</span>
-                </div>
-            `;
-        }
-
-        document.getElementById('type-of-customer').innerHTML = classification;
+        // let classification = '';
+        // if (data.loaiKhachHang === 1) {
+        //     classification = `
+        //         <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
+        //             <span class="badge bg-success">Khách Hàng Mới</span>
+        //         </div>
+        //     `;
+        // } else if (data.loaiKhachHang === 2) {
+        //     classification = `
+        //         <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
+        //             <span class="badge bg-info">Khách Hàng Tiềm Năng</span>
+        //         </div>
+        //     `;
+        // } else if (data.loaiKhachHang === 3) {
+        //     classification = `
+        //         <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
+        //             <span class="badge bg-danger">Khách Hàng Thân Thiết</span>
+        //         </div>
+        //     `;
+        // } else {
+        //     classification = `
+        //         <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
+        //             <span class="badge bg-success">Khách Hàng Mới</span>
+        //         </div>
+        //     `;
+        // }
+        //
+        // document.getElementById('type-of-customer').innerHTML = classification;
     }
 
     async function getAddressDefault() {
@@ -1285,7 +1292,7 @@
             }
             let name = '';
             if (object.tenNguoiNhan === null) {
-                name = object.kh.hoTen;
+                name = object.kh.ten;
             } else {
                 name = object.tenNguoiNhan;
             }
@@ -1669,7 +1676,7 @@
             let displayStyle = data[i].default === false ? 'style="display: none;"' : '';
             let name = '';
             if (data[i].tenNguoiNhan === null) {
-                name = data[i].kh.hoTen;
+                name = data[i].kh.ten;
             } else {
                 name = data[i].tenNguoiNhan;
             }
