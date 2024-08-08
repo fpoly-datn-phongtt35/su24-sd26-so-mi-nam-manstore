@@ -185,9 +185,9 @@
                         </div>
                         <div>
                             <h5 class="fs-18" th:text="${account.ten}"></h5>
-                            <div class="text-muted"><i class="bi bi-geo-alt"></i>
-                                <snap id="account-address"></snap>
-                            </div>
+                            <!--                            <div class="text-muted"><i class="bi bi-geo-alt"></i>-->
+                            <!--                                <snap id="account-address"></snap>-->
+                            <!--                            </div>-->
                         </div>
                         <div class="ms-md-auto">
                             <a class="btn btn-link btn-hover" onclick="handleProduct()">Tiếp tục mua sắm<i
@@ -293,7 +293,8 @@
                                                     <td>
                                                         Giới tính
                                                     </td>
-                                                    <td class="fw-medium" th:text="${account.gioiTinh == true ? 'Nam' : 'Nữ'}">m
+                                                    <td class="fw-medium"
+                                                        th:text="${account.gioiTinh == true ? 'Nam' : 'Nữ'}">m
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -711,7 +712,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Tỉnh/Thành</label>
                                     <select class="form-control" id="province-update"
-                                            onchange="getDistricts()">
+                                            onchange="getDistrictsEdit()">
                                         <option data-id="" value="0">Chọn tỉnh/thành</option>
                                     </select>
                                     <div class="text-danger p-1" id="error-province-update"></div>
@@ -721,7 +722,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Quận/Huyện</label>
                                     <select class="form-control" id="district-update"
-                                            onchange="getWards()">
+                                            onchange="getWardsEdit()">
                                         <option data-id="" value="0">Chọn quận/huyện</option>
                                     </select>
                                     <div class="text-danger p-1" id="error-district-update">
@@ -733,7 +734,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Xã/Phường</label>
-                                    <select class="form-control" id="ward-update" onchange="validateWardsUpdate()">
+                                    <select class="form-control" id="ward-update" onchange="validateWardsEdit()">
                                         <option data-id="" value="0">Chọn xã/phường</option>
                                     </select>
                                     <div class="text-danger p-1" id="error-ward-update">
@@ -894,7 +895,7 @@
                                 <div class="col-lg-12">
                                     <div class="card-body p-3 border-top border-top-dashed">
                                         <div class="row g-3" id="information-invoice">
-                                            <div class="col-6" >
+                                            <div class="col-6">
                                                 <h6 class="text-muted text-uppercase fw-semibold fs-14 mb-3">Thông tin
                                                     đặt hàng</h6>
                                                 <p class="fw-medium mb-2 fs-16" id="order-name"
@@ -953,7 +954,8 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td>Giảm giá <small class="text-muted" id="promotion-title">(-0%)</small></td>
+                                                        <td>Giảm giá <small class="text-muted" id="promotion-title">(-0%)</small>
+                                                        </td>
                                                         <td class="text-end" id="promotion-value">0đ</td>
                                                     </tr>
                                                     <tr id="hidden-shipping">
@@ -961,8 +963,8 @@
                                                         <td class="text-end" id="td-shipping-fees"></td>
                                                     </tr>
                                                     <tr class="fs-15">
-                                                              <th scope="row">Tổng Tiền</th>
-                                                              <th class="text-end" id="td-total-all"></th>
+                                                        <th scope="row">Tổng Tiền</th>
+                                                        <th class="text-end" id="td-total-all"></th>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -984,7 +986,7 @@
                                                        style="width:10%">
                                                     <tbody>
                                                     <tr>
-                                                        <td style="padding-top: 50%" ><a id="modal-repurchase"
+                                                        <td style="padding-top: 50%"><a id="modal-repurchase"
                                                                                         class="btn btn-hover btn-success"
                                                                                         onclick="handleRepurchaseOrder()"
                                                                                         style="display: none"><i
@@ -1047,45 +1049,7 @@
         </div>
     </div>
 </div>
-<!-- Modal Cancel Order End-->
-<!-- Modal Repurchase Order -->
-<!--<div class="modal" id="modalRepurchaseOrder" tabindex="-1">-->
-<!--    <div class="modal-dialog modal-lg">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h4 class="modal-title">Mua lại #<span id="modal-RepurchaseOrder-code"></span></h4>-->
-<!--                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"-->
-<!--                        type="button"></button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <div class="table-responsive table-card">-->
-<!--                    <table class="table fs-15 align-middle table-nowrap">-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th scope="col">#</th>-->
-<!--                            <th scope="col">Sản phẩm</th>-->
-<!--                            <th scope="col">Đơn giá</th>-->
-<!--                            <th scope="col" class="text-center">Số lượng</th>-->
-<!--                            <th scope="col">Tổng tiền</th>-->
-<!--                            <th scope="col"></th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody id="modal-RepurchaseOrder-list">-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button class="btn btn-primary" onclick="showConfirmPopupRepurchaseOrder()" type="button">-->
-<!--                    Mua lại-->
-<!--                </button>-->
-<!--                <button class="btn btn-danger" data-bs-dismiss="modal" type="button">-->
-<!--                    Đóng-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<
 <!-- Modal Repurchase Order End-->
 <div th:replace="client/fragments/footer::footer"></div>
 <div th:replace="client/fragments/script::script"></div>
@@ -1100,9 +1064,9 @@
     //     document.getElementById('users-img-field').src = account.anhKhachHang;
     //     document.getElementById('src-img').value = account.anhKhachHang;
     // } else {
-        document.getElementById('user-avatar').src = '/assets/images/users/user-dummy-img.jpg';
-        document.getElementById('users-img-field').src = '/assets/images/users/user-dummy-img.jpg';
-        document.getElementById('src-img').value = null;
+    document.getElementById('user-avatar').src = '/assets/images/users/user-dummy-img.jpg';
+    document.getElementById('users-img-field').src = '/assets/images/users/user-dummy-img.jpg';
+    document.getElementById('src-img').value = null;
     // }
 </script>
 <script>
@@ -1142,92 +1106,51 @@
 
 
     window.onload = function () {
-        loadTypeOfCustomer();
+        // loadTypeOfCustomer();
         getAddressDefault();
         loadOrder(0);
     }
 
-    async function loadAvatar() {
-        let src_avatar = document.getElementById('users-img-field');
-        let src_img = document.getElementById('staff-image-input');
-        const selectedFile = src_img.files[0];
-
-        if (selectedFile) {
-            let btn = document.getElementById('btn-update-profile');
-            btn.disabled = true;
-            const startTime = performance.now();
-            if (src_avatar) {
-                src_avatar.src = URL.createObjectURL(selectedFile);
-            }
-            const filePath = document.getElementById('staff-image-input');
-            const formData = new FormData();
-            formData.append("file", filePath.files[0]);
-            var urlUpload = 'http://localhost:8080/admin/upload-file';
-            try {
-                const res = await fetch(urlUpload, {
-                    method: 'POST',
-                    body: formData
-                });
-                const endTime = performance.now();
-                const executionTime = endTime - startTime;
-                await Toast.fire({
-                    icon: "warning",
-                    text: "Ảnh Đại Diện Đang Được Tải Lên!",
-                    time: executionTime.toFixed(2)
-                });
-                btn.disabled = false;
-                console.log(`API call execution time: ${executionTime.toFixed(2)} milliseconds`);
-                document.getElementById("src-img").value = await res.text();
-            } catch (error) {
-                console.error('Error during API call:', error);
-            }
-        } else {
-            console.warn('No file selected');
-        }
-
-    }
-
-    async function loadTypeOfCustomer() {
-        let url = '/api/client/account/' + userId;
-
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            }
-        })
-        const data = await response.json();
-        console.log(data);
-
-        // let classification = '';
-        // if (data.loaiKhachHang === 1) {
-        //     classification = `
-        //         <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
-        //             <span class="badge bg-success">Khách Hàng Mới</span>
-        //         </div>
-        //     `;
-        // } else if (data.loaiKhachHang === 2) {
-        //     classification = `
-        //         <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
-        //             <span class="badge bg-info">Khách Hàng Tiềm Năng</span>
-        //         </div>
-        //     `;
-        // } else if (data.loaiKhachHang === 3) {
-        //     classification = `
-        //         <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
-        //             <span class="badge bg-danger">Khách Hàng Thân Thiết</span>
-        //         </div>
-        //     `;
-        // } else {
-        //     classification = `
-        //         <div class="fw-medium fs-11" style="max-width: 100%; overflow: hidden;">
-        //             <span class="badge bg-success">Khách Hàng Mới</span>
-        //         </div>
-        //     `;
-        // }
-        //
-        // document.getElementById('type-of-customer').innerHTML = classification;
-    }
+    // async function loadAvatar() {
+    //     let src_avatar = document.getElementById('users-img-field');
+    //     let src_img = document.getElementById('staff-image-input');
+    //     const selectedFile = src_img.files[0];
+    //
+    //     if (selectedFile) {
+    //         let btn = document.getElementById('btn-update-profile');
+    //         btn.disabled = true;
+    //         const startTime = performance.now();
+    //         if (src_avatar) {
+    //             src_avatar.src = URL.createObjectURL(selectedFile);
+    //         }
+    //         const filePath = document.getElementById('staff-image-input');
+    //         const formData = new FormData();
+    //         formData.append("file", filePath.files[0]);
+    //         var urlUpload = 'http://localhost:8080/admin/upload-file';
+    //         try {
+    //             const res = await fetch(urlUpload, {
+    //                 method: 'POST',
+    //                 body: formData
+    //             });
+    //             const endTime = performance.now();
+    //             const executionTime = endTime - startTime;
+    //             await Toast.fire({
+    //                 icon: "warning",
+    //                 text: "Ảnh Đại Diện Đang Được Tải Lên!",
+    //                 time: executionTime.toFixed(2)
+    //             });
+    //             btn.disabled = false;
+    //             console.log(`API call execution time: ${executionTime.toFixed(2)} milliseconds`);
+    //             document.getElementById("src-img").value = await res.text();
+    //         } catch (error) {
+    //             console.error('Error during API call:', error);
+    //         }
+    //     } else {
+    //         console.warn('No file selected');
+    //     }
+    //
+    // }
+    //
 
     async function getAddressDefault() {
         let url = '/api/client/address/get-by-customer/' + userId;
@@ -1270,17 +1193,17 @@
         var accountAddress = '';
         if (object === null || object === undefined) {
             address = `
-                    <div class="col-lg-12">
-                        <div class="d-lg-flex justify-content-start align-items-center"
-                            onclick="createAddress()" >
-                            <button class="btn btn-outline-danger">
-                                    <div class="d-flex justify-content-center align-item-center">
-                                        <i class="ri-add-line"></i>
-                                        Thêm Địa Chỉ Mới
-                                    </div>
-                            </button>
-                        </div>
-                    </div>`;
+                        <div class="col-lg-12">
+                            <div class="d-lg-flex justify-content-start align-items-center"
+                                onclick="createAddress()" >
+                                <button class="btn btn-outline-danger">
+                                        <div class="d-flex justify-content-center align-item-center">
+                                            <i class="ri-add-line"></i>
+                                            Thêm Địa Chỉ Mới
+                                        </div>
+                                </button>
+                            </div>
+                        </div>`;
             document.getElementById("address-list").innerHTML = address;
         } else {
             address = '';
@@ -1292,47 +1215,46 @@
             }
             let name = '';
             if (object.tenNguoiNhan === null) {
-                name = object.kh.ten;
+                name = object.idKhachHang.ten;
             } else {
                 name = object.tenNguoiNhan;
             }
             address += ` <div class="col-md-6"><div class="card mb-md-0">
-                                                            <div class="card-body">
-                                                                <div class="float-end clearfix"><a onclick="showAddressList(${object.id})" class="btn btn-hover badge bg-info-subtle text-info"><i class="ri-pencil-fill align-bottom me-1"></i>Thay Đổi</a> </div>
-                                                                <div>
-                                                                    <p class="mb-3 fw-semibold fs-12 d-block text-muted text-uppercase">${name}</p>
-                                                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${addressDetail + '.'}</span>
-                                                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${object.xp + ', ' + object.qh + ', ' + object.ttp + '.'}</span>
-                                                                    <span class="text-muted fw-normal d-block">${object.sdt}</span>
+                                                                <div class="card-body">
+                                                                    <div class="float-end clearfix"><a onclick="showAddressList(${object.id})" class="btn btn-hover badge bg-info-subtle text-info"><i class="ri-pencil-fill align-bottom me-1"></i>Thay Đổi</a> </div>
+                                                                    <div>
+                                                                        <p class="mb-3 fw-semibold fs-12 d-block text-muted text-uppercase">${name}</p>
+                                                                        <span class="text-muted fw-normal text-wrap mb-1 d-block">${addressDetail + '.'}</span>
+                                                                        <span class="text-muted fw-normal text-wrap mb-1 d-block">${object.tinhTp + ', ' + object.quanHuyen + ', ' + object.xaPhuongThitran + '.'}</span>
+                                                                        <span class="text-muted fw-normal d-block">${object.sdt}</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>`;
+                                                        </div>`;
             document.getElementById("address-list").innerHTML = address;
             document.getElementById("account-address").innerHTML =
-                addressDetail + ', ' + object.xp + ', ' + object.qh + ', ' + object.ttp + '.';
+                addressDetail + ', ' + object.tinhTp + ', ' + object.quanHuyen + ', ' + object.xaPhuongThitran + '.';
             document.getElementById("order-address-line").innerHTML = accountAddress;
         }
     }
 
     async function editAddress(idAddress) {
         addressId = idAddress;
-        let address;
-        for (const item of listAddress) {
-            if (item.id === parseInt(idAddress)) {
-                address = item;
-            }
-        }
-        await loadProvince(address.ttp);
-        await getDistrictsUpdate(address.qh);
-        getWardsUpdate(address.xp);
+        let address = listAddress.find(item => item.id === parseInt(idAddress));
+        if (!address) return;
+
+        await loadProvince(address.tinhTp);
+        await getDistrictsUpdate(address.quanHuyen);
+        await getWardsUpdate(address.xaPhuongThitran);
+
         document.getElementById('phone-update').value = address.sdt;
         document.getElementById('address-detail-update').innerText = address.diaChiCuThe;
         document.getElementById('full-name-update').value = address.tenNguoiNhan;
+
         $('#myModalAddress').modal('hide');
         $('#myModalAddressEdit').modal('show');
-
     }
+
 
     async function updateAddress() {
         let province = document.getElementById('province-update');
@@ -1373,10 +1295,10 @@
 
         if (isValid === false) {
             let addressBody = {
-                ttp: '' + province.options[province.selectedIndex].text + '',
-                qh: '' + district.options[district.selectedIndex].text + '',
-                xp: '' + ward.options[ward.selectedIndex].text + '',
-                dcct: '' + address + '',
+                tinhTp: '' + province.options[province.selectedIndex].text + '',
+                quanHuyen: '' + district.options[district.selectedIndex].text + '',
+                xaPhuongThitran: '' + ward.options[ward.selectedIndex].text + '',
+                diaChiCuThe: '' + address + '',
                 sdt: phone,
                 tenNguoiNhan: name
             };
@@ -1519,10 +1441,10 @@
 
         if (isValid === false) {
             let addressBody = {
-                ttp: '' + province.options[province.selectedIndex].text + '',
-                qh: '' + district.options[district.selectedIndex].text + '',
-                xp: '' + ward.options[ward.selectedIndex].text + '',
-                dcct: '' + address + '',
+                tinhTp: '' + province.options[province.selectedIndex].text + '',
+                quanHuyen: '' + district.options[district.selectedIndex].text + '',
+                xaPhuongThitran: '' + ward.options[ward.selectedIndex].text + '',
+                diaChiCuThe: '' + address + '',
                 sdt: phone,
                 tenNguoiNhan: name
             };
@@ -1676,7 +1598,7 @@
             let displayStyle = data[i].default === false ? 'style="display: none;"' : '';
             let name = '';
             if (data[i].tenNguoiNhan === null) {
-                name = data[i].kh.ten;
+                name = data[i].idKhachHang.ten;
             } else {
                 name = data[i].tenNguoiNhan;
             }
@@ -1693,14 +1615,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <span class="text-muted fw-normal text-wrap mb-1 d-block">${data[i].ttp + ', ' + data[i].qh + ', ' + data[i].xp + '.'}</span>
+                                            <span class="text-muted fw-normal text-wrap mb-1 d-block">${data[i].tinhTp + ', ' + data[i].quanHuyen + ', ' + data[i].xaPhuongThitran + '.'}</span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <span class="text-muted fw-normal text-wrap mb-1 d-block">${addressDetail + '.'}</span>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-10"><span class="text-muted fw-normal d-block text-start">${data[i].kh.sdt}</span></div>
+                                        <div class="col-md-10"><span class="text-muted fw-normal d-block text-start">${data[i].sdt}</span></div>
                                         <div class="col-md-2 d-flex justify-content-end align-items-end">
                                             <span class="link-info" onclick="editAddress(${data[i].id})"><a class="btn btn-hover badge bg-info-subtle text-info"><i class="bi bi-pencil-square"></i></a>
                                                 </span></div>
@@ -1781,6 +1703,78 @@
             });
     });
 
+    function getDistrictsEdit() {
+        const selectedProvince = $("#province-update option:selected");
+        const selectedProvinceId = selectedProvince.data("id");
+        const districtDropdown = $("#district-update");
+        const wardDropdown = $("#ward-update");
+
+        districtDropdown.empty();
+        districtDropdown.append(`<option value="" data-id="">Chọn quận/huyện</option>`);
+        wardDropdown.empty();
+        wardDropdown.append(`<option value="" data-id="">Chọn xã/phường</option>`);
+
+        if (!selectedProvinceId) {
+            return;
+        }
+
+        axios.get(`${districtHost}?province_id=${selectedProvinceId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        })
+            .then(response => {
+                const districts = response.data.data;
+
+                districts.forEach(district => {
+                    districtDropdown.append(`<option value="${district.DistrictName}" data-id="${district.DistrictID}">${district.DistrictName}</option>`);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching GHN Districts:', error);
+            });
+    }
+
+    function getWardsEdit() {
+        const selectedDistrict = $("#district-update option:selected");
+        const selectedDistrictId = selectedDistrict.data("id");
+        const wardDropdown = $("#ward-update");
+
+        wardDropdown.empty();
+        wardDropdown.append(`<option value="" data-id="">Chọn xã/phường</option>`);
+
+        if (!selectedDistrictId) {
+            return;
+        }
+
+        axios.get(`${wardHost}?district_id=${selectedDistrictId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        })
+            .then(response => {
+                const wards = response.data.data;
+
+                wards.forEach(ward => {
+                    wardDropdown.append(`<option value="${ward.WardName}" data-id="${ward.WardID}">${ward.WardName}</option>`);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching GHN Wards:', error);
+            });
+    }
+
+    function validateWardsEdit() {
+        const selectedWard = $("#ward-update option:selected");
+        if (selectedWard.val() === "0") {
+            $('#error-ward-update').text('Bạn chưa chọn xã/phường!');
+        } else {
+            $('#error-ward-update').text('');
+        }
+    }
+
     function getDistricts() {
         const selectedProvince = $("#province option:selected");
         if (selectedProvince.value === "0") {
@@ -1802,7 +1796,6 @@
         if (!selectedProvinceId) {
             return;
         }
-
         axios.get(`${districtHost}?province_id=${selectedProvinceId}`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -1858,6 +1851,15 @@
             .catch(error => {
                 console.error('Error fetching GHN Wards:', error);
             });
+    }
+
+    function validateWardsUpdate() {
+        const selectedWard = $("#ward-update option:selected");
+        if (selectedWard.value === "0") {
+            document.getElementById('error-ward').innerText = 'Bạn chựa chọn Quận/Huyện!';
+        } else {
+            document.getElementById('error-ward').innerText = '';
+        }
     }
 
     function validateWards() {
@@ -2046,14 +2048,6 @@
             });
     }
 
-    function validateWardsUpdate() {
-        const selectedWard = $("#ward-update option:selected");
-        if (selectedWard.value === "0") {
-            document.getElementById('error-ward').innerText = 'Bạn chựa chọn Quận/Huyện!';
-        } else {
-            document.getElementById('error-ward').innerText = '';
-        }
-    }
 
     function validPhoneUpdate() {
         let phoneInput = document.getElementById('phone-update');
@@ -2411,7 +2405,7 @@
             document.getElementById('invoice-status').innerHTML = statusBadge;
             order += `<tr><td>${list[i].maDonHang}</td>
                               <td><span class="text-muted fs-13">${formatDateTime(list[i].ngayTao)}</span></td>
-                              <td class="fw-medium fs-13">${formatMoney(list[i].tongTien + (list[i].tongTien/10))}</td>
+                              <td class="fw-medium fs-13">${formatMoney(list[i].tongTien + (list[i].tongTien / 10))}</td>
                               <td class="fw-medium fs-13" >${statusBadge}</td>
                               <td><a href="#myModalTrackOrder" onclick="loadModalOrderDetails(${list[i].id})" data-bs-toggle="modal" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a></td>
                               </tr>`;
@@ -2518,7 +2512,7 @@
         document.getElementById('invoice-total').innerHTML = formatMoney(order.tongTien);
 
         //--4
-        if(order.ttvc !== null) {
+        if (order.ttvc !== null) {
             document.getElementById('shipping-name').innerHTML = order.ttvc.tenNguoiNhan;
             document.getElementById('shipping-address-line-1').innerHTML = order.ttvc.diaChiCuThe + ', ' + order.ttvc.xp + ', ' + order.ttvc.qh + ', ' + order.ttvc.ttp;
             document.getElementById('shipping-phone-no').innerHTML = order.ttvc.sdtNguoiNhan;
@@ -2584,7 +2578,7 @@
         //--6
         total = total + (total / 10);
         document.getElementById('td-total').innerHTML = formatMoney(total);
-        if(order.ttvc === null) {
+        if (order.ttvc === null) {
             document.getElementById("hidden-shipping").classList.add('d-none');
             document.getElementById('information-invoice').style.display = 'none';
         } else {
@@ -2593,25 +2587,24 @@
             document.getElementById('td-shipping-fees').innerHTML = formatMoney(order.phiVanChuyen);
         }
 
-        if(listOrderDetail[0].dh.km !== null) {
-            if(listOrderDetail[0].dh.km.loaiKM === true) {
-                total = total - (total * (listOrderDetail[0].dh.km.giaTriGiam/100));
+        if (listOrderDetail[0].dh.km !== null) {
+            if (listOrderDetail[0].dh.km.loaiKM === true) {
+                total = total - (total * (listOrderDetail[0].dh.km.giaTriGiam / 100));
                 document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].dh.km.tenKhuyenMai + ')';
                 document.getElementById('promotion-value').innerHTML = '- ' + listOrderDetail[0].dh.km.giaTriGiam + '%';
-            }
-            else {
+            } else {
                 total = total - listOrderDetail[0].dh.km.giaTriGiam;
                 document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].dh.km.tenKhuyenMai + ')';
-                document.getElementById('promotion-value').innerHTML = '- ' + formatMoney(listOrderDetail[0].dh.km.giaTriGiam) ;
+                document.getElementById('promotion-value').innerHTML = '- ' + formatMoney(listOrderDetail[0].dh.km.giaTriGiam);
             }
         }
-        if(listOrderDetail[0].dh.km !== null) {
-            if(order.phiVanChuyen !== null)
+        if (listOrderDetail[0].dh.km !== null) {
+            if (order.phiVanChuyen !== null)
                 document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
             else
                 document.getElementById('td-total-all').innerHTML = formatMoney(total);
         } else {
-            if(order.phiVanChuyen !== null)
+            if (order.phiVanChuyen !== null)
                 document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
             else
                 document.getElementById('td-total-all').innerHTML = formatMoney(total);

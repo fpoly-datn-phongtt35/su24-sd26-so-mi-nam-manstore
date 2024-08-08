@@ -47,4 +47,7 @@ public class DiaChi {
     @Column(name = "TenNguoiNhan", length = 250)
     private String tenNguoiNhan;
 
+    @Column(name = "IsDefault")
+    private boolean isDefault;
+
 }

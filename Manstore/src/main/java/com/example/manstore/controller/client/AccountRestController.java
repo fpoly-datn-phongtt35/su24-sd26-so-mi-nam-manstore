@@ -1,5 +1,7 @@
 package com.example.manstore.controller.client;
 
+import com.example.manstore.entity.DiaChi;
+import com.example.manstore.service.DiaChiService;
 import com.example.manstore.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,13 +22,22 @@ public class AccountRestController {
 //    DonHangService donHangService;
 //    @Autowired
 //    DonHangChiTietService donHangChiTietService;
-//    @Autowired
-//    DiaChiService diaChiService;
+    @Autowired
+DiaChiService diaChiService;
 //    @Autowired
 //    ThongBaoService thongBaoService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> account(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(service.getByID(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/updateAddress/{idAddress}", method = RequestMethod.POST)
+    public ResponseEntity<?> updateAddress(@PathVariable("id") String id, @PathVariable("idAddress") String idAddress) {
+        for (DiaChi diaChi : diaChiService.getByIdKH(id)) {
+            diaChi.setDefault(diaChi.getId() == Integer.parseInt(idAddress));
+            diaChiService.save(diaChi);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
