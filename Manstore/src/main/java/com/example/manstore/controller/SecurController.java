@@ -11,17 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/api/v1/auth")
@@ -39,8 +36,7 @@ public class SecurController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    private ThongBaoServiceImpl thongBaoService;
+    private static final Logger logger = Logger.getLogger(SecurController.class.getName());
 
     @PostMapping("/init-reset-pass")
     public ResponseEntity<?> sendLinkResetPass(@RequestParam("email") String email) {
@@ -64,6 +60,8 @@ public class SecurController {
 
     @PostMapping("/regis-customer")
     public ResponseEntity<?> regisAccount(@RequestBody KhachHang khachHang) {
+        logger.info("Received request to register customer with email: " + khachHang.getEmail());
+
         Optional<KhachHang> kh = khachHangRepository.findByEmail(khachHang.getEmail());
         Optional<NhanVien> nv = nhanVienRepository.getByEmail(khachHang.getEmail());
         if (kh.isPresent() || nv.isPresent()) {
@@ -79,10 +77,14 @@ public class SecurController {
             response.setStatusText("failure");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
+
+        logger.info("Customer information before saving: " + khachHang);
+
         khachHang.setMaHoaMatKhau(passwordEncoder.encode(khachHang.getMatKhau()));
         khachHang.setNgayTao(LocalDate.now());
-//        khachHang.setNgaySinh(new Date(System.currentTimeMillis()));
+        khachHang.setNgaySinh(new Date(System.currentTimeMillis()).toLocalDate());
         khachHang.setGioiTinh(false);
+
         List<KhachHang> list = khachHangRepository.findAll();
         List<Integer> integerList = new ArrayList<>();
         if (list.size() == 0) {
@@ -95,6 +97,7 @@ public class SecurController {
             Optional<Integer> maxNumber = integerList.stream().max(Integer::compareTo);
             maxNumber.ifPresent(integer -> khachHang.setMa("KH" + (integer + 1)));
         }
+
         KhachHang result = khachHangRepository.save(khachHang);
 
 //        ThongBao thongBao = new ThongBao();
