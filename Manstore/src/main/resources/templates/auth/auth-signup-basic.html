@@ -22,7 +22,7 @@
                 <div class="col-lg-6">
                     <div class="auth-card mx-lg-3">
                         <div class="card border-0 mb-0">
-                            <div class="card-header bg-primary border-0">
+                            <div class="card-header bg-danger border-0">
                                 <div class="row">
                                     <div class="col-lg-4 col-3">
                                         <img src="../assets/images/auth/img-1.png" alt="" class="img-fluid">
@@ -156,13 +156,13 @@
             }
             countValid += 1;
         }
-        if (customer.hoTen === '') {
+        if (customer.ten === '') {
             document.getElementById('invalid-fullname').innerText = 'Vui lòng nhập họ tên!';
             countValid += 1;
-        } else if (!nameRegex.test(customer.hoTen)) {
+        } else if (!nameRegex.test(customer.ten)) {
             document.getElementById('invalid-fullname').innerText = 'Vui lòng nhập đúng tên!';
             countValid += 1;
-        } else if (customer.hoTen.length > 50) {
+        } else if (customer.ten.length > 50) {
             document.getElementById('invalid-fullname').innerText = 'Tên quá dài!';
             countValid += 1;
         }
@@ -191,7 +191,7 @@
         var phone = document.getElementById("phone").value;
         var password = document.getElementById("password").value;
         var customer = {
-            "hoTen": fullname,
+            "ten": fullname,
             "sdt": phone,
             "email": email,
             "matKhau": password,

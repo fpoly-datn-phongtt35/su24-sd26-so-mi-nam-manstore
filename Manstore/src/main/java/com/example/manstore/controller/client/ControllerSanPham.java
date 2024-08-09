@@ -9,8 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping({"/client/product",
-        "/product"})
+@RequestMapping({"/client/product", "/product"})
 public class ControllerSanPham {
     @Autowired
     SanPhamService service;

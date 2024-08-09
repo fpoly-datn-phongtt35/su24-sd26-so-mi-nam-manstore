@@ -23,9 +23,10 @@ public class DiaChi {
     private Integer id;
 
 
-    @JsonBackReference
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private KhachHang idKhachHang;
 
     @Column(name = "Tinh_ThanhPho", length = 50)
@@ -45,5 +46,8 @@ public class DiaChi {
 
     @Column(name = "TenNguoiNhan", length = 250)
     private String tenNguoiNhan;
+
+    @Column(name = "IsDefault")
+    private boolean isDefault;
 
 }

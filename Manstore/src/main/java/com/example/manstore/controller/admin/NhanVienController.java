@@ -49,10 +49,10 @@ public class NhanVienController {
         boolean isValid = false;
         model.addAttribute("chucVu", phanQuyenService.getAll());
         for (NhanVien nv : nhanVienService.getAll()) {
-//            nhanVien.setMa("NV" + nhanVienService.getAll().size());
-//            if (nhanVien.getMa().equalsIgnoreCase(nv.getMa())) {
-//                nhanVien.setMa("NV" + (nhanVienService.getAll().size() + 1));
-//            }
+            nhanVien.setMa("NV" + nhanVienService.getAll().size());
+            if (nhanVien.getMa().equalsIgnoreCase(nv.getMa())) {
+                nhanVien.setMa("NV" + (nhanVienService.getAll().size() + 1));
+            }
             if (nhanVien.getSdt().equalsIgnoreCase(nv.getSdt())) {
                 isValid = true;
                 model.addAttribute("errorPhone", "Số điện thoại trùng !");
@@ -105,7 +105,7 @@ public class NhanVienController {
             }
         }
         if (isValid == false) {
-            nhanVien.setIdPhanQuyen(phanQuyenService.findById(Integer.parseInt("1")).get());
+//            nhanVien.setIdPhanQuyen(phanQuyenService.findById(Integer.parseInt("1")).get());
             nhanVien.setTrangThai(0);
             nhanVienService.save(nhanVien);
             model.addAttribute("message", true);

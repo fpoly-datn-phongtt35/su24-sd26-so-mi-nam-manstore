@@ -73,9 +73,11 @@ public class KhachHang implements UserDetails {
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     private List<DiaChi> diaChis;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     private List<GioHang> gioHangs;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     private List<HoaDon> hoaDons;
 

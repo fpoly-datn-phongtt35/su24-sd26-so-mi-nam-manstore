@@ -76,6 +76,7 @@ public class NhanVien implements UserDetails {
     @Column(name = "TrangThai")
     private Integer trangThai;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "idNhanVien" , fetch = FetchType.LAZY)
     private List<HoaDon> hoaDons;
 
