@@ -1,5 +1,6 @@
 package com.example.manstore.repository;
 
+import com.example.manstore.dto.custom.ChiTietSanPhamDTO;
 import com.example.manstore.entity.ChiTietSanPham;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,14 +39,30 @@ public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham, 
     @Query("SELECT s FROM ChiTietSanPham s WHERE s.idMauSac.id = :color AND s.idSize.id = :size AND s.idSanPham.id = :id")
     Page<ChiTietSanPham> FilterByAllAndProduct(@Param("color") String color, @Param("size") Integer size, @Param("id") String id, Pageable pageable);
 
-    @Query("select s from ChiTietSanPham s where s.idSanPham.id=:id and s.idMauSac.id =:ms ")
-    List<ChiTietSanPham> findListProductByColor(@Param("id") String id, @Param("ms") String ms);
+    @Query("SELECT new com.example.manstore.dto.custom.ChiTietSanPhamDTO(s.id, s.ngayTao, s.soluong, s.trangThai, s.duongDan, " +
+            "sz.id, sz.ten, sp.id, sp.ten, ms.id, ms.ten) " +
+            "FROM ChiTietSanPham s " +
+            "JOIN s.idSize sz " +
+            "JOIN s.idSanPham sp " +
+            "JOIN s.idMauSac ms " +
+            "WHERE sp.id = :id AND ms.id = :ms")
+    List<ChiTietSanPhamDTO> findListProductByColor(@Param("id") Integer id, @Param("ms") String ms);
 
-    @Query("select s from ChiTietSanPham s where s.idSanPham.id=:id and s.idMauSac.id =:ms and s.idSize =:size ")
+
+    @Query("select s from ChiTietSanPham s where s.idSanPham.id=:id and s.idMauSac.id =:ms and s.idSize.ten =:size ")
     ChiTietSanPham findIdProductByColorAndSize(@Param("id") String id, @Param("ms") String ms, @Param("size") String size);
-
 
     @Query("select s from ChiTietSanPham s where (s.idSanPham.ten like %:keyword% or s.idSanPham.ma like %:keyword%) and s.idSanPham.trangThai = 1")
     List<ChiTietSanPham> search(@Param("keyword") String keyword);
+
+    @Query("select spct.duongDan from ChiTietSanPham spct where spct.idSanPham.id = :id")
+    List<String> getImgByProductId(@Param("id") String id);
+
+    //lấy đường dẫn theo id và màu sắc
+    @Query("select spct.duongDan from ChiTietSanPham spct where spct.idSanPham.id = :id and spct.idMauSac.id = :color")
+    List<String> getByIdProductAndColor(@Param("id") String id, @Param("color") String color);
+
+
+
 
 }

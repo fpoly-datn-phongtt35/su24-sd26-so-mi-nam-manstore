@@ -104,411 +104,406 @@
 <body>
 <div th:replace="client/fragments/header::header"></div>
 <div th:replace="client/fragments/search::search"></div>
-<div th:replace="client/fragments/subscribe::subscribe"></div>
+<!--<div th:replace="client/fragments/subscribe::subscribe"></div>-->
 <section class="section pb-0 mt-4">
-    <div class="container">
-        <div class="row g-2">
-            <div class="col-lg-12">
-                <a
-                        class="product-banner-1 mt-4 mt-lg-0 rounded overflow-hidden d-block"
-                        href="#!"
-                >
-                    <img
-                            alt=""
-                            class="w-50 rounded object-fit-cover"
-                            src="../assets/images/ecommerce/features/img-6.jpg"
-                            style="max-height: 450px"
-                    />
-                </a>
-            </div>
-            <!--end col-->
-        </div>
-        <!--end row-->
+  <div class="container">
+    <div class="row g-2">
+      <div class="col-lg-12">
+        <a
+                class="product-banner-1 mt-4 mt-lg-0 rounded overflow-hidden d-block"
+                href="#!"
+        >
+          <img
+                  alt=""
+                  class="w-50 rounded object-fit-cover"
+                  src="../assets/images/ecommerce/features/img-6.jpg"
+                  style="max-height: 450px"
+          />
+        </a>
+      </div>
+      <!--end col-->
     </div>
-    <!--end container-->
+    <!--end row-->
+  </div>
+  <!--end container-->
 </section>
 <div id="sport-param" style="display: none;" th:text="${sport_param}"></div>
 <div class="position-relative section">
-    <div class="container">
-        <div class="ecommerce-product gap-4">
-            <div class="sidebar small-sidebar flex-shrink-0">
-                <div class="card overflow-hidden">
-                    <div class="card-header">
-                        <div class="d-flex mb-3">
-                            <div class="flex-grow-1">
-                                <h5 class="fs-16">Filters</h5>
-                            </div>
-                            <div class="flex-shrink-3">
-                                <button class="btn btn-sm btn-info btn-hover"
-                                        id="clearall" onclick="ClearAll()"
-                                >Clear All
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+  <div class="container">
+    <div class="ecommerce-product gap-4">
+      <div class="sidebar small-sidebar flex-shrink-0">
+        <div class="card overflow-hidden">
+          <div class="card-header">
+            <div class="d-flex mb-3">
+              <div class="flex-grow-1">
+                <h5 class="fs-16">Filters</h5>
+              </div>
+              <div class="flex-shrink-3">
+                <button class="btn btn-sm btn-info btn-hover"
+                        id="clearall" onclick="ClearAll()"
+                >Clear All
+                </button>
+              </div>
+            </div>
+          </div>
 
-                    <div class="accordion accordion-flush filter-accordion">
-                        <div class="card-body border-bottom">
-                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
-                                Price
-                            </p>
-                            <div class="slider">
-                                <div class="progress"></div>
-                            </div>
-                            <div class="range-input">
-                                <input class="range-min" onchange="loadPage(0)" step="10000"
-                                       type="range">
-                                <input class="range-max" onchange="loadPage(0)" step="10000"
-                                       type="range">
-                            </div>
-                            <div class="price-input formCost d-flex gap-2 align-items-center mt-3">
-                                <input
-                                        class="form-control form-control-sm"
-                                        disabled
-                                        id="minCost"
-                                        type="text"
-                                />
-                                <span class="fw-semibold text-muted">to</span>
-                                <input
-                                        class="form-control form-control-sm"
-                                        disabled
-                                        id="maxCost"
-                                        type="text"
-                                />
-                            </div>
-                        </div>
+          <div class="accordion accordion-flush filter-accordion">
+            <div class="card-body border-bottom">
+              <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                Price
+              </p>
+              <div class="slider">
+                <div class="progress"></div>
+              </div>
+              <div class="range-input">
+                <input class="range-min" onchange="loadPage(0)" step="10000"
+                       type="range">
+                <input class="range-max" onchange="loadPage(0)" step="10000"
+                       type="range">
+              </div>
+              <div class="price-input formCost d-flex gap-2 align-items-center mt-3">
+                <input
+                        class="form-control form-control-sm"
+                        disabled
+                        id="minCost"
+                        type="text"
+                />
+                <span class="fw-semibold text-muted">to</span>
+                <input
+                        class="form-control form-control-sm"
+                        disabled
+                        id="maxCost"
+                        type="text"
+                />
+              </div>
+            </div>
 
-                        <div class="card-body border-bottom">
-                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
-                                Brands
-                            </p>
-                            <select class="form-control bg-light border-light"
-                                    id="filter-brands" name="choices-single-default" onchange="loadPage(0)">
+            <div class="card-body border-bottom">
+              <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                Thương Hiệu
+              </p>
+              <select class="form-control bg-light border-light"
+                      id="filter-trademark" name="choices-single-default" onchange="loadPage(0)">
 
-                            </select>
+              </select>
 
-                        </div>
+            </div>
 
-                        <div class="card-body border-bottom">
-                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
-                                Sports
-                            </p>
-                            <select class="form-control bg-light border-light"
-                                    id="filter-sports" name="choices-single-default" onchange="loadPage(0)">
+            <div class="card-body border-bottom">
+              <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                Danh Mục
+              </p>
+              <select class="form-control bg-light border-light"
+                      id="filter-category" name="choices-single-default" onchange="loadPage(0)">
 
-                            </select>
-                        </div>
+              </select>
+            </div>
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-headingColors">
-                                <button
-                                        aria-controls="flush-collapseColors"
-                                        aria-expanded="true"
-                                        class="accordion-button bg-transparent shadow-none"
-                                        data-bs-target="#flush-collapseColors"
-                                        data-bs-toggle="collapse"
-                                        type="button"
-                                >
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingColors">
+                <button
+                        aria-controls="flush-collapseColors"
+                        aria-expanded="true"
+                        class="accordion-button bg-transparent shadow-none"
+                        data-bs-target="#flush-collapseColors"
+                        data-bs-toggle="collapse"
+                        type="button"
+                >
                       <span class="text-muted text-uppercase fs-13 fw-medium"
                       >Colors</span
                       >
-                                    <span
-                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"
-                                    ></span>
-                                </button>
-                            </h2>
+                  <span
+                          class="badge bg-success rounded-pill align-middle ms-1 filter-badge"
+                  ></span>
+                </button>
+              </h2>
 
-                            <div
-                                    aria-labelledby="flush-headingColors"
-                                    class="accordion-collapse collapse show"
-                                    id="flush-collapseColors"
-                            >
-                                <div class="accordion-body text-body pt-0">
-                                    <ul
-                                            class="clothe-colors list-unstyled hstack gap-3 mb-0 flex-wrap"
-                                            id="color-filter"
-                                    >
-                                        <li>
-                                            <input
-                                                    id="color-7"
-                                                    name="colors"
-                                                    onclick="chooseFilterColor(1)"
-                                                    type="checkbox"
-                                                    value="1"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="color-7"
-                                            ></label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="color-8"
-                                                    name="colors"
-                                                    onclick="chooseFilterColor(2)"
-                                                    type="checkbox"
-                                                    value="2"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="color-8"
-                                            ></label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="color-4"
-                                                    name="colors"
-                                                    onclick="chooseFilterColor(3)"
-                                                    type="checkbox"
-                                                    value="3"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="color-4"
-                                            ></label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="color-2"
-                                                    name="colors"
-                                                    onclick="chooseFilterColor(4)"
-                                                    type="checkbox"
-                                                    value="4"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="color-2"
-                                                    style="background-color: rgb(169,169,169); border: none;"
-                                            ></label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="color-1"
-                                                    name="colors"
-                                                    onclick="chooseFilterColor(5)"
-                                                    type="checkbox"
-                                                    value="5"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="color-1"
-                                            ></label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="color-6"
-                                                    name="colors"
-                                                    onclick="chooseFilterColor(6)"
-                                                    type="checkbox"
-                                                    value="6"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="color-6"
-                                            ></label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="color-5"
-                                                    name="colors"
-                                                    onclick="chooseFilterColor(7)"
-                                                    type="checkbox"
-                                                    value="7"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="color-5"
-                                            ></label>
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="color-3"
-                                                    name="colors"
-                                                    onclick="chooseFilterColor(8)"
-                                                    type="checkbox"
-                                                    value="8"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="color-3"
-                                            ></label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end accordion-item -->
+              <div
+                      aria-labelledby="flush-headingColors"
+                      class="accordion-collapse collapse show"
+                      id="flush-collapseColors"
+              >
+                <div class="accordion-body text-body pt-0">
+                  <ul
+                          class="clothe-colors list-unstyled hstack gap-3 mb-0 flex-wrap"
+                          id="color-filter"
+                  >
+                    <li>
+                      <input
+                              id="color-7"
+                              name="colors"
+                              onclick="chooseFilterColor(1)"
+                              type="checkbox"
+                              value="1"
+                      />
+                      <label
+                              class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="color-7"
+                      ></label>
+                    </li>
+                    <li>
+                      <input
+                              id="color-8"
+                              name="colors"
+                              onclick="chooseFilterColor(2)"
+                              type="checkbox"
+                              value="2"
+                      />
+                      <label
+                              class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="color-8"
+                      ></label>
+                    </li>
+                    <li>
+                      <input
+                              id="color-4"
+                              name="colors"
+                              onclick="chooseFilterColor(3)"
+                              type="checkbox"
+                              value="3"
+                      />
+                      <label
+                              class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="color-4"
+                      ></label>
+                    </li>
+                    <li>
+                      <input
+                              id="color-2"
+                              name="colors"
+                              onclick="chooseFilterColor(4)"
+                              type="checkbox"
+                              value="4"
+                      />
+                      <label
+                              class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="color-2"
+                              style="background-color: rgb(169,169,169); border: none;"
+                      ></label>
+                    </li>
+                    <li>
+                      <input
+                              id="color-1"
+                              name="colors"
+                              onclick="chooseFilterColor(5)"
+                              type="checkbox"
+                              value="5"
+                      />
+                      <label
+                              class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="color-1"
+                      ></label>
+                    </li>
+                    <li>
+                      <input
+                              id="color-6"
+                              name="colors"
+                              onclick="chooseFilterColor(6)"
+                              type="checkbox"
+                              value="6"
+                      />
+                      <label
+                              class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="color-6"
+                      ></label>
+                    </li>
+                    <li>
+                      <input
+                              id="color-5"
+                              name="colors"
+                              onclick="chooseFilterColor(7)"
+                              type="checkbox"
+                              value="7"
+                      />
+                      <label
+                              class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="color-5"
+                      ></label>
+                    </li>
+                    <li>
+                      <input
+                              id="color-3"
+                              name="colors"
+                              onclick="chooseFilterColor(8)"
+                              type="checkbox"
+                              value="8"
+                      />
+                      <label
+                              class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="color-3"
+                      ></label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- end accordion-item -->
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-headingSize">
-                                <button
-                                        aria-controls="flush-collapseSize"
-                                        aria-expanded="true"
-                                        class="accordion-button bg-transparent shadow-none"
-                                        data-bs-target="#flush-collapseSize"
-                                        data-bs-toggle="collapse"
-                                        type="button"
-                                >
-                      <span class="text-muted text-uppercase fs-13 fw-medium"
-                      >Sizes</span
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="flush-headingSize">
+                <button
+                        aria-controls="flush-collapseSize"
+                        aria-expanded="true"
+                        class="accordion-button bg-transparent shadow-none"
+                        data-bs-target="#flush-collapseSize"
+                        data-bs-toggle="collapse"
+                        type="button">
+                  <span class="text-muted text-uppercase fs-13 fw-medium">Sizes</span>
+                  <span
+                          class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                </button>
+              </h2>
+
+              <div
+                      aria-labelledby="flush-headingSize"
+                      class="accordion-collapse collapse show"
+                      id="flush-collapseSize">
+                <div class="accordion-body text-body pt-0">
+                  <ul
+                          class="clothe-size list-unstyled hstack gap-3 mb-0 flex-wrap"
+                          id="size-filter"
+                  >
+                    <li>
+                      <input
+                              id="size1"
+                              name="sizes"
+                              onclick="chooseFilterSize(1)"
+                              type="checkbox"
+                              value="s"
+                      />
+                      <label
+                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="size1"
+                      >S</label
                       >
-                                    <span
-                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"
-                                    ></span>
-                                </button>
-                            </h2>
+                    </li>
+                    <li>
+                      <input
+                              id="size2"
+                              name="sizes"
+                              onclick="chooseFilterSize(2)"
+                              type="checkbox"
+                              value="m"
+                      />
+                      <label
+                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="size2"
+                      >M</label
+                      >
+                    </li>
+                    <li>
+                      <input
+                              id="size3"
+                              name="sizes"
+                              onclick="chooseFilterSize(3)"
+                              type="checkbox"
+                              value="l"
+                      />
+                      <label
+                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="size3"
+                      >L</label
+                      >
+                    </li>
+                    <li>
+                      <input
+                              id="size4"
+                              name="sizes"
+                              onclick="chooseFilterSize(4)"
+                              type="checkbox"
+                              value="xl"
 
-                            <div
-                                    aria-labelledby="flush-headingSize"
-                                    class="accordion-collapse collapse show"
-                                    id="flush-collapseSize"
-                            >
-                                <div class="accordion-body text-body pt-0">
-                                    <ul
-                                            class="clothe-size list-unstyled hstack gap-3 mb-0 flex-wrap"
-                                            id="size-filter"
-                                    >
-                                        <li>
-                                            <input
-                                                    id="size1"
-                                                    name="sizes"
-                                                    onclick="chooseFilterSize(1)"
-                                                    type="checkbox"
-                                                    value="s"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="size1"
-                                            >S</label
-                                            >
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="size2"
-                                                    name="sizes"
-                                                    onclick="chooseFilterSize(2)"
-                                                    type="checkbox"
-                                                    value="m"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="size2"
-                                            >M</label
-                                            >
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="size3"
-                                                    name="sizes"
-                                                    onclick="chooseFilterSize(3)"
-                                                    type="checkbox"
-                                                    value="l"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="size3"
-                                            >L</label
-                                            >
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="size4"
-                                                    name="sizes"
-                                                    onclick="chooseFilterSize(4)"
-                                                    type="checkbox"
-                                                    value="xl"
-
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="size4"
-                                            >XL</label
-                                            >
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="size5"
-                                                    name="sizes"
-                                                    onclick="chooseFilterSize(5)"
-                                                    type="checkbox"
-                                                    value="xxl"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="size5"
-                                            >XXL</label
-                                            >
-                                        </li>
-                                        <li>
-                                            <input
-                                                    id="size6"
-                                                    name="sizes"
-                                                    onclick="chooseFilterSize(6)"
-                                                    type="checkbox"
-                                                    value="2xl"
-                                            />
-                                            <label
-                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                                                    for="size6"
-                                            >2XL</label
-                                            >
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                      />
+                      <label
+                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="size4"
+                      >XL</label
+                      >
+                    </li>
+                    <li>
+                      <input
+                              id="size5"
+                              name="sizes"
+                              onclick="chooseFilterSize(5)"
+                              type="checkbox"
+                              value="xxl"
+                      />
+                      <label
+                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="size5"
+                      >XXL</label
+                      >
+                    </li>
+                    <li>
+                      <input
+                              id="size6"
+                              name="sizes"
+                              onclick="chooseFilterSize(6)"
+                              type="checkbox"
+                              value="2xl"
+                      />
+                      <label
+                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                              for="size6"
+                      >2XL</label
+                      >
+                    </li>
+                  </ul>
                 </div>
-                <!-- end card -->
+              </div>
             </div>
-            <div class="flex-grow-1">
-                <div class="d-flex align-items-center gap-2 mb-4">
-                    <p class="text-muted flex-grow-1 mb-0">
-                        Hiển thị 8 sản phẩm / 1 trang
-                    </p>
-                    <div class="flex-shrink-0">
-                        <div class="d-flex gap-2">
-                            <div class="flex-shrink-0">
-                                <label class="col-form-label" for="sort-elem"
-                                >Sắp Xếp:</label
-                                >
-                            </div>
-                            <div class="flex-shrink-0">
-                                <select class="form-select w-md" id="sort-elem" onchange="loadPage(page)">
-                                    <option value="0">Tất Cả</option>
-                                    <option value="1">A-Z</option>
-                                    <option value="2">Z-A</option>
-                                    <option value="3">Giá Tăng Dần</option>
-                                    <option value="4">Giá Giảm Dần</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" id="product-grid">
-                </div>
-                <div class="row" id="pagination-element">
-                </div>
-
-                <div class="row d-none" id="search-result-elem">
-                    <div class="col-lg-12">
-                        <div class="text-center py-5">
-                            <div class="avatar-lg mx-auto mb-4">
-                                <div
-                                        class="avatar-title bg-primary-subtle text-primary rounded-circle fs-24"
-                                >
-                                    <i class="bi bi-search"></i>
-                                </div>
-                            </div>
-
-                            <h5>No matching records found</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+        <!-- end card -->
+      </div>
+      <div class="flex-grow-1">
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <p class="text-muted flex-grow-1 mb-0">
+            Hiển thị 8 sản phẩm / 1 trang
+          </p>
+          <div class="flex-shrink-0">
+            <div class="d-flex gap-2">
+              <div class="flex-shrink-0">
+                <label class="col-form-label" for="sort-elem"
+                >Sắp Xếp:</label
+                >
+              </div>
+              <div class="flex-shrink-0">
+                <select class="form-select w-md" id="sort-elem" onchange="loadPage(page)">
+                  <option value="0">Tất Cả</option>
+                  <option value="1">A-Z</option>
+                  <option value="2">Z-A</option>
+                  <option value="3">Giá Tăng Dần</option>
+                  <option value="4">Giá Giảm Dần</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" id="product-grid">
+        </div>
+        <div class="row" id="pagination-element">
+        </div>
+
+        <div class="row d-none" id="search-result-elem">
+          <div class="col-lg-12">
+            <div class="text-center py-5">
+              <div class="avatar-lg mx-auto mb-4">
+                <div
+                        class="avatar-title bg-primary-subtle text-primary rounded-circle fs-24"
+                >
+                  <i class="bi bi-search"></i>
+                </div>
+              </div>
+
+              <h5>No matching records found</h5>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!--end container-->
+  </div>
+  <!--end container-->
 </div>
 
 <div th:replace="client/fragments/footer::footer"></div>
@@ -543,7 +538,7 @@
     var dataPriceMax;
 
     window.onload = async function () {
-        await loadSports();
+        await loadCategory();
         await loadBrands();
         await range();
         await loadPage(0);
@@ -564,7 +559,7 @@
     }
 
     async function loadBrands() {
-        let url = "/api/client/brands/find-all";
+        let url = "/api/client/trademark/find-all";
         const response = await fetch(url, {
             method: 'GET'
         });
@@ -576,12 +571,12 @@
                    <option value="${result[i].id}">${result[i].ten}</option>
             `;
         }
-        document.getElementById('filter-brands').innerHTML = option;
+        document.getElementById('filter-trademark').innerHTML = option;
     }
 
-    async function loadSports() {
+    async function loadCategory() {
         let param = document.getElementById('sport-param').innerText;
-        let url = "/api/client/sports/find-all";
+        let url = "/api/client/category/find-all";
         const response = await fetch(url, {
             method: 'GET'
         });
@@ -610,14 +605,14 @@
             `;
             }
         }
-        document.getElementById('filter-sports').innerHTML = option;
+        document.getElementById('filter-category').innerHTML = option;
     }
 
     async function loadPage(pageNumber) {
         let resultPriceMax = await getPriceMax();
         let sort = document.getElementById('sort-elem').value;
-        let brand = $("#filter-brands").val();
-        let sport = $("#filter-sports").val();
+        let trademark = $("#filter-trademark").val();
+        let category = $("#filter-category").val();
         let minCost = document.getElementById("minCost").value;
         let maxCost = document.getElementById("maxCost").value;
 
@@ -625,10 +620,10 @@
         console.log(minCost, maxCost);
         if (parseInt(minCost) === 0 && parseInt(maxCost) === resultPriceMax) {
             url = "/api/client/product/page/" + pageNumber + "/" + '0' + "/" +
-                resultPriceMax + "?sort=" + sort + "&brand=" + brand + "&sport=" + sport;
+                resultPriceMax + "?sort=" + sort + "&trademark=" + trademark + "&category=" + category;
         } else {
             url = "/api/client/product/page/" + pageNumber + "/" + minCost + "/" +
-                maxCost + "?sort=" + sort + "&brand=" + brand + "&sport=" + sport;
+                maxCost + "?sort=" + sort + "&trademark=" + trademark + "&category=" + category;
         }
 
         console.log(url);
@@ -672,47 +667,55 @@
 
             const dataPicture = await responsePicture.json();
 
-            // console.log(dataPicture);
+            console.log("Full anh: ", dataPicture);
 
             if (dataPicture.statusText === 'failure') {
-                img = `<img id="picture-product" src="../assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
-                    style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">`;
+                img = `<img id="picture-product" src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
+        style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">`;
             } else {
-                var src = dataPicture[0].linkAnh;
-                img = `<img id="picture-product" src="${src}" alt="Ảnh Sản Phẩm"
-                    style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">`;
+                if (Array.isArray(dataPicture) && dataPicture.length > 0) {
+                    var src = dataPicture[0];
+                    console.log("Image name:", src); // In ra tên ảnh
+                    let fullUrl = `http://localhost:8080/assets/images/products/${src}`;
+                    console.log("Full image URL:", fullUrl); // In ra URL đầy đủ
+                    img = `<img id="picture-product" src="${fullUrl}" alt="Ảnh Sản Phẩm"
+            style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">`;
+                } else {
+                    img = `<img id="picture-product" src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
+            style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">`;
+                }
             }
 
             let resultDetailColor = data.filter((product, index, self) =>
-                index === self.findIndex((p) => (
-                    p.ms.id === product.ms.id
-                ))
+                    index === self.findIndex((p) => (
+                        p.idMauSac.id === product.idMauSac.id
+                    ))
             );
-            // Sort colors based on ms.id
-            resultDetailColor.sort((a, b) => a.ms.id - b.ms.id);
+            // Sort colors based on idMauSac.id
+            resultDetailColor.sort((a, b) => a.idMauSac.id - b.idMauSac.id);
             index = i;
             for (j = 0; j < resultDetailColor.length; j++) {
-                if (list[i].id === resultDetailColor[j].sp.id) {
-                    var name = resultDetailColor[j].ms.id;
-                    if (resultDetailColor[j].ms.id === 1) {
+                if (list[i].id === resultDetailColor[j].idSanPham.id) {
+                    var name = resultDetailColor[j].idMauSac.id;
+                    if (resultDetailColor[j].idMauSac.id === 1) {
                         labelColor = "btn-dark";
                         cssStyle = "";
-                    } else if (resultDetailColor[j].ms.id === 2) {
+                    } else if (resultDetailColor[j].idMauSac.id === 2) {
                         cssStyle = "";
                         labelColor = "btn-light";
-                    } else if (resultDetailColor[j].ms.id === 3) {
+                    } else if (resultDetailColor[j].idMauSac.id === 3) {
                         cssStyle = "";
                         labelColor = "btn-danger";
-                    } else if (resultDetailColor[j].ms.id === 4) {
+                    } else if (resultDetailColor[j].idMauSac.id === 4) {
                         labelColor = "btn-secondary";
                         cssStyle = "style=\"background-color: rgb(169,169,169); border: none;\"";
-                    } else if (resultDetailColor[j].ms.id === 5) {
+                    } else if (resultDetailColor[j].idMauSac.id === 5) {
                         cssStyle = "";
                         labelColor = "btn-success";
-                    } else if (resultDetailColor[j].ms.id === 6) {
+                    } else if (resultDetailColor[j].idMauSac.id === 6) {
                         cssStyle = "";
                         labelColor = "btn-secondary";
-                    } else if (resultDetailColor[j].ms.id === 7) {
+                    } else if (resultDetailColor[j].idMauSac.id === 7) {
                         cssStyle = "";
                         labelColor = "btn-primary";
                     } else {
@@ -723,21 +726,26 @@
                 }
             }
             let resultDetailSize = data.filter((product, index, self) =>
-                index === self.findIndex((p) => (
-                    p.size === product.size
-                ))
+                    index === self.findIndex((p) => (
+                        p.idSize.id === product.idSize.id
+                    ))
             );
-            // Sort sizes based on size
-            resultDetailSize.sort((a, b) => a.size.localeCompare(b.size));
-            for (j = 0; j < resultDetailSize.length; j++) {
-                if (list[i].id === resultDetailSize[j].sp.id) {
-                    var name = resultDetailSize[j].size;
-                    size += `<li data-value="${name}" class="li-size${list[i].id}"><input class="size-input${list[i].id}" disabled type="radio" value="${name}" name="product-size" id="product-size-${index}${j + 1}" onclick="chooseProductSize(${list[i].id},${index},${j + 1})"><label class="avatar-xxs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle" for="product-size-${index}${j + 1}" >${resultDetailSize[j].size}</label></li>`
+            // Sort sizes based on idSize.id
+            resultDetailSize.sort((a, b) => a.idSize.id.toString().localeCompare(b.idSize.id.toString()));
+
+            for (let j = 0; j < resultDetailSize.length; j++) {
+                if (list[i].id === resultDetailSize[j].idSanPham.id) {
+                    var name = resultDetailSize[j].idSize.ten;
+                    size += `<li data-value="${name.toLowerCase()}" class="li-size${list[i].id}">
+            <input class="size-input${list[i].id}" disabled type="radio" value="${name.toLowerCase()}" name="product-size" id="product-size-${index}${j + 1}" onclick="chooseProductSize(${list[i].id},${index},${j + 1})">
+            <label class="avatar-xxs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle" for="product-size-${index}${j + 1}">${name}</label>
+         </li>`;
                 }
             }
+
             main += `<div class="col-xxl-3 col-xxl-3 col-md-6">
                         <div class="card ecommerce-product-widgets border-0 rounded-0 shadow-none overflow-hidden">
-                            <div class="bg-light bg-opacity-50 rounded py-4 position-relative" id="image-product-${list[i].id}">
+                            <div class="bg-light bg-opacity-50 rounded position-relative" id="image-product-${list[i].id}">
                                 ${img}
                                 <div class="action vstack gap-2">
                                     <button onclick="nextPageDetail(${list[i].id})" class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action "
@@ -749,9 +757,9 @@
                                 <div>
                                     <ul class="clothe-colors list-unstyled hstack gap-1 mb-3 flex-wrap" style="height: 35px" >${color}</ul>
                                     <ul class="clothe-size list-unstyled hstack gap-1 mb-3 flex-wrap" style="height: 35px">${size}</ul>
-                                    <a><h6 class="text-capitalize fs-15 lh-base text-truncate mb-0">${list[i].tenSP}</h6></a>
+                                    <a><h6 class="text-capitalize fs-15 lh-base text-truncate mb-0">${list[i].ten}</h6></a>
                                     <div class="mt-2">
-                                        <h5 class="text-secondary mb-0">${formatMoney(list[i].donGia)}
+                                        <h5 class="text-secondary mb-0">${formatMoney(list[i].gia)}
                                         </h5>
                                     </div>
                                     <div class="tn mt-3"><button onclick="AddToCart()" class="btn btn-primary btn-hover w-100 add-btn"><i
@@ -805,42 +813,175 @@
         return VND.format(money);
     }
 
+    // async function chooseProductColor(idPD, indexId, id) {
+    //     console.log(idPD, id);
+    //     var url = "/api/client/product_detail/detail/" + idPD + "/" + id;
+    //     var arrSize = [];
+    //     var liSize = document.querySelectorAll('li.li-size' + idPD);
+    //     var inputSize = document.querySelectorAll('input.size-input' + idPD);
+    //     const response = await fetch(url, {
+    //         method: 'GET',
+    //     });
+    //     var urlGetPicture = '/api/client/product_detail/picture-detail/' + idPD + '/' + id;
+    //     const pictureResponse = await fetch(urlGetPicture, {
+    //         method: 'GET',
+    //     });
+    //     var dataPicture = await pictureResponse.json();
+    //     console.log(dataPicture);
+    //     var img;
+    //     if (dataPicture.statusText === 'failure') {
+    //         img = `<img id="picture-product" src="../assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
+    //                 style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
+    //                      <div class="action vstack gap-2">
+    //                                 <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+    //                                         onclick="nextPageDetail(${idPD})"
+    //                                         data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+    //                                 <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+    //                      </div>`;
+    //     } else {
+    //         img = `<img id="picture-product" src="${dataPicture[0].linkAnh}" alt="Ảnh Sản Phẩm"
+    //                 style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
+    //                      <div class="action vstack gap-2">
+    //                                 <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+    //                                         onclick="nextPageDetail(${idPD})"
+    //                                         data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+    //                                 <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+    //                      </div>`;
+    //     }
+    //     document.getElementById('image-product-' + idPD).innerHTML = img;
+    //     var result = await response.json();
+    //     if (selectedProduct === undefined && selectedProductDetailColor === undefined) {
+    //         arrSize = [];
+    //         selectedProduct = idPD;
+    //         selectedProductDetailColor = id;
+    //         for (i = 0; i < result.length; i++) {
+    //             inputSize.forEach(function (inputs) {
+    //                 var a = inputs.value.toLowerCase();
+    //                 var b = result[i].size.toLowerCase();
+    //                 if (b === a) {
+    //                     inputs.removeAttribute('disabled');
+    //                     arrSize.push(inputs.value);
+    //                 }
+    //             });
+    //         }
+    //     } else {
+    //         if (selectedProduct === idPD && selectedProductDetailColor !== id) {
+    //             arrSize = [];
+    //             selectedProductDetailColor = id;
+    //             selectedProductDetailSize = undefined;
+    //             for (i = 0; i < result.length; i++) {
+    //                 inputSize.forEach(function (inputs) {
+    //                     var a = inputs.value.toLowerCase();
+    //                     var b = result[i].size.toLowerCase();
+    //                     if (b === a) {
+    //                         inputs.checked = false;
+    //                         inputs.removeAttribute('disabled');
+    //                         arrSize.push(inputs.value);
+    //                     }
+    //                 });
+    //             }
+    //         } else {
+    //             var radioInputs = document.querySelectorAll('input[type="radio"]');
+    //             var idToRemove = "product-color-" + indexId + id;
+    //             for (var i = 0; i < radioInputs.length; i++) {
+    //                 if (radioInputs[i].id === idToRemove) {
+    //                     // Loại bỏ checked = false cho các phần tử radio trừ phần tử hiện tại
+    //                     for (var j = 0; j < radioInputs.length; j++) {
+    //                         if (j !== i) {
+    //                             radioInputs[j].checked = false;
+    //                         }
+    //                     }
+    //                     break;
+    //                 }
+    //             }
+    //             selectedProduct = idPD;
+    //             selectedProductDetailColor = id;
+    //             arrSize = [];
+    //             for (i = 0; i < result.length; i++) {
+    //                 inputSize.forEach(function (inputs) {
+    //                     var a = inputs.value.toLowerCase();
+    //                     var b = result[i].size.toLowerCase();
+    //                     if (b === a) {
+    //                         inputs.removeAttribute('disabled');
+    //                         arrSize.push(inputs.value);
+    //                     }
+    //                 });
+    //             }
+    //         }
+    //     }
+    //
+    //     liSize.forEach(function (li) {
+    //         var a = li.dataset.value.toLowerCase();
+    //         var matchFound = false;
+    //         for (i = 0; i < arrSize.length; i++) {
+    //             var b = arrSize[i].toLowerCase();
+    //             if (a === b) {
+    //                 matchFound = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (!matchFound) {
+    //             li.style.display = 'none';
+    //         } else {
+    //             li.style.display = 'block';
+    //         }
+    //     });
+    // }
+
     async function chooseProductColor(idPD, indexId, id) {
         console.log(idPD, id);
         var url = "/api/client/product_detail/detail/" + idPD + "/" + id;
-        var arrSize = [];
-        var liSize = document.querySelectorAll('li.li-size' + idPD);
-        var inputSize = document.querySelectorAll('input.size-input' + idPD);
-        const response = await fetch(url, {
-            method: 'GET',
-        });
+        var liSize = document.querySelectorAll('.li-size' + idPD);
+        var inputSize = document.querySelectorAll('.size-input' + idPD);
+
+        // Fetch product details based on color
+        const response = await fetch(url, {method: 'GET'});
+
         var urlGetPicture = '/api/client/product_detail/picture-detail/' + idPD + '/' + id;
         const pictureResponse = await fetch(urlGetPicture, {
             method: 'GET',
         });
+
         var dataPicture = await pictureResponse.json();
-        console.log(dataPicture);
+        console.log("ChooseProductColor: ", dataPicture);
         var img;
+
+        // Kiểm tra nếu API trả về thất bại
         if (dataPicture.statusText === 'failure') {
-            img = `<img id="picture-product" src="../assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
+            img = `<img id="picture-product" src="https://via.placeholder.com/200" alt="Ảnh Sản Phẩm"
                     style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
-                         <div class="action vstack gap-2">
-                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
-                                            onclick="nextPageDetail(${idPD})"
-                                            data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
-                                    <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
-                         </div>`;
+                 <div class="action vstack gap-2">
+                            <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+                                    onclick="nextPageDetail(${idPD})"
+                                    data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+                            <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+                 </div>`;
         } else {
-            img = `<img id="picture-product" src="${dataPicture[0].linkAnh}" alt="Ảnh Sản Phẩm"
+            // Kiểm tra nếu dữ liệu hình ảnh hợp lệ
+            if (Array.isArray(dataPicture) && dataPicture.length > 0) {
+                let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+                img = `<img id="picture-product" src="${fullUrl}" alt="Ảnh Sản Phẩm"
                     style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
-                         <div class="action vstack gap-2">
-                                    <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
-                                            onclick="nextPageDetail(${idPD})"
-                                            data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
-                                    <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
-                         </div>`;
+                 <div class="action vstack gap-2">
+                            <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+                                    onclick="nextPageDetail(${idPD})"
+                                    data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+                            <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+                 </div>`;
+            } else {
+                img = `<img id="picture-product" src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm"
+                    style="height: 200px;width: 100%;" class="mx-auto d-block rounded-2">
+                 <div class="action vstack gap-2">
+                            <button class="btn btn-info avatar-xs p-0 btn-soft-info custom-toggle product-action"
+                                    onclick="nextPageDetail(${idPD})"
+                                    data-bs-toggle="button"><span class="icon-on"><i class="ri-eye-fill"></i></span>
+                            <span class="icon-off"><i class="ri-eye-fill"></i></span></button>
+                 </div>`;
+            }
         }
         document.getElementById('image-product-' + idPD).innerHTML = img;
+
+
         var result = await response.json();
         if (selectedProduct === undefined && selectedProductDetailColor === undefined) {
             arrSize = [];
@@ -849,7 +990,7 @@
             for (i = 0; i < result.length; i++) {
                 inputSize.forEach(function (inputs) {
                     var a = inputs.value.toLowerCase();
-                    var b = result[i].size.toLowerCase();
+                    var b = result[i].sizeTen.toLowerCase();
                     if (b === a) {
                         inputs.removeAttribute('disabled');
                         arrSize.push(inputs.value);
@@ -864,7 +1005,7 @@
                 for (i = 0; i < result.length; i++) {
                     inputSize.forEach(function (inputs) {
                         var a = inputs.value.toLowerCase();
-                        var b = result[i].size.toLowerCase();
+                        var b = result[i].sizeTen.toLowerCase();
                         if (b === a) {
                             inputs.checked = false;
                             inputs.removeAttribute('disabled');
@@ -892,7 +1033,7 @@
                 for (i = 0; i < result.length; i++) {
                     inputSize.forEach(function (inputs) {
                         var a = inputs.value.toLowerCase();
-                        var b = result[i].size.toLowerCase();
+                        var b = result[i].sizeTen.toLowerCase();
                         if (b === a) {
                             inputs.removeAttribute('disabled');
                             arrSize.push(inputs.value);
@@ -904,19 +1045,8 @@
 
         liSize.forEach(function (li) {
             var a = li.dataset.value.toLowerCase();
-            var matchFound = false;
-            for (i = 0; i < arrSize.length; i++) {
-                var b = arrSize[i].toLowerCase();
-                if (a === b) {
-                    matchFound = true;
-                    break;
-                }
-            }
-            if (!matchFound) {
-                li.style.display = 'none';
-            } else {
-                li.style.display = 'block';
-            }
+            var matchFound = arrSize.some(size => size.toLowerCase() === a);
+            li.style.display = matchFound ? 'block' : 'none';
         });
     }
 
@@ -953,7 +1083,7 @@
             input.checked = false;
         })
 
-        let selectElement = document.getElementById('filter-sports');
+        let selectElement = document.getElementById('filter-category');
 
         for (let i = 0; i < selectElement.options.length; i++) {
             if (selectElement.options[i].value === "-1") {
@@ -962,7 +1092,7 @@
                 selectElement.options[i].selected = false;
             }
         }
-        let selectElement2 = document.getElementById('filter-brands');
+        let selectElement2 = document.getElementById('filter-trademark');
 
         for (let i = 0; i < selectElement2.options.length; i++) {
             if (selectElement2.options[i].value === "-1") {

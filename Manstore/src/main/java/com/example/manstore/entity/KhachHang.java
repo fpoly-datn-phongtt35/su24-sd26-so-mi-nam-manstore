@@ -69,7 +69,7 @@ public class KhachHang implements UserDetails {
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
-    @JsonManagedReference
+//    @JsonManagedReference
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     private List<DiaChi> diaChis;
 

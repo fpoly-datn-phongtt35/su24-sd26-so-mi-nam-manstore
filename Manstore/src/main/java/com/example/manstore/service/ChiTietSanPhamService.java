@@ -1,8 +1,11 @@
 package com.example.manstore.service;
 
+import com.example.manstore.dto.custom.ChiTietSanPhamDTO;
 import com.example.manstore.entity.ChiTietSanPham;
+import com.example.manstore.repository.ChiTietSanPhamRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -20,17 +23,20 @@ public interface ChiTietSanPhamService {
 
     ChiTietSanPham getCTSPById(Integer id);
 
-    List<ChiTietSanPham> findListProductByColor(String id,String ms);
-
     List<ChiTietSanPham> getListCTSPById(String id);
 
     Page<ChiTietSanPham> Filter(int page, String color, String size, String id);
 
-    ChiTietSanPham findIdProductByColorAndSize(String id,String ms,String size);
+//    List<ChiTietSanPham> findListProductByColor(String id, String ms);
+
+    List<ChiTietSanPhamDTO> findListProductByColor(Integer id, String ms);
+
+    List<String> getImgByProductId( String id);
+
+    List<String> getByIdProductAndColor(String id, String color);
+
+    ChiTietSanPham findIdProductByColorAndSize(String id, String ms, String size);
 
     List<ChiTietSanPham> search(String keyword);
-
-
-
 
 }

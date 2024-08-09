@@ -1,13 +1,42 @@
 <!doctype html>
 <html data-bs-theme="light" data-footer="dark" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="client/fragments/head::head">
+    <style>
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .product-thumb {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .product-thumb img {
+            transition: transform 0.3s ease;
+        }
+
+        .product-thumb:hover img {
+            transform: scale(1.1);
+        }
+
+        .size-xl {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="client/fragments/header::header"></div>
 <div th:replace="client/fragments/search::search"></div>
 <section class="ecommerce-about"
-         style="background-image: url('../assets/images/profile-bg.jpg'); background-size: cover;background-position: center;">
-    <div class="bg-overlay bg-primary" style="opacity: 0.85;"></div>
+         style="background-image: url('http://localhost:8080/assets/images/LDP_BANNER.webp'); background-size: cover;background-position: center;">
+<!--    <div class="bg-overlay bg-primary" style="opacity: 0.85;"></div>-->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
@@ -45,10 +74,10 @@
                     </div><!--end col-->
                     <div class="col-md-10">
                         <div class="bg-light rounded-2 position-relative ribbon-box overflow-hidden">
-                            <div class="ribbon ribbon-danger ribbon-shape trending-ribbon">
-                                <span class="trending-ribbon-text">Trending</span> <i
-                                    class="ri-flashlight-fill text-white align-bottom float-end ms-1"></i>
-                            </div>
+<!--                            <div class="ribbon ribbon-danger ribbon-shape trending-ribbon">-->
+<!--                                <span class="trending-ribbon-text">Trending</span> <i-->
+<!--                                    class="ri-flashlight-fill text-white align-bottom float-end ms-1"></i>-->
+<!--                            </div>-->
                             <div class="swiper productSwiper2">
                                 <div class="swiper-wrapper" id="find-picture">
 
@@ -128,7 +157,7 @@
                 <ul class="nav nav-tabs nav-tabs-custom mb-3" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" data-bs-toggle="tab" href="#home1" role="tab">
-                            Mô tả
+                            Mô Tả Sản Phẩm
                         </a>
                     </li>
                 </ul>
@@ -137,33 +166,29 @@
                     <div class="tab-pane active" id="home1" role="tabpanel">
                         <table class="table table-sm table-borderless align-middle" id="description">
                             <tr>
-                                <th>Mã</th>
+                                <th>Mã :</th>
                                 <td th:text="${sanPham.ma}"></td>
                             </tr>
                             <tr>
-                                <th>Danh mục</th>
-                                <td th:text="${sanPham.idDanhMuc.ten}"></td>
-                            </tr>
-                            <tr>
-                                <th>Thương hiệu</th>
-                                <td th:text="${sanPham.idThuongHieu.ten}"></td>
-                            </tr>
-                            <tr>
-                                <th>Cổ áo</th>
-                                <td th:text="${sanPham.idCoAo.ten}"></td>
-                            </tr>
-                            <tr>
-                                <th>Đuôi áo</th>
-                                <td th:text="${sanPham.idDuoiAo.ten}"></td>
-                            </tr>
-                            <tr>
-                                <th>Kiểu dáng</th>
+                                <th>Kiểu Dáng</th>
                                 <td th:text="${sanPham.idKieuDang.ten}"></td>
                             </tr>
                             <tr>
-                                <th>Chất liệu</th>
+                                <th>Chất Liệu :</th>
                                 <td th:text="${sanPham.idChatLieu.ten}"></td>
                             </tr>
+                            <tr>
+                                <th>Danh Mục :</th>
+                                <td th:text="${sanPham.idDanhMuc.ten}"></td>
+                            </tr>
+                            <tr>
+                                <th>Thương hiệu :</th>
+                                <td th:text="${sanPham.idThuongHieu.ten}"></td>
+                            </tr>
+<!--                            <tr>-->
+<!--                                <th>Mô Tả :</th>-->
+<!--                                <td th:text="${sanPham.moTa}"></td>-->
+<!--                            </tr>-->
                         </table>
                         <p class="text-muted fs-15" th:text="${sanPham.moTa}"></p>
                     </div>
@@ -244,40 +269,40 @@
         const data = await responseDetailPD.json();
         let resultDetailColor = data.filter((product, index, self) =>
             index === self.findIndex((p) => (
-                p.ms.id === product.ms.id
+                p.idMauSac.id === product.idMauSac.id
             ))
         );
         // Sort colors based on ms.id
-        resultDetailColor.sort((a, b) => a.ms.id - b.ms.id);
+        resultDetailColor.sort((a, b) => a.idMauSac.id - b.idMauSac.id);
         for (let i = 0; i < resultDetailColor.length; i++) {
-            if (productId === resultDetailColor[i].sp.id) {
-                if (resultDetailColor[i].ms.id === 1) {
+            if (productId === resultDetailColor[i].idSanPham.id) {
+                if (resultDetailColor[i].idMauSac.id === 1) {
                     labelColor = "btn-dark";
                     cssStyle = "";
-                } else if (resultDetailColor[i].ms.id === 2) {
+                } else if (resultDetailColor[i].idMauSac.id === 2) {
                     cssStyle = "";
                     labelColor = "btn-light";
-                } else if (resultDetailColor[i].ms.id === 3) {
+                } else if (resultDetailColor[i].idMauSac.id === 3) {
                     cssStyle = "";
                     labelColor = "btn-danger";
-                } else if (resultDetailColor[i].ms.id === 4) {
+                } else if (resultDetailColor[i].idMauSac.id === 4) {
                     labelColor = "btn-secondary";
                     cssStyle = "style=\"background-color: rgb(169,169,169); border: none;\"";
-                } else if (resultDetailColor[i].ms.id === 5) {
+                } else if (resultDetailColor[i].idMauSac.id === 5) {
                     cssStyle = "";
                     labelColor = "btn-success";
-                } else if (resultDetailColor[i].ms.id === 6) {
+                } else if (resultDetailColor[i].idMauSac.id === 6) {
                     cssStyle = "";
                     labelColor = "btn-secondary";
-                } else if (resultDetailColor[i].ms.id === 7) {
+                } else if (resultDetailColor[i].idMauSac.id === 7) {
                     cssStyle = "";
                     labelColor = "btn-primary";
                 } else {
                     cssStyle = "";
                     labelColor = "btn-warning";
                 }
-                color += `<li><input onclick="chooseProductColor(${productId})" type="radio" name="colors" id="product-color-${resultDetailColor[i].ms.id}">
-                          <label class="avatar-xs btn ${labelColor} p-0 d-flex align-items-center justify-content-center rounded-circle" ${cssStyle} for="product-color-${resultDetailColor[i].ms.id}" ></label></li>`;
+                color += `<li><input onclick="chooseProductColor(${productId})" type="radio" name="colors" id="product-color-${resultDetailColor[i].idMauSac.id}">
+                          <label class="avatar-xs btn ${labelColor} p-0 d-flex align-items-center justify-content-center rounded-circle" ${cssStyle} for="product-color-${resultDetailColor[i].idMauSac.id}" ></label></li>`;
             }
         }
         document.getElementById("Find-Color").innerHTML = color;
@@ -292,15 +317,15 @@
         var size = '';
         let resultDetailSize = data.filter((product, index, self) =>
             index === self.findIndex((p) => (
-                p.size === product.size
+                p.idSize.id === product.idSize.id
             ))
         );
         // Sort sizes based on size
-        resultDetailSize.sort((a, b) => a.size.localeCompare(b.size));
+        resultDetailSize.sort((a, b) => a.idSize.id.toString().localeCompare(b.idSize.id.toString()));
         for (let i = 0; i < resultDetailSize.length; i++) {
-            if (productId === resultDetailSize[i].sp.id) {
-                size += `<li id="li-size-${resultDetailSize[i].size}"><input onclick="chooseProductSize(${productId})" disabled type="radio" name="sizes" id="product-size-${resultDetailSize[i].size}">
-                         <label class="avatar-xs btn btn-soft-primary text-uppercase p-0 fs-12 d-flex align-items-center justify-content-center rounded-circle" for="product-size-${resultDetailSize[i].size}">${resultDetailSize[i].size}</label></li>`;
+            if (productId === resultDetailSize[i].idSanPham.id) {
+                size += `<li id="li-size-${resultDetailSize[i].idSize.ten}"><input onclick="chooseProductSize(${productId})" disabled type="radio" name="sizes" id="product-size-${resultDetailSize[i].idSize.ten}">
+                         <label class="avatar-xs btn btn-soft-primary text-uppercase p-0 fs-12 d-flex align-items-center justify-content-center rounded-circle" for="product-size-${resultDetailSize[i].idSize.ten}">${resultDetailSize[i].idSize.ten}</label></li>`;
             }
         }
         document.getElementById("Find-Size").innerHTML = size;
@@ -315,7 +340,7 @@
         const data = await responseDetailPD.json();
         let quantity = 0;
         for (let i = 0; i < data.length; i++) {
-            quantity += data[i].soLuong;
+            quantity += data[i].soluong;
         }
         totalQuantity = quantity;
         document.getElementById("Find-Quantity").innerHTML = totalQuantity;
@@ -339,10 +364,10 @@
             if (selectedProductDetailColor === undefined) {
                 selectedProductDetailColor = selectedColorId;
                 for (let i = 0; i < result.length; i++) {
-                    quantity += result[i].soLuong;
+                    quantity += result[i].soluong;
                     selectedSizeInput.forEach(function (inputs) {
                         var a = inputs.id.split('-')[2].toLowerCase();
-                        var b = result[i].size.toLowerCase();
+                        var b = result[i].sizeTen.toLowerCase();
                         if (b === a) {
                             inputs.removeAttribute('disabled');
                             arrSize.push(inputs.id.split('-')[2]);
@@ -356,10 +381,10 @@
                     selectedProductDetailColor = selectedColorId;
                     selectedProductDetailSize = undefined;
                     for (i = 0; i < result.length; i++) {
-                        quantity += result[i].soLuong;
+                        quantity += result[i].soluong;
                         selectedSizeInput.forEach(function (inputs) {
                             var a = inputs.id.split('-')[2].toLowerCase();
-                            var b = result[i].size.toLowerCase();
+                            var b = result[i].sizeTen.toLowerCase();
                             if (b === a) {
                                 inputs.checked = false;
                                 inputs.removeAttribute('disabled');
@@ -371,7 +396,7 @@
                     var radioInputs = document.querySelectorAll('input[type="radio"]');
                     var idToRemove = "product-color-" + selectedColorId;
                     for (let i = 0; i < radioInputs.length; i++) {
-                        quantity += result[i].soLuong;
+                        quantity += result[i].soluong;
                         if (radioInputs[i].id.split('-')[2] === idToRemove) {
                             for (let j = 0; j < radioInputs.length; j++) {
                                 radioInputs[j].checked = false;
@@ -382,10 +407,10 @@
                     selectedProductDetailColor = selectedColorId;
                     arrSize = [];
                     for (i = 0; i < result.length; i++) {
-                        quantity += result[i].soLuong;
+                        quantity += result[i].soluong;
                         selectedSizeInput.forEach(function (inputs) {
                             var a = inputs.id.split('-')[2].toLowerCase();
-                            var b = result[i].size.toLowerCase();
+                            var b = result[i].sizeTen.toLowerCase();
                             if (b === a) {
                                 inputs.checked = false;
                                 inputs.removeAttribute('disabled');
@@ -415,6 +440,9 @@
             totalQuantity = quantity;
             document.getElementById("Find-Quantity").innerHTML = totalQuantity;
             console.log("Selected color ID:", selectedColorId);
+            // Load product pictures by color
+            // await loadPicturesByColor(idPD, selectedColorId)
+
             // Thực hiện các xử lý khác nếu cần
         } else {
             console.log("No color selected");
@@ -422,6 +450,84 @@
         }
 
     }
+
+    // async function loadPicturesByColor(productId, colorId) {
+    //     const url = `/api/client/product_detail/picture-detail/${productId}/${colorId}`;
+    //     const response = await fetch(url, { method: 'GET' });
+    //     const dataPicture = await response.json();
+    //
+    //     let picture = '';
+    //     let pictureFind = '';
+    //
+    //     if (dataPicture.statusText === 'failure') {
+    //         picture += `
+    //         <div class="swiper-slide">
+    //             <div class="product-thumb rounded cursor-pointer" onclick="findPicture('https://via.placeholder.com/200')">
+    //                 <img src="https://via.placeholder.com/200" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
+    //             </div>
+    //         </div>
+    //     `;
+    //         pictureFind += `
+    //         <div class="swiper-slide">
+    //             <img src="https://via.placeholder.com/200" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
+    //         </div>
+    //     `;
+    //     } else {
+    //         if (Array.isArray(dataPicture) && dataPicture.length > 0) {
+    //             dataPicture.forEach((pictureUrl) => {
+    //                 const fullUrl = `http://localhost:8080/assets/images/products/${pictureUrl}`;
+    //                 picture += `
+    //                 <div class="swiper-slide">
+    //                     <div class="product-thumb rounded cursor-pointer" onclick="findPicture('${fullUrl}')">
+    //                         <img src="${fullUrl}" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
+    //                     </div>
+    //                 </div>
+    //             `;
+    //                 pictureFind += `
+    //                 <div class="swiper-slide">
+    //                     <img src="${fullUrl}" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
+    //                 </div>
+    //             `;
+    //             });
+    //         } else {
+    //             picture += `
+    //             <div class="swiper-slide">
+    //                 <div class="product-thumb rounded cursor-pointer" onclick="findPicture('http://localhost:8080/assets/images/products/img-8.png')">
+    //                     <img src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
+    //                 </div>
+    //             </div>
+    //         `;
+    //             pictureFind += `
+    //             <div class="swiper-slide">
+    //                 <img src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
+    //             </div>
+    //         `;
+    //         }
+    //     }
+    //
+    //     document.getElementById('picture-silde').innerHTML = picture;
+    //     document.getElementById('find-picture').innerHTML = pictureFind;
+    //
+    //     // Khởi tạo lại Swiper sau khi nội dung được cập nhật
+    //     new Swiper('.productSwiper', {
+    //         slidesPerView: 4,
+    //         spaceBetween: 10,
+    //         freeMode: true,
+    //         watchSlidesVisibility: true,
+    //         watchSlidesProgress: true,
+    //     });
+    //
+    //     new Swiper('.productSwiper2', {
+    //         spaceBetween: 10,
+    //         navigation: {
+    //             nextEl: '.swiper-button-next',
+    //             prevEl: '.swiper-button-prev',
+    //         },
+    //         thumbs: {
+    //             swiper: document.querySelector('.productSwiper').swiper,
+    //         },
+    //     });
+    // }
 
     async function chooseProductSize(idPD) {
         // Lấy ra input radio đã được chọn
@@ -436,7 +542,7 @@
                 method: 'GET'
             });
             var result = await response.json();
-            totalQuantity = result.soLuong;
+            totalQuantity = result.soluong;
             document.getElementById("Find-Quantity").innerHTML = totalQuantity;
             var minus = document.getElementById("minus");
             var input = document.getElementById('cart-quantity');
@@ -452,7 +558,6 @@
             // Xử lý khi không có size nào được chọn
         }
     }
-
     async function inputQuantity() {
         var productId = document.getElementById("productId").value;
         var input = document.getElementById('cart-quantity');
@@ -462,7 +567,7 @@
         });
         var result = await response.json();
         input.min = 1;
-        input.max = result.soLuong;
+        input.max = result.soluong;
 
         if (parseInt(input.value) > input.max) {
             await Toast.fire({
@@ -513,7 +618,7 @@
         // Lấy giá trị hiện tại của input
         var currentValue = parseInt(inputElement.value);
         // Kiểm tra nếu giá trị hiện tại là max, không tăng giá trị nữa
-        if (result.soLuong > currentValue) {
+        if (result.soluong > currentValue) {
             // Tăng giá trị lên 1
             currentValue = currentValue + 1;
             // Gán giá trị mới vào input
@@ -592,56 +697,124 @@
         }
     }
 
+    // async function loadPicture(productId) {
+    //     var urlDetailPD = '/api/client/product_detail/detailPD/' + productId;
+    //     const responseDetailPD = await fetch(urlDetailPD, {
+    //         method: 'GET'
+    //     });
+    //     const data = await responseDetailPD.json();
+    //
+    //     let resultDetailColor = data.filter((product, index, self) =>
+    //         index === self.findIndex((p) => (
+    //             p.idMauSac.id === product.idMauSac.id
+    //         ))
+    //     );
+    //
+    //     let picture = '';
+    //     let pictureFind = '';
+    //
+    //     for (let i = 0; i < resultDetailColor.length; i++) {
+    //         var urlGetPicture = '/api/client/product_detail/picture-detail/' + resultDetailColor[i].idSanPham.id + '/' + resultDetailColor[i].idMauSac.id;
+    //         const pictureResponse = await fetch(urlGetPicture, {
+    //             method: 'GET'
+    //         });
+    //         var dataPicture = await pictureResponse.json();
+    //         if (dataPicture.statusText === "failure") {
+    //             picture += `
+    //                             <div class="swiper-slide">
+    //                                 <div class="product-thumb rounded cursor-pointer" onclick="findPicture('/assets/images/products/img-8.png')">
+    //                                     <img src="/assets/images/products/img-8.png" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
+    //                                 </div>
+    //                             </div>
+    //                         `;
+    //             pictureFind += `
+    //                                  <div class="swiper-slide ">
+    //                                             <img src="/assets/images/products/img-8.png" alt="" class="img-fluid size-xl" style="width: 100%; height: 100%"/>
+    //                                  </div>
+    //                             `;
+    //         } else {
+    //             picture += `
+    //                          <div class="swiper-slide">
+    //                                 <div class="product-thumb rounded cursor-pointer" onclick="findPicture('${dataPicture[0]}')">
+    //                                     <img src="${dataPicture[0]}" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
+    //                                 </div>
+    //                             </div>
+    //                         `;
+    //             pictureFind += `
+    //                              <div class="swiper-slide ">
+    //                                        <img src="${dataPicture[0]}" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
+    //                              </div>
+    //                             `;
+    //         }
+    //     }
+    //     document.getElementById('picture-silde').innerHTML = picture;
+    //     document.getElementById('find-picture').innerHTML = pictureFind;
+    // }
+
     async function loadPicture(productId) {
-        var urlDetailPD = '/api/client/product_detail/detailPD/' + productId;
-        const responseDetailPD = await fetch(urlDetailPD, {
-            method: 'GET'
-        });
+        const urlDetailPD = '/api/client/product_detail/detailPD/' + productId;
+        const responseDetailPD = await fetch(urlDetailPD, { method: 'GET' });
         const data = await responseDetailPD.json();
 
-        let resultDetailColor = data.filter((product, index, self) =>
-            index === self.findIndex((p) => (
-                p.ms.id === product.ms.id
-            ))
+        const resultDetailColor = data.filter((product, index, self) =>
+                        index === self.findIndex((p) => (
+                                p.idMauSac.id === product.idMauSac.id
+                        ))
         );
 
         let picture = '';
         let pictureFind = '';
 
         for (let i = 0; i < resultDetailColor.length; i++) {
-            var urlGetPicture = '/api/client/product_detail/picture-detail/' + resultDetailColor[i].sp.id + '/' + resultDetailColor[i].ms.id;
-            const pictureResponse = await fetch(urlGetPicture, {
-                method: 'GET'
-            });
-            var dataPicture = await pictureResponse.json();
-            if (dataPicture.statusText === "failure") {
+            const urlGetPicture = '/api/client/product_detail/picture-detail/' + resultDetailColor[i].idSanPham.id + '/' + resultDetailColor[i].idMauSac.id;
+            const pictureResponse = await fetch(urlGetPicture, { method: 'GET' });
+            const dataPicture = await pictureResponse.json();
+
+            if (dataPicture.statusText === 'failure') {
                 picture += `
-                                <div class="swiper-slide">
-                                    <div class="product-thumb rounded cursor-pointer" onclick="findPicture('/assets/images/products/img-8.png')">
-                                        <img src="/assets/images/products/img-8.png" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
-                                    </div>
-                                </div>
-                            `;
+                <div class="swiper-slide">
+                    <div class="product-thumb rounded cursor-pointer" onclick="findPicture('https://via.placeholder.com/200')">
+                        <img src="https://via.placeholder.com/200" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
+                    </div>
+                </div>
+            `;
                 pictureFind += `
-                                     <div class="swiper-slide ">
-                                                <img src="/assets/images/products/img-8.png" alt="" class="img-fluid size-xl" style="width: 100%; height: 100%"/>
-                                     </div>
-                                `;
+                <div class="swiper-slide">
+                    <img src="https://via.placeholder.com/200" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
+                </div>
+            `;
             } else {
-                picture += `
-                             <div class="swiper-slide">
-                                    <div class="product-thumb rounded cursor-pointer" onclick="findPicture('${dataPicture[0].linkAnh}')">
-                                        <img src="${dataPicture[0].linkAnh}" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
-                                    </div>
-                                </div>
-                            `;
-                pictureFind += `
-                                 <div class="swiper-slide ">
-                                           <img src="${dataPicture[0].linkAnh}" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
-                                 </div>
-                                `;
+                if (Array.isArray(dataPicture) && dataPicture.length > 0) {
+                    const fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+                    picture += `
+                    <div class="swiper-slide">
+                        <div class="product-thumb rounded cursor-pointer" onclick="findPicture('${fullUrl}')">
+                            <img src="${fullUrl}" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
+                        </div>
+                    </div>
+                `;
+                    pictureFind += `
+                    <div class="swiper-slide">
+                        <img src="${fullUrl}" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
+                    </div>
+                `;
+                } else {
+                    picture += `
+                    <div class="swiper-slide">
+                        <div class="product-thumb rounded cursor-pointer" onclick="findPicture('http://localhost:8080/assets/images/products/img-8.png')">
+                            <img src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
+                        </div>
+                    </div>
+                `;
+                    pictureFind += `
+                    <div class="swiper-slide">
+                        <img src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
+                    </div>
+                `;
+                }
             }
         }
+
         document.getElementById('picture-silde').innerHTML = picture;
         document.getElementById('find-picture').innerHTML = pictureFind;
     }
@@ -649,16 +822,28 @@
     function findPicture(url) {
         console.log(url);
         if (url !== null) {
-            // Lấy ra swiper productSwiper2
-            var swiper2 = document.querySelector('.productSwiper2').swiper;
-            // Tìm index của hình ảnh có link là linkAnh
-            var index = Array.from(document.querySelectorAll('.swiper-slide')).findIndex(slide => {
+            const swiper2 = document.querySelector('.productSwiper2').swiper;
+            const index = Array.from(document.querySelectorAll('.swiper-slide')).findIndex(slide => {
                 return slide.querySelector('img').getAttribute('src') === url;
             });
-            // Chuyển đến slide có index tương ứng
             swiper2.slideTo(index);
         }
     }
+
+
+    // function findPicture(url) {
+    //     console.log(url);
+    //     if (url !== null) {
+    //         // Lấy ra swiper productSwiper2
+    //         var swiper2 = document.querySelector('.productSwiper2').swiper;
+    //         // Tìm index của hình ảnh có link là linkAnh
+    //         var index = Array.from(document.querySelectorAll('.swiper-slide')).findIndex(slide => {
+    //             return slide.querySelector('img').getAttribute('src') === url;
+    //         });
+    //         // Chuyển đến slide có index tương ứng
+    //         swiper2.slideTo(index);
+    //     }
+    // }
 
     async function getPromotion() {
         let userId = localStorage.getItem("userId")
@@ -735,12 +920,12 @@
                     let promtion = await getPromotion();
                     let dto = {
                         id: result.id,
-                        idSanPham: result.sp.id,
-                        tenSanPham: result.sp.ten,
-                        idMauSac: result.ms.id,
-                        mauSac: result.ms.ten,
-                        size: result.size,
-                        donGia: result.sp.donGia,
+                        idSanPham: result.idSanPham.id,
+                        tenSanPham: result.idSanPham.ten,
+                        idMauSac: result.idMauSac.id,
+                        mauSac: result.idMauSac.ten,
+                        size: result.idSize.ten,
+                        donGia: result.idSanPham.gia,
                         soLuong: parseInt(input.value),
                         khuyenMai: promtion
                     }

@@ -1,6 +1,8 @@
 package com.example.manstore.controller.client;
 
-import com.example.manstore.CustomModel.ResponseCustom;
+
+import com.example.manstore.dto.custom.ChiTietSanPhamDTO;
+import com.example.manstore.dto.custom.ResponseCustom;
 import com.example.manstore.entity.SanPham;
 import com.example.manstore.service.Impl.ChiTietSanPhamImpl;
 import com.example.manstore.service.Impl.SanPhamServiceImpl;
@@ -9,25 +11,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping({"/api/client/product_detail", "/api/product_detail"
 })
 public class SanPhamChiTietRestController {
+
     @Autowired
-    private ChiTietSanPhamImpl sv;
+    ChiTietSanPhamImpl chiTietSanPhamService;
+
     @Autowired
-    private SanPhamServiceImpl sanPhamService;
-//    @Autowired
-//    private AnhSanPhamServiceImpl serviceASP;
+    SanPhamServiceImpl sanPhamService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     private ResponseEntity<?> getAll() {
-        return new ResponseEntity<>(sv.getAllCTSP(), HttpStatus.OK);
+        return new ResponseEntity<>(chiTietSanPhamService.getAllCTSP(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/detailPD/{id}", method = RequestMethod.GET)
     private ResponseEntity<?> getByid(@PathVariable("id") String id) {
-        return ResponseEntity.ok().body(sv.getListCTSPById(id));
+        return ResponseEntity.ok().body(chiTietSanPhamService.getListCTSPById(id));
     }
 
     @RequestMapping(value = "/check-status/{id}", method = RequestMethod.GET)
@@ -40,49 +44,57 @@ public class SanPhamChiTietRestController {
     }
 
     @RequestMapping(value = "/detail/{id}/{color}", method = RequestMethod.GET)
-    private ResponseEntity<?> findIdProductAndColor(@PathVariable("id") String id, @PathVariable("color") String color) {
-        return ResponseEntity.ok().body(sv.findListProductByColor(id, color));
+    private ResponseEntity<?> findIdProductAndColor(@PathVariable("id") Integer id, @PathVariable("color") String color) {
+        List<ChiTietSanPhamDTO> products = chiTietSanPhamService.findListProductByColor(id, color);
+        System.out.println("Controller: Found " + products.size() + " products for id " + id + " and color " + color);
+        return ResponseEntity.ok().body(products);
     }
 
-//    @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
-//    private ResponseEntity<?> getPictureByIdProductDetail(@PathVariable("id") String id) {
-//        if (serviceASP.getByIdProduct(id).size() == 0) {
-//            System.out.println("Product Picture is null");
-//            ResponseCustom responseCustom = new ResponseCustom();
-//            responseCustom.setStatusText("failure");
-//            responseCustom.setMessage("List Picture Is Null");
-//            return ResponseEntity.ok().body(responseCustom);
-//        }
-//        System.out.println(serviceASP.getByIdProduct(id).toString());
-//        return ResponseEntity.ok().body(serviceASP.getByIdProduct(id));
-//    }
+    @RequestMapping(value = "/picture/{id}", method = RequestMethod.GET)
+    private ResponseEntity<?> getPictureByIdProductDetail(@PathVariable("id") String id){
+        List<String> pictures = chiTietSanPhamService.getImgByProductId(id);
+        if (pictures == null || pictures.isEmpty()) {
+            System.out.println("Product Picture is null");
+            ResponseCustom responseCustom = new ResponseCustom();
+            responseCustom.setStatusText("failure");
+            responseCustom.setMessage("List Picture Is Null");
+            return ResponseEntity.ok().body(responseCustom);
+        }
+        System.out.println("anh san pham chi tiet: " + pictures.toString());
+        return ResponseEntity.ok().body(pictures);
+    }
 
-//    @RequestMapping(value = "/picture-detail/{id}/{color}", method = RequestMethod.GET)
-//    private ResponseEntity<?> getPictureByIdProductAndColor(@PathVariable("id") String id,
-//                                                            @PathVariable("color") String color) {
-//        if (serviceASP.getByIdProductAndColor(id, color).size() == 0) {
-//            System.out.println("Product Picture is null");
-//            ResponseCustom responseCustom = new ResponseCustom();
-//            responseCustom.setStatusText("failure");
-//            responseCustom.setMessage("List Picture Is Null");
-//            return ResponseEntity.ok().body(responseCustom);
-//        }
-//        System.out.println(serviceASP.getByIdProductAndColor(id, color).toString());
-//        return ResponseEntity.ok().body(serviceASP.getByIdProductAndColor(id, color));
-//    }
+    @RequestMapping(value = "/picture-detail/{id}/{color}", method = RequestMethod.GET)
+    private ResponseEntity<?> getPictureByIdProductAndColor(@PathVariable("id") String id,
+                                                            @PathVariable("color") String color) {
+        List<String> pictures = chiTietSanPhamService.getByIdProductAndColor(id, color);
+        if (pictures == null || pictures.isEmpty()) {
+            System.out.println("Product Picture is null");
+            ResponseCustom responseCustom = new ResponseCustom();
+            responseCustom.setStatusText("failure");
+            responseCustom.setMessage("List Picture Is Null");
+            return ResponseEntity.ok().body(responseCustom);
+        }
+        System.out.println("anh san pham chi tiet theo mau sac: " + pictures.toString());
+        return ResponseEntity.ok().body(pictures);
+    }
 
     @RequestMapping(value = "/detailSL/{id}/{color}/{size}", method = RequestMethod.GET)
     private ResponseEntity<?> findIdProductAndColorAndSize(@PathVariable("id") String id, @PathVariable("color") String color, @PathVariable("size") String size) {
-        return ResponseEntity.ok().body(sv.findIdProductByColorAndSize(id, color, size));
+        return ResponseEntity.ok().body(chiTietSanPhamService.findIdProductByColorAndSize(id, color, size));
     }
 
+
+
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    private ResponseEntity<?> getByidSPCT(@PathVariable("id") String id) {
-        return ResponseEntity.ok().body(sv.getCTSPById(Integer.parseInt(id)));
+    private ResponseEntity<?> getByidSPCT(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok().body(chiTietSanPhamService.getCTSPById(id));
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     private ResponseEntity<?> search(@RequestParam("keyword") String keyword) {
-        return ResponseEntity.ok().body(sv.search(keyword));
+        return ResponseEntity.ok().body(chiTietSanPhamService.search(keyword));
     }
+
+
 }
