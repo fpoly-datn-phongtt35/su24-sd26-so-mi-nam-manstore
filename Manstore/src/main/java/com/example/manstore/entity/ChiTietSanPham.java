@@ -56,4 +56,7 @@ public class ChiTietSanPham {
     @JsonIgnore
     private List<GioHangChiTiet> gioHangChiTiets;
 
+    @Column(name = "duongDan")
+    private String duongDan;
+
 }

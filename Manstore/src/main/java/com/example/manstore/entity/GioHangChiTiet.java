@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -26,6 +27,9 @@ public class GioHangChiTiet {
 
     @Column(name = "DonGia", precision = 18)
     private BigDecimal donGia;
+
+    @Column(name = "NgaySua")
+    private LocalDate ngaySua;
 
     @Column(name = "TongTien", precision = 18)
     private BigDecimal tongTien;

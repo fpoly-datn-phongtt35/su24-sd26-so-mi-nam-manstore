@@ -59,7 +59,5 @@ public class HoaDon {
     @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
     private List<ChiTietHoaDon> chiTietHoaDons;
 
-    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
-    private List<HoadonPhieugiam> hoadonPhieugiam;
 
 }

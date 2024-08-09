@@ -18,6 +18,8 @@ public class ChiTietSanPhamValidationRequest {
     private String size;
     private String mauSac;
     private Integer trangThai;
+
+    private String duongDan;
     private boolean isValid;
 
     @Override
@@ -27,6 +29,7 @@ public class ChiTietSanPhamValidationRequest {
                 ", size='" + size + '\'' +
                 ", mauSac='" + mauSac + '\'' +
                 ", trangThai='" + trangThai + '\'' +
+                ", duongDan='" + duongDan + '\'' +
                 ", isValid=" + isValid +
                 '}';
     }

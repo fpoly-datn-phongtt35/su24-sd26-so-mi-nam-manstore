@@ -21,16 +21,20 @@ public class SanPhanResponse {
     private LocalDate ngayTao;
     private BigDecimal gia;
     private BigDecimal giaSale;
-    private String danhMuc;
+    private Integer danhMuc;
+    private String tenDanhMuc;
     private String duongDan;
-    private String thuongHieu;
-    private String coAo;
-    private String duoiAo;
-    private String kieuDang;
-    private String chatLieu;
+    private Integer thuongHieu;
+    private String tenThuongHieu;
+    private Integer duoiAo;
+    private String tenDuoiAo;
+    private Integer kieuDang;
+    private String tenKieuDang;
+    private Integer chatLieu;
+    private String tenChatLieu;
     private Integer trangThai;
 
-    public SanPhanResponse(Integer id, String ma, String ten, int soLuong, LocalDate ngayTao, BigDecimal gia, BigDecimal giaSale, String danhMuc,String duongDan, String thuongHieu, String coAo, String duoiAo, String kieuDang, String chatLieu, Integer trangThai) {
+    public SanPhanResponse(Integer id, String ma, String ten, Integer soLuong, LocalDate ngayTao, BigDecimal gia, BigDecimal giaSale, Integer danhMuc, String duongDan, Integer thuongHieu, Integer duoiAo, Integer kieuDang, Integer chatLieu, Integer trangThai) {
         this.id = id;
         this.ma = ma;
         this.ten = ten;
@@ -41,12 +45,13 @@ public class SanPhanResponse {
         this.danhMuc = danhMuc;
         this.duongDan = duongDan;
         this.thuongHieu = thuongHieu;
-        this.coAo = coAo;
         this.duoiAo = duoiAo;
         this.kieuDang = kieuDang;
         this.chatLieu = chatLieu;
         this.trangThai = trangThai;
     }
+
+
 
 
 

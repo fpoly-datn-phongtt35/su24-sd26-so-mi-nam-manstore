@@ -1,5 +1,6 @@
 package com.example.manstore.service.Impl;
 
+import com.example.manstore.dto.custom.ChiTietSanPhamDTO;
 import com.example.manstore.entity.ChiTietSanPham;
 import com.example.manstore.repository.ChiTietSanPhamRepository;
 import com.example.manstore.service.ChiTietSanPhamService;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -21,6 +23,11 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     @Override
     public List<ChiTietSanPham> getAllCTSP() {
         return ctspRepository.findAll();
+    }
+
+    @Override
+    public List<ChiTietSanPham> getAllCTSPById(Integer id) {
+        return ctspRepository.getListSpctByIdSp(String.valueOf(id));
     }
 
     @Override
@@ -72,5 +79,38 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
             pagination = ctspRepository.FilterByAllAndProduct(color, sizeId, id, pageable);
         }
         return pagination;
+    }
+
+    @Override
+    public List<String> getImgByProductId(String id) {
+        List<String> duongDan = ctspRepository.getImgByProductId(id);
+        if (duongDan == null || duongDan.isEmpty()) {
+            return null;
+        }
+        return Collections.singletonList(duongDan.get(0).split(",")[0]); // Lấy phần tử đầu tiên
+
+//        return ctspRepository.getImgByProductId(id);
+    }
+
+    @Override
+    public List<String> getByIdProductAndColor(String id, String color) {
+        return ctspRepository.getByIdProductAndColor(id, color);
+    }
+
+    @Override
+    public List<ChiTietSanPhamDTO> findListProductByColor(Integer id, String ms) {
+        List<ChiTietSanPhamDTO> result = ctspRepository.findListProductByColor(id, ms);
+        System.out.println("Service: Found " + result.size() + " products for id " + id + " and color " + ms);
+        return result;
+    }
+
+    @Override
+    public ChiTietSanPham findIdProductByColorAndSize(String id, String ms, String size) {
+        return ctspRepository.findIdProductByColorAndSize(id, ms, size);
+    }
+
+    @Override
+    public List<ChiTietSanPham> search(String keyword) {
+        return ctspRepository.search(keyword);
     }
 }
