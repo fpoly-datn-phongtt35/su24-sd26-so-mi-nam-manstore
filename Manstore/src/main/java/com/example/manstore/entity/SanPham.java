@@ -58,38 +58,38 @@ public class SanPham {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDanhMuc", nullable = false, referencedColumnName = "id")
-    @JsonManagedReference
+//    @JsonManagedReference
     private DanhMuc idDanhMuc;
 
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idThuongHieu", nullable = false, referencedColumnName = "id")
-    @JsonManagedReference
+//    @JsonManagedReference
     private ThuongHieu idThuongHieu;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idCoAo", nullable = false, referencedColumnName = "id")
-    @JsonManagedReference
+//    @JsonManagedReference
     private CoAo idCoAo;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDuoiAo", nullable = false, referencedColumnName = "id")
-    @JsonManagedReference
+//    @JsonManagedReference
     private DuoiAo idDuoiAo;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKieuDang", nullable = false, referencedColumnName = "id")
-    @JsonManagedReference
+//    @JsonManagedReference
     private KieuDang idKieuDang;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idChatLieu", nullable = false, referencedColumnName = "id")
-    @JsonManagedReference
+//    @JsonManagedReference
     private ChatLieu idChatLieu;
 
     @Column(name = "TrangThai")
