@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -72,4 +73,16 @@ public class DotGiamGiaRestController {
             return ResponseEntity.status(HttpStatus.OK).body("promotion not exists");
         }
     }
+
+    @GetMapping("/public/promotion/find-by-date")
+    public ResponseEntity<?> findByDate(@RequestParam("type") String type) {
+        LocalDate now = LocalDate.now();
+        List<DotGiamGia> promotions = dotGiamGiaRepository.getPromotionAll(now, true);
+
+        // Lọc khuyến mãi hết hạn
+        promotions.removeIf(km -> km.getNgayKetThuc().isBefore(now));
+
+        return new ResponseEntity<>(promotions, HttpStatus.OK);
+    }
+
 }

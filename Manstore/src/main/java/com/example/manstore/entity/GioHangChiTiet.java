@@ -25,14 +25,8 @@ public class GioHangChiTiet {
     @Column(name = "SoLuong")
     private Integer soLuong;
 
-    @Column(name = "DonGia", precision = 18)
-    private BigDecimal donGia;
-
     @Column(name = "NgaySua")
     private LocalDate ngaySua;
-
-    @Column(name = "TongTien", precision = 18)
-    private BigDecimal tongTien;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

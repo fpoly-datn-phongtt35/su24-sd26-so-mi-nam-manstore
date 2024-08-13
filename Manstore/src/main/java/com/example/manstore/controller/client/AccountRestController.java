@@ -2,6 +2,7 @@ package com.example.manstore.controller.client;
 
 import com.example.manstore.entity.DiaChi;
 import com.example.manstore.service.DiaChiService;
+import com.example.manstore.service.HoaDonService;
 import com.example.manstore.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -18,12 +19,12 @@ import java.time.LocalDateTime;
 public class AccountRestController {
     @Autowired
     KhachHangService service;
-//    @Autowired
-//    DonHangService donHangService;
+    @Autowired
+    HoaDonService donHangService;
 //    @Autowired
 //    DonHangChiTietService donHangChiTietService;
     @Autowired
-DiaChiService diaChiService;
+    DiaChiService diaChiService;
 //    @Autowired
 //    ThongBaoService thongBaoService;
 
@@ -40,4 +41,5 @@ DiaChiService diaChiService;
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

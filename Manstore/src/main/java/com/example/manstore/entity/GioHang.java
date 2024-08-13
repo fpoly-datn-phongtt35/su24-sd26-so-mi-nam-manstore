@@ -27,10 +27,6 @@ public class GioHang {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-
-    @Column(name = "Ma", length = 50)
-    private String ma;
-
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 

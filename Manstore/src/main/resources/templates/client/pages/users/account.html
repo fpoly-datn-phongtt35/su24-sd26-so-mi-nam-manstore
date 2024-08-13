@@ -190,8 +190,9 @@
                             <!--                            </div>-->
                         </div>
                         <div class="ms-md-auto">
-                            <a class="btn btn-link btn-hover" onclick="handleProduct()">Tiếp tục mua sắm<i
-                                    class="ri-arrow-right-line align-middle ms-1"></i></a></a>
+                            <a class="btn btn-link btn-hover" onclick="handleProduct()">
+                                Tiếp tục mua sắm<i class="ri-arrow-right-line align-middle ms-1"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -210,8 +211,8 @@
                         <ul class="nav nav-pills flex-column gap-3" role="tablist">
                             <li class="nav-item " role="presentation">
                                 <a aria-selected="true" class="nav-link fs-15 active" data-bs-toggle="tab"
-                                   href="#custom-v-pills-profile" role="tab"><i
-                                        class="bi bi-person-circle align-middle me-1"></i>
+                                   href="#custom-v-pills-profile" role="tab">
+                                    <i class="bi bi-person-circle align-middle me-1"></i>
                                     <span>Thông tin</span>
                                 </a>
                             </li>
@@ -261,56 +262,35 @@
                                             <table class="table table-borderless table-sm">
                                                 <tbody>
                                                 <tr>
-                                                    <td>
-                                                        Họ Và Tên
-                                                    </td>
-                                                    <td class="fw-medium" th:text="${account.ten}">
-                                                    </td>
+                                                    <td>Họ Và Tên</td>
+                                                    <td class="fw-medium" th:text="${account.ten}"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
-                                                        Ngày sinh
-                                                    </td>
-                                                    <td class="fw-medium"
-                                                        th:text="${account.ngaySinh}">
-                                                    </td>
+                                                    <td>Ngày sinh</td>
+                                                    <td class="fw-medium" th:text="${account.ngaySinh}"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
-                                                        Số điện thoại
-                                                    </td>
-                                                    <td class="fw-medium" th:text="${account.sdt}">
-                                                    </td>
+                                                    <td>Số điện thoại</td>
+                                                    <td class="fw-medium" th:text="${account.sdt}"></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
-                                                        Username / Email
-                                                    </td>
-                                                    <td class="fw-medium" th:text="${account.email}">m
-                                                    </td>
+                                                    <td>Username / Email</td>
+                                                    <td class="fw-medium" th:text="${account.email}">m</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
-                                                        Giới tính
-                                                    </td>
-                                                    <td class="fw-medium"
-                                                        th:text="${account.gioiTinh == true ? 'Nam' : 'Nữ'}">m
-                                                    </td>
+                                                    <td>Giới tính</td>
+                                                    <td class="fw-medium" th:text="${account.gioiTinh == true ? 'Nam' : 'Nữ'}">m</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
-                                                        Ngày tham gia
-                                                    </td>
-                                                    <td class="fw-medium"
-                                                        th:text="${account.ngayTao}">
-                                                    </td>
+                                                    <td>Ngày tham gia</td>
+                                                    <td class="fw-medium" th:text="${account.ngayTao}"></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                         <div class="d-flex mb-auto mt-4">
-                                            <h6 class="fs-16 text-decoration-underline flex-grow-1 mb-0">Địa Chỉ Nhận
-                                                Hàng</h6>
+                                            <h6 class="fs-16 text-decoration-underline flex-grow-1 mb-0">
+                                                Địa Chỉ Nhận Hàng</h6>
                                         </div>
                                         <div class="row mt-4" id="address-list">
                                         </div>
@@ -328,12 +308,10 @@
                             <div class="card-header">
                                 <!-- Tab Nav -->
                                 <div class="nav-wrapper position-relative mb-2">
-                                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="myTab"
-                                        role="tablist">
+                                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a aria-controls="tabs-text-1" aria-selected="true"
-                                               class="nav-link mb-sm-3 mb-md-0 active" data-bs-toggle="tab"
-                                               data-value="1"
+                                               class="nav-link mb-sm-3 mb-md-0 active" data-bs-toggle="tab" data-value="1"
                                                href="#tabs-text-1" id="tabs-text-tab-1" onclick="loadOrder(0)"
                                                role="tab">Chờ xác nhận</a>
                                         </li>
@@ -457,9 +435,8 @@
                                         </form>
                                         <div class="text-sm-end">
                                             <button class="btn btn-info d-block d-sm-inline-block"
-                                                    onclick="showConfirmPopupPassword()"
-                                                    type="button"><i
-                                                    class="ri-edit-box-line align-middle me-2"></i>Đổi mật khẩu
+                                                    onclick="showConfirmPopupPassword()" type="button">
+                                                <i class="ri-edit-box-line align-middle me-2"></i>Đổi mật khẩu
                                             </button>
                                         </div>
                                     </div>
@@ -637,8 +614,7 @@
                                             onchange="getWards()">
                                         <option data-id="" value="0">Chọn quận/huyện</option>
                                     </select>
-                                    <div class="text-danger p-1" id="error-district">
-                                    </div>
+                                    <div class="text-danger p-1" id="error-district"></div>
                                 </div>
                             </div>
                         </div>
@@ -686,12 +662,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" data-bs-dismiss="modal" type="button">
-                    Huỷ
-                </button>
-                <button class="btn btn-primary" onclick="saveAddress()" type="button">
-                    Thêm
-                </button>
+                <button class="btn btn-danger" data-bs-dismiss="modal" type="button">Huỷ</button>
+                <button class="btn btn-primary" onclick="saveAddress()" type="button">Thêm</button>
             </div>
         </div>
     </div>
@@ -1106,7 +1078,6 @@
 
 
     window.onload = function () {
-        // loadTypeOfCustomer();
         getAddressDefault();
         loadOrder(0);
     }
@@ -1188,7 +1159,6 @@
     }
 
     async function loadAdress(object) {
-
         let address = '';
         var accountAddress = '';
         if (object === null || object === undefined) {
@@ -1221,7 +1191,7 @@
             }
             address += ` <div class="col-md-6"><div class="card mb-md-0">
                                                                 <div class="card-body">
-                                                                    <div class="float-end clearfix"><a onclick="showAddressList(${object.id})" class="btn btn-hover badge bg-info-subtle text-info"><i class="ri-pencil-fill align-bottom me-1"></i>Thay Đổi</a> </div>
+                                                                    <div class="float-end clearfix"><a onclick="showAddressList(${object.id})" class="btn btn-hover badge bg-info-subtle text-info"><i class="ri-pencil-fill align-bottom me-1"></i>Thay Đổi</a></div>
                                                                     <div>
                                                                         <p class="mb-3 fw-semibold fs-12 d-block text-muted text-uppercase">${name}</p>
                                                                         <span class="text-muted fw-normal text-wrap mb-1 d-block">${addressDetail + '.'}</span>

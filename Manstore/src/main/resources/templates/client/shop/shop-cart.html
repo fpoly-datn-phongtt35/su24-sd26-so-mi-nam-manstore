@@ -59,18 +59,7 @@
             <!--end col-->
             <div class="col-lg-4">
                 <div class="sticky-side-div">
-                    <!--                    <div class="card">-->
-                    <!--                        <div class="card-body">-->
-                    <!--                            <div class="text-center">-->
-                    <!--                                <h6 class="mb-3 fs-15">Bạn có <span class="fw-semibold">voucher</span>?</h6>-->
-                    <!--                            </div>-->
-                    <!--                            <div class="hstack gap-3 px-3 mx-n3">-->
-                    <!--                                <input class="form-control me-auto" type="text" placeholder="Enter coupon code"-->
-                    <!--                                       value="Toner15" aria-label="Add Promo Code here..." disabled>-->
-                    <!--                                <button type="button" class="btn btn-primary w-xs" disabled>Apply</button>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
+
                     <div class="card overflow-hidden">
                         <div class="card-header border-bottom-dashed">
                             <h5 class="card-title mb-0 fs-15">Tổng giá trị <span class="text-danger fw-bold"
@@ -89,6 +78,12 @@
                                             khuyến mãi)</small> :
                                         </td>
                                         <td class="text-end cart-discount text-danger" id="promotion-value"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <select id="promotion-select" onchange="applySelectedPromotion()">
+                                            <option value="">Chọn khuyến mãi</option>
+                                        </select></td>
                                     </tr>
                                     <tr>
                                         <td>VAT <span class="text-danger">(10%)</span> :</td>
@@ -110,9 +105,9 @@
                         <button type="button" class="btn btn-hover btn-danger set-disabled" onclick="backToProduct()">
                             Quay Lại Trang Sản Phẩm
                         </button>
-                        <button type="button" class="btn btn-hover btn-success set-disabled" onclick="handleOrder()">Mua
-                            Hàng<i
-                                    class="ri-logout-box-r-line align-bottom ms-1"></i></button>
+<!--                        <button type="button" class="btn btn-hover btn-success set-disabled" onclick="handleOrder()">Mua-->
+<!--                            Hàng<i-->
+<!--                                    class="ri-logout-box-r-line align-bottom ms-1"></i></button>-->
                     </div>
                 </div>
                 <!-- end sticky -->
@@ -173,32 +168,54 @@
         return VND.format(money);
     }
 
+    // function restoreCheckedState() {
+    //     // console.log(selectedProduct);
+    //     // console.log(saveStatusCheck);
+    //     // console.log(saveStatusCheckGroup);
+    //     // console.log(selectedCart);
+    //     // console.log(selectedProductGroup);
+    //     saveStatusCheck.forEach(function (id) {
+    //         for (let i = 0; i < saveStatusCheck.length; i++) {
+    //             let currentCheckbox = document.querySelectorAll('.checkbox-single');
+    //             console.log("Checked Id ", id);
+    //             currentCheckbox.forEach(function (item) {
+    //                 console.log("Checkbox single value  ", id);
+    //                 if (parseInt(id) === parseInt(item.value)) {
+    //                     item.checked = true;
+    //                 }
+    //             })
+    //         }
+    //     });
+    //
+    //     saveStatusCheckGroup.forEach(function (id) {
+    //         let currentCheckbox = document.getElementById(id);
+    //         if (currentCheckbox) {
+    //             console.log("checkbox : ", currentCheckbox);
+    //             currentCheckbox.checked = true;
+    //         }
+    //     })
+    // }
+
     function restoreCheckedState() {
-        // console.log(selectedProduct);
-        // console.log(saveStatusCheck);
-        // console.log(saveStatusCheckGroup);
-        // console.log(selectedCart);
-        // console.log(selectedProductGroup);
+        // Lưu trữ tất cả các checkbox vào biến để lặp qua chỉ một lần
+        let currentCheckboxes = document.querySelectorAll('.checkbox-single');
+
+        // Cập nhật trạng thái checkbox cho các ID trong saveStatusCheck
         saveStatusCheck.forEach(function (id) {
-            for (let i = 0; i < saveStatusCheck.length; i++) {
-                let currentCheckbox = document.querySelectorAll('.checkbox-single');
-                console.log("Checked Id ", id);
-                currentCheckbox.forEach(function (item) {
-                    console.log("Checkbox single value  ", id);
-                    if (parseInt(id) === parseInt(item.value)) {
-                        item.checked = true;
-                    }
-                })
-            }
+            currentCheckboxes.forEach(function (item) {
+                if (parseInt(id) === parseInt(item.value)) {
+                    item.checked = true;
+                }
+            });
         });
 
+        // Cập nhật trạng thái checkbox cho các ID trong saveStatusCheckGroup
         saveStatusCheckGroup.forEach(function (id) {
             let currentCheckbox = document.getElementById(id);
             if (currentCheckbox) {
-                console.log("checkbox : ", currentCheckbox);
                 currentCheckbox.checked = true;
             }
-        })
+        });
     }
 
     async function loadPage() {
@@ -211,6 +228,7 @@
                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             }
         });
+
         var result = await response.json();
         console.log(result);
         if (result.length > 0) {
@@ -226,78 +244,82 @@
         var main = '';
         var groupedProducts = {};
         for (i = 0; i < list.length; i++) {
-            if (!groupedProducts[list[i].spct.sp.id]) {
-                groupedProducts[list[i].spct.sp.id] = [];
+            if (!groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id]) {
+                groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id] = [];
             }
-            groupedProducts[list[i].spct.sp.id].push(list[i]);
+            groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id].push(list[i]);
         }
         productDataList = groupedProducts;
-        var indexFor = 0;
+        let indexFor = 0;
         for (var key in groupedProducts) {
-            indexFor += 1;
             if (groupedProducts.hasOwnProperty(key)) {
+                indexFor += 1;
                 var groupSP = '';
                 var arrChild = groupedProducts[key];
-                var productName = arrChild[0].spct.sp.tenSP;
-                var productId = arrChild[0].spct.sp.id;
+                var productName = arrChild[0].idSanPhamChiTiet.idSanPham.ten;
+                var productId = arrChild[0].idSanPhamChiTiet.idSanPham.id;
                 for (let j = 0; j < arrChild.length; j++) {
                     var count = arrChild[j].soLuong;
-                    sub_total += arrChild[j].spct.sp.donGia * count;
-                    vat += (arrChild[j].spct.sp.donGia * count) * 0.1;
-                    var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].spct.sp.id + '/' + arrChild[j].spct.ms.id;
-                    const pictureResponse = await fetch(urlGetPicture, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-                        }
-                    });
-                    var dataPicture = await pictureResponse.json();
-                    var img;
-                    if (dataPicture.statusText === "failure") {
-                        img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-md">`;
-                    } else {
-                        img = `<img src="${dataPicture[0].linkAnh}" alt="" class="avatar-md">`;
-                    }
+                    sub_total += arrChild[j].idSanPhamChiTiet.idSanPham.gia * count;
+                    vat += (arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1;
+                    // var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].idSanPhamChiTiet.idSanPham.id + '/' + arrChild[j].idSanPhamChiTiet.idMauSac.id;
+                    // const pictureResponse = await fetch(urlGetPicture, {
+                    //     method: 'GET',
+                    //     headers: {
+                    //         'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                    //     }
+                    // });
+                    // var dataPicture = await pictureResponse.json();
+                    // var img;
+                    // if (dataPicture.statusText === "failure") {
+                    //     img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-md">`;
+                    // } else {
+                    //     img = `<img src="${dataPicture[0].duongDan}" alt="" class="avatar-md">`;
+                    // }
                     groupSP += `<div class="row gy-3 p-2">
                                     <div class="col-sm-auto d-flex gap-2 justify-content-end mt-auto mb-auto">
                                       <div class="form-check">
-                                      <input class="form-check-input checkbox-single checkbox-child-${arrChild[j].spct.sp.id}" type="checkbox" id="checkbox-${arrChild[j].spct.sp.id}-${j + 1}" data-sub-total="${arrChild[j].spct.sp.donGia * count}" data-vat="${(arrChild[j].spct.sp.donGia * count) * 0.1}" data-count="${count}" data-id-cart="${arrChild[j].gh.id}"
-                                      value="${arrChild[j].spct.id}" style="width: 20px; height: 20px" onclick="chooseProduct(${arrChild[j].spct.sp.id},${j + 1})"></div>
+                                      <input class="form-check-input checkbox-single checkbox-child-${arrChild[j].idSanPhamChiTiet.idSanPham.id}" type="checkbox" id="checkbox-${arrChild[j].idSanPhamChiTiet.idSanPham.id}-${j + 1}"
+                                      data-sub-total="${arrChild[j].idSanPhamChiTiet.idSanPham.gia * count}" data-vat="${(arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1}" data-count="${count}" data-id-cart="${arrChild[j].idGioHang.id}"
+                                      value="${arrChild[j].idSanPhamChiTiet.id}" style="width: 20px; height: 20px" onclick="chooseProduct(${arrChild[j].idSanPhamChiTiet.idSanPham.id},${j + 1})">
+                                      </div>
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="avatar-lg h-100">
                                             <div class="avatar-title bg-dark-subtle rounded py-3" id="product-picture">
-                                                ${img}
+
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <a href="#!">
-                                            <h5 class="fs-16 lh-base mb-1">${arrChild[j].spct.sp.tenSP}</h5>
+                                            <h5 class="fs-16 lh-base mb-1">${arrChild[j].idSanPhamChiTiet.idSanPham.ten}</h5>
                                         </a>
                                         <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Color : <span class="fw-medium">${arrChild[j].spct.ms.ten}</span></li>
+                                            <li class="list-inline-item">Màu Sắc : <span class="fw-medium">${arrChild[j].idSanPhamChiTiet.idMauSac.ten}</span></li>
                                         </ul>
                                         <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Size : <span class="fw-medium">${arrChild[j].spct.size}</span></li>
+                                            <li class="list-inline-item">Size : <span class="fw-medium">${arrChild[j].idSanPhamChiTiet.idSize.ten}</span></li>
                                         </ul>
-                                          <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Quantity :</li><div class="input-step">
-                                            <button type="button" onclick="minusQuantity(${arrChild[j].id},${indexFor},${arrChild[j].spct.sp.donGia})" class="minus">–</button>
+                                        <ul class="list-inline text-muted fs-13 mb-auto">
+                                            <li class="list-inline-item">Số Lượng :</li>
+                                            <div class="input-step">
+                                            <button type="button" onclick="minusQuantity(${arrChild[j].id},${indexFor},${arrChild[j].idSanPhamChiTiet.idSanPham.gia})" class="minus">–</button>
                                             <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].id}-${indexFor}"
-                                            onblur="editQuantity(${arrChild[j].id},${indexFor},${arrChild[j].spct.sp.tl.id})" value="${arrChild[j].soLuong}" min="1" max="1000">
-                                            <button type="button" onclick="addQuantity(${arrChild[j].id},${arrChild[j].spct.sp.tl.id},${arrChild[j].spct.sp.donGia})" class="plus">+</button></div>
+                                            onblur="editQuantity(${arrChild[j].id},${indexFor},${arrChild[j].idSanPhamChiTiet.idSanPham.idDanhMuc.id})" value="${arrChild[j].soLuong}" min="1" max="1000">
+                                            <button type="button" onclick="addQuantity(${arrChild[j].id},${arrChild[j].idSanPhamChiTiet.idSanPham.idDanhMuc.id},${arrChild[j].idSanPhamChiTiet.idSanPham.gia})" class="plus">+</button>
+                                            </div>
                                         </ul>
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="text-lg-end">
                                             <p class="text-muted mb-1 fs-12">Đơn Giá :</p>
-                                            <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].spct.sp.donGia)}</span></h5>
+                                            <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].idSanPhamChiTiet.idSanPham.gia)}</span></h5>
                                         </div>
-                                         <div class="text-lg-end" style="padding-top: 30px;">
+                                        <div class="text-lg-end" style="padding-top: 30px;">
                                             <div class="d-flex justify-content-center align-items-center">
                                                 <span class="text-danger">
-                                                    <i class="ri-delete-bin-6-line" onclick="deleteOne(${arrChild[j].id},${arrChild[j].spct.id})"></i>
+                                                    <i class="ri-delete-bin-6-line" onclick="deleteOne(${arrChild[j].id},${arrChild[j].idSanPhamChiTiet.id})"></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -469,8 +491,8 @@
                             selectedProduct.forEach(function (item) {
                                 console.log(item);
                             })
-                            console.log('Checked : ', selectedProduct.includes(arr[i].spct.id + ''));
-                            if (!selectedProduct.includes(arr[i].spct.id + '')) {
+                            console.log('Checked : ', selectedProduct.includes(arr[i].idSanPhamChiTiet.id + ''));
+                            if (!selectedProduct.includes(arr[i].idSanPhamChiTiet.id + '')) {
                                 allInSelectedProduct = false;
                                 console.log("Not all are in select product!")
                                 break;
@@ -547,6 +569,8 @@
         areAllChecked();
     }
 
+    let promotions = [];
+
     function handleInvoiceCalculation(sub_total, vat) {
         sub_total_global = sub_total;
         vat_global = vat;
@@ -563,74 +587,70 @@
     }
 
     async function getInformationPromotion() {
-        $.ajax({
-            url: '/client/promotion/find-by-customer?id=' + userId,
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            },
-            success: function (response) {
-                console.log(response);
-                let promotion = response[0];
-                let total_amount = 0;
-                if (promotion !== undefined) {
-                    promotion_applies = promotion;
-                    if ((parseInt(sub_total_global) / 1000) >= parseInt(promotion.giaTriDonHangApDung)) {
-                        document.getElementById('promotion-message').innerText = '';
-                        document.getElementById('promotion-title').innerText = '(' + promotion.tenKhuyenMai + ')';
-                        if (promotion.loaiKM === true) {
-                            total_amount = (sub_total_global + vat_global) -
-                                ((sub_total_global + vat_global) * (promotion.giaTriGiam / 100));
-                            document.getElementById('promotion-value').innerText = '- ' + promotion.giaTriGiam + ' %';
-                            document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                        } else {
-                            total_amount = (sub_total_global + vat_global) - promotion.giaTriGiam;
-                            document.getElementById('promotion-value').innerText = '- ' + formatMoney(promotion.giaTriGiam);
-                            document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                        }
-                    } else {
-                        let promitonValue = 0;
-                        if (promotion.giaTriDonHangApDung === 100) {
-                            promitonValue = 100000;
-                        } else if (promotion.giaTriDonHangApDung === 200) {
-                            promitonValue = 200000;
-                        } else if (promotion.giaTriDonHangApDung === 500) {
-                            promitonValue = 500000;
-                        } else if (promotion.giaTriDonHangApDung === 1000) {
-                            promitonValue = 1000000;
-                        } else if (promotion.giaTriDonHangApDung === 2000) {
-                            promitonValue = 2000000;
-                        } else {
-                            promitonValue = 5000000;
-                        }
-                        if (promotion.loaiKM === true) {
-                            document.getElementById('promotion-title').innerText = '';
-                            document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promitonValue - sub_total_global) +
-                                ' để nhận được khuyến mãi giảm ' + promotion.giaTriGiam + '% / Tổng giá trị đơn hàng)';
-                            total_amount = sub_total_global + vat_global;
-                            document.getElementById('promotion-value').innerText = '- 0 %';
-                            document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                        } else {
-                            document.getElementById('promotion-title').innerText = '';
-                            document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promitonValue - sub_total_global) +
-                                ' để nhận được khuyến mãi giảm ' + formatMoney(promotion.giaTriGiam) + ')';
-                            total_amount = sub_total_global + vat_global;
-                            document.getElementById('promotion-value').innerText = '- 0 %';
-                            document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                        }
-                    }
+        try {
+            const response = await fetch('/public/promotion/find-by-date?type=all', {
+                method: 'GET'
+            });
+            promotions = await response.json();
+
+            // Làm trống danh sách khuyến mãi trong dropdown
+            const promotionSelect = document.getElementById('promotion-select');
+            promotionSelect.innerHTML = '<option value="">Chọn khuyến mãi</option>';
+
+            promotions.forEach((promotion, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.text = promotion.ten;
+                promotionSelect.add(option);
+            });
+
+            // Tự động áp dụng khuyến mãi đầu tiên (nếu cần)
+            applySelectedPromotion();
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function applySelectedPromotion() {
+        let total_amount = sub_total_global + vat_global; // Khởi tạo tổng số tiền
+        const selectedIndex = document.getElementById('promotion-select').value;
+
+        if (selectedIndex !== "") {
+            const selectedPromotion = promotions[selectedIndex];
+
+            if (total_amount > parseInt(selectedPromotion.giaTriDonHang)) {
+                // Áp dụng khuyến mãi
+                document.getElementById('promotion-message').innerText = '';
+                document.getElementById('promotion-title').innerText = '(' + selectedPromotion.ten + ')';
+
+                if (selectedPromotion.loaiGiamGia) {
+                    // Giảm theo tỷ lệ phần trăm
+                    total_amount -= (total_amount * (selectedPromotion.giaTriGiam / 100));
+                    document.getElementById('promotion-value').innerText = '- ' + selectedPromotion.giaTriGiam + ' %';
                 } else {
-                    total_amount = sub_total_global + vat_global;
-                    document.getElementById('promotion-message').innerText = '';
-                    document.getElementById('promotion-title').innerText = '';
-                    document.getElementById('promotion-value').innerText = '- 0 %';
-                    document.getElementById("total-amount").innerText = formatMoney(total_amount);
+                    // Giảm theo số tiền cụ thể
+                    total_amount -= selectedPromotion.giaTriGiam;
+                    document.getElementById('promotion-value').innerText = '- ' + formatMoney(selectedPromotion.giaTriGiam);
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
+            } else {
+                // Không đủ điều kiện để nhận khuyến mãi
+                document.getElementById('promotion-title').innerText = '';
+                document.getElementById('promotion-message').innerText =
+                    '(Đơn hàng cần phải lớn hơn ' + formatMoney(selectedPromotion.giaTriDonHang) +
+                    ' để được ' +
+                    (selectedPromotion.loaiGiamGia ? 'giảm ' + selectedPromotion.giaTriGiam + '% / Tổng giá trị đơn hàng' : 'giảm ' + formatMoney(selectedPromotion.giaTriGiam)) + ')';
+
+                document.getElementById('promotion-value').innerText = '- 0 %';
             }
-        });
+        } else {
+            // Nếu không chọn khuyến mãi nào
+            document.getElementById('promotion-message').innerText = '';
+            document.getElementById('promotion-title').innerText = '';
+            document.getElementById('promotion-value').innerText = '- 0 %';
+        }
+
+        document.getElementById("total-amount").innerText = formatMoney(total_amount);
     }
 
     function areAllChecked() {
@@ -880,11 +900,10 @@
             },
             success: function (response) {
                 console.log(response);
-                if (response.statusText === "success") {
+                if (response.status === "success") {
                     loadPage();
-                    handleInvoiceCalculation(sub_total_global + price, vat_global + (price * 0.1))
-                }
-                if (response.statusText === "failure") {
+                    handleInvoiceCalculation(sub_total_global + price, vat_global + (price * 0.1));
+                } else if (response.status === "failure") {
                     if (response.message === "The product is out of stock") {
                         swal.fire({
                             title: 'Thông Báo',
@@ -896,19 +915,17 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 loadPage();
-                            }
-                            if (result.isDismissed && result.dismiss === swal.DismissReason.cancel) {
+                            } else if (result.dismiss === swal.DismissReason.cancel) {
                                 window.location.href = '/client/product?sport=' + sport;
                             }
-                            loadPage();
-                        })
+                        });
                     } else {
                         swal.fire({
                             title: 'Rất Xin Lỗi Quý Khách',
-                            text: response.message + '',
+                            text: response.message,
                             icon: "warning",
                             confirmButtonText: 'OK'
-                        })
+                        });
                         loadPage();
                     }
                 }
@@ -918,6 +935,7 @@
             }
         });
     }
+
 
     function minusQuantity(id, index, price) {
         let count = document.getElementById('product-quantity-' + id + '-' + index).value;
@@ -940,16 +958,14 @@
                         },
                         success: function (response) {
                             console.log(response);
-                            if (response.statusText === "success") {
-                                if (response.message === "The product has been removed from the cart!") {
-                                    swal.fire({
-                                        icon: "success",
-                                        title: "Xoá thành công!",
-                                        cancelButtonText: "OK"
-                                    })
-                                    loadPage();
-                                    unchooseAll();
-                                }
+                            if (response.status === "success" && response.message === "The product has been removed from the cart!") {
+                                swal.fire({
+                                    icon: "success",
+                                    title: "Xoá thành công!",
+                                    confirmButtonText: "OK"
+                                });
+                                loadPage();
+                                unchooseAll();
                             }
                         },
                         error: function (xhr, status, error) {
@@ -967,11 +983,9 @@
                 },
                 success: function (response) {
                     console.log(response);
-                    if (response.statusText === "success") {
-                        if (response.message === "success") {
-                            loadPage();
-                            handleInvoiceCalculation(sub_total_global - price, vat_global - (price * 0.1));
-                        }
+                    if (response.status === "success" && response.message === "success") {
+                        loadPage();
+                        handleInvoiceCalculation(sub_total_global - price, vat_global - (price * 0.1));
                     }
                 },
                 error: function (xhr, status, error) {
@@ -980,6 +994,7 @@
             });
         }
     }
+
 
 
     function editQuantity(id, index, sport) {
@@ -993,22 +1008,19 @@
             },
             success: function (response) {
                 console.log(response);
-                if (response.statusText === "failure") {
+                if (response.status === "failure") {
                     if (response.message === "Quantity must be greater than 0") {
                         swal.fire({
                             icon: "warning",
                             text: "Số lượng sản phẩm phải lớn hơn 0!",
-                            cancelButtonText: "OK"
-                        })
-                        loadPage();
+                            confirmButtonText: "OK"
+                        });
                     } else if (response.message === "Format error") {
                         swal.fire({
                             icon: "warning",
                             text: "Vui lòng nhập đúng số lượng!",
-                            cancelButtonText: "OK"
-                        })
-                        loadPage();
-
+                            confirmButtonText: "OK"
+                        });
                     } else if (response.message === "The product is out of stock") {
                         swal.fire({
                             title: 'Thông Báo',
@@ -1020,19 +1032,16 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 loadPage();
-                            }
-                            if (result.isDismissed && result.dismiss === swal.DismissReason.cancel) {
+                            } else if (result.dismiss === swal.DismissReason.cancel) {
                                 window.location.href = '/client/product?sport=' + sport;
                             }
-                            loadPage();
-                        })
+                        });
                     } else {
                         swal.fire({
                             icon: "warning",
                             text: "Rất tiếc! Số lượng sản phẩm chỉ còn lại " + response.message + "!",
-                            cancelButtonText: "OK"
-                        })
-                        loadPage();
+                            confirmButtonText: "OK"
+                        });
                     }
                 } else {
                     loadPage();
@@ -1043,6 +1052,7 @@
             }
         });
     }
+
 
     function handleOrder() {
         if (selectedProduct.length === 0) {
@@ -1066,7 +1076,7 @@
                     if (response === "max quantity") {
                         swal.fire({
                             icon: "warning",
-                            title: "Nhắc Nhỏ",
+                            title: "Nhắc Nhở",
                             text: 'Bạn chỉ có thể mua tối đa 20 sản phẩm cho mỗi sản phẩm trong 1 đơn hàng!',
                             cancelButtonText: "OK"
                         })

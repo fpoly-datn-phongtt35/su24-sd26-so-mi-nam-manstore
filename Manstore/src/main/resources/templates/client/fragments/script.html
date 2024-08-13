@@ -252,43 +252,74 @@
 
         }
 
+        // async function handleQuantityCart(userId) {
+        //     if (userId !== null) {
+        //         let url = '/api/v1/auth/get-quantity-cart/' + userId;
+        //         const response = await fetch(url, {
+        //             method: "GET"
+        //         })
+        //         let count = await response.json();
+        //         if (count === 0) {
+        //             document.getElementById('quantity-cart').innerText = '';
+        //         } else {
+        //             document.getElementById('quantity-cart').innerText = count;
+        //         }
+        //     } else {
+        //         document.getElementById('quantity-cart').innerText = '';
+        //     }
+        // }
         async function handleQuantityCart(userId) {
             if (userId !== null) {
                 let url = '/api/v1/auth/get-quantity-cart/' + userId;
-                const response = await fetch(url, {
-                    method: "GET"
-                })
-                let count = await response.json();
-                if (count === 0) {
+
+                try {
+                    const response = await fetch(url, {
+                        method: "GET"
+                    });
+
+                    if (response.ok) {
+                        let count = await response.json();
+
+                        if (typeof count === 'number' && count > 0) {
+                            document.getElementById('quantity-cart').innerText = count;
+                        } else {
+                            document.getElementById('quantity-cart').innerText = '';
+                        }
+                    } else {
+                        console.error('Error:', response.statusText);
+                        document.getElementById('quantity-cart').innerText = '';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
                     document.getElementById('quantity-cart').innerText = '';
-                } else {
-                    document.getElementById('quantity-cart').innerText = count;
                 }
             } else {
                 document.getElementById('quantity-cart').innerText = '';
             }
         }
 
+
+
         async function handleAuth() {
             let handleAuthElement = '';
             let avatarElement = '';
             let userId = localStorage.getItem("userId");
             const userObj = await getUserInformation(userId);
-            if (userObj.anhKhachHang !== null) {
-                avatarElement = `   <img
-                                            class="rounded-circle header-profile-user"
-                                            src="${userObj.anhKhachHang}"
-                                            alt="Header Avatar"
-                                            id="avatar-user"
-                                    />`
-            } else {
+            // if (userObj.anhKhachHang !== null) {
+            //     avatarElement = `   <img
+            //                                 class="rounded-circle header-profile-user"
+            //                                 src="${userObj.anhKhachHang}"
+            //                                 alt="Header Avatar"
+            //                                 id="avatar-user"
+            //                         />`
+            // } else {
                 avatarElement = `   <img
                                             class="rounded-circle header-profile-user"
                                             src="/assets/images/users/user-dummy-img.jpg"
                                             alt="Header Avatar"
                                             id="avatar-user"
                                     />`
-            }
+            // }
             if (userId !== null) {
                 handleAuthElement = `
                             <div class="dropdown header-item dropdown-hover-end">
@@ -303,7 +334,7 @@
                                    ${avatarElement}
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                <h6 class="dropdown-header">Welcome ${userObj.ten}!</h6>
+                                <h6 class="dropdown-header">Xin chào ${userObj.ten}!</h6>
                                 <a class="dropdown-item btn" onclick="handleProfile()"
                                 ><i
                                 class="ri-settings-4-fill text-muted fs-15 align-middle me-1"
@@ -322,7 +353,7 @@
                                 `;
                 document.getElementById('login-logout').innerHTML = handleAuthElement;
                 handleQuantityCart(userId);
-                loadNotification(userId);
+                // loadNotification(userId);
             } else {
                 document.getElementById('login-logout').innerHTML = `
                     <div class="dropdown topbar-head-dropdown ms-2 header-item dropdown-hover-end">
