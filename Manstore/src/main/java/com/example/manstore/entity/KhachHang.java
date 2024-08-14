@@ -70,15 +70,17 @@ public class KhachHang implements UserDetails {
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
-//    @JsonManagedReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     @JsonIgnore
     private List<DiaChi> diaChis;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     @JsonIgnore
     private List<GioHang> gioHangs;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     @JsonIgnore
     private List<HoaDon> hoaDons;

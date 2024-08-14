@@ -59,7 +59,7 @@ public class NhanVien implements UserDetails {
     @Column(name = "GioiTinh")
     private Integer gioiTinh;
 
-//    @JsonManagedReference
+    @JsonManagedReference
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idPhanQuyen", nullable = false, referencedColumnName = "id")
@@ -76,6 +76,7 @@ public class NhanVien implements UserDetails {
     @Column(name = "TrangThai")
     private Integer trangThai;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "idNhanVien" , fetch = FetchType.LAZY)
     private List<HoaDon> hoaDons;
 

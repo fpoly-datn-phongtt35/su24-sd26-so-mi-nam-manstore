@@ -16,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/api/v1/auth")
 @RestController
@@ -81,22 +84,56 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/get-quantity-cart/{id}")
-    public ResponseEntity<?> getQuantityCart(@PathVariable("id") String id) {
-        if (ghrp.getByIdKH(id).size() > 0) {
-            return new ResponseEntity<>(ghrp.getByIdKH(id).size(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("0", HttpStatus.OK);
-        }
-    }
+//    @GetMapping("/get-quantity-cart/{id}")
+//    public ResponseEntity<?> getQuantityCart(@PathVariable("id") String id) {
+//        if (ghrp.getByIdKH(id).size() > 0) {
+//            return new ResponseEntity<>(ghrp.getByIdKH(id).size(), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("0", HttpStatus.OK);
+//        }
+//    }
+@GetMapping("/get-quantity-cart/{id}")
+public ResponseEntity<?> getQuantityCart(@PathVariable("id") String id) {
+    try {
+        // Lấy danh sách giỏ hàng
+        List<?> cartList = ghrp.getByIdKH(id);
 
-    @PostMapping("/getInformation-customer/{id}")
-    public ResponseEntity<?> getCustomerInformation(@PathVariable("id") String id) {
-        if (khrp.findById(Integer.parseInt(id)).isPresent()) {
-            return new ResponseEntity<>(khrp.findById(Integer.parseInt(id)).get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("null", HttpStatus.OK);
-        }
+        // Trả về số lượng giỏ hàng dưới dạng số nguyên
+        int quantity = cartList.size();
+
+        // Trả về số lượng cùng với mã trạng thái HTTP OK
+        return new ResponseEntity<>(quantity, HttpStatus.OK);
+    } catch (Exception e) {
+        // Xử lý lỗi và trả về mã lỗi thích hợp
+        return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+
+//    @PostMapping("/getInformation-customer/{id}")
+//    public ResponseEntity<?> getCustomerInformation(@PathVariable("id") String id) {
+//        if (khrp.findById(Integer.parseInt(id)).isPresent()) {
+//            return new ResponseEntity<>(khrp.findById(Integer.parseInt(id)).get(), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("null", HttpStatus.OK);
+//        }
+//    }
+@PostMapping("/getInformation-customer/{id}")
+public ResponseEntity<?> getCustomerInformation(@PathVariable("id") String id) {
+    try {
+        int customerId = Integer.parseInt(id);
+        Optional<KhachHang> khachHangOptional = khrp.findById(customerId);
+
+        if (khachHangOptional.isPresent()) {
+            return new ResponseEntity<>(khachHangOptional.get(), HttpStatus.OK);
+        } else {
+            // Trả về null nhưng dưới dạng JSON thay vì chuỗi "null"
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+    } catch (NumberFormatException e) {
+        // Xử lý lỗi nếu id không phải là số nguyên hợp lệ
+        return new ResponseEntity<>("Invalid customer ID format", HttpStatus.BAD_REQUEST);
+    }
+}
+
 
 }

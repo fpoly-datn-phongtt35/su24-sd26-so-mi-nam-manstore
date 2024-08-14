@@ -1,5 +1,7 @@
 package com.example.manstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,15 +27,12 @@ public class GioHang {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-
-    @Column(name = "Ma", length = 50)
-    private String ma;
-
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private KhachHang idKhachHang;
 
     @OneToMany(mappedBy = "idGioHang", fetch = FetchType.LAZY)

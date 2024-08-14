@@ -98,10 +98,21 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-sm-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Giới tính <span
-                                                    style="color:red;">*</span></label>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label class="form-label" for="staff-position-input">Chức vụ <span
+                                                        style="color:red;">*</span></label>
+                                                <select class="form-control" required id="staff-position-input"
+                                                        th:field="*{idPhanQuyen}">
+                                                    <option value="0">Chức vụ</option>
+                                                    <option th:each="position:${chucVu}" th:value="${position.id}"
+                                                            th:text="${position.ten}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label class="form-label">Giới tính <span
+                                                        style="color:red;">*</span></label>
                                                 <br>
                                                 <input class="form-check-input" type="radio" id="nam" value="0"
                                                        th:name="gioiTinh" checked="checked">
@@ -110,21 +121,22 @@
                                                 <input class="form-check-input" type="radio" value="1" id="nu"
                                                        th:name="gioiTinh">
                                                 <label class="form-check-label" for="nu">Nữ</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- end col -->
                                 </div>
                             </div>
-                            </div>
-                            <!-- end card -->
-                            <div class="text-end mb-3">
-                                <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm mới
-                                </button>
-                                <a th:href="@{/admin/staff}" class="btn btn-danger w-sm">Trở lại</a>
-                            </div>
                         </div>
-                        <!-- end col -->
-                        <!-- end row -->
+                        <!-- end card -->
+                        <div class="text-end mb-3">
+                            <button type="button" class="btn btn-success w-sm" onclick="showConfirmPopup()">Thêm mới
+                            </button>
+                            <a th:href="@{/admin/staff}" class="btn btn-danger w-sm">Trở lại</a>
+                        </div>
+                    </div>
+                    <!-- end col -->
+                    <!-- end row -->
                 </form>
             </div>
             <!-- End Page-content -->
