@@ -75,6 +75,7 @@ public class KhachHang implements UserDetails {
     @JsonIgnore
     private List<DiaChi> diaChis;
 
+
     @JsonManagedReference
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     @JsonIgnore
@@ -84,6 +85,9 @@ public class KhachHang implements UserDetails {
     @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
     @JsonIgnore
     private List<HoaDon> hoaDons;
+
+    @OneToMany(mappedBy = "idKhachHang", fetch = FetchType.LAZY)
+    private List<ThongBao> thongBaos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

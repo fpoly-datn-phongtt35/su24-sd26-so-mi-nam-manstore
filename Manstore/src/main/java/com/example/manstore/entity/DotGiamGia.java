@@ -56,4 +56,7 @@ public class DotGiamGia {
     @OneToMany(mappedBy = "idDotGiamGia", fetch = FetchType.LAZY)
     private List<HoaDon> hoaDons;
 
+    @OneToMany(mappedBy = "idDotGiamGia", fetch = FetchType.LAZY)
+    private List<ChiTietHoaDon> chiTietHoaDons;
+
 }
