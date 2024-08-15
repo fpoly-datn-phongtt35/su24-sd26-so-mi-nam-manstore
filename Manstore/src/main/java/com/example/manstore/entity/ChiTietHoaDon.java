@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -28,11 +29,23 @@ public class ChiTietHoaDon {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idDotGiamGia", nullable = false, referencedColumnName = "id")
+    private DotGiamGia idDotGiamGia;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idHoaDon", nullable = false, referencedColumnName = "id")
     private HoaDon idHoaDon;
 
+    @Column(name = "NgayTao")
+    private LocalDate ngayTao;
+
     @Column(name = "DonGia", precision = 18)
     private BigDecimal donGia;
+
+    @Column(name = "GiaThoiDiemMua", precision = 18)
+    private BigDecimal giaThoiDiemMua;
+
 
     @Column(name = "SoLuong")
     private Integer soLuong;

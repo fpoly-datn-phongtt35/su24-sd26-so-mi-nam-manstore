@@ -47,11 +47,21 @@ public class HoaDon {
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
-    @Column(name = "VAT", precision = 18)
-    private BigDecimal vat;
+    @Column(name = "PhiVanChuyen")
+    private BigDecimal phiVanChuyen;
 
-    @Column(name = "PhuongThucThanhToan")
-    private Integer phuongThucThanhToan;
+
+    @Column(name = "GhiChu", length = 250)
+    private String ghiChu;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idThongTinVanChuyen", nullable = false, referencedColumnName = "id")
+    private ThongTinVanChuyen idThongTinVanChuyen;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idPhuongThucThanhToan", nullable = false, referencedColumnName = "id")
+    private PhuongThucThanhToan idPhuongThucThanhToan;
+
 
     @Column(name = "TongTien", precision = 18)
     private BigDecimal tongTien;
@@ -61,6 +71,9 @@ public class HoaDon {
 
     @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
     private List<ChiTietHoaDon> chiTietHoaDons;
+
+    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
+    private List<ThongBao> thongBaos;
 
 
 }
