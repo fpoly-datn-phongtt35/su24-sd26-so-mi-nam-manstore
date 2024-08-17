@@ -26,6 +26,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "NhanVien")
 public class NhanVien implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

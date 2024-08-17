@@ -50,7 +50,7 @@ public class ChiTietHoaDon {
     @Column(name = "SoLuong")
     private Integer soLuong;
 
-    @Column(name = "TrangThai")
-    private Integer trangThai;
+    @Column(name = "TongTien")
+    private BigDecimal tongTien;
 
 }

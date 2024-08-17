@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
@@ -15,6 +17,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "PhanQuyen")
 public class PhanQuyen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

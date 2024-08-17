@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -37,7 +38,11 @@ public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia,Integer> 
     @Query("select v from DotGiamGia v where v.ten = ?1 ")
     Optional<DotGiamGia> findByName(String name);
 
-
     @Query("SELECT v FROM DotGiamGia v WHERE v.ngayBatDau <= :now AND v.ngayKetThuc >= :now AND v.trangThai = :active")
     List<DotGiamGia> getPromotionAll(LocalDate now, Boolean active);
+
+    @Query("select km from DotGiamGia km inner join KhachHang kh where kh.id = ?1 " +
+            "and (?2 >= km.ngayBatDau) and (?2 <= km.ngayKetThuc) and km.trangThai = ?3")
+    List<DotGiamGia> getByCustomer(Integer id, LocalDate now,boolean status);
+
 }

@@ -79,12 +79,12 @@
                                         </td>
                                         <td class="text-end cart-discount text-danger" id="promotion-value"></td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                        <select id="promotion-select" onchange="applySelectedPromotion()">
-                                            <option value="">Chọn khuyến mãi</option>
-                                        </select></td>
-                                    </tr>
+<!--                                    <tr>-->
+<!--                                        <td>-->
+<!--                                        <select id="promotion-select" onchange="applySelectedPromotion()">-->
+<!--                                            <option value="">Chọn khuyến mãi</option>-->
+<!--                                        </select></td>-->
+<!--                                    </tr>-->
                                     <tr>
                                         <td>VAT <span class="text-danger">(10%)</span> :</td>
                                         <td class="text-end cart-tax" id="vat"></td>
@@ -105,9 +105,9 @@
                         <button type="button" class="btn btn-hover btn-danger set-disabled" onclick="backToProduct()">
                             Quay Lại Trang Sản Phẩm
                         </button>
-<!--                        <button type="button" class="btn btn-hover btn-success set-disabled" onclick="handleOrder()">Mua-->
-<!--                            Hàng<i-->
-<!--                                    class="ri-logout-box-r-line align-bottom ms-1"></i></button>-->
+                        <button type="button" class="btn btn-hover btn-success set-disabled" onclick="handleOrder()">Mua
+                            Hàng<i
+                                    class="ri-logout-box-r-line align-bottom ms-1"></i></button>
                     </div>
                 </div>
                 <!-- end sticky -->
@@ -591,67 +591,44 @@
             const response = await fetch('/public/promotion/find-by-date?type=all', {
                 method: 'GET'
             });
-            promotions = await response.json();
+            const promotions = await response.json();
+            let total_amount = sub_total_global + vat_global; // Khởi tạo tổng số tiền
 
-            // Làm trống danh sách khuyến mãi trong dropdown
-            const promotionSelect = document.getElementById('promotion-select');
-            promotionSelect.innerHTML = '<option value="">Chọn khuyến mãi</option>';
+            if (promotions.length > 0) {
+                let promotion = promotions[0]; // Giả sử bạn chỉ cần khuyến mãi đầu tiên trong danh sách
 
-            promotions.forEach((promotion, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.text = promotion.ten;
-                promotionSelect.add(option);
-            });
+                if (total_amount > parseInt(promotion.giaTriDonHang)) {
+                    // Khuyến mãi áp dụng khi tổng giá trị đơn hàng lớn hơn promotion.giaTriDonHang
+                    document.getElementById('promotion-message').innerText = '';
+                    document.getElementById('promotion-title').innerText = '(' + promotion.ten + ')';
 
-            // Tự động áp dụng khuyến mãi đầu tiên (nếu cần)
-            applySelectedPromotion();
+                    if (promotion.loaiGiamGia) {
+                        // Giảm theo tỷ lệ phần trăm
+                        total_amount -= (total_amount * (promotion.giaTriGiam / 100));
+                        document.getElementById('promotion-value').innerText = '- ' + promotion.giaTriGiam + ' %';
+                    } else {
+                        // Giảm theo số tiền cụ thể
+                        total_amount -= promotion.giaTriGiam;
+                        document.getElementById('promotion-value').innerText = '- ' + formatMoney(promotion.giaTriGiam);
+                    }
+                } else {
+                    // Không đủ điều kiện để nhận khuyến mãi
+                    document.getElementById('promotion-title').innerText = '';
+                    document.getElementById('promotion-message').innerText =
+                        '(Đơn hàng cần vượt quá ' + formatMoney(promotion.giaTriDonHang) +
+                        ' để nhận được khuyến mãi ' +
+                        (promotion.loaiGiamGia ? 'giảm ' + promotion.giaTriGiam + '% / Tổng giá trị đơn hàng' : 'giảm ' + formatMoney(promotion.giaTriGiam)) + ')';
 
+                    document.getElementById('promotion-value').innerText = '- 0 %';
+                }
+            }
+
+            document.getElementById("total-amount").innerText = formatMoney(total_amount);
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    function applySelectedPromotion() {
-        let total_amount = sub_total_global + vat_global; // Khởi tạo tổng số tiền
-        const selectedIndex = document.getElementById('promotion-select').value;
-
-        if (selectedIndex !== "") {
-            const selectedPromotion = promotions[selectedIndex];
-
-            if (total_amount > parseInt(selectedPromotion.giaTriDonHang)) {
-                // Áp dụng khuyến mãi
-                document.getElementById('promotion-message').innerText = '';
-                document.getElementById('promotion-title').innerText = '(' + selectedPromotion.ten + ')';
-
-                if (selectedPromotion.loaiGiamGia) {
-                    // Giảm theo tỷ lệ phần trăm
-                    total_amount -= (total_amount * (selectedPromotion.giaTriGiam / 100));
-                    document.getElementById('promotion-value').innerText = '- ' + selectedPromotion.giaTriGiam + ' %';
-                } else {
-                    // Giảm theo số tiền cụ thể
-                    total_amount -= selectedPromotion.giaTriGiam;
-                    document.getElementById('promotion-value').innerText = '- ' + formatMoney(selectedPromotion.giaTriGiam);
-                }
-            } else {
-                // Không đủ điều kiện để nhận khuyến mãi
-                document.getElementById('promotion-title').innerText = '';
-                document.getElementById('promotion-message').innerText =
-                    '(Đơn hàng cần phải lớn hơn ' + formatMoney(selectedPromotion.giaTriDonHang) +
-                    ' để được ' +
-                    (selectedPromotion.loaiGiamGia ? 'giảm ' + selectedPromotion.giaTriGiam + '% / Tổng giá trị đơn hàng' : 'giảm ' + formatMoney(selectedPromotion.giaTriGiam)) + ')';
-
-                document.getElementById('promotion-value').innerText = '- 0 %';
-            }
-        } else {
-            // Nếu không chọn khuyến mãi nào
-            document.getElementById('promotion-message').innerText = '';
-            document.getElementById('promotion-title').innerText = '';
-            document.getElementById('promotion-value').innerText = '- 0 %';
-        }
-
-        document.getElementById("total-amount").innerText = formatMoney(total_amount);
-    }
 
     function areAllChecked() {
         let checkboxes = document.querySelectorAll('.checkbox-single[type="checkbox"]');

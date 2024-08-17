@@ -30,7 +30,7 @@ public class GioHang {
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
     @JsonBackReference
     private KhachHang idKhachHang;

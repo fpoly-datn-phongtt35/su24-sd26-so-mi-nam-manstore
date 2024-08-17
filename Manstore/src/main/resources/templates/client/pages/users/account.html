@@ -2863,13 +2863,13 @@
     }
 
     async function getInformationPromotion() {
-        let url = '/client/promotion/find-by-customer?id=' + userId;
+        let url = '/public/promotion/find-by-date?type=all';
         const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            },
-        })
+            }
+        });
         const data = await response.json();
         return data;
     }
