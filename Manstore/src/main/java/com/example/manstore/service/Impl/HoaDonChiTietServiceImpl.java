@@ -24,7 +24,8 @@ public class HoaDonChiTietServiceImpl implements HoaDonChiTietService {
 
     @Override
     public void save(ChiTietHoaDon dhct) {
-        rp.saveAndFlush(dhct);
+        System.out.println(dhct);
+        rp.save(dhct);
     }
 
     @Override

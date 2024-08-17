@@ -279,21 +279,37 @@ public class HoaDonRestController {
         thongBaoService.save(thongBao);
 
         //tạo hoá đơn chi tiết
-        ChiTietHoaDon dhct = new ChiTietHoaDon();
-        BigDecimal donGia = new BigDecimal(dtoSP.getDonGia());
-        dhct.setIdChiTietSanPham(spService.getCTSPById(Integer.valueOf(dtoSP.getId())));
-        dhct.setSoLuong(dtoSP.getSoLuong());
-        dhct.setIdHoaDon(donHangNew);
-        dhct.setNgayTao(LocalDate.now());
-        dhct.setDonGia(donGia);
-        dhct.setGiaThoiDiemMua(donGia);
-        BigDecimal tongTien = BigDecimal.valueOf(dtoSP.getSoLuong())
-                .multiply(donGia);
-        dhct.setTongTien(tongTien);
-        donHangCTService.save(dhct);
-        donHangNew.setTongTien(tongTien);
-        donHangService.save(donHangNew);
+       try {
+           System.out.println("0000000000000");
+           ChiTietHoaDon dhct = new ChiTietHoaDon();
+           System.out.println("1111111111111");
+           BigDecimal donGia = new BigDecimal(dtoSP.getDonGia());
+           System.out.println("22222222222222");
+           dhct.setIdChiTietSanPham(spService.getCTSPById(Integer.valueOf(dtoSP.getId())));
+           System.out.println("33333333333333");
+           dhct.setSoLuong(dtoSP.getSoLuong());
+           System.out.println("44444444444444");
+           dhct.setIdHoaDon(donHangNew);
+           System.out.println("55555555555555");
+           dhct.setNgayTao(LocalDate.now());
+           System.out.println("66666666666666");
+           dhct.setDonGia(donGia);
+           System.out.println("77777777777777");
+           dhct.setGiaThoiDiemMua(donGia);
+           System.out.println("888888888888888");
+           BigDecimal tongTien = BigDecimal.valueOf(dtoSP.getSoLuong())
+                   .multiply(donGia);
+           System.out.println("999999999999999");
+           dhct.setTongTien(tongTien);
+           System.out.println("1010101010101");
+           donHangCTService.save(dhct);
+           System.out.println("1111111111111"+ dhct);
+           donHangNew.setTongTien(tongTien);
+           donHangService.save(donHangNew);
 
+       }catch (Exception e){
+           e.printStackTrace();
+       }
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 

@@ -79,7 +79,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 path.startsWith("/api/register") ||
                 path.startsWith("/shop-cart") ||
                 path.startsWith("/order") ||
-                path.startsWith("/api/client/cart_detail/findAll")) {
+                path.startsWith("/api/client/cart_detail/findAll")||
+                path.startsWith("api/client/order/invoice/buy-now/**")
+        )
+        {
             filterChain.doFilter(request, response);
             return;
         }

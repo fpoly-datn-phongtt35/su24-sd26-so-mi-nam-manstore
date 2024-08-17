@@ -27,7 +27,6 @@ public class ChiTietHoaDon {
     @JoinColumn(name = "idChiTietSanPham", nullable = false, referencedColumnName = "id")
     private ChiTietSanPham idChiTietSanPham;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDotGiamGia", nullable = false, referencedColumnName = "id")
     private DotGiamGia idDotGiamGia;
@@ -45,7 +44,6 @@ public class ChiTietHoaDon {
 
     @Column(name = "GiaThoiDiemMua", precision = 18)
     private BigDecimal giaThoiDiemMua;
-
 
     @Column(name = "SoLuong")
     private Integer soLuong;

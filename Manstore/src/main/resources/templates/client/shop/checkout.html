@@ -651,7 +651,7 @@
         let total_amount;
         if (promotion !== undefined) {
             console.log('Khuyến mãi hiện tại:', promotion);
-            if ((sub_total / 100) >= promotion.giaTriDonHang) {
+            if ((sub_total / 1000) >= promotion.giaTriDonHang) {
                 if (promotion.loaiGiamGia === true)
                     total_amount = (sub_total + vat) - ((sub_total + vat) * (promotion.giaTriGiam / 100));
                 else
@@ -670,7 +670,7 @@
                     value_promotion = promotion.giaTriGiam + '%';
                 else
                     value_promotion = formatMoney(promotion.giaTriGiam);
-                let reference_value = (promotion.giaTriDonHang - (sub_total / 100));
+                let reference_value = (promotion.giaTriDonHang - (sub_total / 1000));
                 let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
                     ' cho đơn hàng!)';
                 document.getElementById("table-cart").innerHTML = main;
@@ -1905,7 +1905,7 @@
                     idSanPham: productBuyNow.idSanPham,
                     idMauSac: productBuyNow.idMauSac,
                     size: productBuyNow.idSize,
-                    donGia: productBuyNow.gia,
+                    donGia: productBuyNow.donGia,
                     soLuong: productBuyNow.soLuong
                 };
                 let url;
