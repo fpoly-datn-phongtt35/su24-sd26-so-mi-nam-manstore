@@ -2,14 +2,14 @@ package com.example.manstore.controller.client;
 
 
 import com.example.manstore.CustomModel.ResponseCustom;
-import com.example.manstore.CustomModel.ResponseMessage;
-import com.example.manstore.CustomModel.ResponseProduct;
+import com.example.manstore.dto.custom.ChiTietSanPhamDTO;
+
 import com.example.manstore.dto.custom.SanPhamChiTietDTO;
-import com.example.manstore.entity.ChiTietSanPham;
-import com.example.manstore.entity.GioHang;
-import com.example.manstore.entity.GioHangChiTiet;
-import com.example.manstore.entity.KhachHang;
-import com.example.manstore.service.*;
+import com.example.manstore.entity.*;
+import com.example.manstore.service.ChiTietSanPhamService;
+import com.example.manstore.service.GioHangChiTietService;
+import com.example.manstore.service.GioHangService;
+import com.example.manstore.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +31,10 @@ public class GioHangChiTietRestController {
 
     @Autowired
     GioHangChiTietService service;
-
-    @Autowired
-    HoaDonService donHangservice;
-    @Autowired
-    HoaDonChiTietService donHangChiTietservice;
+//    @Autowired
+//    DonHangService donHangservice;
+//    @Autowired
+//    DonHangChiTietService donHangChiTietservice;
     @Autowired
     KhachHangService khachHangService;
     @Autowired
@@ -52,7 +52,7 @@ public class GioHangChiTietRestController {
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    //    @RequestMapping(value = "/findAll/{id}", method = RequestMethod.GET)
+//    @RequestMapping(value = "/findAll/{id}", method = RequestMethod.GET)
 //    private ResponseEntity<?> findAll(@PathVariable("id") String id) {
 //        GioHang gh = gioHangService.findByIdKH(Integer.parseInt(id));
 //        if (gh == null) {
@@ -66,35 +66,35 @@ public class GioHangChiTietRestController {
 //        List<GioHangChiTiet> list = service.getByIdGHList(String.valueOf(gh.getId()));
 //        return new ResponseEntity<>(list, HttpStatus.OK);
 //    }
-    @RequestMapping(value = "/findAll/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> findAll(@PathVariable("id") String id) {
-        try {
-            // Tìm giỏ hàng theo ID khách hàng
-            GioHang gh = gioHangService.findByIdKH(Integer.parseInt(id));
+@RequestMapping(value = "/findAll/{id}", method = RequestMethod.GET)
+public ResponseEntity<?> findAll(@PathVariable("id") String id) {
+    try {
+        // Tìm giỏ hàng theo ID khách hàng
+        GioHang gh = gioHangService.findByIdKH(Integer.parseInt(id));
 
-            // Nếu không tìm thấy, tạo giỏ hàng mới
-            if (gh == null) {
-                GioHang cart = new GioHang();
-                KhachHang kh = khachHangService.getByID(Integer.parseInt(id));
-                cart.setNgayTao(LocalDate.now());
-                cart.setIdKhachHang(kh);
-                gioHangService.save(cart);
-                gh = gioHangService.findByIdKH(Integer.parseInt(id));
-            }
-
-            // Lấy danh sách chi tiết giỏ hàng
-            List<GioHangChiTiet> list = service.getByIdGHList(String.valueOf(gh.getId()));
-
-            // Trả về danh sách chi tiết giỏ hàng
-            return new ResponseEntity<>(list, HttpStatus.OK);
-
-        } catch (Exception e) {
-            // Ghi log lỗi và trả về lỗi 500 nếu có lỗi xảy ra
-            System.err.println("Error occurred while retrieving cart details: " + e.getMessage());
-            e.printStackTrace();
-            return new ResponseEntity<>("An error occurred while processing your request.", HttpStatus.INTERNAL_SERVER_ERROR);
+        // Nếu không tìm thấy, tạo giỏ hàng mới
+        if (gh == null) {
+            GioHang cart = new GioHang();
+            KhachHang kh = khachHangService.getByID(Integer.parseInt(id));
+            cart.setNgayTao(LocalDate.now());
+            cart.setIdKhachHang(kh);
+            gioHangService.save(cart);
+            gh = gioHangService.findByIdKH(Integer.parseInt(id));
         }
+
+        // Lấy danh sách chi tiết giỏ hàng
+        List<GioHangChiTiet> list = service.getByIdGHList(String.valueOf(gh.getId()));
+
+        // Trả về danh sách chi tiết giỏ hàng
+        return new ResponseEntity<>(list, HttpStatus.OK);
+
+    } catch (Exception e) {
+        // Ghi log lỗi và trả về lỗi 500 nếu có lỗi xảy ra
+        System.err.println("Error occurred while retrieving cart details: " + e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity<>("An error occurred while processing your request.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
 
     @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
@@ -242,7 +242,6 @@ public class GioHangChiTietRestController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
-
     @RequestMapping(value = "/add-quantity/{id}", method = RequestMethod.GET)
     public ResponseEntity<ResponseCustom> addQuantity(@PathVariable("id") String id) {
         ResponseCustom response = new ResponseCustom();
@@ -283,6 +282,31 @@ public class GioHangChiTietRestController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+//    @RequestMapping(value = "/add-quantity/{id}", method = RequestMethod.GET)
+//    public ResponseEntity<?> addQuantity(@PathVariable("id") String id) {
+//        GioHangChiTiet ghct = gioHangChiTietService.getById(id);
+//        ChiTietSanPham spct = ctspService.getCTSPById(ghct.getIdSanPhamChiTiet().getId());
+//        ResponseCustom response = new ResponseCustom();
+//        if (spct.getSoluong() == 0) {
+//            response.setStatusText("failure");
+//            response.setMessage("The product is out of stock");
+//            gioHangChiTietService.delete(id);
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } else if (ghct.getSoLuong() >= spct.getSoluong()) {
+//            ghct.setSoLuong(spct.getSoluong());
+//            gioHangChiTietService.save(ghct);
+//            response.setStatusText("failure");
+//            response.setMessage("Số Lượng Sản Phẩm Chỉ Còn Lại " + spct.getSoluong() + "!");
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } else {
+//            ghct.setSoLuong(ghct.getSoLuong() + 1);
+//            gioHangChiTietService.save(ghct);
+//            response.setStatusText("success");
+//            response.setMessage("success");
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        }
+//    }
 
     @RequestMapping(value = "/edit-quantity/{id}/{quantity}", method = RequestMethod.GET)
     public ResponseEntity<?> editQuantity(@PathVariable("id") String id, @PathVariable("quantity") String quantity) {
@@ -342,92 +366,6 @@ public class GioHangChiTietRestController {
             }
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/add-to-invoice/{id}", method = RequestMethod.POST)
-    public ResponseEntity<?> addToInvoice(@RequestBody List<String> listProduct, @PathVariable("id") String idUser) {
-        ResponseProduct responseProduct = new ResponseProduct();
-        List<GioHangChiTiet> listGHCT = new ArrayList<>();
-        List<ResponseMessage> listMessage = new ArrayList<>();
-        GioHang gioHang = gioHangService.findByIdKH(Integer.parseInt(idUser));
-        List<GioHangChiTiet> listAll = gioHangChiTietService.getByIdGHList(String.valueOf(gioHang.getId()));
-        if (listProduct.size() == 0) {
-            return new ResponseEntity<>("null", HttpStatus.OK);
-        } else {
-            for (String idProduct : listProduct) {
-                ChiTietSanPham spct = ctspService.getCTSPById(Integer.valueOf(idProduct));
-                if (spct.getSoluong() <= 0) {
-                    for (GioHangChiTiet ghct : listAll) {
-                        if (spct.getId() == ghct.getIdSanPhamChiTiet().getId() || spct.getIdSanPham().getTrangThai() == 0) {
-                            gioHangChiTietService.delete(String.valueOf(ghct.getId()));
-                        }
-                    }
-                    ResponseMessage response = new ResponseMessage();
-                    response.setTen(spct.getIdSanPham().getTen());
-                    response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
-                    response.setSl_ton(spct.getSoluong() + "");
-                    response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
-                    response.setTrangThai(spct.getIdSanPham().getTrangThai() != 0);
-                    listMessage.add(response);
-                } else if (spct.getIdSanPham().getTrangThai() == 0) {
-                    for (GioHangChiTiet ghct : listAll) {
-                        if (spct.getId() == ghct.getIdSanPhamChiTiet().getId() || spct.getIdSanPham().getTrangThai() == 0) {
-                            gioHangChiTietService.delete(String.valueOf(ghct.getId()));
-                        }
-                    }
-                    ResponseMessage response = new ResponseMessage();
-                    response.setTen(spct.getIdSanPham().getTen());
-                    response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
-                    response.setSl_ton(spct.getSoluong() + "");
-                    response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
-                    response.setTrangThai(false);
-                    listMessage.add(response);
-                } else {
-                    for (GioHangChiTiet ghct : listAll) {
-                        if (spct.getId() == ghct.getIdSanPhamChiTiet().getId() && ghct.getSoLuong() > 20) {
-                            return new ResponseEntity<>("max quantity", HttpStatus.OK);
-                        }
-                    }
-                    for (GioHangChiTiet ghct : listAll) {
-                        if (spct.getId() == ghct.getIdSanPhamChiTiet().getId() && ghct.getSoLuong() > spct.getSoluong()) {
-                            ghct.setSoLuong(spct.getSoluong());
-                            gioHangChiTietService.save(ghct);
-                            ResponseMessage response = new ResponseMessage();
-                            response.setTen(spct.getIdSanPham().getTen());
-                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
-                            response.setSl_ton(spct.getSoluong() + "");
-                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
-                            response.setTrangThai(spct.getIdSanPham().getTrangThai() != 0);
-                            listMessage.add(response);
-                        }
-                    }
-                }
-            }
-            if (listMessage.size() > 0) {
-                responseProduct.setListCart(listGHCT);
-                responseProduct.setListMessage(listMessage);
-                return new ResponseEntity<>(responseProduct, HttpStatus.OK);
-            }
-            for (String id : listProduct
-            ) {
-                GioHang gh = gioHangService.findByIdKH(Integer.parseInt(idUser));
-
-                if (gioHangChiTietService.getByIdGHList(String.valueOf(gh.getId())).size() == 0) {
-                    System.out.println("Cart detail null");
-                } else {
-                    for (GioHangChiTiet ghct : gioHangChiTietService.getByIdGHList(String.valueOf(gh.getId()))) {
-                        if (String.valueOf(ghct.getIdSanPhamChiTiet().getId()).equalsIgnoreCase(id)) {
-                            listGHCT.add(ghct);
-                            break;
-                        }
-                    }
-                }
-
-            }
-        }
-        responseProduct.setListCart(listGHCT);
-        responseProduct.setListMessage(listMessage);
-        return new ResponseEntity<>(responseProduct, HttpStatus.OK);
     }
 
 }

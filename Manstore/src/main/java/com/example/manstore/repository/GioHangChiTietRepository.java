@@ -1,5 +1,6 @@
 package com.example.manstore.repository;
 
+import com.example.manstore.entity.GioHang;
 import com.example.manstore.entity.GioHangChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,4 +37,6 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
 
     @Query("select ghct from GioHangChiTiet ghct where ghct.idGioHang.idKhachHang.id = :id ORDER BY ghct.ngaySua DESC")
     List<GioHangChiTiet> getByIdKH(@Param("id") String id);
+
+    List<GioHangChiTiet> getAllByIdGioHangOrderByNgaySuaDesc(GioHang idGioHang);
 }

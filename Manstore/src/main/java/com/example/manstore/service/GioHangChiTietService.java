@@ -1,6 +1,8 @@
 package com.example.manstore.service;
 
 
+import com.example.manstore.dto.respone.GioHangChiTietResponse;
+import com.example.manstore.entity.GioHang;
 import com.example.manstore.entity.GioHangChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,8 @@ public interface GioHangChiTietService {
     GioHangChiTiet getById(String id);
 
     List<GioHangChiTiet> getByIdGHList(String id);
+
+    List<GioHangChiTietResponse> getAllByIdGioHangOrderByNgaySuaDesc(String idGioHang);
 
     void deleteAll();
 

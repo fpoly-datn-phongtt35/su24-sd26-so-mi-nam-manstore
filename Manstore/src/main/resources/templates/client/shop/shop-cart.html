@@ -156,9 +156,12 @@
         selectedProductGroup = [];
         sub_total_global = 0;
         vat_global = 0;
-        userId = localStorage.getItem("userId");
-        loadPage();
+        // userId = localStorage.getItem("userId");
     }
+        userId = localStorage.getItem("userId");
+
+    loadPage();
+
 
     function formatMoney(money) {
         const VND = new Intl.NumberFormat('vi-VN', {
@@ -244,25 +247,29 @@
         var main = '';
         var groupedProducts = {};
         for (i = 0; i < list.length; i++) {
-            if (!groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id]) {
-                groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id] = [];
+            console.log('ZZZZZZZZZZZ: ',list[i])
+            if (!groupedProducts[list[i]?.sanPhamChiTiet?.sanPham?.id]) {
+                groupedProducts[list[i]?.sanPhamChiTiet?.sanPham?.id] = [];
             }
-            groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id].push(list[i]);
+            groupedProducts[list[i]?.sanPhamChiTiet?.sanPham?.id].push(list[i]);
         }
         productDataList = groupedProducts;
+        console.log('productDataList = ',groupedProducts);
         let indexFor = 0;
         for (var key in groupedProducts) {
             if (groupedProducts.hasOwnProperty(key)) {
                 indexFor += 1;
                 var groupSP = '';
                 var arrChild = groupedProducts[key];
-                var productName = arrChild[0].idSanPhamChiTiet.idSanPham.ten;
-                var productId = arrChild[0].idSanPhamChiTiet.idSanPham.id;
+                var productName = arrChild[0].sanPhamChiTiet.sanPham.ten;
+                console.log(arrChild[0].sanPhamChiTiet.sanPham.id);
+                var productId = arrChild[0].sanPhamChiTiet.sanPham.id;
                 for (let j = 0; j < arrChild.length; j++) {
+                    console.log(arrChild[j]);
                     var count = arrChild[j].soLuong;
-                    sub_total += arrChild[j].idSanPhamChiTiet.idSanPham.gia * count;
-                    vat += (arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1;
-                    // var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].idSanPhamChiTiet.idSanPham.id + '/' + arrChild[j].idSanPhamChiTiet.idMauSac.id;
+                    sub_total += arrChild[j].sanPhamChiTiet.sanPham.gia * count;
+                    vat += (arrChild[j].sanPhamChiTiet.sanPham.gia * count) * 0.1;
+                    // var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].sanPhamChiTiet.sanPham.id + '/' + arrChild[j].sanPhamChiTiet.mauSac.id;
                     // const pictureResponse = await fetch(urlGetPicture, {
                     //     method: 'GET',
                     //     headers: {
@@ -279,9 +286,9 @@
                     groupSP += `<div class="row gy-3 p-2">
                                     <div class="col-sm-auto d-flex gap-2 justify-content-end mt-auto mb-auto">
                                       <div class="form-check">
-                                      <input class="form-check-input checkbox-single checkbox-child-${arrChild[j].idSanPhamChiTiet.idSanPham.id}" type="checkbox" id="checkbox-${arrChild[j].idSanPhamChiTiet.idSanPham.id}-${j + 1}"
-                                      data-sub-total="${arrChild[j].idSanPhamChiTiet.idSanPham.gia * count}" data-vat="${(arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1}" data-count="${count}" data-id-cart="${arrChild[j].idGioHang.id}"
-                                      value="${arrChild[j].idSanPhamChiTiet.id}" style="width: 20px; height: 20px" onclick="chooseProduct(${arrChild[j].idSanPhamChiTiet.idSanPham.id},${j + 1})">
+                                      <input class="form-check-input checkbox-single checkbox-child-${arrChild[j].sanPhamChiTiet.sanPham.id}" type="checkbox" id="checkbox-${arrChild[j].sanPhamChiTiet.sanPham.id}-${j + 1}"
+                                      data-sub-total="${arrChild[j].sanPhamChiTiet.sanPham.gia * count}" data-vat="${(arrChild[j].sanPhamChiTiet.sanPham.gia * count) * 0.1}" data-count="${count}" data-id-cart="${arrChild[j].gioHang.id}"
+                                      value="${arrChild[j].sanPhamChiTiet.id}" style="width: 20px; height: 20px" onclick="chooseProduct(${arrChild[j].sanPhamChiTiet.sanPham.id},${j + 1})">
                                       </div>
                                     </div>
                                     <div class="col-sm-auto">
@@ -293,33 +300,33 @@
                                     </div>
                                     <div class="col-sm">
                                         <a href="#!">
-                                            <h5 class="fs-16 lh-base mb-1">${arrChild[j].idSanPhamChiTiet.idSanPham.ten}</h5>
+                                            <h5 class="fs-16 lh-base mb-1">${arrChild[j].sanPhamChiTiet.sanPham.ten}</h5>
                                         </a>
                                         <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Màu Sắc : <span class="fw-medium">${arrChild[j].idSanPhamChiTiet.idMauSac.ten}</span></li>
+                                            <li class="list-inline-item">Màu Sắc : <span class="fw-medium">${arrChild[j].sanPhamChiTiet.mauSac.ten}</span></li>
                                         </ul>
                                         <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Size : <span class="fw-medium">${arrChild[j].idSanPhamChiTiet.idSize.ten}</span></li>
+                                            <li class="list-inline-item">Size : <span class="fw-medium">${arrChild[j].sanPhamChiTiet.size.ten}</span></li>
                                         </ul>
                                         <ul class="list-inline text-muted fs-13 mb-auto">
                                             <li class="list-inline-item">Số Lượng :</li>
                                             <div class="input-step">
-                                            <button type="button" onclick="minusQuantity(${arrChild[j].id},${indexFor},${arrChild[j].idSanPhamChiTiet.idSanPham.gia})" class="minus">–</button>
-                                            <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].id}-${indexFor}"
-                                            onblur="editQuantity(${arrChild[j].id},${indexFor},${arrChild[j].idSanPhamChiTiet.idSanPham.idDanhMuc.id})" value="${arrChild[j].soLuong}" min="1" max="1000">
-                                            <button type="button" onclick="addQuantity(${arrChild[j].id},${arrChild[j].idSanPhamChiTiet.idSanPham.idDanhMuc.id},${arrChild[j].idSanPhamChiTiet.idSanPham.gia})" class="plus">+</button>
+                                            <button type="button" onclick="minusQuantity(${arrChild[j].sanPhamChiTiet.id},${indexFor},${arrChild[j].sanPhamChiTiet.sanPham.gia})" class="minus">–</button>
+                                            <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].sanPhamChiTiet.id}-${indexFor}"
+                                            onblur="editQuantity(${arrChild[j].sanPhamChiTiet.id},${indexFor},${arrChild[j].sanPhamChiTiet.sanPham.danhMucResponse.id})" value="${arrChild[j].soLuong}" min="1" max="1000">
+                                            <button type="button" onclick="addQuantity(${arrChild[j].sanPhamChiTiet.id},${arrChild[j].sanPhamChiTiet.sanPham.danhMucResponse.id},${arrChild[j].sanPhamChiTiet.sanPham.gia})" class="plus">+</button>
                                             </div>
                                         </ul>
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="text-lg-end">
                                             <p class="text-muted mb-1 fs-12">Đơn Giá :</p>
-                                            <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].idSanPhamChiTiet.idSanPham.gia)}</span></h5>
+                                            <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].sanPhamChiTiet.sanPham.gia)}</span></h5>
                                         </div>
                                         <div class="text-lg-end" style="padding-top: 30px;">
                                             <div class="d-flex justify-content-center align-items-center">
                                                 <span class="text-danger">
-                                                    <i class="ri-delete-bin-6-line" onclick="deleteOne(${arrChild[j].id},${arrChild[j].idSanPhamChiTiet.id})"></i>
+                                                    <i class="ri-delete-bin-6-line" onclick="deleteOne(${arrChild[j].sanPhamChiTiet.id},${arrChild[j].sanPhamChiTiet.id})"></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -411,7 +418,7 @@
                     console.log("after choose group if: " + sub_total_global, vat_global);
                     count = input.getAttribute('data-count');
                     cartId = input.getAttribute('data-id-cart');
-                    product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
+                    product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
                     if (!selectedCart.some(obj => JSON.stringify(obj) === JSON.stringify(product))) {
                         console.log('remove product from cart')
                         selectedCart.push(product);
@@ -443,7 +450,7 @@
                         console.log("after choose group: " + sub_total_global, vat_global);
                         count = input.getAttribute('data-count');
                         cartId = input.getAttribute('data-id-cart');
-                        product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
+                        product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
                         let index = selectedCart.findIndex(item => JSON.stringify(item) === JSON.stringify(product));
                         if (selectedCart.some(obj => JSON.stringify(obj) === JSON.stringify(product))) {
                             selectedCart.splice(index, 1);
@@ -491,8 +498,8 @@
                             selectedProduct.forEach(function (item) {
                                 console.log(item);
                             })
-                            console.log('Checked : ', selectedProduct.includes(arr[i].idSanPhamChiTiet.id + ''));
-                            if (!selectedProduct.includes(arr[i].idSanPhamChiTiet.id + '')) {
+                            console.log('Checked : ', selectedProduct.includes(arr[i].sanPhamChiTiet.id + ''));
+                            if (!selectedProduct.includes(arr[i].sanPhamChiTiet.id + '')) {
                                 allInSelectedProduct = false;
                                 console.log("Not all are in select product!")
                                 break;
@@ -540,7 +547,7 @@
         arrCheckboxAll.forEach(function (input) {
             count = input.getAttribute('data-count');
             cartId = input.getAttribute('data-id-cart');
-            product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
+            product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
             if (input.checked === true) {
                 console.log(input);
                 sub_total += parseInt(input.getAttribute('data-sub-total'));
@@ -670,7 +677,7 @@
             vat_global += parseInt(input.getAttribute('data-vat'));
             count = input.getAttribute('data-count');
             cartId = input.getAttribute('data-id-cart');
-            product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
+            product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
             selectedProduct.push(input.value);
             selectedCart.push(product);
             saveStatusCheck.push(input.value);
@@ -1154,7 +1161,7 @@
                             }).then(() => {
                                 saveStatusCheck.splice(saveStatusCheck.indexOf(product_Id), 1);
                                 selectedProduct.splice(selectedProduct.indexOf(product_Id), 1);
-                                let index = selectedCart.findIndex(item => JSON.stringify(item.idSanPhamChiTiet) === product_Id);
+                                let index = selectedCart.findIndex(item => JSON.stringify(item.sanPhamChiTiet) === product_Id);
                                 selectedCart.splice(index, 1);
                                 loadPage();
                             })
@@ -1166,7 +1173,7 @@
                             }).then(() => {
                                 saveStatusCheck.splice(saveStatusCheck.indexOf(product_Id), 1);
                                 selectedProduct.splice(selectedProduct.indexOf(product_Id), 1);
-                                let index = selectedCart.findIndex(item => JSON.stringify(item.idSanPhamChiTiet) === product_Id);
+                                let index = selectedCart.findIndex(item => JSON.stringify(item.sanPhamChiTiet) === product_Id);
                                 selectedCart.splice(index, 1);
                                 loadPage();
                             })
@@ -1184,6 +1191,7 @@
             }
         });
     }
+
 
 </script>
 </body>

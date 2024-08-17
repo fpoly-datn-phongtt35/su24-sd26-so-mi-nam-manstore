@@ -2,9 +2,7 @@ package com.example.manstore.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
@@ -15,9 +13,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "ThongTinVanChuyen")
 public class ThongTinVanChuyen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

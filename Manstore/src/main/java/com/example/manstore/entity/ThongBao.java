@@ -1,9 +1,7 @@
 package com.example.manstore.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
@@ -12,9 +10,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "ThongBao")
 public class ThongBao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
