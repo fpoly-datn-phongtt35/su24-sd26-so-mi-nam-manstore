@@ -20,6 +20,9 @@ public interface DotGiamGiaRepository extends JpaRepository<DotGiamGia,Integer> 
     @PersistenceContext
     EntityManager entityManager = null;
 
+    @Query("SELECT new com.example.manstore.dto.respone.DotGiamGiaResponse(dgg.id, dgg.ma, dgg.ten, dgg.ngayTao, dgg.ngayBatDau, dgg.ngayKetThuc, dgg.loaiGiamGia, dgg.giaTriGiam, dgg.giaTriDonHang,dgg.trangThai) FROM DotGiamGia dgg")
+    public Page<DotGiamGia> findAllDGG(LocalDate start, LocalDate end, String promotionType, Pageable pageable);
+
     @Query("select v from DotGiamGia v where v.ngayBatDau >= ?1 and v.ngayKetThuc <= ?2")
     Page<DotGiamGia> findByDate(LocalDate start, LocalDate end, Pageable pageable);
 

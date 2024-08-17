@@ -283,31 +283,6 @@ public ResponseEntity<?> findAll(@PathVariable("id") String id) {
     }
 
 
-//    @RequestMapping(value = "/add-quantity/{id}", method = RequestMethod.GET)
-//    public ResponseEntity<?> addQuantity(@PathVariable("id") String id) {
-//        GioHangChiTiet ghct = gioHangChiTietService.getById(id);
-//        ChiTietSanPham spct = ctspService.getCTSPById(ghct.getIdSanPhamChiTiet().getId());
-//        ResponseCustom response = new ResponseCustom();
-//        if (spct.getSoluong() == 0) {
-//            response.setStatusText("failure");
-//            response.setMessage("The product is out of stock");
-//            gioHangChiTietService.delete(id);
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        } else if (ghct.getSoLuong() >= spct.getSoluong()) {
-//            ghct.setSoLuong(spct.getSoluong());
-//            gioHangChiTietService.save(ghct);
-//            response.setStatusText("failure");
-//            response.setMessage("Số Lượng Sản Phẩm Chỉ Còn Lại " + spct.getSoluong() + "!");
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        } else {
-//            ghct.setSoLuong(ghct.getSoLuong() + 1);
-//            gioHangChiTietService.save(ghct);
-//            response.setStatusText("success");
-//            response.setMessage("success");
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-//    }
-
     @RequestMapping(value = "/edit-quantity/{id}/{quantity}", method = RequestMethod.GET)
     public ResponseEntity<?> editQuantity(@PathVariable("id") String id, @PathVariable("quantity") String quantity) {
         GioHangChiTiet ghct = gioHangChiTietService.getById(id);

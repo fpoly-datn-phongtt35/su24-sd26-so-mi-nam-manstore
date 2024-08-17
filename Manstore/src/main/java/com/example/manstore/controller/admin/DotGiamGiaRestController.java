@@ -44,7 +44,7 @@ public class DotGiamGiaRestController {
                                      @RequestParam(value = "end", required = false) LocalDate end,
                                      @RequestParam(value = "promotion_type", required = false) String promotionType,
                                      Pageable pageable) {
-        Page<DotGiamGia> result = dotGiamGiaService.findAll(start, end, promotionType, pageable);
+        Page<DotGiamGia> result = dotGiamGiaRepository.findAllDGG(start, end, promotionType, pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
