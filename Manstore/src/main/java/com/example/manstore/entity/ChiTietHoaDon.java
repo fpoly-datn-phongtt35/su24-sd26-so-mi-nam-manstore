@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "ChiTietHoaDon")
-public class ChiTietHoaDon {
+public class ChiTietHoaDon implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -50,7 +51,7 @@ public class ChiTietHoaDon {
     @Column(name = "SoLuong")
     private Integer soLuong;
 
-    @Column(name = "TrangThai")
-    private Integer trangThai;
+    @Column(name = "TongTien", precision = 18)
+    private BigDecimal tongTien;
 
 }

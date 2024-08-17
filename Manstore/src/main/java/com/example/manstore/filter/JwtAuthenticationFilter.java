@@ -29,10 +29,63 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String secret_key = "123";
 
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//        String authorizationHeader = request.getHeader(AUTHORIZATION);
+//        System.out.println("Header : "+authorizationHeader);
+//        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//            try {
+//                String token = authorizationHeader.substring("Bearer ".length());
+//                Algorithm algorithm = Algorithm.HMAC256(secret_key.getBytes());
+//                JWTVerifier verifier = JWT.require(algorithm).build();
+//                DecodedJWT decodedJWT = verifier.verify(token);
+//                String username = decodedJWT.getSubject();
+//                String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+//                System.out.println(username);
+//                for (String role: roles
+//                ) {
+//                    System.out.println(role);
+//                }
+//                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//                Arrays.stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
+//                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,null,authorities);
+//                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//                filterChain.doFilter(request,response);
+//            } catch (Exception exception) {
+//                response.setHeader("error",exception.getMessage());
+//                response.setStatus(FORBIDDEN.value());
+//                Map<String,String> error = new HashMap<>();
+//                error.put("error message",exception.getMessage());
+//                response.setContentType(APPLICATION_JSON_VALUE);
+//                new ObjectMapper().writeValue(response.getOutputStream(),error);
+//            }
+//        } else {
+//            filterChain.doFilter(request,response);
+//        }
+//    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String path = request.getRequestURI();
+
+        // Bỏ qua xác thực cho các endpoint được cấu hình là "permitAll"
+        if (path.startsWith("/api/v1/auth") ||
+                path.startsWith("/api/v2/auth") ||
+                path.startsWith("/index/home") ||
+                path.startsWith("/admin") ||
+                path.startsWith("/assets") ||
+                path.startsWith("/client/assets") ||
+                path.startsWith("/templates") ||
+                path.startsWith("/api/register") ||
+                path.startsWith("/shop-cart") ||
+                path.startsWith("/order") ||
+                path.startsWith("/api/client/cart_detail/findAll")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Tiến hành xác thực JWT cho các endpoint còn lại
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-        System.out.println("Header : "+authorizationHeader);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String token = authorizationHeader.substring("Bearer ".length());
@@ -41,26 +94,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 DecodedJWT decodedJWT = verifier.verify(token);
                 String username = decodedJWT.getSubject();
                 String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-                System.out.println(username);
-                for (String role: roles
-                ) {
-                    System.out.println(role);
-                }
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 Arrays.stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,null,authorities);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                filterChain.doFilter(request,response);
+                filterChain.doFilter(request, response);
             } catch (Exception exception) {
-                response.setHeader("error",exception.getMessage());
+                response.setHeader("error", exception.getMessage());
                 response.setStatus(FORBIDDEN.value());
-                Map<String,String> error = new HashMap<>();
-                error.put("error message",exception.getMessage());
+                Map<String, String> error = new HashMap<>();
+                error.put("error message", exception.getMessage());
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(),error);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
         } else {
-            filterChain.doFilter(request,response);
+            filterChain.doFilter(request, response);
         }
     }
+
 }
