@@ -451,83 +451,6 @@
 
     }
 
-    // async function loadPicturesByColor(productId, colorId) {
-    //     const url = `/api/client/product_detail/picture-detail/${productId}/${colorId}`;
-    //     const response = await fetch(url, { method: 'GET' });
-    //     const dataPicture = await response.json();
-    //
-    //     let picture = '';
-    //     let pictureFind = '';
-    //
-    //     if (dataPicture.statusText === 'failure') {
-    //         picture += `
-    //         <div class="swiper-slide">
-    //             <div class="product-thumb rounded cursor-pointer" onclick="findPicture('https://via.placeholder.com/200')">
-    //                 <img src="https://via.placeholder.com/200" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
-    //             </div>
-    //         </div>
-    //     `;
-    //         pictureFind += `
-    //         <div class="swiper-slide">
-    //             <img src="https://via.placeholder.com/200" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
-    //         </div>
-    //     `;
-    //     } else {
-    //         if (Array.isArray(dataPicture) && dataPicture.length > 0) {
-    //             dataPicture.forEach((pictureUrl) => {
-    //                 const fullUrl = `http://localhost:8080/assets/images/products/${pictureUrl}`;
-    //                 picture += `
-    //                 <div class="swiper-slide">
-    //                     <div class="product-thumb rounded cursor-pointer" onclick="findPicture('${fullUrl}')">
-    //                         <img src="${fullUrl}" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
-    //                     </div>
-    //                 </div>
-    //             `;
-    //                 pictureFind += `
-    //                 <div class="swiper-slide">
-    //                     <img src="${fullUrl}" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
-    //                 </div>
-    //             `;
-    //             });
-    //         } else {
-    //             picture += `
-    //             <div class="swiper-slide">
-    //                 <div class="product-thumb rounded cursor-pointer" onclick="findPicture('http://localhost:8080/assets/images/products/img-8.png')">
-    //                     <img src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm" class="img-fluid" style="width: 100%; height: 100%;"/>
-    //                 </div>
-    //             </div>
-    //         `;
-    //             pictureFind += `
-    //             <div class="swiper-slide">
-    //                 <img src="http://localhost:8080/assets/images/products/img-8.png" alt="Ảnh Sản Phẩm" class="img-fluid size-xl" style="width: 100%; height: 100%;"/>
-    //             </div>
-    //         `;
-    //         }
-    //     }
-    //
-    //     document.getElementById('picture-silde').innerHTML = picture;
-    //     document.getElementById('find-picture').innerHTML = pictureFind;
-    //
-    //     // Khởi tạo lại Swiper sau khi nội dung được cập nhật
-    //     new Swiper('.productSwiper', {
-    //         slidesPerView: 4,
-    //         spaceBetween: 10,
-    //         freeMode: true,
-    //         watchSlidesVisibility: true,
-    //         watchSlidesProgress: true,
-    //     });
-    //
-    //     new Swiper('.productSwiper2', {
-    //         spaceBetween: 10,
-    //         navigation: {
-    //             nextEl: '.swiper-button-next',
-    //             prevEl: '.swiper-button-prev',
-    //         },
-    //         thumbs: {
-    //             swiper: document.querySelector('.productSwiper').swiper,
-    //         },
-    //     });
-    // }
 
     async function chooseProductSize(idPD) {
         // Lấy ra input radio đã được chọn
@@ -723,60 +646,6 @@
     }
 
 
-    // async function loadPicture(productId) {
-    //     var urlDetailPD = '/api/client/product_detail/detailPD/' + productId;
-    //     const responseDetailPD = await fetch(urlDetailPD, {
-    //         method: 'GET'
-    //     });
-    //     const data = await responseDetailPD.json();
-    //
-    //     let resultDetailColor = data.filter((product, index, self) =>
-    //         index === self.findIndex((p) => (
-    //             p.idMauSac.id === product.idMauSac.id
-    //         ))
-    //     );
-    //
-    //     let picture = '';
-    //     let pictureFind = '';
-    //
-    //     for (let i = 0; i < resultDetailColor.length; i++) {
-    //         var urlGetPicture = '/api/client/product_detail/picture-detail/' + resultDetailColor[i].idSanPham.id + '/' + resultDetailColor[i].idMauSac.id;
-    //         const pictureResponse = await fetch(urlGetPicture, {
-    //             method: 'GET'
-    //         });
-    //         var dataPicture = await pictureResponse.json();
-    //         if (dataPicture.statusText === "failure") {
-    //             picture += `
-    //                             <div class="swiper-slide">
-    //                                 <div class="product-thumb rounded cursor-pointer" onclick="findPicture('/assets/images/products/img-8.png')">
-    //                                     <img src="/assets/images/products/img-8.png" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
-    //                                 </div>
-    //                             </div>
-    //                         `;
-    //             pictureFind += `
-    //                                  <div class="swiper-slide ">
-    //                                             <img src="/assets/images/products/img-8.png" alt="" class="img-fluid size-xl" style="width: 100%; height: 100%"/>
-    //                                  </div>
-    //                             `;
-    //         } else {
-    //             picture += `
-    //                          <div class="swiper-slide">
-    //                                 <div class="product-thumb rounded cursor-pointer" onclick="findPicture('${dataPicture[0]}')">
-    //                                     <img src="${dataPicture[0]}" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
-    //                                 </div>
-    //                             </div>
-    //                         `;
-    //             pictureFind += `
-    //                              <div class="swiper-slide ">
-    //                                        <img src="${dataPicture[0]}" alt="" class="img-fluid" style="width: 100%; height: 100%"/>
-    //                              </div>
-    //                             `;
-    //         }
-    //     }
-    //     document.getElementById('picture-silde').innerHTML = picture;
-    //     document.getElementById('find-picture').innerHTML = pictureFind;
-    // }
-
     async function loadPicture(productId) {
         const urlDetailPD = '/api/client/product_detail/detailPD/' + productId;
         const responseDetailPD = await fetch(urlDetailPD, { method: 'GET' });
@@ -855,21 +724,6 @@
             swiper2.slideTo(index);
         }
     }
-
-
-    // function findPicture(url) {
-    //     console.log(url);
-    //     if (url !== null) {
-    //         // Lấy ra swiper productSwiper2
-    //         var swiper2 = document.querySelector('.productSwiper2').swiper;
-    //         // Tìm index của hình ảnh có link là linkAnh
-    //         var index = Array.from(document.querySelectorAll('.swiper-slide')).findIndex(slide => {
-    //             return slide.querySelector('img').getAttribute('src') === url;
-    //         });
-    //         // Chuyển đến slide có index tương ứng
-    //         swiper2.slideTo(index);
-    //     }
-    // }
 
     async function getPromotion() {
         let userId = localStorage.getItem("userId")

@@ -156,11 +156,12 @@
         selectedProductGroup = [];
         sub_total_global = 0;
         vat_global = 0;
-        // userId = localStorage.getItem("userId");
-    }
         userId = localStorage.getItem("userId");
+        loadPage();
+    }
+        // userId = localStorage.getItem("userId");
 
-    loadPage();
+    // loadPage();
 
 
     function formatMoney(money) {
@@ -171,33 +172,6 @@
         return VND.format(money);
     }
 
-    // function restoreCheckedState() {
-    //     // console.log(selectedProduct);
-    //     // console.log(saveStatusCheck);
-    //     // console.log(saveStatusCheckGroup);
-    //     // console.log(selectedCart);
-    //     // console.log(selectedProductGroup);
-    //     saveStatusCheck.forEach(function (id) {
-    //         for (let i = 0; i < saveStatusCheck.length; i++) {
-    //             let currentCheckbox = document.querySelectorAll('.checkbox-single');
-    //             console.log("Checked Id ", id);
-    //             currentCheckbox.forEach(function (item) {
-    //                 console.log("Checkbox single value  ", id);
-    //                 if (parseInt(id) === parseInt(item.value)) {
-    //                     item.checked = true;
-    //                 }
-    //             })
-    //         }
-    //     });
-    //
-    //     saveStatusCheckGroup.forEach(function (id) {
-    //         let currentCheckbox = document.getElementById(id);
-    //         if (currentCheckbox) {
-    //             console.log("checkbox : ", currentCheckbox);
-    //             currentCheckbox.checked = true;
-    //         }
-    //     })
-    // }
 
     function restoreCheckedState() {
         // Lưu trữ tất cả các checkbox vào biến để lặp qua chỉ một lần
@@ -234,6 +208,7 @@
 
         var result = await response.json();
         console.log(result);
+
         if (result.length > 0) {
             document.getElementById('product-count').innerText = result.length;
         } else {
@@ -241,144 +216,153 @@
             let arr = document.querySelectorAll('.set-disabled');
             arr.forEach(function (item) {
                 item.disabled = true;
-            })
+            });
         }
+
         var list = result;
         var main = '';
         var groupedProducts = {};
+
         for (i = 0; i < list.length; i++) {
-            console.log('ZZZZZZZZZZZ: ',list[i])
             if (!groupedProducts[list[i]?.sanPhamChiTiet?.sanPham?.id]) {
                 groupedProducts[list[i]?.sanPhamChiTiet?.sanPham?.id] = [];
             }
             groupedProducts[list[i]?.sanPhamChiTiet?.sanPham?.id].push(list[i]);
         }
+
         productDataList = groupedProducts;
-        console.log('productDataList = ',groupedProducts);
         let indexFor = 0;
+
         for (var key in groupedProducts) {
             if (groupedProducts.hasOwnProperty(key)) {
                 indexFor += 1;
                 var groupSP = '';
                 var arrChild = groupedProducts[key];
                 var productName = arrChild[0].sanPhamChiTiet.sanPham.ten;
-                console.log(arrChild[0].sanPhamChiTiet.sanPham.id);
                 var productId = arrChild[0].sanPhamChiTiet.sanPham.id;
+
                 for (let j = 0; j < arrChild.length; j++) {
-                    console.log(arrChild[j]);
                     var count = arrChild[j].soLuong;
                     sub_total += arrChild[j].sanPhamChiTiet.sanPham.gia * count;
                     vat += (arrChild[j].sanPhamChiTiet.sanPham.gia * count) * 0.1;
-                    // var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].sanPhamChiTiet.sanPham.id + '/' + arrChild[j].sanPhamChiTiet.mauSac.id;
-                    // const pictureResponse = await fetch(urlGetPicture, {
-                    //     method: 'GET',
-                    //     headers: {
-                    //         'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-                    //     }
-                    // });
-                    // var dataPicture = await pictureResponse.json();
-                    // var img;
-                    // if (dataPicture.statusText === "failure") {
-                    //     img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-md">`;
-                    // } else {
-                    //     img = `<img src="${dataPicture[0].duongDan}" alt="" class="avatar-md">`;
-                    // }
-                    groupSP += `<div class="row gy-3 p-2">
-                                    <div class="col-sm-auto d-flex gap-2 justify-content-end mt-auto mb-auto">
-                                      <div class="form-check">
-                                      <input class="form-check-input checkbox-single checkbox-child-${arrChild[j].sanPhamChiTiet.sanPham.id}" type="checkbox" id="checkbox-${arrChild[j].sanPhamChiTiet.sanPham.id}-${j + 1}"
-                                      data-sub-total="${arrChild[j].sanPhamChiTiet.sanPham.gia * count}" data-vat="${(arrChild[j].sanPhamChiTiet.sanPham.gia * count) * 0.1}" data-count="${count}" data-id-cart="${arrChild[j].gioHang.id}"
-                                      value="${arrChild[j].sanPhamChiTiet.id}" style="width: 20px; height: 20px" onclick="chooseProduct(${arrChild[j].sanPhamChiTiet.sanPham.id},${j + 1})">
-                                      </div>
-                                    </div>
-                                    <div class="col-sm-auto">
-                                        <div class="avatar-lg h-100">
-                                            <div class="avatar-title bg-dark-subtle rounded py-3" id="product-picture">
 
-                                            </div>
+                    // Fetch picture based on product ID and color
+                    var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].sanPhamChiTiet.sanPham.id + '/' + arrChild[j].sanPhamChiTiet.mauSac.id;
+                    const pictureResponse = await fetch(urlGetPicture, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                        }
+                    });
+                    var dataPicture = await pictureResponse.json();
+                    var img;
+
+                    if (dataPicture.statusText === "failure" || !Array.isArray(dataPicture) || dataPicture.length === 0) {
+                        img = `<img src="http://localhost:8080/assets/images/products/img-8.png" alt="" class="avatar-md">`;
+                    } else {
+                        let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+                        img = `<img src="${fullUrl}" alt="" class="avatar-md">`;
+                    }
+
+                    groupSP += `<div class="row gy-3 p-2">
+                                <div class="col-sm-auto d-flex gap-2 justify-content-end mt-auto mb-auto">
+                                    <div class="form-check">
+                                        <input class="form-check-input checkbox-single checkbox-child-${arrChild[j].sanPhamChiTiet.sanPham.id}" type="checkbox" id="checkbox-${arrChild[j].sanPhamChiTiet.sanPham.id}-${j + 1}"
+                                        data-sub-total="${arrChild[j].sanPhamChiTiet.sanPham.gia * count}" data-vat="${(arrChild[j].sanPhamChiTiet.sanPham.gia * count) * 0.1}" data-count="${count}" data-id-cart="${arrChild[j].gioHang.id}"
+                                        value="${arrChild[j].id}" style="width: 20px; height: 20px" onclick="chooseProduct(${arrChild[j].sanPhamChiTiet.sanPham.id},${j + 1})">
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <div class="avatar-lg h-100">
+                                        <div class="avatar-title bg-dark-subtle rounded py-3" id="product-picture-${arrChild[j].id}-${indexFor}">
+                                            ${img}
                                         </div>
                                     </div>
-                                    <div class="col-sm">
-                                        <a href="#!">
-                                            <h5 class="fs-16 lh-base mb-1">${arrChild[j].sanPhamChiTiet.sanPham.ten}</h5>
-                                        </a>
-                                        <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Màu Sắc : <span class="fw-medium">${arrChild[j].sanPhamChiTiet.mauSac.ten}</span></li>
-                                        </ul>
-                                        <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Size : <span class="fw-medium">${arrChild[j].sanPhamChiTiet.size.ten}</span></li>
-                                        </ul>
-                                        <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Số Lượng :</li>
-                                            <div class="input-step">
-                                            <button type="button" onclick="minusQuantity(${arrChild[j].sanPhamChiTiet.id},${indexFor},${arrChild[j].sanPhamChiTiet.sanPham.gia})" class="minus">–</button>
-                                            <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].sanPhamChiTiet.id}-${indexFor}"
-                                            onblur="editQuantity(${arrChild[j].sanPhamChiTiet.id},${indexFor},${arrChild[j].sanPhamChiTiet.sanPham.danhMucResponse.id})" value="${arrChild[j].soLuong}" min="1" max="1000">
-                                            <button type="button" onclick="addQuantity(${arrChild[j].sanPhamChiTiet.id},${arrChild[j].sanPhamChiTiet.sanPham.danhMucResponse.id},${arrChild[j].sanPhamChiTiet.sanPham.gia})" class="plus">+</button>
-                                            </div>
-                                        </ul>
-                                    </div>
-                                    <div class="col-sm-auto">
-                                        <div class="text-lg-end">
-                                            <p class="text-muted mb-1 fs-12">Đơn Giá :</p>
-                                            <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].sanPhamChiTiet.sanPham.gia)}</span></h5>
+                                </div>
+                                <div class="col-sm">
+                                    <a href="#!">
+                                        <h5 class="fs-16 lh-base mb-1">${arrChild[j].sanPhamChiTiet.sanPham.ten}</h5>
+                                    </a>
+                                    <ul class="list-inline text-muted fs-13 mb-auto">
+                                        <li class="list-inline-item">Màu Sắc : <span class="fw-medium">${arrChild[j].sanPhamChiTiet.mauSac.ten}</span></li>
+                                    </ul>
+                                    <ul class="list-inline text-muted fs-13 mb-auto">
+                                        <li class="list-inline-item">Size : <span class="fw-medium">${arrChild[j].sanPhamChiTiet.size.ten}</span></li>
+                                    </ul>
+                                    <ul class="list-inline text-muted fs-13 mb-auto">
+                                        <li class="list-inline-item">Số Lượng :</li>
+                                        <div class="input-step">
+                                            <button type="button" onclick="minusQuantity(${arrChild[j].id},${indexFor},${arrChild[j].sanPhamChiTiet.sanPham.gia})" class="minus">–</button>
+                                            <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].id}-${indexFor}"
+                                            onblur="editQuantity(${arrChild[j].id},${indexFor},${arrChild[j].sanPhamChiTiet.sanPham.danhMucResponse.id})" value="${arrChild[j].soLuong}" min="1" max="1000">
+                                            <button type="button" onclick="addQuantity(${arrChild[j].id},${arrChild[j].sanPhamChiTiet.sanPham.danhMucResponse.id},${arrChild[j].sanPhamChiTiet.sanPham.gia})" class="plus">+</button>
                                         </div>
-                                        <div class="text-lg-end" style="padding-top: 30px;">
-                                            <div class="d-flex justify-content-center align-items-center">
-                                                <span class="text-danger">
-                                                    <i class="ri-delete-bin-6-line" onclick="deleteOne(${arrChild[j].sanPhamChiTiet.id},${arrChild[j].sanPhamChiTiet.id})"></i>
-                                                </span>
-                                            </div>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <div class="text-lg-end">
+                                        <p class="text-muted mb-1 fs-12">Đơn Giá :</p>
+                                        <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].sanPhamChiTiet.sanPham.gia)}</span></h5>
+                                    </div>
+                                    <div class="text-lg-end" style="padding-top: 30px;">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <span class="text-danger">
+                                                <i class="ri-delete-bin-6-line" onclick="deleteOne(${arrChild[j].id},${arrChild[j].id})"></i>
+                                            </span>
                                         </div>
                                     </div>
-                                </div>`;
+                                </div>
+                            </div>`;
                 }
+
                 main += `<div class="card product">
-                            <div class="card-header">
-                                <div class="row align-items-center gy-3">
-                                   <div class="col-sm">
-                                        <div class="d-flex flex-wrap my-n1 mt-auto mb-auto">
-                                            <div style="padding-left: 10px;padding-top: 5px;">
-                                                <div class="d-block text-body px-2 form-check">
-                                                    <input class="form-check-input checkbox-group" type="checkbox" id="check-group-${productId}"
-                                                    onclick="chooseProductGroup(${productId})" value="${productId}" style="width: 20px; height: 20px">
-                                                </div>
+                        <div class="card-header">
+                            <div class="row align-items-center gy-3">
+                                <div class="col-sm">
+                                    <div class="d-flex flex-wrap my-n1 mt-auto mb-auto">
+                                        <div style="padding-left: 10px;padding-top: 5px;">
+                                            <div class="d-block text-body px-2 form-check">
+                                                <input class="form-check-input checkbox-group" type="checkbox" id="check-group-${productId}"
+                                                onclick="chooseProductGroup(${productId})" value="${productId}" style="width: 20px; height: 20px">
                                             </div>
-                                            <div>
-                                                <div class="d-block text-body p-1 px-2 form-check-label"><h5 class="fs-16 lh-base mb-1">${productName}</h5></div>
-                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-block text-body p-1 px-2 form-check-label"><h5 class="fs-16 lh-base mb-1">${productName}</h5></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body p-4">
-                            ${groupSP}
-                            </div>
-                            <div class="card-footer">
-                                <div class="row align-items-center gy-3">
-                                    <div class="col-sm">
-                                        <div class="d-flex flex-wrap my-n1">
-                                            <div hidden>
-                                                <button class="btn btn-hover d-block text-body p-1 px-2"
-                                                ><i class="ri-delete-bin-fill text-muted align-bottom me-1" onclick="deleteGroup(${productId})"></i>Xoá</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-auto">
-                                        <div class="d-flex align-items-center gap-2 text-muted">
-                                            <div>Tổng Tiền :</div>
-                                            <h5 class="fs-14 mb-0">${formatMoney(sub_total)}<span class="product-line-price">
-                                            </span></h5>
+                        </div>
+                        <div class="card-body p-4">
+                        ${groupSP}
+                        </div>
+                        <div class="card-footer">
+                            <div class="row align-items-center gy-3">
+                                <div class="col-sm">
+                                    <div class="d-flex flex-wrap my-n1">
+                                        <div hidden>
+                                            <button class="btn btn-hover d-block text-body p-1 px-2"
+                                            ><i class="ri-delete-bin-fill text-muted align-bottom me-1" onclick="deleteGroup(${productId})"></i>Xoá</button>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-auto">
+                                    <div class="d-flex align-items-center gap-2 text-muted">
+                                        <div>Tổng Tiền :</div>
+                                        <h5 class="fs-14 mb-0">${formatMoney(sub_total)}<span class="product-line-price">
+                                        </span></h5>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
                     </div>`;
             }
+
             groupSP = '';
             sub_total = 0;
             vat = 0;
         }
+
         document.getElementById("card-product").innerHTML = main;
         restoreCheckedState();
     }
@@ -898,7 +882,7 @@
         }
     }
 
-    function addQuantity(id, sport, price) {
+    function addQuantity(id, category, price) {
         $.ajax({
             url: '/api/client/cart_detail/add-quantity/' + id,
             method: 'GET',
@@ -907,10 +891,10 @@
             },
             success: function (response) {
                 console.log(response);
-                if (response.status === "success") {
+                if (response.statusText === "success") {
                     loadPage();
                     handleInvoiceCalculation(sub_total_global + price, vat_global + (price * 0.1));
-                } else if (response.status === "failure") {
+                } else if (response.statusText === "failure") {
                     if (response.message === "The product is out of stock") {
                         swal.fire({
                             title: 'Thông Báo',
@@ -923,7 +907,7 @@
                             if (result.isConfirmed) {
                                 loadPage();
                             } else if (result.dismiss === swal.DismissReason.cancel) {
-                                window.location.href = '/client/product?sport=' + sport;
+                                window.location.href = '/client/product?sport=' + category;
                             }
                         });
                     } else {
@@ -965,7 +949,7 @@
                         },
                         success: function (response) {
                             console.log(response);
-                            if (response.status === "success" && response.message === "The product has been removed from the cart!") {
+                            if (response.statusText === "success" && response.message === "The product has been removed from the cart!") {
                                 swal.fire({
                                     icon: "success",
                                     title: "Xoá thành công!",
@@ -990,7 +974,7 @@
                 },
                 success: function (response) {
                     console.log(response);
-                    if (response.status === "success" && response.message === "success") {
+                    if (response.statusText === "success" && response.message === "success") {
                         loadPage();
                         handleInvoiceCalculation(sub_total_global - price, vat_global - (price * 0.1));
                     }
@@ -1004,7 +988,7 @@
 
 
 
-    function editQuantity(id, index, sport) {
+    function editQuantity(id, index, category) {
         var count = document.getElementById('product-quantity-' + id + '-' + index).value;
         console.log("So Luong : " + count);
         $.ajax({
@@ -1015,7 +999,7 @@
             },
             success: function (response) {
                 console.log(response);
-                if (response.status === "failure") {
+                if (response.statusText === "failure") {
                     if (response.message === "Quantity must be greater than 0") {
                         swal.fire({
                             icon: "warning",
@@ -1040,7 +1024,7 @@
                             if (result.isConfirmed) {
                                 loadPage();
                             } else if (result.dismiss === swal.DismissReason.cancel) {
-                                window.location.href = '/client/product?sport=' + sport;
+                                window.location.href = '/client/product?sport=' + category;
                             }
                         });
                     } else {
