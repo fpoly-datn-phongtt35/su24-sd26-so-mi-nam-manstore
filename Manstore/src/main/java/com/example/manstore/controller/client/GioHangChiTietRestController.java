@@ -2,14 +2,11 @@ package com.example.manstore.controller.client;
 
 
 import com.example.manstore.CustomModel.ResponseCustom;
-import com.example.manstore.CustomModel.ResponseMessage;
-import com.example.manstore.CustomModel.ResponseProduct;
+import com.example.manstore.dto.custom.ChiTietSanPhamDTO;
+
 import com.example.manstore.dto.custom.SanPhamChiTietDTO;
 import com.example.manstore.dto.respone.GioHangChiTietResponse;
-import com.example.manstore.entity.ChiTietSanPham;
-import com.example.manstore.entity.GioHang;
-import com.example.manstore.entity.GioHangChiTiet;
-import com.example.manstore.entity.KhachHang;
+import com.example.manstore.entity.*;
 import com.example.manstore.service.ChiTietSanPhamService;
 import com.example.manstore.service.GioHangChiTietService;
 import com.example.manstore.service.GioHangService;
@@ -24,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +32,7 @@ public class GioHangChiTietRestController {
 
     @Autowired
     GioHangChiTietService service;
-    //    @Autowired
+//    @Autowired
 //    DonHangService donHangservice;
 //    @Autowired
 //    DonHangChiTietService donHangChiTietservice;
@@ -55,20 +53,6 @@ public class GioHangChiTietRestController {
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    //    @RequestMapping(value = "/findAll/{id}", method = RequestMethod.GET)
-//    private ResponseEntity<?> findAll(@PathVariable("id") String id) {
-//        GioHang gh = gioHangService.findByIdKH(Integer.parseInt(id));
-//        if (gh == null) {
-//            GioHang cart = new GioHang();
-//            KhachHang kh = khachHangService.getByID(Integer.parseInt(id));
-//            cart.setIdKhachHang(kh);
-//            gioHangService.save(cart);
-//            gh = gioHangService.findByIdKH(Integer.parseInt(id));
-//        }
-//        System.out.println(gh.toString());
-//        List<GioHangChiTiet> list = service.getByIdGHList(String.valueOf(gh.getId()));
-//        return new ResponseEntity<>(list, HttpStatus.OK);
-//    }
     @RequestMapping(value = "/findAll/{id}", method = RequestMethod.GET)
     private ResponseEntity<?> findAll(@PathVariable("id") String id) {
         GioHang gh = gioHangService.findByIdKH(Integer.parseInt(id));
@@ -82,14 +66,10 @@ public class GioHangChiTietRestController {
         System.out.println(gh.toString());
         List<GioHangChiTietResponse> list = service.getAllByIdGioHangOrderByNgaySuaDesc(String.valueOf(gh.getId()));
 
-//        List<GioHangChiTiet> listTemp = new ArrayList<>();
-//        for (GioHangChiTiet ghct : list) {
-//                listTemp.add(ghct);
-//            System.out.println("BBBBBBBBBBBBBBBBBBBBBB: " + ghct.getIdSanPhamChiTiet().getId());
-//        }
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + list);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
 
 
     @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
@@ -237,14 +217,15 @@ public class GioHangChiTietRestController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
-
     @RequestMapping(value = "/add-quantity/{id}", method = RequestMethod.GET)
-    public ResponseEntity<ResponseCustom> addQuantity(@PathVariable("id") String id) {
+    public ResponseEntity<ResponseCustom> addQuantity(@PathVariable("id") Integer id) {
         ResponseCustom response = new ResponseCustom();
 
         // Kiểm tra và xử lý nếu GioHangChiTiet không tồn tại
-        Optional<GioHangChiTiet> optionalGioHangChiTiet = Optional.ofNullable(gioHangChiTietService.getById(id));
+        System.out.println("ID received: " + id);
+        Optional<GioHangChiTiet> optionalGioHangChiTiet = Optional.ofNullable(gioHangChiTietService.getById(id.toString()));
         if (!optionalGioHangChiTiet.isPresent()) {
+            System.out.println("No GioHangChiTiet found for ID: " + id);
             response.setStatusText("failure");
             response.setMessage("Không tìm thấy sản phẩm trong giỏ hàng.");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -257,7 +238,7 @@ public class GioHangChiTietRestController {
         if (spct.getSoluong() == 0) {
             response.setStatusText("failure");
             response.setMessage("Sản phẩm đã hết hàng.");
-            gioHangChiTietService.delete(id); // Xóa sản phẩm khỏi giỏ hàng nếu hết hàng
+            gioHangChiTietService.delete(id.toString()); // Xóa sản phẩm khỏi giỏ hàng nếu hết hàng
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
@@ -271,13 +252,40 @@ public class GioHangChiTietRestController {
         }
 
         // Tăng số lượng sản phẩm trong giỏ hàng
+        System.out.println("Trc khi cong: " + ghct.getSoLuong());
         ghct.setSoLuong(ghct.getSoLuong() + 1);
         gioHangChiTietService.save(ghct);
         response.setStatusText("success");
         response.setMessage("Số lượng sản phẩm đã được tăng lên.");
+        System.out.println("GHCT: " + ghct.getSoLuong());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
+//    @RequestMapping(value = "/add-quantity/{id}", method = RequestMethod.GET)
+//    public ResponseEntity<?> addQuantity(@PathVariable("id") String id) {
+//        GioHangChiTiet ghct = gioHangChiTietService.getById(id);
+//        ChiTietSanPham spct = ctspService.getCTSPById(ghct.getIdSanPhamChiTiet().getId());
+//        ResponseCustom response = new ResponseCustom();
+//        if (spct.getSoluong() == 0) {
+//            response.setStatusText("failure");
+//            response.setMessage("The product is out of stock");
+//            gioHangChiTietService.delete(id);
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } else if (ghct.getSoLuong() >= spct.getSoluong()) {
+//            ghct.setSoLuong(spct.getSoluong());
+//            gioHangChiTietService.save(ghct);
+//            response.setStatusText("failure");
+//            response.setMessage("Số Lượng Sản Phẩm Chỉ Còn Lại " + spct.getSoluong() + "!");
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } else {
+//            ghct.setSoLuong(ghct.getSoLuong() + 1);
+//            gioHangChiTietService.save(ghct);
+//            response.setStatusText("success");
+//            response.setMessage("success");
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        }
+//    }
 
     @RequestMapping(value = "/edit-quantity/{id}/{quantity}", method = RequestMethod.GET)
     public ResponseEntity<?> editQuantity(@PathVariable("id") String id, @PathVariable("quantity") String quantity) {
