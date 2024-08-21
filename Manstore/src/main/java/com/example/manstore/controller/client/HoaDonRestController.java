@@ -212,6 +212,7 @@ public class HoaDonRestController {
                                                 @PathVariable("idAddress") String idAddress,
                                                 @RequestParam(value = "idPromotion", required = false) String idPromotion) {
 
+        System.out.println("Received SPDTO: " + dtoSP);
         ResponseMessage response = new ResponseMessage();
         ChiTietSanPham spct = spService.getCTSPById(Integer.valueOf(dtoSP.getId()));
         if (spct.getSoluong() <= 0 || spct.getSoluong() < dtoSP.getSoLuong() || spct.getIdSanPham().getTrangThai() == 0) {

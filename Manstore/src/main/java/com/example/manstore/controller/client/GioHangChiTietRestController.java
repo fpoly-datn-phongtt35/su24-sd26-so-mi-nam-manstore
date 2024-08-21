@@ -2,6 +2,8 @@ package com.example.manstore.controller.client;
 
 
 import com.example.manstore.CustomModel.ResponseCustom;
+import com.example.manstore.CustomModel.ResponseMessage;
+import com.example.manstore.CustomModel.ResponseProduct;
 import com.example.manstore.dto.custom.ChiTietSanPhamDTO;
 
 import com.example.manstore.dto.custom.SanPhamChiTietDTO;
