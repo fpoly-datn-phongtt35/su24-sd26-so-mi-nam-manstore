@@ -2,323 +2,323 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="light" data-footer="dark"
       xmlns="http://www.w3.org/1999/html">
 <head th:replace="client/fragments/head::head">
-    <style>
-        .modal-xl-custom {
-            width: 400px;
-        }
-    </style>
+  <style>
+      .modal-xl-custom {
+          width: 400px;
+      }
+  </style>
 </head>
 <body>
 <div th:replace="client/fragments/header::header"></div>
 <div th:replace="client/fragments/search::search"></div>
 <section class="page-wrapper bg-primary">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="text-center d-flex align-items-center justify-content-between">
-                    <h4 class="text-white mb-0">Thanh toán </h4>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb breadcrumb-light justify-content-center mb-0 fs-15">
-                            <li class="breadcrumb-item"><a href="#!">Shop</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-            <!--end col-->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="text-center d-flex align-items-center justify-content-between">
+          <h4 class="text-white mb-0">Thanh toán </h4>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-light justify-content-center mb-0 fs-15">
+              <li class="breadcrumb-item"><a href="#!">Shop</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
+            </ol>
+          </nav>
         </div>
-        <!--end row-->
+      </div>
+      <!--end col-->
     </div>
-    <!--end container-->
+    <!--end row-->
+  </div>
+  <!--end container-->
 </section>
 
 <section class="section">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive table-card">
-                            <table class="table align-middle table-borderless table-nowrap text-center mb-0">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Sản Phẩm</th>
-                                    <th scope="col">Đơn Giá</th>
-                                    <th scope="col">Số Lượng</th>
-                                    <th scope="col">Thành Tiền</th>
-                                </tr>
-                                </thead>
-                                <tbody id="table-cart">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-4 pt-2">
-                    <div class="row gy-3" id="address">
-
-                    </div>
-                </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-8">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive table-card">
+              <table class="table align-middle table-borderless table-nowrap text-center mb-0">
+                <thead>
+                <tr>
+                  <th scope="col">Sản Phẩm</th>
+                  <th scope="col">Đơn Giá</th>
+                  <th scope="col">Số Lượng</th>
+                  <th scope="col">Thành Tiền</th>
+                </tr>
+                </thead>
+                <tbody id="table-cart">
+                </tbody>
+              </table>
             </div>
-            <!-- end col -->
-            <div class="col-lg-4">
-                <div class="sticky-side-div">
-                    <div class="card overflow-hidden">
-                        <div class="card-header border-bottom-dashed">
-                            <h5 class="card-title mb-0 fs-15">Tổng Giá Trị <span class="text-danger fw-bold"
-                                                                                 id="important-note"></span>
-                            </h5>
-                        </div>
-                        <div class="card-body pt-4">
-                            <div class="table-responsive table-card">
-                                <table class="table table-borderless mb-0 fs-15">
-                                    <tbody>
-                                    <tr>
-                                        <td>Tổng tiền<small>(trước thuế)</small></td>
-                                        <td class="text-end cart-subtotal" id="sub-total"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Giảm giá <small class="text-muted" disabled id="promotion-title">(Không có
-                                            khuyến mãi)</small>:
-                                        </td>
-                                        <td class="text-end cart-discount text-danger" id="promotion-value"></td>
-                                    </tr>
-<!--                                    <tr>-->
-<!--                                        <td>-->
-<!--                                            <select id="promotion-select" onchange="applySelectedPromotion()">-->
-<!--                                                <option value="">Chọn khuyến mãi</option>-->
-<!--                                            </select>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-                                    <tr>
-                                        <td>VAT<small>(10%)</small> :</td>
-                                        <td class="text-end cart-tax" id="vat"></td>
-                                    </tr>
-                                    <tr class="table-active">
-                                        <th>Tổng thanh toán<small> (chưa tính phí ship)</small> :</th>
-                                        <td class="text-end">
-                                            <span class="fw-semibold cart-total" id="total_amount"></span>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- end table-responsive -->
-                        </div>
-                    </div>
-                    <div class="hstack gap-2 justify-content-between justify-content-end" id="change_button">
-                        <a class="btn btn-hover btn-soft-info w-100" onclick="handleBack()">Quay Lại Giỏ Hàng<i
-                                class="ri-arrow-right-line label-icon align-middle ms-1"></i></a>
-                        <button class="btn btn-hover btn-primary w-100" onclick="handlerOrder()">Đặt Hàng</button>
-                    </div>
+          </div>
+        </div>
 
-                </div>
-                <!-- end sticky -->
-            </div><!--end col-->
-        </div><!--end row-->
-    </div><!--end container-->
+        <div class="mt-4 pt-2">
+          <div class="row gy-3" id="address">
+
+          </div>
+        </div>
+      </div>
+      <!-- end col -->
+      <div class="col-lg-4">
+        <div class="sticky-side-div">
+          <div class="card overflow-hidden">
+            <div class="card-header border-bottom-dashed">
+              <h5 class="card-title mb-0 fs-15">Tổng Giá Trị <span class="text-danger fw-bold"
+                                                                   id="important-note"></span>
+              </h5>
+            </div>
+            <div class="card-body pt-4">
+              <div class="table-responsive table-card">
+                <table class="table table-borderless mb-0 fs-15">
+                  <tbody>
+                  <tr>
+                    <td>Tổng tiền<small>(trước thuế)</small></td>
+                    <td class="text-end cart-subtotal" id="sub-total"></td>
+                  </tr>
+                  <tr>
+                    <td>Giảm giá <small class="text-muted" disabled id="promotion-title">(Không có
+                      khuyến mãi)</small>:
+                    </td>
+                    <td class="text-end cart-discount text-danger" id="promotion-value"></td>
+                  </tr>
+                  <!--                                    <tr>-->
+                  <!--                                        <td>-->
+                  <!--                                            <select id="promotion-select" onchange="applySelectedPromotion()">-->
+                  <!--                                                <option value="">Chọn khuyến mãi</option>-->
+                  <!--                                            </select>-->
+                  <!--                                        </td>-->
+                  <!--                                    </tr>-->
+                  <tr>
+                    <td>VAT<small>(10%)</small> :</td>
+                    <td class="text-end cart-tax" id="vat"></td>
+                  </tr>
+                  <tr class="table-active">
+                    <th>Tổng thanh toán<small> (chưa tính phí ship)</small> :</th>
+                    <td class="text-end">
+                      <span class="fw-semibold cart-total" id="total_amount"></span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- end table-responsive -->
+            </div>
+          </div>
+          <div class="hstack gap-2 justify-content-between justify-content-end" id="change_button">
+            <a class="btn btn-hover btn-soft-info w-100" onclick="handleBack()">Quay Lại Giỏ Hàng<i
+                    class="ri-arrow-right-line label-icon align-middle ms-1"></i></a>
+            <button class="btn btn-hover btn-primary w-100" onclick="handlerOrder()">Đặt Hàng</button>
+          </div>
+
+        </div>
+        <!-- end sticky -->
+      </div><!--end col-->
+    </div><!--end row-->
+  </div><!--end container-->
 </section>
 <div class="modal fade" id="myModal" tabindex="-1">
-    <div class="modal-dialog modal-xl-custom">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Địa Chỉ Của Tôi</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mt-4 pt-2">
-                    <div id="modal-address" class="row gy-3"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Đóng
-                </button>
-                <button type="button" class="btn btn-primary" id="change-address" onclick="handleChangeAddress()">
-                    Lưu
-                </button>
-            </div>
+  <div class="modal-dialog modal-xl-custom">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Địa Chỉ Của Tôi</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mt-4 pt-2">
+          <div id="modal-address" class="row gy-3"></div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Đóng
+        </button>
+        <button type="button" class="btn btn-primary" id="change-address" onclick="handleChangeAddress()">
+          Lưu
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 <div class="modal fade" id="myModalCreate" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Địa Chỉ Nhận Hàng</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Tỉnh/Thành</label>
-                                    <select class="form-control" id="province"
-                                            onchange="getDistricts()">
-                                        <option value="0" data-id="">Chọn tỉnh/thành</option>
-                                    </select>
-                                    <div class="text-danger p-1" id="error-province"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Quận/Huyện</label>
-                                    <select class="form-control" id="district"
-                                            onchange="getWards()">
-                                        <option value="0" data-id="">Chọn quận/huyện</option>
-                                    </select>
-                                    <div class="text-danger p-1" id="error-district">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Xã/Phường</label>
-                                    <select class="form-control" id="ward" onchange="validateWards()">
-                                        <option value="0" data-id="">Chọn xã/phường</option>
-                                    </select>
-                                    <div class="text-danger p-1" id="error-ward">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Số Điện Thoại</label>
-                                    <input class="form-control" id="phone" onkeyup="validPhone()"
-                                           onpaste="validPhone()"/>
-                                    <div class="text-danger p-1" id="error-phone"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="address-detail">Địa Chỉ
-                                    </label>
-                                    <textarea aria-label="With textarea" class="form-control"
-                                              id="address-detail" onkeyup="validAddressdetail()">
-                                    </textarea>
-                                    <div class="text-danger p-1" id="error-address-detail"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="full-name">Họ Tên Người Nhận
-                                    </label>
-                                    <input class="form-control" id="full-name" onkeyup="validFullName()"/>
-                                    <div class="text-danger p-1" id="error-name"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Địa Chỉ Nhận Hàng</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Tỉnh/Thành</label>
+                  <select class="form-control" id="province"
+                          onchange="getDistricts()">
+                    <option value="0" data-id="">Chọn tỉnh/thành</option>
+                  </select>
+                  <div class="text-danger p-1" id="error-province"></div>
                 </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Quận/Huyện</label>
+                  <select class="form-control" id="district"
+                          onchange="getWards()">
+                    <option value="0" data-id="">Chọn quận/huyện</option>
+                  </select>
+                  <div class="text-danger p-1" id="error-district">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Huỷ
-                </button>
-                <button type="button" class="btn btn-primary" onclick="saveAddress()">
-                    Thêm
-                </button>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Xã/Phường</label>
+                  <select class="form-control" id="ward" onchange="validateWards()">
+                    <option value="0" data-id="">Chọn xã/phường</option>
+                  </select>
+                  <div class="text-danger p-1" id="error-ward">
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Số Điện Thoại</label>
+                  <input class="form-control" id="phone" onkeyup="validPhone()"
+                         onpaste="validPhone()"/>
+                  <div class="text-danger p-1" id="error-phone"></div>
+                </div>
+              </div>
             </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label" for="address-detail">Địa Chỉ
+                  </label>
+                  <textarea aria-label="With textarea" class="form-control"
+                            id="address-detail" onkeyup="validAddressdetail()">
+                                    </textarea>
+                  <div class="text-danger p-1" id="error-address-detail"></div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label" for="full-name">Họ Tên Người Nhận
+                  </label>
+                  <input class="form-control" id="full-name" onkeyup="validFullName()"/>
+                  <div class="text-danger p-1" id="error-name"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Huỷ
+        </button>
+        <button type="button" class="btn btn-primary" onclick="saveAddress()">
+          Thêm
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 <div class="modal fade" id="myModalEdit" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Cập Nhật Địa Chỉ</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Cập Nhật Địa Chỉ</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Tỉnh/Thành</label>
+                  <select class="form-control" id="province-update"
+                          onchange="getDistricts()">
+                    <option value="0" data-id="">Chọn tỉnh/thành</option>
+                  </select>
+                  <div class="text-danger p-1" id="error-province-update"></div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Quận/Huyện</label>
+                  <select class="form-control" id="district-update"
+                          onchange="getWards()">
+                    <option value="0" data-id="">Chọn quận/huyện</option>
+                  </select>
+                  <div class="text-danger p-1" id="error-district-update">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Tỉnh/Thành</label>
-                                    <select class="form-control" id="province-update"
-                                            onchange="getDistricts()">
-                                        <option value="0" data-id="">Chọn tỉnh/thành</option>
-                                    </select>
-                                    <div class="text-danger p-1" id="error-province-update"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Quận/Huyện</label>
-                                    <select class="form-control" id="district-update"
-                                            onchange="getWards()">
-                                        <option value="0" data-id="">Chọn quận/huyện</option>
-                                    </select>
-                                    <div class="text-danger p-1" id="error-district-update">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Xã/Phường</label>
-                                    <select class="form-control" id="ward-update" onchange="validateWardsUpdate()">
-                                        <option value="0" data-id="">Chọn xã/phường</option>
-                                    </select>
-                                    <div class="text-danger p-1" id="error-ward-update">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="phone-update">Số Điện Thoại</label>
-                                    <input class="form-control" id="phone-update" onkeyup="validPhoneUpdate()"
-                                           onpaste="validPhoneUpdate()"/>
-                                    <div class="text-danger p-1" id="error-phone-update"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="address-detail">Địa Chỉ
-                                    </label>
-                                    <textarea aria-label="With textarea" class="form-control"
-                                              id="address-detail-update" onkeyup="validAddressdetailUpdate()"
-                                              onpaste="validAddressdetailUpdate()">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Xã/Phường</label>
+                  <select class="form-control" id="ward-update" onchange="validateWardsUpdate()">
+                    <option value="0" data-id="">Chọn xã/phường</option>
+                  </select>
+                  <div class="text-danger p-1" id="error-ward-update">
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label" for="phone-update">Số Điện Thoại</label>
+                  <input class="form-control" id="phone-update" onkeyup="validPhoneUpdate()"
+                         onpaste="validPhoneUpdate()"/>
+                  <div class="text-danger p-1" id="error-phone-update"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label" for="address-detail">Địa Chỉ
+                  </label>
+                  <textarea aria-label="With textarea" class="form-control"
+                            id="address-detail-update" onkeyup="validAddressdetailUpdate()"
+                            onpaste="validAddressdetailUpdate()">
                                     </textarea>
-                                    <div class="text-danger p-1" id="error-address-detail-update"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="full-name-update">Họ Tên Người Nhận
-                                    </label>
-                                    <input class="form-control" id="full-name-update" onkeyup="validFullNameUpdate()"/>
-                                    <div class="text-danger p-1" id="error-name-update"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  <div class="text-danger p-1" id="error-address-detail-update"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Huỷ
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="updateAddress()">
-                        Lưu
-                    </button>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label" for="full-name-update">Họ Tên Người Nhận
+                  </label>
+                  <input class="form-control" id="full-name-update" onkeyup="validFullNameUpdate()"/>
+                  <div class="text-danger p-1" id="error-name-update"></div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Huỷ
+          </button>
+          <button type="button" class="btn btn-primary" onclick="updateAddress()">
+            Lưu
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 <div th:replace="client/fragments/footer::footer"></div>
 <div th:replace="client/fragments/script::script"></div>
@@ -410,59 +410,160 @@
         return VND.format(money);
     }
 
+    // async function loadCart() {
+    //     console.log(listCart);
+    //     let sub_total = 0;
+    //     let vat = 0;
+    //     let main = ``;
+    //     for (i = 0; i < listCart.length; i++) {
+    //         let money = formatMoney(listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong);
+    //         sub_total += listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong;
+    //         vat += (listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong) * 0.1;
+    //         // let urlGetPicture = '/api/client/product_detail/picture-detail/' + listCart[i].spct.sp.id + '/' + listCart[i].spct.ms.id;
+    //         // const pictureResponse = await fetch(urlGetPicture, {
+    //         //     method: 'GET',
+    //         //     headers: {
+    //         //         'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+    //         //     }
+    //         // });
+    //         // let dataPicture = await pictureResponse.json();
+    //         // let img = '';
+    //         // if (dataPicture.statusText === "failure") {
+    //         //     img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-xs">`;
+    //         // } else {
+    //         //     img = `<img src="${dataPicture[0].linkAnh}" alt="" class="avatar-xs">`;
+    //         // }
+    //         main += `
+    //                 <tr>
+    //                         <td class="text-start">
+    //                              <div class="d-flex align-items-center gap-2">
+    //                                   <div class="avatar-sm flex-shrink-0">
+    //                                           <div class="avatar-title bg-success-subtle rounded-3">
+    //
+    //                                           </div>
+    //                                   </div>
+    //                                   <div class="flex-grow-1">
+    //                                               <h6>${listCart[i].idSanPhamChiTiet.idSanPham.ten}</h6>
+    //                                               <p class="text-muted mb-0">${listCart[i].idSanPhamChiTiet.idMauSac.ten} & ${listCart[i].idSanPhamChiTiet.idSize.ten}</p>
+    //                                   </div>
+    //                              </div>
+    //                         </td>
+    //                         <td>
+    //                              ${formatMoney(listCart[i].idSanPhamChiTiet.idSanPham.gia)}
+    //                         </td>
+    //                         <td>
+    //                              ${listCart[i].soLuong}
+    //                         </td>
+    //                         <td class="text-center">${money}</td>
+    //                 </tr>
+    //         `;
+    //     }
+    //
+    //     let total_amount;
+    //     console.log(promotion);
+    //     if (promotion !== null) {
+    //
+    //         if (sub_total >= promotion.giaTriDonHang) {
+    //             if (promotion.loaiGiamGia === true)
+    //                 total_amount = (sub_total + vat) - ((sub_total + vat) * (promotion.giaTriGiam / 100));
+    //             else
+    //                 total_amount = (sub_total + vat) - promotion.giaTriGiam;
+    //             document.getElementById("table-cart").innerHTML = main;
+    //             document.getElementById("sub-total").innerText = formatMoney(sub_total);
+    //             document.getElementById("vat").innerText = formatMoney(vat);
+    //             document.getElementById("total_amount").innerText = formatMoney(total_amount);
+    //             document.getElementById("promotion-title").innerText = '(' + promotion.ten + ')';
+    //             document.getElementById("promotion-value").innerText = promotion.loaiGiamGia === true ?
+    //                 '- ' + promotion.giaTriGiam + '%' : '- ' + formatMoney(promotion.giaTriGiam);
+    //         } else {
+    //             total_amount = sub_total + vat;
+    //             let value_promotion;
+    //             if (promotion.loaiGiamGia === true)
+    //                 value_promotion = promotion.giaTriGiam + '%';
+    //             else
+    //                 value_promotion = formatMoney(promotion.giaTriGiam);
+    //             let reference_value = (promotion.giaTriDonHang - (sub_total));
+    //             let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
+    //                 ' cho đơn hàng!)';
+    //             document.getElementById("table-cart").innerHTML = main;
+    //             document.getElementById("sub-total").innerText = formatMoney(sub_total);
+    //             document.getElementById("vat").innerText = formatMoney(vat);
+    //             document.getElementById("total_amount").innerText = formatMoney(total_amount);
+    //             document.getElementById("promotion-title").innerText = '(chưa đủ điều kiện áp dụng)';
+    //             document.getElementById('important-note').innerText = important_note;
+    //         }
+    //     } else {
+    //         total_amount = sub_total + vat;
+    //         document.getElementById("table-cart").innerHTML = main;
+    //         document.getElementById("sub-total").innerText = formatMoney(sub_total);
+    //         document.getElementById("vat").innerText = formatMoney(vat);
+    //         document.getElementById("total_amount").innerText = formatMoney(total_amount);
+    //     }
+    // }
+
     async function loadCart() {
         console.log(listCart);
         let sub_total = 0;
         let vat = 0;
         let main = ``;
-        for (i = 0; i < listCart.length; i++) {
+
+        for (let i = 0; i < listCart.length; i++) {
             let money = formatMoney(listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong);
             sub_total += listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong;
             vat += (listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong) * 0.1;
-            // let urlGetPicture = '/api/client/product_detail/picture-detail/' + listCart[i].spct.sp.id + '/' + listCart[i].spct.ms.id;
-            // const pictureResponse = await fetch(urlGetPicture, {
-            //     method: 'GET',
-            //     headers: {
-            //         'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            //     }
-            // });
-            // let dataPicture = await pictureResponse.json();
-            // let img = '';
-            // if (dataPicture.statusText === "failure") {
-            //     img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-xs">`;
-            // } else {
-            //     img = `<img src="${dataPicture[0].linkAnh}" alt="" class="avatar-xs">`;
-            // }
-            main += `
-                    <tr>
-                            <td class="text-start">
-                                 <div class="d-flex align-items-center gap-2">
-                                      <div class="avatar-sm flex-shrink-0">
-                                              <div class="avatar-title bg-success-subtle rounded-3">
 
-                                              </div>
-                                      </div>
-                                      <div class="flex-grow-1">
-                                                  <h6>${listCart[i].idSanPhamChiTiet.idSanPham.ten}</h6>
-                                                  <p class="text-muted mb-0">${listCart[i].idSanPhamChiTiet.idMauSac.ten} & ${listCart[i].idSanPhamChiTiet.idSize.ten}</p>
-                                      </div>
-                                 </div>
-                            </td>
-                            <td>
-                                 ${formatMoney(listCart[i].idSanPhamChiTiet.idSanPham.gia)}
-                            </td>
-                            <td>
-                                 ${listCart[i].soLuong}
-                            </td>
-                            <td class="text-center">${money}</td>
-                    </tr>
-            `;
+            // Tạo URL để lấy hình ảnh sản phẩm
+            let urlGetPicture = '/api/client/product_detail/picture-detail/' + listCart[i].idSanPhamChiTiet.idSanPham.id + '/' + listCart[i].idSanPhamChiTiet.idMauSac.id;
+            const pictureResponse = await fetch(urlGetPicture, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                }
+            });
+
+            let dataPicture = await pictureResponse.json();
+            console.log('Image data received loadCart:', dataPicture);
+
+            let img;
+
+            // Xử lý khi không có ảnh hoặc có lỗi
+            if (dataPicture.statusText === "failure" || !Array.isArray(dataPicture) || dataPicture.length === 0) {
+                img = `<img src="http://localhost:8080/assets/images/products/img-8.png" alt="" class="avatar-md">`;
+            } else {
+                let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+                img = `<img src="${fullUrl}" alt="" class="avatar-md">`;
+            }
+
+            main += `
+            <tr>
+                <td class="text-start">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="avatar-sm flex-shrink-0">
+                            <div class="avatar-title bg-success-subtle rounded-3">
+                                ${img}
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6>${listCart[i].idSanPhamChiTiet.idSanPham.ten}</h6>
+                            <p class="text-muted mb-0">${listCart[i].idSanPhamChiTiet.idMauSac.ten} & ${listCart[i].idSanPhamChiTiet.idSize.ten}</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    ${formatMoney(listCart[i].idSanPhamChiTiet.idSanPham.gia)}
+                </td>
+                <td>
+                    ${listCart[i].soLuong}
+                </td>
+                <td class="text-center">${money}</td>
+            </tr>
+        `;
         }
 
         let total_amount;
         console.log(promotion);
-        if (promotion !== null) {
 
+        if (promotion !== null) {
             if (sub_total >= promotion.giaTriDonHang) {
                 if (promotion.loaiGiamGia === true)
                     total_amount = (sub_total + vat) - ((sub_total + vat) * (promotion.giaTriGiam / 100));
@@ -483,8 +584,7 @@
                 else
                     value_promotion = formatMoney(promotion.giaTriGiam);
                 let reference_value = (promotion.giaTriDonHang - (sub_total));
-                let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
-                    ' cho đơn hàng!)';
+                let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion + ' cho đơn hàng!)';
                 document.getElementById("table-cart").innerHTML = main;
                 document.getElementById("sub-total").innerText = formatMoney(sub_total);
                 document.getElementById("vat").innerText = formatMoney(vat);
@@ -520,27 +620,35 @@
             let money = formatMoney(list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong);
             sub_total += list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong;
             vat += (list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong) * 0.1;
-            // let urlGetPicture = '/api/client/product_detail/picture-detail/' + list[i].spct.sp.id + '/' + list[i].spct.ms.id;
-            // const pictureResponse = await fetch(urlGetPicture, {
-            //     method: 'GET',
-            //     headers: {
-            //         'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            //     }
-            // });
-            // let dataPicture = await pictureResponse.json();
-            // let img = '';
-            // if (dataPicture.statusText === "failure") {
-            //     img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-xs">`;
-            // } else {
-            //     img = `<img src="${dataPicture[0].linkAnh}" alt="" class="avatar-xs">`;
-            // }
+            let urlGetPicture = '/api/client/product_detail/picture-detail/' + list[i].idSanPhamChiTiet.idSanPham.id + '/' + list[i].idSanPhamChiTiet.idMauSac.id;
+            const pictureResponse = await fetch(urlGetPicture, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                }
+            });
+
+            let dataPicture = await pictureResponse.json();
+            console.log('Image data received LoadRepurchase:', dataPicture);
+
+            let img = '';
+
+            // Xử lý khi không có ảnh hoặc có lỗi
+            if (!pictureResponse.ok || !Array.isArray(dataPicture) || dataPicture.length === 0) {
+                img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-xs">`;
+                console.warn('Using fallback image due to missing or invalid image data');
+            } else {
+                let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+                img = `<img src="${fullUrl}" alt="" class="avatar-xs">`;
+                console.log('Using fetched image:', fullUrl);
+            }
             main += `
                     <tr>
                             <td class="text-start">
                                  <div class="d-flex align-items-center gap-2">
                                       <div class="avatar-sm flex-shrink-0">
                                               <div class="avatar-title bg-success-subtle rounded-3">
-
+                                             ${img}
                                               </div>
                                       </div>
                                       <div class="flex-grow-1">
@@ -608,47 +716,59 @@
         let money = formatMoney(productBuyNow.donGia * productBuyNow.soLuong);
         sub_total += productBuyNow.donGia * productBuyNow.soLuong;
         vat += (productBuyNow.donGia * productBuyNow.soLuong) * 0.1;
-        // let urlGetPicture = '/api/client/product_detail/picture-detail/' + productBuyNow.idSanPham + '/' + productBuyNow.idMauSac;
-        // const pictureResponse = await fetch(urlGetPicture, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-        //     }
-        // });
-        let promotion = productBuyNow.khuyenMai[0];
-        // let dataPicture = await pictureResponse.json();
-        // let img = '';
-        // if (dataPicture.statusText === "failure") {
-        //     img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-xs">`;
-        // } else {
-        //     img = `<img src="${dataPicture[0].linkAnh}" alt="" class="avatar-xs">`;
-        // }
-        main += `
-                    <tr>
-                            <td class="text-start">
-                                 <div class="d-flex align-items-center gap-2">
-                                      <div class="avatar-sm flex-shrink-0">
-                                              <div class="avatar-title bg-success-subtle rounded-3">
+        // Tạo URL để lấy hình ảnh sản phẩm
+        let urlGetPicture = '/api/client/product_detail/picture-detail/' + productBuyNow.idSanPham + '/' + productBuyNow.idMauSac;
+        console.log('Fetching image from URL:', urlGetPicture);
 
-                                              </div>
-                                      </div>
-                                      <div class="flex-grow-1">
-                                                  <h6>${productBuyNow.tenSanPham}</h6>
-                                                  <p class="text-muted mb-0">${productBuyNow.mauSac} & ${productBuyNow.size}</p>
-                                      </div>
-                                 </div>
-                            </td>
-                            <td>
-                                 ${formatMoney(productBuyNow.donGia)}
-                            </td>
-                            <td>
-                                 ${productBuyNow.soLuong}
-                            </td>
-                            <td class="text-center">${money}</td>
-                    </tr>
-            `;
+        const pictureResponse = await fetch(urlGetPicture, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+            }
+        });
+
+        let dataPicture = await pictureResponse.json();
+        console.log('Image data received loadBuyNow:', dataPicture);
+
+        let img = '';
+
+        // Xử lý khi không có ảnh hoặc có lỗi
+        if (!pictureResponse.ok || !Array.isArray(dataPicture) || dataPicture.length === 0) {
+            img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-xs">`;
+            console.warn('Using fallback image due to missing or invalid image data');
+        } else {
+            let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+            img = `<img src="${fullUrl}" alt="" class="avatar-xs">`;
+            console.log('Using fetched image:', fullUrl);
+        }
+
+        main += `
+        <tr>
+            <td class="text-start">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="avatar-sm flex-shrink-0">
+                        <div class="avatar-title bg-success-subtle rounded-3">
+                            ${img}
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6>${productBuyNow.tenSanPham}</h6>
+                        <p class="text-muted mb-0">${productBuyNow.mauSac} & ${productBuyNow.size}</p>
+                    </div>
+                </div>
+            </td>
+            <td>
+                ${formatMoney(productBuyNow.donGia)}
+            </td>
+            <td>
+                ${productBuyNow.soLuong}
+            </td>
+            <td class="text-center">${money}</td>
+        </tr>
+    `;
 
         let total_amount;
+        let promotion = productBuyNow.khuyenMai[0];
         if (promotion !== undefined) {
             console.log('Khuyến mãi hiện tại:', promotion);
             if (sub_total >= promotion.giaTriDonHang) {
@@ -1910,7 +2030,7 @@
                 let url;
                 let sub_total = parseInt(productBuyNow.donGia) * parseInt(productBuyNow.soLuong);
                 if (productBuyNow.khuyenMai.length > 0)
-                    if (sub_total>= productBuyNow.khuyenMai[0].giaTriDonHang)
+                    if (sub_total >= productBuyNow.khuyenMai[0].giaTriDonHang)
                         url = '/api/client/order/invoice/buy-now/' + userId + '/' + addressId + '?idPromotion=' + productBuyNow.khuyenMai[0].id;
                     else
                         url = '/api/client/order/invoice/buy-now/' + userId + '/' + addressId;

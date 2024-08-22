@@ -239,20 +239,25 @@
                     var count = arrChild[j].soLuong;
                     sub_total += arrChild[j].idSanPhamChiTiet.idSanPham.gia * count;
                     vat += (arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1;
-                    // var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].idSanPhamChiTiet.idSanPham.id + '/' + arrChild[j].idSanPhamChiTiet.idMauSac.id;
-                    // const pictureResponse = await fetch(urlGetPicture, {
-                    //     method: 'GET',
-                    //     headers: {
-                    //         'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-                    //     }
-                    // });
-                    // var dataPicture = await pictureResponse.json();
-                    // var img;
-                    // if (dataPicture.statusText === "failure") {
-                    //     img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-md">`;
-                    // } else {
-                    //     img = `<img src="${dataPicture[0].duongDan}" alt="" class="avatar-md">`;
-                    // }
+
+                    // Tim anh theo id san pham chi tiet va id mau sac
+                    var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].idSanPhamChiTiet.idSanPham.id + '/' + arrChild[j].idSanPhamChiTiet.idMauSac.id;
+                    const pictureResponse = await fetch(urlGetPicture, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                        }
+                    });
+                    var dataPicture = await pictureResponse.json();
+                    var img;
+
+                    if (dataPicture.statusText === "failure" || !Array.isArray(dataPicture) || dataPicture.length === 0) {
+                        img = `<img src="http://localhost:8080/assets/images/products/img-8.png" alt="" class="avatar-md">`;
+                    } else {
+                        let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+                        img = `<img src="${fullUrl}" alt="" class="avatar-md">`;
+                    }
+
                     groupSP += `<div class="row gy-3 p-2">
                                     <div class="col-sm-auto d-flex gap-2 justify-content-end mt-auto mb-auto">
                                       <div class="form-check">
@@ -263,8 +268,9 @@
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="avatar-lg h-100">
-                                            <div class="avatar-title bg-dark-subtle rounded py-3" id="product-picture">
-                                               </div>
+                                             <div class="avatar-title bg-dark-subtle rounded py-3" id="product-picture-${arrChild[j].id}-${indexFor}">
+                                            ${img}
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="col-sm">
@@ -467,8 +473,8 @@
                             selectedProduct.forEach(function (item) {
                                 console.log(item);
                             })
-                            console.log('Checked : ', selectedProduct.includes(arr[i].sanPhamChiTiet.id + ''));
-                            if (!selectedProduct.includes(arr[i].sanPhamChiTiet.id + '')) {
+                            console.log('Checked : ', selectedProduct.includes(arr[i].idSanPhamChiTiet.id + ''));
+                            if (!selectedProduct.includes(arr[i].idSanPhamChiTiet.id + '')) {
                                 allInSelectedProduct = false;
                                 console.log("Not all are in select product!")
                                 break;
@@ -660,34 +666,27 @@
             }
         });
     }
-
-        function areAllChecked() {
-            let checkboxes = document.querySelectorAll('.checkbox-single[type="checkbox"]');
-            let isChecked = true;
-            for (let i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].checked === false) {
-                    isChecked = false;
-                }
+    function areAllChecked() {
+        let checkboxes = document.querySelectorAll('.checkbox-single[type="checkbox"]');
+        let isChecked = true;
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked === false) {
+                isChecked = false;
             }
-            console.log('checked : ', isChecked);
-            let button;
-            if (isChecked === true) {
-                button = ` < button
-
-                    class
-
-                    = "btn btn-hover btn-info"
-                    onclick = "unchooseAll()" >
-                        Bỏ
-                    Chọn
-                    < /button>`;
-            } else {
-                button = `<button class="btn btn-hover btn-success" onclick="chooseAll()">
+        }
+        console.log('checked : ', isChecked);
+        let button;
+        if (isChecked === true) {
+            button = `<button class="btn btn-hover btn-info" onclick="unchooseAll()">
+                            Bỏ Chọn
+                        </button>`;
+        } else {
+            button = `<button class="btn btn-hover btn-success" onclick="chooseAll()">
                             Chọn Tất Cả
                         </button>`;
-            }
-            document.getElementById('button-choose').innerHTML = button;
         }
+        document.getElementById('button-choose').innerHTML = button;
+    }
 
         function chooseAll() {
             sub_total_global = 0;
