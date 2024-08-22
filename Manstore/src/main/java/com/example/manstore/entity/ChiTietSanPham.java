@@ -50,13 +50,13 @@ public class ChiTietSanPham implements Serializable {
     @Column(name = "TrangThai")
     private Integer trangThai;
 
-    @OneToMany(mappedBy = "idChiTietSanPham", fetch = FetchType.LAZY)
-    private List<ChiTietHoaDon> chiTietHoaDons;
-
-    @OneToMany(mappedBy = "idSanPhamChiTiet", fetch = FetchType.LAZY)
-//    @JsonIgnore
-    @JsonBackReference
-    private List<GioHangChiTiet> gioHangChiTiets;
+//    @OneToMany(mappedBy = "idChiTietSanPham", fetch = FetchType.LAZY)
+//    private List<ChiTietHoaDon> chiTietHoaDons;
+//
+//    @OneToMany(mappedBy = "idSanPhamChiTiet", fetch = FetchType.LAZY)
+////    @JsonIgnore
+//    @JsonBackReference
+//    private List<GioHangChiTiet> gioHangChiTiets;
 
     @Column(name = "duongDan")
     private String duongDan;

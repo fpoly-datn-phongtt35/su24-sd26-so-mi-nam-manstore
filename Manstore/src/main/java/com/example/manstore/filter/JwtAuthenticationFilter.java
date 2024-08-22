@@ -80,7 +80,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 path.startsWith("/shop-cart") ||
                 path.startsWith("/order") ||
                 path.startsWith("/api/client/cart_detail/findAll")||
-                path.startsWith("api/client/order/invoice/buy-now/**")
+                path.startsWith("api/client/order/invoice/buy-now/**")||
+                path.startsWith(" /api/client/cart_detail/add-to-invoice/**")
         )
         {
             filterChain.doFilter(request, response);

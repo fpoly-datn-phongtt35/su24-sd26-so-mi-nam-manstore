@@ -36,9 +36,9 @@ public class MauSac implements Serializable {
     @Column(name = "Ten", length = 100)
     private String ten;
 
-    @OneToMany(mappedBy = "idMauSac", fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JsonIgnoreProperties({"idMauSac", "hibernateLazyInitializer", "handler"})
-    private List<ChiTietSanPham> chiTietSanPhams;
+//    @OneToMany(mappedBy = "idMauSac", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    @JsonIgnoreProperties({"idMauSac", "hibernateLazyInitializer", "handler"})
+//    private List<ChiTietSanPham> chiTietSanPhams;
 
 }

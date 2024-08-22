@@ -70,11 +70,11 @@ public class HoaDon implements Serializable {
     @Column(name = "TrangThai")
     private Integer trangThai;
 
-    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
-    private List<ChiTietHoaDon> chiTietHoaDons;
-
-    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
-    private List<ThongBao> thongBaos;
+//    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
+//    private List<ChiTietHoaDon> chiTietHoaDons;
+//
+//    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
+//    private List<ThongBao> thongBaos;
 
 
 }

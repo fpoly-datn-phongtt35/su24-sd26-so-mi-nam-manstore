@@ -345,7 +345,6 @@ public class SanPhamController {
             try {
                 sp.setTen(dto.getTen());
                 sp.setGia(dto.getGia());
-                sp.setGiaSale(dto.getGiaSale());
                 sp.setMoTa(dto.getMoTa());
                 sp.setTrangThai(dto.getTrangThai());
                 sp.setIdDanhMuc(danhMucRepository.findById(dto.getDanhMuc()).get());
@@ -449,7 +448,6 @@ public class SanPhamController {
             try {
                 sp.setTen(dto.getTen());
                 sp.setGia(dto.getGia());
-                sp.setGiaSale(dto.getGiaSale());
                 sp.setMoTa(dto.getMoTa());
                 sp.setTrangThai(dto.getTrangThai());
                 sp.setIdDanhMuc(danhMucRepository.findById(dto.getDanhMuc()).get());

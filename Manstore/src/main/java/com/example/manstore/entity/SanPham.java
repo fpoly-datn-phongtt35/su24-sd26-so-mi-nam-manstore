@@ -47,8 +47,8 @@ public class SanPham implements Serializable {
     @Column(name = "Gia", precision = 18)
     private BigDecimal gia;
 
-    @Column(name = "GiaSale", precision = 18)
-    private BigDecimal giaSale;
+//    @Column(name = "GiaSale", precision = 18)
+//    private BigDecimal giaSale;
 
 
     @Column(name = "MoTa", length = 500)
@@ -94,11 +94,11 @@ public class SanPham implements Serializable {
     @Column(name = "TrangThai")
     private Integer trangThai;
 
-    @OneToMany(mappedBy = "idSanPham", fetch = FetchType.LAZY)
-//    @JsonIgnoreProperties({"idSanPham", "hibernateLazyInitializer", "handler"})
-    @JsonIgnore
-//    @JsonBackReference
-    private List<ChiTietSanPham> chiTietSanPhams;
+//    @OneToMany(mappedBy = "idSanPham", fetch = FetchType.LAZY)
+////    @JsonIgnoreProperties({"idSanPham", "hibernateLazyInitializer", "handler"})
+//    @JsonIgnore
+////    @JsonBackReference
+//    private List<ChiTietSanPham> chiTietSanPhams;
 
     @Column(name = "DuongDan")
     private String DuongDan;

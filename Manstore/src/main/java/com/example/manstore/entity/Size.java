@@ -37,9 +37,9 @@ public class Size implements Serializable {
     @Column(name = "MoTa", length = 500)
     private String moTa;
 
-    @OneToMany(mappedBy = "idSize", fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JsonIgnoreProperties({"idMauSac", "hibernateLazyInitializer", "handler"})
-    private List<ChiTietSanPham> chiTietSanPhams;
+//    @OneToMany(mappedBy = "idSize", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    @JsonIgnoreProperties({"idMauSac", "hibernateLazyInitializer", "handler"})
+//    private List<ChiTietSanPham> chiTietSanPhams;
 
 }

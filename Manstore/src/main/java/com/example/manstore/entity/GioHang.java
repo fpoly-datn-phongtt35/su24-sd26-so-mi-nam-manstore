@@ -34,7 +34,7 @@ public class GioHang implements Serializable {
     @JsonBackReference
     private KhachHang idKhachHang;
 
-    @OneToMany(mappedBy = "idGioHang", fetch = FetchType.LAZY)
-    private List<GioHangChiTiet> gioHangChiTiets;
+//    @OneToMany(mappedBy = "idGioHang", fetch = FetchType.LAZY)
+//    private List<GioHangChiTiet> gioHangChiTiets;
 
 }

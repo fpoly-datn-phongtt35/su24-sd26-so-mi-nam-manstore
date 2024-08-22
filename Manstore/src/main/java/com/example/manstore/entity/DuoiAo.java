@@ -39,8 +39,8 @@ public class DuoiAo implements Serializable {
     @Column(name = "MoTa", length = 500)
     private String moTa;
 
-    @OneToMany(mappedBy = "idDuoiAo", fetch = FetchType.LAZY)
-    @JsonBackReference
-    private List<SanPham> sanPhams;
+//    @OneToMany(mappedBy = "idDuoiAo", fetch = FetchType.LAZY)
+//    @JsonBackReference
+//    private List<SanPham> sanPhams;
 
 }

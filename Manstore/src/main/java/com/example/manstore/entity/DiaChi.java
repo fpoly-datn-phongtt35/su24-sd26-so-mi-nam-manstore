@@ -24,8 +24,6 @@ public class DiaChi implements Serializable {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
     @JsonBackReference

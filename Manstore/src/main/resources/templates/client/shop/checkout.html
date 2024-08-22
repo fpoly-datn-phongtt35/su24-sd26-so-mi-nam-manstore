@@ -82,7 +82,7 @@
                                         <td>Giảm giá <small class="text-muted" disabled id="promotion-title">(Không có
                                             khuyến mãi)</small>:
                                         </td>
-                                        <td class="text-end cart-discount text-danger" id="promotion-value">- 0%</td>
+                                        <td class="text-end cart-discount text-danger" id="promotion-value"></td>
                                     </tr>
 <!--                                    <tr>-->
 <!--                                        <td>-->
@@ -348,7 +348,6 @@
         handleStatusLogin();
         if (listCart) {
             loadCart();
-
             document.getElementById('change_button').innerHTML = `
                 <a class="btn btn-hover btn-soft-info w-100" onclick="handleBack()">Quay Lại Giỏ Hàng<i
                                 class="ri-arrow-right-line label-icon align-middle ms-1"></i></a>
@@ -461,30 +460,31 @@
         }
 
         let total_amount;
+        console.log(promotion);
         if (promotion !== null) {
-            console.log(promotion);
+
             if (sub_total >= promotion.giaTriDonHang) {
-                if (promotion.loaiGiamGia) {
+                if (promotion.loaiGiamGia === true)
                     total_amount = (sub_total + vat) - ((sub_total + vat) * (promotion.giaTriGiam / 100));
-                } else {
+                else
                     total_amount = (sub_total + vat) - promotion.giaTriGiam;
-                }
                 document.getElementById("table-cart").innerHTML = main;
                 document.getElementById("sub-total").innerText = formatMoney(sub_total);
                 document.getElementById("vat").innerText = formatMoney(vat);
                 document.getElementById("total_amount").innerText = formatMoney(total_amount);
                 document.getElementById("promotion-title").innerText = '(' + promotion.ten + ')';
-                document.getElementById("promotion-value").innerText = promotion.loaiGiamGia ?
-                    '- ' + promotion.giaTriGiam + '%' :
-                    '- ' + formatMoney(promotion.loaiGiamGia);
+                document.getElementById("promotion-value").innerText = promotion.loaiGiamGia === true ?
+                    '- ' + promotion.giaTriGiam + '%' : '- ' + formatMoney(promotion.giaTriGiam);
             } else {
                 total_amount = sub_total + vat;
-                let value_promotion = promotion.loaiGiamGia ?
-                    promotion.giaTriGiam + '%' :
-                    formatMoney(promotion.giaTriGiam);
-                let reference_value = (promotion.giaTriDonHang - sub_total);
-                let important_note = `(Mua thêm ${formatMoney(reference_value)} sẽ được giảm ${value_promotion} cho đơn hàng!)`;
-
+                let value_promotion;
+                if (promotion.loaiGiamGia === true)
+                    value_promotion = promotion.giaTriGiam + '%';
+                else
+                    value_promotion = formatMoney(promotion.giaTriGiam);
+                let reference_value = (promotion.giaTriDonHang - (sub_total));
+                let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
+                    ' cho đơn hàng!)';
                 document.getElementById("table-cart").innerHTML = main;
                 document.getElementById("sub-total").innerText = formatMoney(sub_total);
                 document.getElementById("vat").innerText = formatMoney(vat);

@@ -26,8 +26,8 @@ public class PhanQuyen {
     @Column(name = "Ten", length = 100)
     private String ten;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "idPhanQuyen", fetch = FetchType.LAZY)
-    private List<NhanVien> nhanViens;
+//    @JsonBackReference
+//    @OneToMany(mappedBy = "idPhanQuyen", fetch = FetchType.LAZY)
+//    private List<NhanVien> nhanViens;
 
 }

@@ -68,24 +68,24 @@ public class KhachHang implements UserDetails{
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<DiaChi> diaChis;
-
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<GioHang> gioHangs;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<HoaDon> hoaDons;
-
-    @OneToMany(mappedBy = "idKhachHang", fetch = FetchType.LAZY)
-    private List<ThongBao> thongBaos;
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private List<DiaChi> diaChis;
+//
+//
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private List<GioHang> gioHangs;
+//
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "idKhachHang" , fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private List<HoaDon> hoaDons;
+//
+//    @OneToMany(mappedBy = "idKhachHang", fetch = FetchType.LAZY)
+//    private List<ThongBao> thongBaos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

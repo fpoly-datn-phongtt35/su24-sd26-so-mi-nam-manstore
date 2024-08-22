@@ -38,8 +38,8 @@ public class ChatLieu implements Serializable  {
     @Column(name = "MoTa", length = 500)
     private String moTa;
 
-    @OneToMany(mappedBy = "idChatLieu", fetch = FetchType.LAZY)
-    @JsonBackReference
-    private List<SanPham> sanPhams;
+//    @OneToMany(mappedBy = "idChatLieu", fetch = FetchType.LAZY)
+//    @JsonBackReference
+//    private List<SanPham> sanPhams;
 
 }

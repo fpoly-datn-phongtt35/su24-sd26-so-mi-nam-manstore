@@ -29,7 +29,6 @@ public class DotGiamGia implements Serializable {
     @Column(name = "Ma", length = 50)
     private String ma;
 
-
     @Column(name = "Ten", length = 100)
     private String ten;
 
@@ -54,10 +53,7 @@ public class DotGiamGia implements Serializable {
     @Column(name = "TrangThai")
     private Boolean trangThai;
 
-    @OneToMany(mappedBy = "idDotGiamGia", fetch = FetchType.LAZY)
-    private List<HoaDon> hoaDons;
-
-    @OneToMany(mappedBy = "idDotGiamGia", fetch = FetchType.LAZY)
-    private List<ChiTietHoaDon> chiTietHoaDons;
+//    @OneToMany(mappedBy = "idDotGiamGia", fetch = FetchType.LAZY)
+//    private List<HoaDon> hoaDons;
 
 }

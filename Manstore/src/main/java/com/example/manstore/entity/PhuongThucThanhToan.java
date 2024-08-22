@@ -24,7 +24,7 @@ public class PhuongThucThanhToan {
     @Column(name = "Ten", length = 50)
     private String ten;
 
-    @OneToMany(mappedBy = "idPhuongThucThanhToan", fetch = FetchType.LAZY)
-    private List<HoaDon> hoaDons;
+//    @OneToMany(mappedBy = "idPhuongThucThanhToan", fetch = FetchType.LAZY)
+//    private List<HoaDon> hoaDons;
 
 }

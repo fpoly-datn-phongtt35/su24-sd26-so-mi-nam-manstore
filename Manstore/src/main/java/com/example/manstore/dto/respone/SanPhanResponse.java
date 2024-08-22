@@ -20,7 +20,6 @@ public class SanPhanResponse {
     private Integer soLuong;
     private LocalDate ngayTao;
     private BigDecimal gia;
-    private BigDecimal giaSale;
     private Integer danhMuc;
     private String tenDanhMuc;
     private String duongDan;
@@ -41,7 +40,6 @@ public class SanPhanResponse {
         this.soLuong = soLuong;
         this.ngayTao = ngayTao;
         this.gia = gia;
-        this.giaSale = giaSale;
         this.danhMuc = danhMuc;
         this.duongDan = duongDan;
         this.thuongHieu = thuongHieu;

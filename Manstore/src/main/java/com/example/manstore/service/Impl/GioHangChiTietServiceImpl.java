@@ -94,7 +94,6 @@ public class GioHangChiTietServiceImpl implements GioHangChiTietService {
             sanPhanResponse.setId(gioHangChiTiet.getIdSanPhamChiTiet().getIdSanPham().getId());
             sanPhanResponse.setTen(gioHangChiTiet.getIdSanPhamChiTiet().getIdSanPham().getTen());
             sanPhanResponse.setGia(gioHangChiTiet.getIdSanPhamChiTiet().getIdSanPham().getGia());
-            sanPhanResponse.setGiaSale(gioHangChiTiet.getIdSanPhamChiTiet().getIdSanPham().getGiaSale());
             sanPhanResponse.setSoLuong(gioHangChiTiet.getIdSanPhamChiTiet().getIdSanPham().getSoLuong());
             sanPhanResponse.setNgayTao(gioHangChiTiet.getIdSanPhamChiTiet().getIdSanPham().getNgayTao());
             sanPhanResponse.setDuongDan(gioHangChiTiet.getIdSanPhamChiTiet().getIdSanPham().getDuongDan());

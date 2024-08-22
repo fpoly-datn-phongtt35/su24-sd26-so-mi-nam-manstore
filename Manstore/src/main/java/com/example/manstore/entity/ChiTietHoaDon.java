@@ -27,9 +27,6 @@ public class ChiTietHoaDon {
     @JoinColumn(name = "idChiTietSanPham", nullable = false, referencedColumnName = "id")
     private ChiTietSanPham idChiTietSanPham;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idDotGiamGia", nullable = false, referencedColumnName = "id")
-    private DotGiamGia idDotGiamGia;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -56,20 +56,33 @@ public class GioHangChiTietRestController {
     }
 
     @RequestMapping(value = "/findAll/{id}", method = RequestMethod.GET)
-    private ResponseEntity<?> findAll(@PathVariable("id") String id) {
-        GioHang gh = gioHangService.findByIdKH(Integer.parseInt(id));
-        if (gh == null) {
-            GioHang cart = new GioHang();
-            KhachHang kh = khachHangService.getByID(Integer.parseInt(id));
-            cart.setIdKhachHang(kh);
-            gioHangService.save(cart);
-            gh = gioHangService.findByIdKH(Integer.parseInt(id));
-        }
-        System.out.println(gh.toString());
-        List<GioHangChiTietResponse> list = service.getAllByIdGioHangOrderByNgaySuaDesc(String.valueOf(gh.getId()));
+    public ResponseEntity<?> findAll(@PathVariable("id") String id) {
+        try {
+            // Tìm giỏ hàng theo ID khách hàng
+            GioHang gh = gioHangService.findByIdKH(Integer.parseInt(id));
 
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + list);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+            // Nếu không tìm thấy, tạo giỏ hàng mới
+            if (gh == null) {
+                GioHang cart = new GioHang();
+                KhachHang kh = khachHangService.getByID(Integer.parseInt(id));
+                cart.setNgayTao(LocalDate.now());
+                cart.setIdKhachHang(kh);
+                gioHangService.save(cart);
+                gh = gioHangService.findByIdKH(Integer.parseInt(id));
+            }
+
+            // Lấy danh sách chi tiết giỏ hàng
+            List<GioHangChiTiet> list = service.getByIdGHList(String.valueOf(gh.getId()));
+
+            // Trả về danh sách chi tiết giỏ hàng
+            return new ResponseEntity<>(list, HttpStatus.OK);
+
+        } catch (Exception e) {
+            // Ghi log lỗi và trả về lỗi 500 nếu có lỗi xảy ra
+            System.err.println("Error occurred while retrieving cart details: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>("An error occurred while processing your request.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -220,14 +233,12 @@ public class GioHangChiTietRestController {
         }
     }
     @RequestMapping(value = "/add-quantity/{id}", method = RequestMethod.GET)
-    public ResponseEntity<ResponseCustom> addQuantity(@PathVariable("id") Integer id) {
+    public ResponseEntity<ResponseCustom> addQuantity(@PathVariable("id") String id) {
         ResponseCustom response = new ResponseCustom();
 
         // Kiểm tra và xử lý nếu GioHangChiTiet không tồn tại
-        System.out.println("ID received: " + id);
-        Optional<GioHangChiTiet> optionalGioHangChiTiet = Optional.ofNullable(gioHangChiTietService.getById(id.toString()));
+        Optional<GioHangChiTiet> optionalGioHangChiTiet = Optional.ofNullable(gioHangChiTietService.getById(id));
         if (!optionalGioHangChiTiet.isPresent()) {
-            System.out.println("No GioHangChiTiet found for ID: " + id);
             response.setStatusText("failure");
             response.setMessage("Không tìm thấy sản phẩm trong giỏ hàng.");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -240,7 +251,7 @@ public class GioHangChiTietRestController {
         if (spct.getSoluong() == 0) {
             response.setStatusText("failure");
             response.setMessage("Sản phẩm đã hết hàng.");
-            gioHangChiTietService.delete(id.toString()); // Xóa sản phẩm khỏi giỏ hàng nếu hết hàng
+            gioHangChiTietService.delete(id); // Xóa sản phẩm khỏi giỏ hàng nếu hết hàng
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
@@ -254,40 +265,13 @@ public class GioHangChiTietRestController {
         }
 
         // Tăng số lượng sản phẩm trong giỏ hàng
-        System.out.println("Trc khi cong: " + ghct.getSoLuong());
         ghct.setSoLuong(ghct.getSoLuong() + 1);
         gioHangChiTietService.save(ghct);
         response.setStatusText("success");
         response.setMessage("Số lượng sản phẩm đã được tăng lên.");
-        System.out.println("GHCT: " + ghct.getSoLuong());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
-//    @RequestMapping(value = "/add-quantity/{id}", method = RequestMethod.GET)
-//    public ResponseEntity<?> addQuantity(@PathVariable("id") String id) {
-//        GioHangChiTiet ghct = gioHangChiTietService.getById(id);
-//        ChiTietSanPham spct = ctspService.getCTSPById(ghct.getIdSanPhamChiTiet().getId());
-//        ResponseCustom response = new ResponseCustom();
-//        if (spct.getSoluong() == 0) {
-//            response.setStatusText("failure");
-//            response.setMessage("The product is out of stock");
-//            gioHangChiTietService.delete(id);
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        } else if (ghct.getSoLuong() >= spct.getSoluong()) {
-//            ghct.setSoLuong(spct.getSoluong());
-//            gioHangChiTietService.save(ghct);
-//            response.setStatusText("failure");
-//            response.setMessage("Số Lượng Sản Phẩm Chỉ Còn Lại " + spct.getSoluong() + "!");
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        } else {
-//            ghct.setSoLuong(ghct.getSoLuong() + 1);
-//            gioHangChiTietService.save(ghct);
-//            response.setStatusText("success");
-//            response.setMessage("success");
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-//    }
 
     @RequestMapping(value = "/edit-quantity/{id}/{quantity}", method = RequestMethod.GET)
     public ResponseEntity<?> editQuantity(@PathVariable("id") String id, @PathVariable("quantity") String quantity) {

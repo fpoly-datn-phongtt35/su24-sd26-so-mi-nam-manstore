@@ -48,8 +48,8 @@ public class ThongTinVanChuyen {
     @Nationalized
     @Column(name = "DiaChiCuThe", length = 200)
     private String diaChiCuThe;
-
-    @OneToMany(mappedBy = "idThongTinVanChuyen", fetch = FetchType.LAZY)
-    private List<HoaDon> hoaDons;
+//
+//    @OneToMany(mappedBy = "idThongTinVanChuyen", fetch = FetchType.LAZY)
+//    private List<HoaDon> hoaDons;
 
 }
