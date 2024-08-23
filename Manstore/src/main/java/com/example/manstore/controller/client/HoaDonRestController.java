@@ -144,7 +144,7 @@ public class HoaDonRestController {
         dh.setIdKhachHang(khachHangService.getByID(id));
         dh.setIdPhuongThucThanhToan(ptttService.getById("1"));
         dh.setTrangThai(1);
-        dh.setNgayTao(LocalDate.now());
+        dh.setNgayTao(LocalDateTime.now());
         if (idPromotion != null) {
             DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).isPresent()
                     ? dotGiamGiaService.findById(Integer.parseInt(idPromotion)).get() : null;
@@ -178,7 +178,7 @@ public class HoaDonRestController {
             dhct.setIdChiTietSanPham(spct);
             dhct.setSoLuong(Integer.parseInt(ghct.getSoLuong()));
             dhct.setIdHoaDon(donHangNew);
-            dhct.setNgayTao(LocalDate.now());
+            dhct.setNgayTao(LocalDateTime.now());
             dhct.setDonGia(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
             dhct.setGiaThoiDiemMua(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
             BigDecimal tongTien = BigDecimal.valueOf(Integer.parseInt(ghct.getSoLuong()))
@@ -253,7 +253,7 @@ public class HoaDonRestController {
         dh.setIdKhachHang(khachHangService.getByID(Integer.parseInt(id)));
         dh.setIdPhuongThucThanhToan(ptttService.getById("1"));
         dh.setTrangThai(1);
-        dh.setNgayTao(LocalDate.now());
+        dh.setNgayTao(LocalDateTime.now());
         if (idPromotion != null) {
             DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).isPresent()
                     ? dotGiamGiaService.findById(Integer.parseInt(idPromotion)).get() : null;
@@ -292,7 +292,7 @@ public class HoaDonRestController {
            System.out.println("44444444444444");
            dhct.setIdHoaDon(donHangNew);
            System.out.println("55555555555555");
-           dhct.setNgayTao(LocalDate.now());
+           dhct.setNgayTao(LocalDateTime.now());
            System.out.println("66666666666666");
            dhct.setDonGia(donGia);
            System.out.println("77777777777777");
@@ -371,7 +371,7 @@ public class HoaDonRestController {
         dh.setIdKhachHang(khachHangService.getByID(Integer.valueOf(id)));
         dh.setIdPhuongThucThanhToan(ptttService.getById("1"));
         dh.setTrangThai(1);
-        dh.setNgayTao(LocalDate.now());
+        dh.setNgayTao(LocalDateTime.now());
         if (idPromotion != null) {
             DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).isPresent()
                     ? dotGiamGiaService.findById(Integer.parseInt(idPromotion)).get() : null;
@@ -406,7 +406,7 @@ public class HoaDonRestController {
             dhct.setIdChiTietSanPham(spct);
             dhct.setSoLuong(quantity);
             dhct.setIdHoaDon(donHangNew);
-            dhct.setNgayTao(LocalDate.now());
+            dhct.setNgayTao(LocalDateTime.now());
             dhct.setDonGia(spct.getIdSanPham().getGia());
             dhct.setGiaThoiDiemMua(spct.getIdSanPham().getGia());
             BigDecimal tongTien = spct.getIdSanPham().getGia().multiply(new BigDecimal(quantity));

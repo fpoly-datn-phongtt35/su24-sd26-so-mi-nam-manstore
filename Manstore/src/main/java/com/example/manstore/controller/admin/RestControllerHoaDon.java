@@ -56,7 +56,7 @@ public class RestControllerHoaDon {
                                     @RequestParam(value = "startDate", required = false) String startDate,
                                     @RequestParam(value = "endDate", required = false) String endDate
     ) {
-        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("ngayTao").descending());
+        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("id").descending());
         Page<HoaDon> page = serviceInvoice.page(pageable);
         if (status != null && keyword == null && startDate == null & endDate == null) {
             page = serviceInvoice.filterByStatus(pageable, Integer.parseInt(status));
