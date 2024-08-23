@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -37,6 +38,6 @@ public class ThongBao {
     private String noiDung;
 
     @Column(name = "NgayGui")
-    private LocalDate ngayGui;
+    private LocalDateTime ngayGui;
 
 }

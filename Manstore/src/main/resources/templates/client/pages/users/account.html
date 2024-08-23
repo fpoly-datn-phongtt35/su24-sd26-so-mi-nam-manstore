@@ -2131,10 +2131,11 @@
                 }
             });
             var listOrderDetail = await responseOrderDetail.json();
+            console.log("chi tiet hoa don: ",listOrderDetail);
             for (let j = 0; j < listOrderDetail.length; j++) {
-                nameOrder1 = listOrderDetail[0].spct.sp.tenSP;
-                colorOrder1 = listOrderDetail[0].spct.ms.ten;
-                sizeOrder1 = listOrderDetail[0].spct.size;
+                nameOrder1 = listOrderDetail[0].idChiTietSanPham.idSanPham.ten;
+                colorOrder1 = listOrderDetail[0].idChiTietSanPham.idMauSac.ten;
+                sizeOrder1 = listOrderDetail[0].idChiTietSanPham.idSize.ten;
                 quantityProduct = j - 1 + 1;
             }
             var statusBadge;
@@ -2373,7 +2374,7 @@
                 document.getElementById("pl-red").style.width = "100%";
             }
             document.getElementById('invoice-status').innerHTML = statusBadge;
-            order += `<tr><td>${list[i].maDonHang}</td>
+            order += `<tr><td>${list[i].ma}</td>
                               <td><span class="text-muted fs-13">${formatDateTime(list[i].ngayTao)}</span></td>
                               <td class="fw-medium fs-13">${formatMoney(list[i].tongTien + (list[i].tongTien / 10))}</td>
                               <td class="fw-medium fs-13" >${statusBadge}</td>
@@ -2440,7 +2441,7 @@
         var order = await responseOrder.json();
         //Order detail
         //--1 Label
-        document.getElementById('modalLabel').innerHTML = 'Đơn hàng #' + order.maDonHang;
+        document.getElementById('modalLabel').innerHTML = 'Đơn hàng #' + order.ma;
 
         //--2 Status date
         var urlStatusDate = "/api/client/account/statusDate/" + id;
@@ -2452,40 +2453,40 @@
         });
         var statusDate = await responseStatusDate.json();
         for (let i = 0; i < statusDate.length; i++) {
-            if (statusDate[i].dh.id === id) {
+            if (statusDate[i].idHoaDon.id === id) {
                 if (statusDate[i].trangThaiDonHang === 1) {
-                    document.getElementById('date-tt1').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].thoiGianGui));
-                    document.getElementById('date-span1').innerHTML = formatDateTime(statusDate[i].thoiGianGui);
+                    document.getElementById('date-tt1').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span1').innerHTML = formatDateTime(statusDate[i].ngayGui);
                 } else if (statusDate[i].trangThaiDonHang === 2) {
-                    document.getElementById('date-tt2').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].thoiGianGui));
-                    document.getElementById('date-span2').innerHTML = formatDateTime(statusDate[i].thoiGianGui);
+                    document.getElementById('date-tt2').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span2').innerHTML = formatDateTime(statusDate[i].ngayGui);
                 } else if (statusDate[i].trangThaiDonHang === 3) {
-                    document.getElementById('date-tt3').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].thoiGianGui));
-                    document.getElementById('date-span3').innerHTML = formatDateTime(statusDate[i].thoiGianGui);
+                    document.getElementById('date-tt3').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span3').innerHTML = formatDateTime(statusDate[i].ngayGui);
                 } else if (statusDate[i].trangThaiDonHang === 4) {
-                    document.getElementById('date-tt4').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].thoiGianGui));
-                    document.getElementById('date-span4').innerHTML = formatDateTime(statusDate[i].thoiGianGui);
+                    document.getElementById('date-tt4').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span4').innerHTML = formatDateTime(statusDate[i].ngayGui);
                 } else if (statusDate[i].trangThaiDonHang === 5) {
-                    document.getElementById('date-tt5').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].thoiGianGui));
-                    document.getElementById('date-span5').innerHTML = formatDateTime(statusDate[i].thoiGianGui);
+                    document.getElementById('date-tt5').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span5').innerHTML = formatDateTime(statusDate[i].ngayGui);
                 } else if (statusDate[i].trangThaiDonHang === 6) {
-                    document.getElementById('date-tt6').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].thoiGianGui));
-                    document.getElementById('date-span6').innerHTML = formatDateTime(statusDate[i].thoiGianGui);
+                    document.getElementById('date-tt6').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span6').innerHTML = formatDateTime(statusDate[i].ngayGui);
 
                 }
             }
         }
 
         //--3
-        document.getElementById('invoice-no').innerHTML = order.maDonHang;
+        document.getElementById('invoice-no').innerHTML = order.ma;
         document.getElementById('invoice-date-time').innerHTML = formatDateTime(order.ngayTao);
         document.getElementById('invoice-total').innerHTML = formatMoney(order.tongTien);
 
         //--4
         if (order.ttvc !== null) {
-            document.getElementById('shipping-name').innerHTML = order.ttvc.tenNguoiNhan;
-            document.getElementById('shipping-address-line-1').innerHTML = order.ttvc.diaChiCuThe + ', ' + order.ttvc.xp + ', ' + order.ttvc.qh + ', ' + order.ttvc.ttp;
-            document.getElementById('shipping-phone-no').innerHTML = order.ttvc.sdtNguoiNhan;
+            document.getElementById('shipping-name').innerHTML = order.idThongTinVanChuyen.tenNguoiNhan;
+            document.getElementById('shipping-address-line-1').innerHTML = order.idThongTinVanChuyen.diaChiCuThe + ', ' + order.idThongTinVanChuyen.xaPhuongThitran + ', ' + order.idThongTinVanChuyen.quanHuyen + ', ' + order.idThongTinVanChuyen.tinhThanhpho;
+            document.getElementById('shipping-phone-no').innerHTML = order.idThongTinVanChuyen.sdt;
         }
 
         //--5
@@ -2500,30 +2501,37 @@
         var modalProductList = '';
         var total = 0;
         for (let i = 0; i < listOrderDetail.length; i++) {
-            var urlGetPicture = '/api/client/product_detail/picture-detail/' + listOrderDetail[i].spct.sp.id + '/' + listOrderDetail[i].spct.ms.id;
+            var urlGetPicture = '/api/client/product_detail/picture-detail/' + listOrderDetail[i].idChiTietSanPham.idSanPham.id + '/' + listOrderDetail[i].idChiTietSanPham.idMauSac.id;
             const pictureResponse = await fetch(urlGetPicture, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 }
             });
-            var dataPicture = await pictureResponse.json();
-            var img;
-            if (dataPicture.statusText === "failure") {
-                img = `<img src="/assets/images/products/img-8.png" alt=""
-                        class="avatar-md" style="width: 100%;height: 100%;display: flex;">`;
+
+
+            let dataPicture = await pictureResponse.json();
+            console.log('Image data received loadOderDetail:', dataPicture);
+
+            let img;
+
+            // Xử lý khi không có ảnh hoặc có lỗi
+            if (dataPicture.statusText === "failure" || !Array.isArray(dataPicture) || dataPicture.length === 0) {
+                img = `<img src="http://localhost:8080/assets/images/products/img-8.png" alt="" class="avatar-md">`;
             } else {
-                img = `<img src="${dataPicture[0].linkAnh}" alt="" class="avatar-md"
-                        class="avatar-md" style="width: 100%;height: 100%;display: flex;">`;
+                let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+                img = `<img src="${fullUrl}" alt="" class="avatar-md">`;
             }
+
+
             modalProductList += `<tr><th scope="row">${i + 1}</th><td class="text-start">
             <div class="d-flex align-items-center gap-2">
              <div class="avatar-md d-flex justify-content-center align-items-center">
-             <div class="image-container" style="width: 49px;height: 66px;">
+             <div class="image-container" style="width: 65px;height: 66px;">
                     ${img}</div></div>
                                                         <div class="flex-grow-1">
-                                                            <h6>${listOrderDetail[i].spct.sp.tenSP}</h6>
-                                                            <p class="text-muted mb-0">${listOrderDetail[i].spct.ms.ten} & ${listOrderDetail[i].spct.size}</p>
+                                                            <h6>${listOrderDetail[i].idChiTietSanPham.idSanPham.ten}</h6>
+                                                            <p class="text-muted mb-0">${listOrderDetail[i].idChiTietSanPham.idMauSac.ten} & ${listOrderDetail[i].idChiTietSanPham.idSize.ten}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -2533,11 +2541,11 @@
                                             </tr>`;
             total += listOrderDetail[i].giaThoiDiemMua * listOrderDetail[i].soLuong;
         }
-        if (listOrderDetail[0].dh.trangThai === 5 || listOrderDetail[0].dh.trangThai === 6) {
+        if (listOrderDetail[0].idHoaDon.trangThaiDonHang === 5 || listOrderDetail[0].idHoaDon.trangThaiDonHang === 6) {
             document.getElementById('modal-repurchase').style.display = 'block';
             var element = document.getElementById("table-reason");
             element.classList.remove("d-none");
-            document.getElementById("reason-failure").innerText = listOrderDetail[0].dh.ghiChu;
+            document.getElementById("reason-failure").innerText = listOrderDetail[0].idHoaDon.ghiChu;
         } else {
             document.getElementById('modal-repurchase').style.display = 'none';
             var element = document.getElementById("table-reason");
@@ -2548,7 +2556,7 @@
         //--6
         total = total + (total / 10);
         document.getElementById('td-total').innerHTML = formatMoney(total);
-        if (order.ttvc === null) {
+        if (order.idThongTinVanChuyen === null) {
             document.getElementById("hidden-shipping").classList.add('d-none');
             document.getElementById('information-invoice').style.display = 'none';
         } else {
@@ -2557,18 +2565,18 @@
             document.getElementById('td-shipping-fees').innerHTML = formatMoney(order.phiVanChuyen);
         }
 
-        if (listOrderDetail[0].dh.km !== null) {
-            if (listOrderDetail[0].dh.km.loaiKM === true) {
-                total = total - (total * (listOrderDetail[0].dh.km.giaTriGiam / 100));
-                document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].dh.km.tenKhuyenMai + ')';
-                document.getElementById('promotion-value').innerHTML = '- ' + listOrderDetail[0].dh.km.giaTriGiam + '%';
+        if (listOrderDetail[0].idHoaDon.idDotGiamGia !== null) {
+            if (listOrderDetail[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
+                total = total - (total * (listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
+                document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].idHoaDon.idDotGiamGia.ten + ')';
+                document.getElementById('promotion-value').innerHTML = '- ' + listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
             } else {
-                total = total - listOrderDetail[0].dh.km.giaTriGiam;
-                document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].dh.km.tenKhuyenMai + ')';
-                document.getElementById('promotion-value').innerHTML = '- ' + formatMoney(listOrderDetail[0].dh.km.giaTriGiam);
+                total = total - listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam;
+                document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].idHoaDon.idDotGiamGia.ten + ')';
+                document.getElementById('promotion-value').innerHTML = '- ' + formatMoney(listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam);
             }
         }
-        if (listOrderDetail[0].dh.km !== null) {
+        if (listOrderDetail[0].idHoaDon.idDotGiamGia !== null) {
             if (order.phiVanChuyen !== null)
                 document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
             else
@@ -2582,7 +2590,7 @@
 
         //Cancel order
         document.getElementById('modalCancelOrder').setAttribute('data-value', order.id);
-        document.getElementById("modal-CancelOrder-code").innerHTML = order.maDonHang;
+        document.getElementById("modal-CancelOrder-code").innerHTML = order.ma;
 
         // //Repurchase order
         // document.getElementById('modalRepurchaseOrder').setAttribute('data-value', order.id);
@@ -2709,7 +2717,7 @@
                                     $('#modalCancelOrder').modal('hide');
                                     document.getElementById('note').value = '';
                                     loadOrder(0);
-                                    loadNotification(userId);
+                                    // loadNotification(userId);
                                 })
                             } else if (response === "failure") {
                                 swal.fire({

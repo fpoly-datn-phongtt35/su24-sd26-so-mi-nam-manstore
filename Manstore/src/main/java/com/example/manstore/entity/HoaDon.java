@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,10 +35,8 @@ public class HoaDon implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
     private KhachHang idKhachHang;
 
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idNhanVien", nullable = false, referencedColumnName = "id")
     private NhanVien idNhanVien;
@@ -46,7 +45,7 @@ public class HoaDon implements Serializable {
     private String ma;
 
     @Column(name = "NgayTao")
-    private LocalDate ngayTao;
+    private LocalDateTime ngayTao;
 
     @Column(name = "PhiVanChuyen")
     private BigDecimal phiVanChuyen;
