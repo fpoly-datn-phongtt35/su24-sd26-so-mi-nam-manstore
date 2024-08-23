@@ -2483,7 +2483,7 @@
         document.getElementById('invoice-total').innerHTML = formatMoney(order.tongTien);
 
         //--4
-        if (order.ttvc !== null) {
+        if (order.idThongTinVanChuyen !== null) {
             document.getElementById('shipping-name').innerHTML = order.idThongTinVanChuyen.tenNguoiNhan;
             document.getElementById('shipping-address-line-1').innerHTML = order.idThongTinVanChuyen.diaChiCuThe + ', ' + order.idThongTinVanChuyen.xaPhuongThitran + ', ' + order.idThongTinVanChuyen.quanHuyen + ', ' + order.idThongTinVanChuyen.tinhThanhpho;
             document.getElementById('shipping-phone-no').innerHTML = order.idThongTinVanChuyen.sdt;
@@ -2717,7 +2717,7 @@
                                     $('#modalCancelOrder').modal('hide');
                                     document.getElementById('note').value = '';
                                     loadOrder(0);
-                                    // loadNotification(userId);
+                                    loadNotification(userId);
                                 })
                             } else if (response === "failure") {
                                 swal.fire({
