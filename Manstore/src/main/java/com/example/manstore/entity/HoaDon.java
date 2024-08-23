@@ -34,10 +34,9 @@ public class HoaDon implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
     private KhachHang idKhachHang;
 
-    @JsonBackReference
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idNhanVien", nullable = false, referencedColumnName = "id")
     private NhanVien idNhanVien;

@@ -574,15 +574,15 @@
             var momentDate = moment(createAt);
             var customerName;
             var staffName;
-            if (list[i].kh === null) {
-                customerName = 'Khách Vãng Lai';
+            if (list[i].idKhachHang === null) {
+                customerName = 'Chưa có';
             } else {
-                customerName = list[i].kh.hoTen;
+                customerName = list[i].idKhachHang.ten;
             }
-            if (list[i].nv === null) {
+            if (list[i].idNhanVien === null) {
                 staffName = 'Chưa Có';
             } else {
-                staffName = list[i].nv.hoTen;
+                staffName = list[i].idNhanVien.ten;
             }
             const formattedDate = momentDate.format('DD/MM/YYYY HH:mm');
             var statusBadge;
@@ -607,7 +607,7 @@
             }
             let formattedMoney = formatmoney(money + (money * 0.1));
             main += `<tr >
-                            <td scope="row">${list[i].maDonHang}</td>
+                            <td scope="row">${list[i].ma}</td>
                             <td scope="row">${customerName}</td>
                             <td scope="row">${staffName}</td>
                             <td scope="row">${formattedDate}</td>

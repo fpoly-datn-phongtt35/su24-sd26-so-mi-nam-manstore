@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <!-- Meta tags -->
   <meta charset="UTF-8">
@@ -50,231 +50,95 @@
               <span data-key="t-dashboard">Thống Kê</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link menu-link" th:href="@{/admin/sell-off}">
-              <i class="bi bi-receipt-cutoff"></i>
-              <span data-key="t-sell-off">Bán hàng tại quầy</span>
-            </a>
-          </li>
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link menu-link" th:href="@{/admin/sell-off}">-->
+<!--              <i class="bi bi-receipt-cutoff"></i>-->
+<!--              <span data-key="t-sell-off">Bán hàng tại quầy</span>-->
+<!--            </a>-->
+<!--          </li>-->
           <li class="nav-item">
             <a class="nav-link menu-link" href="#sidebarProducts" data-bs-toggle="collapse" role="button"
                aria-expanded="false" aria-controls="sidebarProducts">
               <i class="bi bi-box-seam"></i>
-              <span data-key="t-products">Sản phẩm</span>
+              <span data-key="t-products">Quản lý Sản phẩm</span>
             </a>
             <div class="collapse menu-dropdown" id="sidebarProducts">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <a th:href="@{/admin/product/product_list}" class="nav-link" data-key="t-list-view">Danh sách</a>
+                  <a th:href="@{/admin/product/product_list}" class="nav-link">
+                    <i class="bi bi-box"></i>
+                    <span data-key="t-products">Sản phẩm</span>
+                  </a>
                 </li>
                 <li class="nav-item">
-                  <a th:href="@{/admin/product/create_product}" class="nav-link" data-key="t-create-product">Thêm sản
-                    phẩm</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link menu-link" href="#sidebarTrademark" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarTrademark">
+                  <a th:href="@{/admin/trademark}" class="nav-link">
                     <i class="bi bi-shop"></i>
-                    <span data-key="t-brands">Thương hiệu</span>
+                    <span data-key="t-trademark">Thương hiệu</span>
                   </a>
-                  <div class="collapse menu-dropdown" id="sidebarTrademark">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <a th:href="@{/admin/trademark}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                      </li>
-                      <li class="nav-item">
-                        <a th:href="@{/admin/trademark/add}" class="nav-link" data-key="t-create-brand">Thêm Thương
-                          Hiệu</a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
-<!--                <li class="nav-item">-->
-<!--                  <a class="nav-link menu-link" href="#sidebarSize" data-bs-toggle="collapse" role="button"-->
-<!--                     aria-expanded="false" aria-controls="sidebarSize">-->
-<!--                    <i class="ri-t-shirt-2-line"></i>-->
-<!--                    <span data-key="t-brands">Size</span>-->
-<!--                  </a>-->
-<!--                  <div class="collapse menu-dropdown" id="sidebarSize">-->
-<!--                    <ul class="nav nav-sm flex-column">-->
-<!--                      <li class="nav-item">-->
-<!--                        <a th:href="@{/admin/size}" class="nav-link" data-key="t-list-view">Danh Sách</a>-->
-<!--                      </li>-->
-<!--                      <li class="nav-item">-->
-<!--                        <a th:href="@{/admin/size/add}" class="nav-link" data-key="t-overview">Thêm Size</a>-->
-<!--                      </li>-->
-<!--                    </ul>-->
-<!--                  </div>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                  <a class="nav-link menu-link" href="#sidebarColor" data-bs-toggle="collapse" role="button"-->
-<!--                     aria-expanded="false" aria-controls="sidebarColor">-->
-<!--                    <i class="ri-palette-line"></i>-->
-<!--                    <span data-key="t-brands">Màu Sắc</span>-->
-<!--                  </a>-->
-<!--                  <div class="collapse menu-dropdown" id="sidebarColor">-->
-<!--                    <ul class="nav nav-sm flex-column">-->
-<!--                      <li class="nav-item">-->
-<!--                        <a th:href="@{/admin/color}" class="nav-link" data-key="t-list-view">Danh Sách</a>-->
-<!--                      </li>-->
-<!--                      <li class="nav-item">-->
-<!--                        <a th:href="@{/admin/color/add}" class="nav-link" data-key="t-overview">Thêm Màu Sắc</a>-->
-<!--                      </li>-->
-<!--                    </ul>-->
-<!--                  </div>-->
-<!--                </li>-->
+
                 <li class="nav-item">
-                  <a class="nav-link menu-link" href="#sidebarDesigns" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarDesigns">
+                  <a th:href="@{/admin/designs}" class="nav-link">
                     <i class="ri-shirt-line"></i>
-                    <span data-key="t-brands">Kiểu Dáng</span>
+                    <span data-key="t-designs">Kiểu Dáng</span>
                   </a>
-                  <div class="collapse menu-dropdown" id="sidebarDesigns">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <a th:href="@{/admin/designs}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                      </li>
-                      <li class="nav-item">
-                        <a th:href="@{/admin/designs/add}" class="nav-link" data-key="t-overview">Thêm Kiểu Dáng</a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
+
                 <li class="nav-item">
-                  <a class="nav-link menu-link" href="#sidebarShirtTail" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarShirtTail">
+                  <a th:href="@{/admin/shirtTail}" class="nav-link">
                     <i class="ri-t-shirt-air-line"></i>
-                    <span data-key="t-brands">Đuôi Áo</span>
+                    <span data-key="t-shirtTail">Đuôi Áo</span>
                   </a>
-                  <div class="collapse menu-dropdown" id="sidebarShirtTail">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <a th:href="@{/admin/shirtTail}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                      </li>
-                      <li class="nav-item">
-                        <a th:href="@{/admin/shirtTail/add}" class="nav-link" data-key="t-overview">Thêm Đuôi Áo</a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
+
                 <li class="nav-item">
-                  <a class="nav-link menu-link" href="#sidebarCategory" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarCategory">
+                  <a th:href="@{/admin/category}" class="nav-link">
                     <i class="ri-survey-line"></i>
-                    <span data-key="t-brands">Danh Mục</span>
+                    <span data-key="t-category">Danh Mục</span>
                   </a>
-                  <div class="collapse menu-dropdown" id="sidebarCategory">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <a th:href="@{/admin/category}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                      </li>
-                      <li class="nav-item">
-                        <a th:href="@{/admin/category/add}" class="nav-link" data-key="t-overview">Thêm Danh Mục</a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
+
                 <li class="nav-item">
-                  <a class="nav-link menu-link" href="#sidebarCollar" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarCollar">
+                  <a th:href="@{/admin/collar}" class="nav-link">
                     <i class="ri-shirt-fill"></i>
-                    <span data-key="t-brands">Loại Cổ Áo</span>
+                    <span data-key="t-collar">Loại Cổ Áo</span>
                   </a>
-                  <div class="collapse menu-dropdown" id="sidebarCollar">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <a th:href="@{/admin/collar}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                      </li>
-                      <li class="nav-item">
-                        <a th:href="@{/admin/collar/add}" class="nav-link" data-key="t-overview">Thêm Cổ Áo</a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
+
                 <li class="nav-item">
-                  <a class="nav-link menu-link" href="#sidebarMaterial" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarMaterial">
+                  <a th:href="@{/admin/material}" class="nav-link">
                     <i class="ri-equalizer-line"></i>
-                    <span data-key="t-brands">Chất Liệu</span>
+                    <span data-key="t-material">Chất Liệu</span>
                   </a>
-                  <div class="collapse menu-dropdown" id="sidebarMaterial">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <a th:href="@{/admin/material}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                      </li>
-                      <li class="nav-item">
-                        <a th:href="@{/admin/material/add}" class="nav-link" data-key="t-overview">Thêm Chất Liệu</a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
+
               </ul>
             </div>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link menu-link" href="#sidebarVoucher" data-bs-toggle="collapse" role="button"
-               aria-expanded="false" aria-controls="sidebarVoucher">
+            <a class="nav-link menu-link" th:href="@{/admin/promotion}">
               <i class="bi bi-bookmark-dash"></i>
-              <span data-key="t-orders">Khuyễn Mãi</span>
+              <span data-key="t-promotion-list">Đợt Giảm Giá</span>
             </a>
-            <div class="collapse menu-dropdown" id="sidebarVoucher">
-              <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                  <a th:href="@{/admin/promotion}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                </li>
-                <li class="nav-item">
-                  <a th:href="@{/admin/add-promotion}" class="nav-link" data-key="t-overview">Tạo Khuyến Mãi</a>
-                </li>
-              </ul>
-            </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link menu-link" href="#sidebarInvoice" data-bs-toggle="collapse" role="button"
-               aria-expanded="false" aria-controls="sidebarInvoice">
+            <a class="nav-link menu-link" th:href="@{/admin/invoices_list}">
               <i class="bi bi-archive"></i>
-              <span data-key="t-invoice">Đơn hàng</span>
+              <span data-key="t-invoices-list">Hoá Đơn</span>
             </a>
-            <div class="collapse menu-dropdown" id="sidebarInvoice">
-              <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                  <a th:href="@{/admin/invoices_list}" class="nav-link" data-key="t-list-view">Danh sách</a>
-                </li>
-              </ul>
-            </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link menu-link" href="#sidebarCustomer" data-bs-toggle="collapse" role="button"
-               aria-expanded="false" aria-controls="sidebarCustomer">
+            <a class="nav-link menu-link" th:href="@{/admin/customer}">
               <i class="bi bi-people"></i>
-              <span data-key="t-users-list">Khách hàng</span>
+              <span data-key="t-customer-list">Khách hàng</span>
             </a>
-            <div class="collapse menu-dropdown" id="sidebarCustomer">
-              <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                  <a th:href="@{/admin/customer}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                </li>
-                <li class="nav-item">
-                  <a th:href="@{/admin/customer/add}" class="nav-link" data-key="t-overview">Thêm Khách Hàng</a>
-                </li>
-              </ul>
-            </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link menu-link" href="#sidebarStaff" data-bs-toggle="collapse" role="button"
-               aria-expanded="false" aria-controls="sidebarStaff">
+            <a class="nav-link menu-link" th:href="@{/admin/staff}">
               <i class="bi bi-person-bounding-box"></i>
               <span data-key="t-staffs-list">Nhân viên</span>
             </a>
-            <div class="collapse menu-dropdown" id="sidebarStaff">
-              <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                  <a th:href="@{/admin/staff}" class="nav-link" data-key="t-list-view">Danh Sách</a>
-                </li>
-                <li class="nav-item">
-                  <a th:href="@{/admin/staff/add}" class="nav-link" data-key="t-overview">Thêm Nhân Viên</a>
-                </li>
-              </ul>
-            </div>
           </li>
         </ul>
       </div>

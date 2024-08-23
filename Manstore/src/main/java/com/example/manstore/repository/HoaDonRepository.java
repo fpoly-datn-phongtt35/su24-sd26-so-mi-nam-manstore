@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,5 +23,34 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Integer> {
 
     @Query("SELECT hd FROM HoaDon hd WHERE hd.idDotGiamGia.id = :idPromotion")
     List<HoaDon> findByPromotion(@Param("idPromotion") String idPromotion);
+
+    @Query("SELECT dh FROM HoaDon dh WHERE dh.trangThai = :status and dh.trangThai > 0")
+    Page<HoaDon> filterByStatus(@Param("status") int status, Pageable pageable);
+
+    @Query("SELECT dh FROM HoaDon dh WHERE dh.ngayTao >= :start and dh.ngayTao <= :end and dh.trangThai > 0")
+    Page<HoaDon> filterByDate(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, Pageable pageable);
+
+    @Query("SELECT dh FROM HoaDon dh WHERE dh.ngayTao >= :start and dh.ngayTao <= :end and dh.trangThai = :status and dh.trangThai > 0")
+    Page<HoaDon> filterByDateAndStatus(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end,
+                                        @Param("status") int status, Pageable pageable);
+
+    @Query("SELECT dh FROM HoaDon dh WHERE dh.ngayTao >= :start and dh.ngayTao <= :end and dh.trangThai = :status and dh.ma LIKE %:keyword% and dh.trangThai > 0")
+    Page<HoaDon> searchAndFilterByAll(@Param("status") int status, @Param("start") LocalDateTime start,
+                                       @Param("end") LocalDateTime end, @Param("keyword") String keyword,
+                                       Pageable pageable);
+    @Query("SELECT dh FROM HoaDon dh WHERE dh.ma LIKE %:keyword% and dh.trangThai > 0")
+    Page<HoaDon> searchByName(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT dh FROM HoaDon dh WHERE dh.ma LIKE %:keyword%" +
+            " and dh.trangThai = :status")
+    Page<HoaDon> searchAndFilter(@Param("status") int status, @Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT dh FROM HoaDon dh WHERE dh.ma LIKE %:keyword% and dh.trangThai > 0 and dh.ngayTao >= :start and dh.ngayTao <= :end")
+    Page<HoaDon> searchAndFilterByDate(@Param("keyword") String keyword, @Param("start") LocalDateTime start,
+                                        @Param("end") LocalDateTime end, Pageable pageable);
+
+    @Query("SELECT dh FROM HoaDon dh WHERE dh.idKhachHang.id = :idkh AND dh.trangThai=:status")
+    Page<HoaDon> findByIdKHAndStatus(Pageable pageable, @Param("idkh") String idkh, @Param("status") String status);
+
 
 }
