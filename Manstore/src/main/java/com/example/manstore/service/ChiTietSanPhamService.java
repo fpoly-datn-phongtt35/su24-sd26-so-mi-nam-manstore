@@ -27,6 +27,9 @@ public interface ChiTietSanPhamService {
 
     Page<ChiTietSanPham> Filter(int page, String color, String size, String id);
 
+    Page<ChiTietSanPham> searchAndFilter(int page,String keyword,String color,String size);
+
+
 //    List<ChiTietSanPham> findListProductByColor(String id, String ms);
 
     List<ChiTietSanPhamDTO> findListProductByColor(Integer id, String ms);

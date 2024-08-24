@@ -82,6 +82,31 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     }
 
     @Override
+    public Page<ChiTietSanPham> searchAndFilter(int page, String keyword, String color, String size) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by("ngayTao").descending());
+        Page<ChiTietSanPham> pagination;
+        if (keyword == null && color == null && size == null) {
+            System.out.println("findAll");
+            pagination = ctspRepository.findAll(pageable);
+        } else if (keyword == null && color != null && size == null) {
+            pagination = ctspRepository.FilterByColor(color, pageable);
+        } else if (keyword == null && color == null && size != null) {
+            pagination = ctspRepository.FilterBySize(size, pageable);
+        } else if (keyword == null && color != null && size != null) {
+            pagination = ctspRepository.FilterByAll(color, size, pageable);
+        } else if (keyword != null && color == null && size == null) {
+            pagination = ctspRepository.search("%" + keyword + "%", pageable);
+        } else if (keyword != null && color != null && size == null) {
+            pagination = ctspRepository.searchAndFilterByColor("%" + keyword + "%", color,pageable);
+        } else if (keyword != null && color == null && size != null) {
+            pagination = ctspRepository.searchAndFilterBySize("%" + keyword + "%", size,pageable);
+        } else {
+            pagination = ctspRepository.searchAndFilterAll("%" + keyword + "%", color, size,pageable);
+        }
+        return pagination;
+    }
+
+    @Override
     public List<String> getImgByProductId(String id) {
         List<String> duongDan = ctspRepository.getImgByProductId(id);
         if (duongDan == null || duongDan.isEmpty()) {

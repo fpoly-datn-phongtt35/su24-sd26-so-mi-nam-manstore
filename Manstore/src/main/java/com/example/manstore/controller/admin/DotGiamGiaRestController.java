@@ -94,23 +94,23 @@ public class DotGiamGiaRestController {
         return new ResponseEntity<>(promotions, HttpStatus.OK);
     }
 
-    @GetMapping("/client/promotion/find-by-customer")
-    public ResponseEntity<?> findByIdCustomer(@RequestParam("id") Integer id) {
-        try {
-            List<DotGiamGia> promotions = dotGiamGiaRepository.getByCustomer(id, LocalDate.now(), true);
-            promotions.removeIf(promotion -> promotion.getNgayKetThuc().isBefore(LocalDate.now()));
-
-            if (promotions.isEmpty()) {
-                List<DotGiamGia> allPromotions = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
-                return new ResponseEntity<>(allPromotions, HttpStatus.OK);
-            }
-
-            return new ResponseEntity<>(promotions, HttpStatus.OK);
-        } catch (Exception e) {
-            // Log lỗi và trả về mã lỗi phù hợp
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @GetMapping("/client/promotion/find-by-customer")
+//    public ResponseEntity<?> findByIdCustomer(@RequestParam("id") Integer id) {
+//        try {
+//            List<DotGiamGia> promotions = dotGiamGiaRepository.getByCustomer(id, LocalDate.now(), true);
+//            promotions.removeIf(promotion -> promotion.getNgayKetThuc().isBefore(LocalDate.now()));
+//
+//            if (promotions.isEmpty()) {
+//                List<DotGiamGia> allPromotions = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
+//                return new ResponseEntity<>(allPromotions, HttpStatus.OK);
+//            }
+//
+//            return new ResponseEntity<>(promotions, HttpStatus.OK);
+//        } catch (Exception e) {
+//            // Log lỗi và trả về mã lỗi phù hợp
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 
 }
