@@ -60,6 +60,151 @@ public class HoaDonRestController {
     private DotGiamGiaService dotGiamGiaService;
 
     // đơn hàng được xác nhận -> chỉnh sửa số lượng sản phẩm
+//    @PostMapping("/invoice/save/{id}/{idAddress}")
+//    private ResponseEntity<?> saveInvoice(@RequestBody List<GioHangChiTietDTO> list,
+//                                          @PathVariable("id") Integer id,
+//                                          @PathVariable("idAddress") String idAddress,
+//                                          @RequestParam(value = "idPromotion", required = false) String idPromotion) {
+//        List<ResponseMessage> listMessage = new ArrayList<>();
+//        GioHang gioHang = gioHangService.findByIdKH((id));
+//        List<GioHangChiTiet> listAllGH = ghService.getByIdGHList(String.valueOf(gioHang.getId()));
+//        if (list.size() == 0) {
+//            return new ResponseEntity<>("null", HttpStatus.OK);
+//        } else {
+//            for (GioHangChiTietDTO gioHangChiTietDTO : list) {
+//                ChiTietSanPham spct = spService.getCTSPById(Integer.valueOf(gioHangChiTietDTO.getIdSanPhamChiTiet()));
+//                if (spct.getSoluong() <= 0) {
+//                    for (GioHangChiTiet ghct : listAllGH) {
+//                        if (spct.getId() == ghct.getIdSanPhamChiTiet().getId()) {
+//                            ghService.delete(String.valueOf(ghct.getId()));
+//                        }
+//                    }
+//                    ResponseMessage response = new ResponseMessage();
+//                    response.setTen(spct.getIdSanPham().getTen());
+//                    response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
+//                    response.setSl_ton(spct.getSoluong() + "");
+//                    response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
+//                    response.setTrangThai(spct.getIdSanPham().getTrangThai() != 0);
+//                    listMessage.add(response);
+//                } else if (spct.getIdSanPham().getTrangThai() == 0) {
+//                    ResponseMessage response = new ResponseMessage();
+//                    response.setTen(spct.getIdSanPham().getTen());
+//                    response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
+//                    response.setSl_ton(spct.getSoluong() + "");
+//                    response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
+//                    response.setTrangThai(false);
+//                    listMessage.add(response);
+//                } else {
+//                    for (GioHangChiTiet ghct : listAllGH) {
+//                        if (spct.getId() == ghct.getIdSanPhamChiTiet().getId() && ghct.getSoLuong() > spct.getSoluong()) {
+//                            ghct.setSoLuong(spct.getSoluong());
+//                            ghService.save(ghct);
+//                            ResponseMessage response = new ResponseMessage();
+//                            response.setTen(spct.getIdSanPham().getTen());
+//                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
+//                            response.setSl_ton(spct.getSoluong() + "");
+//                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
+//                            response.setTrangThai(spct.getIdSanPham().getTrangThai() != 0);
+//                            listMessage.add(response);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (listMessage.size() > 0) {
+//            return new ResponseEntity<>(listMessage, HttpStatus.OK);
+//        }
+//
+//        ThongTinVanChuyen ttvc = new ThongTinVanChuyen();
+//        DiaChi diaChi = diaChiService.getById(idAddress);
+//        ttvc.setTinhThanhpho(diaChi.getTinhTp());
+//        ttvc.setQuanHuyen(diaChi.getQuanHuyen());
+//        ttvc.setXaPhuongThitran(diaChi.getXaPhuongThitran());
+//        ttvc.setDiaChiCuThe(diaChi.getDiaChiCuThe());
+//        ttvc.setSdt(diaChi.getSdt());
+//        ttvc.setTenNguoiNhan(diaChi.getIdKhachHang().getTen());
+//        ttvcService.save(ttvc);
+//
+//        // tạo đơn hàng
+//        HoaDon dh = new HoaDon();
+//        dh.setIdThongTinVanChuyen(ttvc);
+//        List<HoaDon> listAll = donHangService.getAll();
+//        List<Integer> listId = new ArrayList<>();
+//        if (listAll.size() == 0) {
+//            dh.setMa("DH1");
+//        } else {
+//            for (HoaDon donHang : listAll) {
+//                int index = Integer.parseInt(donHang.getMa().substring(2));
+//                listId.add(index);
+//            }
+//            Optional<Integer> maxNumber = listId.stream().max(Integer::compareTo);
+//            maxNumber.ifPresent(integer -> dh.setMa("DH" + (integer + 1)));
+//        }
+//        dh.setIdKhachHang(khachHangService.getByID(id));
+//        dh.setIdPhuongThucThanhToan(ptttService.getById("1"));
+//        dh.setTrangThai(1);
+//        dh.setNgayTao(LocalDateTime.now());
+//        if (idPromotion != null) {
+//            DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).isPresent()
+//                    ? dotGiamGiaService.findById(Integer.parseInt(idPromotion)).get() : null;
+//            if (km != null) {
+//                dh.setIdDotGiamGia(km);
+//            }
+//        }
+//
+//        donHangService.save(dh);
+//
+//        HoaDon donHangNew = donHangService.findByHD(dh.getMa());
+//
+//        ThongBao thongBao = new ThongBao();
+//
+//        thongBao.setIdHoaDon(donHangNew);
+//
+//        thongBao.setTrangThaiDonHang(1);
+//
+//        thongBao.setNoiDung("Đặt Hàng Thành Công");
+//
+//        thongBao.setNgayGui(LocalDateTime.now());
+//
+//        thongBao.setIdKhachHang(khachHangService.getByID(id));
+//
+//        thongBaoService.save(thongBao);
+//
+//        // tạo hoá đơn chi tiết
+//        for (GioHangChiTietDTO ghct : list) {
+//            ChiTietSanPham spct = spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet()));
+//            ChiTietHoaDon dhct = new ChiTietHoaDon();
+//            dhct.setIdChiTietSanPham(spct);
+//            dhct.setSoLuong(Integer.parseInt(ghct.getSoLuong()));
+//            dhct.setIdHoaDon(donHangNew);
+//            dhct.setNgayTao(LocalDateTime.now());
+//            dhct.setDonGia(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
+//            dhct.setGiaThoiDiemMua(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
+//            BigDecimal tongTien = BigDecimal.valueOf(Integer.parseInt(ghct.getSoLuong()))
+//                    .multiply(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
+//            dhct.setTongTien(tongTien);
+//            donHangCTService.save(dhct);
+//            for (GioHangChiTiet gioHangChiTiet : ghService.getByIdGHList(ghct.getIdGioHang())) {
+//                if (Integer.parseInt(ghct.getIdSanPhamChiTiet()) == gioHangChiTiet.getIdSanPhamChiTiet().getId()) {
+//                    ghService.delete(String.valueOf(gioHangChiTiet.getId()));
+//                    break;
+//                }
+//            }
+//            donHangNew.setTongTien(tongTien);
+//            donHangService.save(donHangNew);
+//        }
+//
+////        BigDecimal tongGiaTri = new BigDecimal("0");
+////        for (ChiTietHoaDon donHangChiTiet :
+////                donHangCTService.findByIdHD(String.valueOf(donHangNew.getId()))
+////        ) {
+////            tongGiaTri = tongGiaTri.add(donHangChiTiet.getTongTien());
+////        }
+//
+//
+//        return new ResponseEntity<>("success", HttpStatus.OK);
+//    }
     @PostMapping("/invoice/save/{id}/{idAddress}")
     private ResponseEntity<?> saveInvoice(@RequestBody List<GioHangChiTietDTO> list,
                                           @PathVariable("id") Integer id,
@@ -172,6 +317,7 @@ public class HoaDonRestController {
         thongBaoService.save(thongBao);
 
         // tạo hoá đơn chi tiết
+        BigDecimal totalInvoiceAmount = new BigDecimal("0");
         for (GioHangChiTietDTO ghct : list) {
             ChiTietSanPham spct = spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet()));
             ChiTietHoaDon dhct = new ChiTietHoaDon();
@@ -181,27 +327,24 @@ public class HoaDonRestController {
             dhct.setNgayTao(LocalDateTime.now());
             dhct.setDonGia(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
             dhct.setGiaThoiDiemMua(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
+
             BigDecimal tongTien = BigDecimal.valueOf(Integer.parseInt(ghct.getSoLuong()))
                     .multiply(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
             dhct.setTongTien(tongTien);
+
+            totalInvoiceAmount = totalInvoiceAmount.add(tongTien);
+
             donHangCTService.save(dhct);
+
             for (GioHangChiTiet gioHangChiTiet : ghService.getByIdGHList(ghct.getIdGioHang())) {
                 if (Integer.parseInt(ghct.getIdSanPhamChiTiet()) == gioHangChiTiet.getIdSanPhamChiTiet().getId()) {
                     ghService.delete(String.valueOf(gioHangChiTiet.getId()));
                     break;
                 }
             }
-            donHangNew.setTongTien(tongTien);
-            donHangService.save(donHangNew);
         }
-
-//        BigDecimal tongGiaTri = new BigDecimal("0");
-//        for (ChiTietHoaDon donHangChiTiet :
-//                donHangCTService.findByIdHD(String.valueOf(donHangNew.getId()))
-//        ) {
-//            tongGiaTri = tongGiaTri.add(donHangChiTiet.getTongTien());
-//        }
-
+        donHangNew.setTongTien(totalInvoiceAmount);
+        donHangService.save(donHangNew);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }

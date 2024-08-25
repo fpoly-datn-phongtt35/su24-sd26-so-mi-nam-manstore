@@ -22,12 +22,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Hoá Đơn</h4>
+                            <h4 class="mb-sm-0">Đơn hàng</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Hoá Đơn</a></li>
-                                    <li class="breadcrumb-item active">Danh Sách Hoá Đơn</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Đơn Hàng</a></li>
+                                    <li class="breadcrumb-item active">Danh Sách Đơn Hàng</li>
                                 </ol>
                             </div>
 
@@ -41,7 +41,7 @@
                         <div class="card" id="invoiceList">
                             <div class="card-header border-0">
                                 <div class="d-flex align-items-center">
-                                    <h5 class="card-title mb-0 flex-grow-1">Danh Sách Hoá Đơn</h5>
+                                    <h5 class="card-title mb-0 flex-grow-1">Danh Sách Đơn Hàng</h5>
                                 </div>
                             </div>
                             <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
@@ -115,7 +115,7 @@
                                         <table class="table align-middle table-nowrap" id="invoiceTable">
                                             <thead class="text-muted">
                                             <tr>
-                                                <th>Mã Hoá Đơn</th>
+                                                <th>Mã Đơn Hàng</th>
                                                 <th>Khách Hàng</th>
                                                 <th>Nhân Viên</th>
                                                 <th>Ngày Tạo</th>
@@ -182,7 +182,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Hoá Đơn Chi Tiết</h4>
+                <h4 class="modal-title">Đơn Hàng Chi Tiết</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
@@ -198,8 +198,7 @@
                                     <div class="card-body p-4">
                                         <div class="row g-3">
                                             <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Hoá
-                                                    Đơn</p>
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Đơn Hàng</p>
                                                 <h5 class="fs-15 mb-0">#<span id="invoice-no"></span></h5>
                                             </div>
                                             <!--end col-->
@@ -873,15 +872,15 @@
                         <i class="ri-add-line"></i> Thêm Sản Phẩm
                    </div>
             `;
+
             let vat = total_amount * 0.1;
+            let total_before_discount = total_amount + vat;
             let total;
             console.log("Phí Ship ", shipp_fee);
-            if (shipp_fee === undefined || shipp_fee === null) {
-                total = total_amount + vat;
-            } else {
-                total = total_amount + vat + shipp_fee;
-            }
 
+            if (shipp_fee !== undefined && shipp_fee !== null) {
+                total_before_discount += shipp_fee; // Cộng thêm phí ship nếu có
+            }
             let promotion_title = '(không có khuyến mãi)';
             let promotion_value = '- 0';
             let promotion = await getPromotionByDate(0);
@@ -918,36 +917,34 @@
                 promotion_title = '(' + data[0].idHoaDon.idDotGiamGia.ten + ')';
                 if (data[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
                     promotion_value = '- ' + data[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
-                    total = total - (total * (data[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
+                    total = total_before_discount - (total_amount * (data[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
                 } else {
                     promotion_value = '- ' + formatmoney(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
-                    total = total - parseInt(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
+                    total = total_before_discount - parseInt(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
                 }
             }
-
             sub_total = `
-       <tr>
-                  <td>Tổng tiền <small class="text-muted">(Trước thuế)</small></td>
-                  <td class="text-end">${formatmoney(total_amount)}</td>
-       </tr>
-       <tr>
-                 <td>VAT (10%)</td>
-                 <td class="text-end">${formatmoney(vat)}</td>
-       </tr>
-       <tr>
-                  <td>Khuyến Mãi <small class="text-muted" id="promotion-title">${promotion_title}</small></td>
-                  <td class="text-end" id="promotion-value">${promotion_value}</td>
-       </tr>
-       <tr id="money-ship">
-                   <td>Phí Ship</td>
-                   <td><input style="width: 100px;" type="text" class="form-control" id="shipping-fee" onblur="handleShippingFee(${order_id},${shipp_fee})"/></td>
-       </tr>
-       <tr class="border-top border-top-dashed fs-15">
-                   <th scope="row">Tổng số tiền</th>
-                   <th class="text-end">${formatmoney(total)}</th>
-       </tr>
+<tr>
+    <td>Tổng tiền <small class="text-muted">(Trước thuế)</small></td>
+    <td class="text-end">${formatmoney(total_amount)}</td>
+</tr>
+<tr>
+    <td>VAT (10%)</td>
+    <td class="text-end">${formatmoney(vat)}</td>
+</tr>
+<tr>
+    <td>Khuyến Mãi <small class="text-muted" id="promotion-title">${promotion_title}</small></td>
+    <td class="text-end" id="promotion-value">${promotion_value}</td>
+</tr>
+<tr id="money-ship">
+    <td>Phí Ship</td>
+    <td><input style="width: 100px;" type="text" class="form-control" id="shipping-fee" onblur="handleShippingFee(${order_id},${shipp_fee})"/></td>
+</tr>
+<tr class="border-top border-top-dashed fs-15">
+    <th scope="row">Tổng số tiền</th>
+    <th class="text-end">${formatmoney(total)}</th>
+</tr>
 `;
-
 
             let hideShippingFee = false;
             var momentDate = moment(data[0].idHoaDon.ngayTao);
@@ -1028,26 +1025,7 @@
                             </div>
                         </div>`;
             }
-            // else {
-            //     if (data[0].dh.tienKhachTra !== null) {
-            //         if (data[0].dh.kh !== null) {
-            //             document.getElementById('address').innerHTML = `
-            //             <div class="col-lg-12">
-            //                         <div class="card border-0">
-            //                             <br>
-            //                             <label class="form-label">
-            //                                 <div class="row">
-            //                                     <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block">Thông tin khách hàng</span></div>
-            //                                 </div>
-            //                                 <span class="text-muted fw-normal text-wrap mb-1 d-block">Họ Tên : ${data[0].dh.kh.hoTen}</span>
-            //                                 <span class="text-muted fw-normal text-wrap mb-1 d-block">Số Điện Thoại : ${data[0].dh.kh.sdt}</span>
-            //                                 <span class="text-muted fw-normal text-wrap mb-1 d-block">Email : ${data[0].dh.kh.email}</span>
-            //                             </label>
-            //                         </div>
-            //                     </div>`;
-            //         }
-            //     }
-            // }
+
             handleStatusInvoice(order_status, order_id);
             document.getElementById('products-list').innerHTML = main;
             document.getElementById('sub-total').innerHTML = sub_total;

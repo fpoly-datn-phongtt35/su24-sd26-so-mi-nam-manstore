@@ -61,7 +61,6 @@ public class NhanVien implements UserDetails {
     @Column(name = "GioiTinh")
     private Integer gioiTinh;
 
-    @JsonManagedReference
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idPhanQuyen", nullable = false, referencedColumnName = "id")

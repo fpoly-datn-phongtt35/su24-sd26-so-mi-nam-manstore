@@ -16,7 +16,7 @@ public class ThongBaoServiceImpl implements ThongBaoService {
     @Autowired
     ThongBaoRepository rp;
 
-    Sort sort = Sort.by("thoiGianGui").descending();
+    Sort sort = Sort.by("ngayGui").descending();
 
     @Override
     public void save(ThongBao thongBao) {

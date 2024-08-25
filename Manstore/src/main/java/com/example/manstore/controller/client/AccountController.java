@@ -62,22 +62,33 @@ public class AccountController {
         return "redirect:/client/account/" + id;
     }
 
-    @RequestMapping(value = "/{id}/huyDon/{idDH}", method = RequestMethod.POST)
-    public String huyDon(@PathVariable(value = "idDH") String idDH, @PathVariable(value = "id") String id, RedirectAttributes redirectAttributes
-            , @ModelAttribute("donHang") HoaDon donHang) {
-        try {
-            HoaDon donHangCapNhat = donHangService.findByHD(idDH);
-            if (donHangCapNhat != null) {
+//    @RequestMapping(value = "/{id}/cancelOder/{idDH}", method = RequestMethod.POST)
+//    public String huyDon(@PathVariable(value = "idDH") String idDH, @PathVariable(value = "id") String id, RedirectAttributes redirectAttributes
+//            , @ModelAttribute("donHang") HoaDon donHang) {
+//        try {
+//            HoaDon donHangCapNhat = donHangService.findByHD(idDH);
+//            if (donHangCapNhat != null) {
 //                donHangCapNhat.setGhiChu(donHang.getGhiChu());
-                donHangCapNhat.setTrangThai(6); // Trạng thái 6 có thể là trạng thái hủy
-                donHangService.save(donHangCapNhat);
-                redirectAttributes.addFlashAttribute("message", "Đơn hàng đã được hủy thành công.");
-            } else {
-                redirectAttributes.addFlashAttribute("message", "Không tìm thấy đơn hàng để hủy.");
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Đã xảy ra lỗi khi hủy đơn hàng.");
-        }
+//                donHangCapNhat.setTrangThai(6); // Trạng thái 6 có thể là trạng thái hủy
+//                donHangService.save(donHangCapNhat);
+//                redirectAttributes.addFlashAttribute("message", "Đơn hàng đã được hủy thành công.");
+//            } else {
+//                redirectAttributes.addFlashAttribute("message", "Không tìm thấy đơn hàng để hủy.");
+//            }
+//        } catch (Exception e) {
+//            redirectAttributes.addFlashAttribute("message", "Đã xảy ra lỗi khi hủy đơn hàng.");
+//        }
+//        return "redirect:/client/account/" + id;
+//    }
+
+    @RequestMapping(value = "/{id}/cancelOder/{idDH}", method = RequestMethod.POST)
+    public String cancelOder(@PathVariable(value = "idDH") String idHD, @PathVariable(value = "id") String id, RedirectAttributes redirectAttributes
+            , @ModelAttribute("donHang") HoaDon donHang) {
+        HoaDon updateDH = donHangService.findByHD(idHD);
+        updateDH.setGhiChu(donHang.getGhiChu());
+        updateDH.setTrangThai(6);
+        donHangService.save(updateDH);
+        redirectAttributes.addFlashAttribute("message", true);
         return "redirect:/client/account/" + id;
     }
 }
