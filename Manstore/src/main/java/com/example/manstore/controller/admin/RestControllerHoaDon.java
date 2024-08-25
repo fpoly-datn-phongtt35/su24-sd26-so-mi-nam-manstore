@@ -1,9 +1,8 @@
 package com.example.manstore.controller.admin;
 
-import com.example.manstore.entity.ChiTietHoaDon;
-import com.example.manstore.entity.ChiTietSanPham;
-import com.example.manstore.entity.DotGiamGia;
-import com.example.manstore.entity.HoaDon;
+import com.example.manstore.CustomModel.ResponseCustom;
+import com.example.manstore.CustomModel.ResponseMessage;
+import com.example.manstore.entity.*;
 import com.example.manstore.repository.DotGiamGiaRepository;
 import com.example.manstore.service.HoaDonChiTietService;
 import com.example.manstore.service.HoaDonService;
@@ -280,26 +279,7 @@ public class RestControllerHoaDon {
             dhct.setTongTien(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(1)));
             dhct.setIdHoaDon(dh);
             dh.setTongTien(dh.getTongTien().add(dhct.getGiaThoiDiemMua()));
-//            if (dh.getIdDotGiamGia() == null) {
-//                List<DotGiamGia> List = dotGiamGiaRepository.getByCustomer(dh.getIdKhachHang().getId(), LocalDate.now(), true);
-//                List.removeIf(km -> km.getNgayKetThuc().isBefore(LocalDate.now()));
-//                System.out.println("List " + List.toString());
-//                int total = dh.getTongTien().intValue();
-//                if (List.size() == 0) {
-//                    List<DotGiamGia> listPromotionAll = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
-//                    listPromotionAll.removeIf(km -> km.getNgayKetThuc().isBefore(LocalDate.now()));
-//                    System.out.println("List " + listPromotionAll.toString());
-//                    if (listPromotionAll.size() > 0) {
-//                        if (total >= listPromotionAll.get(0).getGiaTriDonHang()) {
-//                            dh.setIdDotGiamGia(listPromotionAll.get(0));
-//                        }
-//                    }
-//                } else {
-//                    if (total >= List.get(0).getGiaTriDonHang()) {
-//                        dh.setIdDotGiamGia(List.get(0));
-//                    }
-//                }
-//            }
+
             if (dh.getIdDotGiamGia() == null) {
                 List<DotGiamGia> listPromotionAll = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
                 listPromotionAll.removeIf(km -> km.getNgayKetThuc().isBefore(LocalDate.now()));
@@ -329,6 +309,337 @@ public class RestControllerHoaDon {
             return new ResponseEntity<>("failure", HttpStatus.OK);
         }
     }
+
+    @GetMapping("/change-status/{id}")
+    private ResponseEntity<?> confirmOrder(@PathVariable("id") String id,
+                                           @RequestParam("status") int status,
+                                           @RequestParam("idStaff") Integer idStaff,
+                                           @RequestParam(value = "reason", required = false) String reason) {
+        NhanVien nv = nhanVienService.findById(idStaff).isPresent() ? nhanVienService.findById(idStaff).get() : null;
+        ResponseCustom responseCustom = new ResponseCustom();
+        List<ResponseMessage> listMessage = new ArrayList<>();
+        HoaDon dh = donHangService.findById(Integer.parseInt(id)).get();
+        ThongBao thongBao = new ThongBao();
+        List<ChiTietHoaDon> list = donHangCTService.findByIdHD(id);
+        if (status == dh.getTrangThai()) {
+            responseCustom.setStatusText("failure");
+            responseCustom.setMessage("The status has been switched before");
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+        if (dh.getTrangThai() == 1 && status == 2) {
+            for (ChiTietHoaDon dhct : list
+            ) {
+                for (ChiTietSanPham spct : spService.getAllCTSP()) {
+                    if (spct.getId() == dhct.getIdChiTietSanPham().getId()) {
+                        if (dhct.getSoLuong() > spct.getSoluong() || spct.getSoluong() <= 0) {
+                            ResponseMessage response = new ResponseMessage();
+                            response.setTen(spct.getIdSanPham().getTen());
+                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
+                            response.setSl_ton(spct.getSoluong() + "");
+                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
+                            listMessage.add(response);
+                        }
+                    }
+                }
+            }
+            if (listMessage.size() > 0) {
+                return new ResponseEntity<>(listMessage, HttpStatus.OK);
+            }
+            for (ChiTietHoaDon dhct : list
+            ) {
+                int count_of_product = dhct.getIdChiTietSanPham().getSoluong();
+                int count_of_invoice = dhct.getSoLuong();
+                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+                spct.setSoluong(count_of_product - count_of_invoice);
+                spService.save(spct);
+            }
+            dh.setIdNhanVien(nv);
+            dh.setTrangThai(status);
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBaoService.save(thongBao);
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+        if (dh.getTrangThai() == 2 && status == 3) {
+            if (dh.getPhiVanChuyen() == null) {
+                responseCustom.setStatusText("failure");
+                responseCustom.setMessage("Shipping fee is null");
+                return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+            }
+            dh.setTrangThai(status);
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBaoService.save(thongBao);
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+        if (dh.getTrangThai() == 3 && status == 4) {
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);;
+            thongBaoService.save(thongBao);
+            dh.setTrangThai(status);
+            dh.setTongTien(donHangService.calculateTotal(id));
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+        if (dh.getTrangThai() == 3 && status == 5) {
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBao.setNoiDung(reason);
+            thongBaoService.save(thongBao);
+            dh.setTrangThai(status);
+            dh.setGhiChu(reason);
+            for (ChiTietHoaDon dhct : list
+            ) {
+                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+                spService.save(spct);
+            }
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+        if (dh.getTrangThai() == 1 && status == 6) {
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBao.setNoiDung(reason);
+            thongBaoService.save(thongBao);
+            dh.setTrangThai(status);
+            dh.setGhiChu(reason);
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+        if (dh.getTrangThai() == 2 && status == 6) {
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBao.setNoiDung(reason);
+            thongBaoService.save(thongBao);
+            dh.setTrangThai(status);
+            dh.setGhiChu(reason);
+            for (ChiTietHoaDon dhct : list
+            ) {
+                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+                spService.save(spct);
+            }
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+        responseCustom.setStatusText("failure");
+        responseCustom.setMessage("Cannot change status");
+        return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+    }
+
+    @GetMapping("/edit-quantity/{id}")
+    private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
+                                           @RequestParam("quantity") int count) {
+
+        ChiTietHoaDon dhct = donHangCTService.getById2(id);
+        ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+        HoaDon dh = dhct.getIdHoaDon();
+        if (count < 1) {
+            return new ResponseEntity<>("Số lượng phải lớn hơn 0!", HttpStatus.OK);
+        } else {
+            if (dhct.getIdHoaDon().getTrangThai() == 1) {
+                if (count <= spct.getSoluong()) {
+                    int quantity = dhct.getSoLuong() - count;
+                    dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(quantity))));
+                    if (dh.getIdDotGiamGia() != null) {
+                        int total = dh.getTongTien().intValue();
+                        System.out.println("Total " + total);
+                        if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+                            dh.setIdDotGiamGia(null);
+                        }
+
+                    }
+                    donHangService.save(dh);
+                    dhct.setSoLuong(count);
+                    donHangCTService.save(dhct);
+                    return new ResponseEntity<>("success", HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Sản phẩm này chỉ còn lại " + spct.getSoluong() + "!", HttpStatus.OK);
+                }
+            } else if (dhct.getIdHoaDon().getTrangThai() == 2) {
+                if (count <= (dhct.getSoLuong() + spct.getSoluong())) {
+                    int afterCount;
+                    if (count <= dhct.getSoLuong()) {
+                        if (count <= spct.getSoluong()) {
+                            afterCount = spct.getSoluong() + (dhct.getSoLuong() - count);
+                            spct.setSoluong(afterCount);
+                            spService.save(spct);
+                            int quantity = dhct.getSoLuong() - count;
+                            dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(quantity))));
+                            if (dh.getIdDotGiamGia() != null) {
+                                int total = dh.getTongTien().intValue();
+                                System.out.println("Total " + total);
+                                if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+                                    dh.setIdDotGiamGia(null);
+                                }
+                            }
+                            donHangService.save(dh);
+                            dhct.setSoLuong(count);
+                            donHangCTService.save(dhct);
+                            return new ResponseEntity<>("success", HttpStatus.OK);
+                        } else {
+                            afterCount = spct.getSoluong() + (dhct.getSoLuong() - count);
+                            spct.setSoluong(afterCount);
+                            spService.save(spct);
+                            int quantity = dhct.getSoLuong() - count;
+                            dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(quantity))));
+                            if (dh.getIdDotGiamGia() != null) {
+                                int total = dh.getTongTien().intValue();
+                                System.out.println("Total " + total);
+                                if (total  < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+                                    dh.setIdDotGiamGia(null);
+                                }
+                            }
+                            donHangService.save(dh);
+                            dhct.setSoLuong(count);
+                            donHangCTService.save(dhct);
+                            return new ResponseEntity<>("success", HttpStatus.OK);
+                        }
+                    } else {
+                        if (count <= (dhct.getSoLuong() + spct.getSoluong())) {
+                            if (count <= dhct.getSoLuong()) {
+                                System.out.println("case 2 " + count + " " + spct.getSoluong() + (dhct.getSoLuong() - count));
+                                afterCount = spct.getSoluong() + (dhct.getSoLuong() - count);
+                                spct.setSoluong(afterCount);
+                                spService.save(spct);
+                                int quantity = dhct.getSoLuong() - count;
+                                dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(quantity))));
+                                if (dh.getIdDotGiamGia() != null) {
+                                    int total = dh.getTongTien().intValue();
+                                    System.out.println("Total " + total);
+                                    if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+                                        dh.setIdDotGiamGia(null);
+                                    }
+                                }
+                                donHangService.save(dh);
+                                dhct.setSoLuong(count);
+                                donHangCTService.save(dhct);
+                                return new ResponseEntity<>("success", HttpStatus.OK);
+                            } else {
+                                System.out.println("case 3 " + count + " " + (spct.getSoluong() - (count - dhct.getSoLuong())));
+                                afterCount = spct.getSoluong() - (count - dhct.getSoLuong());
+                                spct.setSoluong(afterCount);
+                                int quantity = count - dhct.getSoLuong();
+                                dh.setTongTien(dh.getTongTien().add(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(quantity))));
+                                if (dh.getIdDotGiamGia() == null) {
+                                    List<DotGiamGia> listPromotionAll = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
+                                    listPromotionAll.removeIf(km -> km.getNgayKetThuc().isBefore(LocalDate.now()));
+                                    System.out.println("List " + listPromotionAll.toString());
+                                    int total = dh.getTongTien().intValue();
+                                    if (listPromotionAll.size() > 0) {
+                                        if (total >= listPromotionAll.get(0).getGiaTriDonHang()) {
+                                            dh.setIdDotGiamGia(listPromotionAll.get(0));
+                                        }
+                                    }
+                                }
+                                donHangService.save(dh);
+                                dhct.setSoLuong(count);
+                                donHangCTService.save(dhct);
+                                return new ResponseEntity<>("success", HttpStatus.OK);
+                            }
+                        } else {
+                            return new ResponseEntity<>("Sản Phẩm Chỉ Còn Lại " +
+                                    dhct.getSoLuong() + spct.getSoluong() + "!", HttpStatus.OK);
+                        }
+                    }
+                } else {
+                    return new ResponseEntity<>("Sản Phẩm Chỉ Còn Lại " +
+                            (dhct.getSoLuong() + spct.getSoluong()) + "!", HttpStatus.OK);
+                }
+
+            } else {
+                return new ResponseEntity<>("Không thể thay đổi số lượng sản phẩm cho đơn hàng này!", HttpStatus.OK);
+            }
+        }
+    }
+
+    @GetMapping("/delete-invoice-detail/{id}")
+    private ResponseEntity<?> deleteInvoiceDetailById(@PathVariable("id") String id) {
+        if (donHangCTService.getById2(id) != null) {
+            ChiTietHoaDon dhct = donHangCTService.getById2(id);
+            HoaDon dh = dhct.getIdHoaDon();
+            ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+            List<ChiTietHoaDon> list = donHangCTService.findByIdHD(String.valueOf(dh.getId()));
+            if (dhct.getIdHoaDon().getTrangThai() == 1 || dhct.getIdHoaDon().getTrangThai() == 2) {
+                if (dhct.getIdHoaDon().getTrangThai() == 1) {
+                    if (list.size() <= 1) {
+                        return new ResponseEntity<>("error", HttpStatus.OK);
+                    }
+                    if (dh.getIdDotGiamGia() != null) {
+                        dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(dhct.getSoLuong()))));
+                        int total = dh.getTongTien().intValue();
+                        System.out.println("Total " + total);
+                        if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+                            dh.setIdDotGiamGia(null);
+                        }
+
+                    }
+                    BigDecimal total_before = dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(dhct.getSoLuong())));
+                    dh.setTongTien(total_before);
+                    donHangService.save(dh);
+                    donHangCTService.deleteById(id);
+                } else if (dhct.getIdHoaDon().getTrangThai() == 2) {
+                    if (list.size() <= 1) {
+                        return new ResponseEntity<>("error", HttpStatus.OK);
+                    }
+                    if (dh.getIdDotGiamGia() != null) {
+                        dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(dhct.getSoLuong()))));
+                        int total = dh.getTongTien().intValue();
+                        System.out.println("Total " + total);
+                        if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+                            dh.setIdDotGiamGia(null);
+                        }
+
+                    }
+                    BigDecimal total_before = dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(dhct.getSoLuong())));
+                    dh.setTongTien(total_before);
+                    donHangService.save(dh);
+                    donHangCTService.deleteById(id);
+                    spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+                    spService.save(spct);
+                }
+            } else {
+                return new ResponseEntity<>("no-status", HttpStatus.OK);
+            }
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("failure", HttpStatus.OK);
+        }
+    }
+
 
 
 }

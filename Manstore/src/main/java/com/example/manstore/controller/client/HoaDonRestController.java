@@ -165,7 +165,7 @@ public class HoaDonRestController {
 
         thongBao.setNoiDung("Đặt Hàng Thành Công");
 
-        thongBao.setNgayGui(LocalDate.now());
+        thongBao.setNgayGui(LocalDateTime.now());
 
         thongBao.setIdKhachHang(khachHangService.getByID(id));
 
@@ -183,7 +183,7 @@ public class HoaDonRestController {
             dhct.setGiaThoiDiemMua(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
             BigDecimal tongTien = BigDecimal.valueOf(Integer.parseInt(ghct.getSoLuong()))
                     .multiply(spService.getCTSPById(Integer.valueOf(ghct.getIdSanPhamChiTiet())).getIdSanPham().getGia());
-            dhct.setTongTien(tongTien.add(tongTien.multiply(BigDecimal.valueOf(0.1))));
+            dhct.setTongTien(tongTien);
             donHangCTService.save(dhct);
             for (GioHangChiTiet gioHangChiTiet : ghService.getByIdGHList(ghct.getIdGioHang())) {
                 if (Integer.parseInt(ghct.getIdSanPhamChiTiet()) == gioHangChiTiet.getIdSanPhamChiTiet().getId()) {
@@ -191,17 +191,17 @@ public class HoaDonRestController {
                     break;
                 }
             }
+            donHangNew.setTongTien(tongTien);
+            donHangService.save(donHangNew);
         }
 
-        BigDecimal tongGiaTri = new BigDecimal("0");
-        for (ChiTietHoaDon donHangChiTiet :
-                donHangCTService.findByIdHD(String.valueOf(donHangNew.getId()))
-        ) {
-            tongGiaTri = tongGiaTri.add(donHangChiTiet.getTongTien());
-        }
+//        BigDecimal tongGiaTri = new BigDecimal("0");
+//        for (ChiTietHoaDon donHangChiTiet :
+//                donHangCTService.findByIdHD(String.valueOf(donHangNew.getId()))
+//        ) {
+//            tongGiaTri = tongGiaTri.add(donHangChiTiet.getTongTien());
+//        }
 
-        donHangNew.setTongTien(tongGiaTri);
-        donHangService.save(donHangNew);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
@@ -273,7 +273,7 @@ public class HoaDonRestController {
 
         thongBao.setNoiDung("Đặt Hàng Thành Công");
 
-        thongBao.setNgayGui(LocalDate.now());
+        thongBao.setNgayGui(LocalDateTime.now());
 
         thongBao.setIdKhachHang(khachHangService.getByID(Integer.valueOf(id)));
 
@@ -281,30 +281,17 @@ public class HoaDonRestController {
 
         //tạo hoá đơn chi tiết
        try {
-           System.out.println("0000000000000");
            ChiTietHoaDon dhct = new ChiTietHoaDon();
-           System.out.println("1111111111111");
            BigDecimal donGia = new BigDecimal(dtoSP.getDonGia());
-           System.out.println("22222222222222");
            dhct.setIdChiTietSanPham(spService.getCTSPById(Integer.valueOf(dtoSP.getId())));
-           System.out.println("33333333333333");
            dhct.setSoLuong(dtoSP.getSoLuong());
-           System.out.println("44444444444444");
            dhct.setIdHoaDon(donHangNew);
-           System.out.println("55555555555555");
            dhct.setNgayTao(LocalDateTime.now());
-           System.out.println("66666666666666");
            dhct.setDonGia(donGia);
-           System.out.println("77777777777777");
            dhct.setGiaThoiDiemMua(donGia);
-           System.out.println("888888888888888");
-           BigDecimal tongTien = BigDecimal.valueOf(dtoSP.getSoLuong())
-                   .multiply(donGia);
-           System.out.println("999999999999999");
+           BigDecimal tongTien = BigDecimal.valueOf(dtoSP.getSoLuong()).multiply(donGia);
            dhct.setTongTien(tongTien);
-           System.out.println("1010101010101");
            donHangCTService.save(dhct);
-           System.out.println("1111111111111"+ dhct);
            donHangNew.setTongTien(tongTien);
            donHangService.save(donHangNew);
 
@@ -392,7 +379,7 @@ public class HoaDonRestController {
 
         thongBao.setNoiDung("Đặt Hàng Thành Công");
 
-        thongBao.setNgayGui(LocalDate.now());
+        thongBao.setNgayGui(LocalDateTime.now());
 
         thongBao.setIdKhachHang(khachHangService.getByID(Integer.parseInt(id)));
 

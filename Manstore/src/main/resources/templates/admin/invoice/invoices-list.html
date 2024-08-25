@@ -298,7 +298,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-end">
                 <button type="button" class="btn btn-success" onclick="handleCancelInvoice()">Xác Nhận</button>
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
                         aria-label="Close">Huỷ Bỏ
                 </button>
             </div>
@@ -741,22 +741,22 @@
         var main = '';
         var img = '';
         for (let i = 0; i < list.length; i++) {
-            // var url = '/api/admin/product_detail/picture/' + list[i].sp.id + '/' + list[i].ms.id;
-            // const responsePicture = await fetch(url, {
-            //     method: 'GET',
-            //     headers: {
-            //         'Authorization': 'Bearer ' + localStorage.getItem('token')
-            //     }
-            // })
-            // const data = await responsePicture.json();
-            // console.log(data);
-            //
-            // if (data !== null) {
-            //     img = `<img src="${data[0].linkAnh}" alt="Ảnh sản phẩm"
-            //         style="width: 100%; height: auto;display: block;">`;
-            // } else {
-            //     img = `<i class="ri-question-mark" style="padding-left: 7px;"></i>`;
-            // }
+            var url = '/api/admin/product_detail/picture/' + list[i].idSanPham.id + '/' + list[i].idMauSac.id;
+            const responsePicture = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            const data = await responsePicture.json();
+            console.log(data);
+
+            if (data.statusText === "failure" || !Array.isArray(data) || data.length === 0) {
+                img = `<img src="http://localhost:8080/assets/images/products/img-8.png" alt="" class="avatar-md">`;
+            } else {
+                let fullUrl = `http://localhost:8080/assets/images/products/${data[0]}`;
+                img = `<img src="${fullUrl}" alt="" class="avatar-md">`;
+            }
             main += `<tr >
                             <td scope="row">${i + 1}</td>
                             <td scope="row">${list[i].idSanPham.ten}</td>
@@ -790,17 +790,6 @@
         $('#myModal').modal('hide');
     }
 
-    // async function getPromotion(id) {
-    //     const response = await fetch('/public/promotion/find-by-date?type=all', {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-    //         }
-    //     });
-    //     var result = await response.json();
-    //     return result;
-    // }
-
     async function getPromotionByDate(type) {
         const response = await fetch('/public/promotion/find-by-date?type=all', {
             method: 'GET',
@@ -831,10 +820,7 @@
         let order_id;
         let shipp_fee;
         let note;
-        // let money_paid;
-        let money_refund;
         if (response.status === 200) {
-            // money_paid = data[0].dh.tienKhachTra;
             order_status = data[0].idHoaDon.trangThai;
             order_id = data[0].idHoaDon.id;
             address = data[0].idHoaDon.idThongTinVanChuyen;
@@ -897,7 +883,7 @@
             }
 
             let promotion_title = '(không có khuyến mãi)';
-            let promotion_value = '- 0%';
+            let promotion_value = '- 0';
             let promotion = await getPromotionByDate(0);
 
             console.log(promotion);
@@ -907,14 +893,14 @@
                 if (promotion === null || promotion.length === 0) {
                     id_promotion = null;
                     promotion_title = '(Không có khuyến mãi)';
-                    promotion_value = '- 0%';
+                    promotion_value = '- 0';
                 } else {
                     let obj_promotion = promotion[0];
                     id_promotion = obj_promotion.id;
                     let reference_value = total_amount;
                     if (reference_value < obj_promotion.giaTriDonHang) {
                         promotion_title = '(chưa đủ điều kiện)';
-                        promotion_value = '- 0%';
+                        promotion_value = '- 0';
                         let need_more_value = (obj_promotion.giaTriDonHang - reference_value);
                         let reduce_value;
                         if (obj_promotion.loaiGiamGia === true)
@@ -961,39 +947,9 @@
                    <th class="text-end">${formatmoney(total)}</th>
        </tr>
 `;
-            // money_refund = parseInt(money_paid) - parseInt(total);
+
+
             let hideShippingFee = false;
-            // if (data[0].idHoaDon.trangThai > 0 && data[0].idHoaDon.trangThai < 4) {
-            //     sub_total += ``;
-            // } else if (data[0].idHoaDon.trangThai === 5 || data[0].idHoaDon.trangThai === 6) {
-            //     sub_total += ``;
-            // } else {
-            //     if (data[0].idHoaDon.idKhachHang === null) {
-            //         hideShippingFee = true;
-            //         sub_total += `
-            //         <tr ${hidden}>
-            //                   <td>Tiền Khách Trả</td>
-            //                   <td class="text-end">${formatmoney(money_paid)}</td>
-            //        </tr>
-            //        <tr ${hidden}>
-            //                   <td>Tiền trả lại</td>
-            //                   <td class="text-end">${formatmoney(money_refund)}</td>
-            //        </tr>`;
-            //     } else {
-            //         if (data[0].dh.tienKhachTra !== null) {
-            //             hideShippingFee = true;
-            //             sub_total += `
-            //         <tr ${hidden}>
-            //                   <td>Tiền Khách Trả</td>
-            //                   <td class="text-end">${formatmoney(money_paid)}</td>
-            //        </tr>
-            //        <tr ${hidden}>
-            //                   <td>Tiền trả lại</td>
-            //                   <td class="text-end">${formatmoney(money_refund)}</td>
-            //        </tr>`;
-            //         }
-            //     }
-            // }
             var momentDate = moment(data[0].idHoaDon.ngayTao);
             var status = '';
 
@@ -1035,7 +991,7 @@
                     <br disabled>
                     <br disabled>
                     <div class="row" id="reason-label">
-                           <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block text-danger">
+                           <div class="col-md-9"><span class="mb-3 text-uppercase fw-semibold d-block text-danger">
                                 Lý do huỷ/giao thất bại :</span>
                            </div>
                     </div>
@@ -1878,5 +1834,6 @@
             });
         }
     }
+
 </script>
 </html>
