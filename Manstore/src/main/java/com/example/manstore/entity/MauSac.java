@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "MauSac")
-public class MauSac {
+public class MauSac implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,9 +36,9 @@ public class MauSac {
     @Column(name = "Ten", length = 100)
     private String ten;
 
-    @OneToMany(mappedBy = "idMauSac", fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JsonIgnoreProperties({"idMauSac", "hibernateLazyInitializer", "handler"})
-    private List<ChiTietSanPham> chiTietSanPhams;
+//    @OneToMany(mappedBy = "idMauSac", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    @JsonIgnoreProperties({"idMauSac", "hibernateLazyInitializer", "handler"})
+//    private List<ChiTietSanPham> chiTietSanPhams;
 
 }

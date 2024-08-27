@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +27,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "NhanVien")
 public class NhanVien implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +61,6 @@ public class NhanVien implements UserDetails {
     @Column(name = "GioiTinh")
     private Integer gioiTinh;
 
-//    @JsonManagedReference
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idPhanQuyen", nullable = false, referencedColumnName = "id")
@@ -76,9 +77,12 @@ public class NhanVien implements UserDetails {
     @Column(name = "TrangThai")
     private Integer trangThai;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "idNhanVien" , fetch = FetchType.LAZY)
-    private List<HoaDon> hoaDons;
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "idNhanVien" , fetch = FetchType.LAZY)
+//    private List<HoaDon> hoaDons;
+//
+//    @OneToMany(mappedBy = "idNhanVien", fetch = FetchType.LAZY)
+//    private List<ThongBao> thongBaos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

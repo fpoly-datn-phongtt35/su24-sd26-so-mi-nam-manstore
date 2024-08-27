@@ -1,12 +1,11 @@
 package com.example.manstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "GioHangChiTiet")
-public class GioHangChiTiet {
+public class GioHangChiTiet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -25,14 +24,8 @@ public class GioHangChiTiet {
     @Column(name = "SoLuong")
     private Integer soLuong;
 
-    @Column(name = "DonGia", precision = 18)
-    private BigDecimal donGia;
-
     @Column(name = "NgaySua")
     private LocalDate ngaySua;
-
-    @Column(name = "TongTien", precision = 18)
-    private BigDecimal tongTien;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

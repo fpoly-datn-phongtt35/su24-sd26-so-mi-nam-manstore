@@ -9,8 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +23,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "HoaDon")
-public class HoaDon {
+public class HoaDon implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -33,10 +35,9 @@ public class HoaDon {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
-    @JsonBackReference
     private KhachHang idKhachHang;
 
-    @JsonBackReference
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idNhanVien", nullable = false, referencedColumnName = "id")
     private NhanVien idNhanVien;
@@ -45,13 +46,23 @@ public class HoaDon {
     private String ma;
 
     @Column(name = "NgayTao")
-    private LocalDate ngayTao;
+    private LocalDateTime ngayTao;
 
-    @Column(name = "VAT", precision = 18)
-    private BigDecimal vat;
+    @Column(name = "PhiVanChuyen")
+    private BigDecimal phiVanChuyen;
 
-    @Column(name = "PhuongThucThanhToan")
-    private Integer phuongThucThanhToan;
+
+    @Column(name = "GhiChu", length = 250)
+    private String ghiChu;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idThongTinVanChuyen", nullable = false, referencedColumnName = "id")
+    private ThongTinVanChuyen idThongTinVanChuyen;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idPhuongThucThanhToan", nullable = false, referencedColumnName = "id")
+    private PhuongThucThanhToan idPhuongThucThanhToan;
+
 
     @Column(name = "TongTien", precision = 18)
     private BigDecimal tongTien;
@@ -59,8 +70,11 @@ public class HoaDon {
     @Column(name = "TrangThai")
     private Integer trangThai;
 
-    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
-    private List<ChiTietHoaDon> chiTietHoaDons;
+//    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
+//    private List<ChiTietHoaDon> chiTietHoaDons;
+//
+//    @OneToMany(mappedBy = "idHoaDon", fetch = FetchType.LAZY)
+//    private List<ThongBao> thongBaos;
 
 
 }

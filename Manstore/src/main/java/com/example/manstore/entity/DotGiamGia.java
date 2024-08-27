@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "DotGiamGia")
-public class DotGiamGia {
+public class DotGiamGia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,7 +28,6 @@ public class DotGiamGia {
 
     @Column(name = "Ma", length = 50)
     private String ma;
-
 
     @Column(name = "Ten", length = 100)
     private String ten;
@@ -53,7 +53,7 @@ public class DotGiamGia {
     @Column(name = "TrangThai")
     private Boolean trangThai;
 
-    @OneToMany(mappedBy = "idDotGiamGia", fetch = FetchType.LAZY)
-    private List<HoaDon> hoaDons;
+//    @OneToMany(mappedBy = "idDotGiamGia", fetch = FetchType.LAZY)
+//    private List<HoaDon> hoaDons;
 
 }

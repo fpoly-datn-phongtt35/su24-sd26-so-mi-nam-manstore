@@ -58,9 +58,10 @@ public class SecurController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-    @PostMapping("/regis-customer")
+    @PostMapping(value = "/regis-customer", consumes = {"application/json", "application/json;charset=UTF-8"} )
     public ResponseEntity<?> regisAccount(@RequestBody KhachHang khachHang) {
         logger.info("Received request to register customer with email: " + khachHang.getEmail());
+        logger.info("Customer data: " + khachHang.toString());
 
         Optional<KhachHang> kh = khachHangRepository.findByEmail(khachHang.getEmail());
         Optional<NhanVien> nv = nhanVienRepository.getByEmail(khachHang.getEmail());
@@ -83,7 +84,7 @@ public class SecurController {
         khachHang.setMaHoaMatKhau(passwordEncoder.encode(khachHang.getMatKhau()));
         khachHang.setNgayTao(LocalDate.now());
         khachHang.setNgaySinh(new Date(System.currentTimeMillis()).toLocalDate());
-        khachHang.setGioiTinh(false);
+        khachHang.setGioiTinh(true);
 
         List<KhachHang> list = khachHangRepository.findAll();
         List<Integer> integerList = new ArrayList<>();

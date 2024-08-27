@@ -82,10 +82,28 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     }
 
     @Override
-    public List<ChiTietSanPhamDTO> findListProductByColor(Integer id, String ms) {
-        List<ChiTietSanPhamDTO> result = ctspRepository.findListProductByColor(id, ms);
-        System.out.println("Service: Found " + result.size() + " products for id " + id + " and color " + ms);
-        return result;
+    public Page<ChiTietSanPham> searchAndFilter(int page, String keyword, String color, String size) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by("ngayTao").descending());
+        Page<ChiTietSanPham> pagination;
+        if (keyword == null && color == null && size == null) {
+            System.out.println("findAll");
+            pagination = ctspRepository.findAll(pageable);
+        } else if (keyword == null && color != null && size == null) {
+            pagination = ctspRepository.FilterByColor(color, pageable);
+        } else if (keyword == null && color == null && size != null) {
+            pagination = ctspRepository.FilterBySize(size, pageable);
+        } else if (keyword == null && color != null && size != null) {
+            pagination = ctspRepository.FilterByAll(color, size, pageable);
+        } else if (keyword != null && color == null && size == null) {
+            pagination = ctspRepository.search("%" + keyword + "%", pageable);
+        } else if (keyword != null && color != null && size == null) {
+            pagination = ctspRepository.searchAndFilterByColor("%" + keyword + "%", color,pageable);
+        } else if (keyword != null && color == null && size != null) {
+            pagination = ctspRepository.searchAndFilterBySize("%" + keyword + "%", size,pageable);
+        } else {
+            pagination = ctspRepository.searchAndFilterAll("%" + keyword + "%", color, size,pageable);
+        }
+        return pagination;
     }
 
     @Override
@@ -102,6 +120,13 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     @Override
     public List<String> getByIdProductAndColor(String id, String color) {
         return ctspRepository.getByIdProductAndColor(id, color);
+    }
+
+    @Override
+    public List<ChiTietSanPhamDTO> findListProductByColor(Integer id, String ms) {
+        List<ChiTietSanPhamDTO> result = ctspRepository.findListProductByColor(id, ms);
+        System.out.println("Service: Found " + result.size() + " products for id " + id + " and color " + ms);
+        return result;
     }
 
     @Override

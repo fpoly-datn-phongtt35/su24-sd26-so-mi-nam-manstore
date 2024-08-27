@@ -59,18 +59,7 @@
             <!--end col-->
             <div class="col-lg-4">
                 <div class="sticky-side-div">
-                    <!--                    <div class="card">-->
-                    <!--                        <div class="card-body">-->
-                    <!--                            <div class="text-center">-->
-                    <!--                                <h6 class="mb-3 fs-15">Bạn có <span class="fw-semibold">voucher</span>?</h6>-->
-                    <!--                            </div>-->
-                    <!--                            <div class="hstack gap-3 px-3 mx-n3">-->
-                    <!--                                <input class="form-control me-auto" type="text" placeholder="Enter coupon code"-->
-                    <!--                                       value="Toner15" aria-label="Add Promo Code here..." disabled>-->
-                    <!--                                <button type="button" class="btn btn-primary w-xs" disabled>Apply</button>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
+
                     <div class="card overflow-hidden">
                         <div class="card-header border-bottom-dashed">
                             <h5 class="card-title mb-0 fs-15">Tổng giá trị <span class="text-danger fw-bold"
@@ -90,6 +79,12 @@
                                         </td>
                                         <td class="text-end cart-discount text-danger" id="promotion-value"></td>
                                     </tr>
+                                    <!--                                    <tr>-->
+                                    <!--                                        <td>-->
+                                    <!--                                        <select id="promotion-select" onchange="applySelectedPromotion()">-->
+                                    <!--                                            <option value="">Chọn khuyến mãi</option>-->
+                                    <!--                                        </select></td>-->
+                                    <!--                                    </tr>-->
                                     <tr>
                                         <td>VAT <span class="text-danger">(10%)</span> :</td>
                                         <td class="text-end cart-tax" id="vat"></td>
@@ -164,6 +159,10 @@
         userId = localStorage.getItem("userId");
         loadPage();
     }
+    // userId = localStorage.getItem("userId");
+
+    // loadPage();
+
 
     function formatMoney(money) {
         const VND = new Intl.NumberFormat('vi-VN', {
@@ -173,32 +172,27 @@
         return VND.format(money);
     }
 
+
     function restoreCheckedState() {
-        // console.log(selectedProduct);
-        // console.log(saveStatusCheck);
-        // console.log(saveStatusCheckGroup);
-        // console.log(selectedCart);
-        // console.log(selectedProductGroup);
+        // Lưu trữ tất cả các checkbox vào biến để lặp qua chỉ một lần
+        let currentCheckboxes = document.querySelectorAll('.checkbox-single');
+
+        // Cập nhật trạng thái checkbox cho các ID trong saveStatusCheck
         saveStatusCheck.forEach(function (id) {
-            for (let i = 0; i < saveStatusCheck.length; i++) {
-                let currentCheckbox = document.querySelectorAll('.checkbox-single');
-                console.log("Checked Id ", id);
-                currentCheckbox.forEach(function (item) {
-                    console.log("Checkbox single value  ", id);
-                    if (parseInt(id) === parseInt(item.value)) {
-                        item.checked = true;
-                    }
-                })
-            }
+            currentCheckboxes.forEach(function (item) {
+                if (parseInt(id) === parseInt(item.value)) {
+                    item.checked = true;
+                }
+            });
         });
 
+        // Cập nhật trạng thái checkbox cho các ID trong saveStatusCheckGroup
         saveStatusCheckGroup.forEach(function (id) {
             let currentCheckbox = document.getElementById(id);
             if (currentCheckbox) {
-                console.log("checkbox : ", currentCheckbox);
                 currentCheckbox.checked = true;
             }
-        })
+        });
     }
 
     async function loadPage() {
@@ -211,6 +205,7 @@
                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             }
         });
+
         var result = await response.json();
         console.log(result);
         if (result.length > 0) {
@@ -226,25 +221,27 @@
         var main = '';
         var groupedProducts = {};
         for (i = 0; i < list.length; i++) {
-            if (!groupedProducts[list[i].spct.sp.id]) {
-                groupedProducts[list[i].spct.sp.id] = [];
+            if (!groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id]) {
+                groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id] = [];
             }
-            groupedProducts[list[i].spct.sp.id].push(list[i]);
+            groupedProducts[list[i].idSanPhamChiTiet.idSanPham.id].push(list[i]);
         }
         productDataList = groupedProducts;
-        var indexFor = 0;
+        let indexFor = 0;
         for (var key in groupedProducts) {
-            indexFor += 1;
             if (groupedProducts.hasOwnProperty(key)) {
+                indexFor += 1;
                 var groupSP = '';
                 var arrChild = groupedProducts[key];
-                var productName = arrChild[0].spct.sp.tenSP;
-                var productId = arrChild[0].spct.sp.id;
+                var productName = arrChild[0].idSanPhamChiTiet.idSanPham.ten;
+                var productId = arrChild[0].idSanPhamChiTiet.idSanPham.id;
                 for (let j = 0; j < arrChild.length; j++) {
                     var count = arrChild[j].soLuong;
-                    sub_total += arrChild[j].spct.sp.donGia * count;
-                    vat += (arrChild[j].spct.sp.donGia * count) * 0.1;
-                    var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].spct.sp.id + '/' + arrChild[j].spct.ms.id;
+                    sub_total += arrChild[j].idSanPhamChiTiet.idSanPham.gia * count;
+                    vat += (arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1;
+
+                    // Tim anh theo id san pham chi tiet va id mau sac
+                    var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].idSanPhamChiTiet.idSanPham.id + '/' + arrChild[j].idSanPhamChiTiet.idMauSac.id;
                     const pictureResponse = await fetch(urlGetPicture, {
                         method: 'GET',
                         headers: {
@@ -253,51 +250,58 @@
                     });
                     var dataPicture = await pictureResponse.json();
                     var img;
-                    if (dataPicture.statusText === "failure") {
-                        img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-md">`;
+
+                    if (dataPicture.statusText === "failure" || !Array.isArray(dataPicture) || dataPicture.length === 0) {
+                        img = `<img src="http://localhost:8080/assets/images/products/img-8.png" alt="" class="avatar-md">`;
                     } else {
-                        img = `<img src="${dataPicture[0].linkAnh}" alt="" class="avatar-md">`;
+                        let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+                        img = `<img src="${fullUrl}" alt="" class="avatar-md">`;
                     }
+
                     groupSP += `<div class="row gy-3 p-2">
                                     <div class="col-sm-auto d-flex gap-2 justify-content-end mt-auto mb-auto">
                                       <div class="form-check">
-                                      <input class="form-check-input checkbox-single checkbox-child-${arrChild[j].spct.sp.id}" type="checkbox" id="checkbox-${arrChild[j].spct.sp.id}-${j + 1}" data-sub-total="${arrChild[j].spct.sp.donGia * count}" data-vat="${(arrChild[j].spct.sp.donGia * count) * 0.1}" data-count="${count}" data-id-cart="${arrChild[j].gh.id}"
-                                      value="${arrChild[j].spct.id}" style="width: 20px; height: 20px" onclick="chooseProduct(${arrChild[j].spct.sp.id},${j + 1})"></div>
+                                       <input class="form-check-input checkbox-single checkbox-child-${arrChild[j].idSanPhamChiTiet.idSanPham.id}" type="checkbox" id="checkbox-${arrChild[j].idSanPhamChiTiet.idSanPham.id}-${j + 1}"
+                                      data-sub-total="${arrChild[j].idSanPhamChiTiet.idSanPham.gia * count}" data-vat="${(arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1}" data-count="${count}" data-id-cart="${arrChild[j].idGioHang.id}"
+                                      value="${arrChild[j].idSanPhamChiTiet.id}" style="width: 20px; height: 20px" onclick="chooseProduct(${arrChild[j].idSanPhamChiTiet.idSanPham.id},${j + 1})">
+                                      </div>
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="avatar-lg h-100">
-                                            <div class="avatar-title bg-dark-subtle rounded py-3" id="product-picture">
-                                                ${img}
-                                            </div>
+                                             <div class="avatar-title bg-dark-subtle rounded py-3" id="product-picture-${arrChild[j].id}-${indexFor}">
+                                            ${img}
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="col-sm">
                                         <a href="#!">
-                                            <h5 class="fs-16 lh-base mb-1">${arrChild[j].spct.sp.tenSP}</h5>
+                                            <h5 class="fs-16 lh-base mb-1">${arrChild[j].idSanPhamChiTiet.idSanPham.ten}</h5>
                                         </a>
                                         <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Color : <span class="fw-medium">${arrChild[j].spct.ms.ten}</span></li>
+                                          <li class="list-inline-item">Màu Sắc : <span class="fw-medium">${arrChild[j].idSanPhamChiTiet.idMauSac.ten}</span></li>
                                         </ul>
                                         <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Size : <span class="fw-medium">${arrChild[j].spct.size}</span></li>
+                                          <li class="list-inline-item">Size : <span class="fw-medium">${arrChild[j].idSanPhamChiTiet.idSize.ten}</span></li>
                                         </ul>
-                                          <ul class="list-inline text-muted fs-13 mb-auto">
-                                            <li class="list-inline-item">Quantity :</li><div class="input-step">
-                                            <button type="button" onclick="minusQuantity(${arrChild[j].id},${indexFor},${arrChild[j].spct.sp.donGia})" class="minus">–</button>
-                                            <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].id}-${indexFor}"
-                                            onblur="editQuantity(${arrChild[j].id},${indexFor},${arrChild[j].spct.sp.tl.id})" value="${arrChild[j].soLuong}" min="1" max="1000">
-                                            <button type="button" onclick="addQuantity(${arrChild[j].id},${arrChild[j].spct.sp.tl.id},${arrChild[j].spct.sp.donGia})" class="plus">+</button></div>
+                                        <ul class="list-inline text-muted fs-13 mb-auto">
+                                            <li class="list-inline-item">Số Lượng :</li>
+                                            <div class="input-step">
+                                            <button type="button" onclick="minusQuantity(${arrChild[j].id},${indexFor},${arrChild[j].idSanPhamChiTiet.idSanPham.gia})" class="minus">–</button>
+                                             <input type="number" class="product-quantity" id="product-quantity-${arrChild[j].id}-${indexFor}"
+                                              onblur="editQuantity(${arrChild[j].id},${indexFor},${arrChild[j].idSanPhamChiTiet.idSanPham.idDanhMuc.id})" value="${arrChild[j].soLuong}" min="1" max="1000">
+                                            <button type="button" onclick="addQuantity(${arrChild[j].id},${arrChild[j].idSanPhamChiTiet.idSanPham.idDanhMuc.id},${arrChild[j].idSanPhamChiTiet.idSanPham.gia})" class="plus">+</button>
+                                            </div>
                                         </ul>
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="text-lg-end">
                                             <p class="text-muted mb-1 fs-12">Đơn Giá :</p>
-                                            <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].spct.sp.donGia)}</span></h5>
+                                            <h5 class="fs-16"><span class="product-price">${formatMoney(arrChild[j].idSanPhamChiTiet.idSanPham.gia)}</span></h5>
                                         </div>
-                                         <div class="text-lg-end" style="padding-top: 30px;">
+                                        <div class="text-lg-end" style="padding-top: 30px;">
                                             <div class="d-flex justify-content-center align-items-center">
                                                 <span class="text-danger">
-                                                    <i class="ri-delete-bin-6-line" onclick="deleteOne(${arrChild[j].id},${arrChild[j].spct.id})"></i>
+                                                <i class="ri-delete-bin-6-line" onclick="deleteOne(${arrChild[j].id},${arrChild[j].idSanPhamChiTiet.id})"></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -305,46 +309,46 @@
                                 </div>`;
                 }
                 main += `<div class="card product">
-                            <div class="card-header">
-                                <div class="row align-items-center gy-3">
-                                   <div class="col-sm">
-                                        <div class="d-flex flex-wrap my-n1 mt-auto mb-auto">
-                                            <div style="padding-left: 10px;padding-top: 5px;">
-                                                <div class="d-block text-body px-2 form-check">
-                                                    <input class="form-check-input checkbox-group" type="checkbox" id="check-group-${productId}"
-                                                    onclick="chooseProductGroup(${productId})" value="${productId}" style="width: 20px; height: 20px">
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="d-block text-body p-1 px-2 form-check-label"><h5 class="fs-16 lh-base mb-1">${productName}</h5></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body p-4">
-                            ${groupSP}
-                            </div>
-                            <div class="card-footer">
-                                <div class="row align-items-center gy-3">
-                                    <div class="col-sm">
-                                        <div class="d-flex flex-wrap my-n1">
-                                            <div hidden>
-                                                <button class="btn btn-hover d-block text-body p-1 px-2"
-                                                ><i class="ri-delete-bin-fill text-muted align-bottom me-1" onclick="deleteGroup(${productId})"></i>Xoá</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-auto">
-                                        <div class="d-flex align-items-center gap-2 text-muted">
-                                            <div>Tổng Tiền :</div>
-                                            <h5 class="fs-14 mb-0">${formatMoney(sub_total)}<span class="product-line-price">
-                                            </span></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    </div>`;
+                        <div class="card-header">
+                        <div class="row align-items-center gy-3">
+                        <div class="col-sm">
+                        <div class="d-flex flex-wrap my-n1 mt-auto mb-auto">
+                        <div style="padding-left: 10px;padding-top: 5px;">
+                        <div class="d-block text-body px-2 form-check">
+                        <input class="form-check-input checkbox-group" type="checkbox" id="check-group-${productId}"
+                    onclick="chooseProductGroup(${productId})" value="${productId}" style="width: 20px; height: 20px">
+                        </div>
+                </div>
+                <div>
+                <div class="d-block text-body p-1 px-2 form-check-label"><h5 class="fs-16 lh-base mb-1">${productName}</h5></div>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                <div class="card-body p-4">
+                ${groupSP}
+                </div>
+                <div class="card-footer">
+                <div class="row align-items-center gy-3">
+                <div class="col-sm">
+                <div class="d-flex flex-wrap my-n1">
+                <div hidden>
+                <button class="btn btn-hover d-block text-body p-1 px-2"
+                ><i class="ri-delete-bin-fill text-muted align-bottom me-1" onclick="deleteGroup(${productId})"></i>Xoá</button>
+                </div>
+                </div>
+                </div>
+                <div class="col-sm-auto">
+                <div class="d-flex align-items-center gap-2 text-muted">
+                <div>Tổng Tiền :</div>
+                <h5 class="fs-14 mb-0">${formatMoney(sub_total)}<span class="product-line-price">
+                </span></h5>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>`;
             }
             groupSP = '';
             sub_total = 0;
@@ -389,7 +393,7 @@
                     console.log("after choose group if: " + sub_total_global, vat_global);
                     count = input.getAttribute('data-count');
                     cartId = input.getAttribute('data-id-cart');
-                    product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
+                    product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
                     if (!selectedCart.some(obj => JSON.stringify(obj) === JSON.stringify(product))) {
                         console.log('remove product from cart')
                         selectedCart.push(product);
@@ -421,7 +425,7 @@
                         console.log("after choose group: " + sub_total_global, vat_global);
                         count = input.getAttribute('data-count');
                         cartId = input.getAttribute('data-id-cart');
-                        product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
+                        product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
                         let index = selectedCart.findIndex(item => JSON.stringify(item) === JSON.stringify(product));
                         if (selectedCart.some(obj => JSON.stringify(obj) === JSON.stringify(product))) {
                             selectedCart.splice(index, 1);
@@ -469,8 +473,8 @@
                             selectedProduct.forEach(function (item) {
                                 console.log(item);
                             })
-                            console.log('Checked : ', selectedProduct.includes(arr[i].spct.id + ''));
-                            if (!selectedProduct.includes(arr[i].spct.id + '')) {
+                            console.log('Checked : ', selectedProduct.includes(arr[i].idSanPhamChiTiet.id + ''));
+                            if (!selectedProduct.includes(arr[i].idSanPhamChiTiet.id + '')) {
                                 allInSelectedProduct = false;
                                 console.log("Not all are in select product!")
                                 break;
@@ -518,7 +522,7 @@
         arrCheckboxAll.forEach(function (input) {
             count = input.getAttribute('data-count');
             cartId = input.getAttribute('data-id-cart');
-            product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
+            product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
             if (input.checked === true) {
                 console.log(input);
                 sub_total += parseInt(input.getAttribute('data-sub-total'));
@@ -547,6 +551,8 @@
         areAllChecked();
     }
 
+    let promotions = [];
+
     function handleInvoiceCalculation(sub_total, vat) {
         sub_total_global = sub_total;
         vat_global = vat;
@@ -562,9 +568,66 @@
         }
     }
 
+    // async function getInformationPromotion() {
+    //     $.ajax({
+    //         url: '/public/promotion/find-by-date?type=all' + userId,
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+    //         },
+    //         success: function (response) {
+    //             console.log(response);
+    //             let promotion = response[0];
+    //             let total_amount = 0;
+    //             if (promotion !== undefined) {
+    //                 promotion_applies = promotion;
+    //                 if ((parseInt(sub_total_global)) >= parseInt(promotion.giaTriDonHang)) {
+    //                     document.getElementById('promotion-message').innerText = '';
+    //                     document.getElementById('promotion-title').innerText = '(' + promotion.ten + ')';
+    //                     if (promotion.loaiGiamGia === true) {
+    //                         total_amount = (sub_total_global + vat_global) -
+    //                             ((sub_total_global + vat_global) * (promotion.giaTriGiam / 100));
+    //                         document.getElementById('promotion-value').innerText = '- ' + promotion.giaTriGiam + ' %';
+    //                         document.getElementById("total-amount").innerText = formatMoney(total_amount);
+    //                     } else {
+    //                         total_amount = (sub_total_global + vat_global) - promotion.giaTriGiam;
+    //                         document.getElementById('promotion-value').innerText = '- ' + formatMoney(promotion.giaTriGiam);
+    //                         document.getElementById("total-amount").innerText = formatMoney(total_amount);
+    //                     }
+    //                 } else {
+    //                     if (promotion.loaiGiamGia === true) {
+    //                         document.getElementById('promotion-title').innerText = '(chưa đủ điều kiện áp dụng)';
+    //                         document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promotion.giaTriDonHang - sub_total_global) +
+    //                             ' sẽ được giảm ' + promotion.giaTriGiam + '% cho đơn hàng!)';
+    //                         total_amount = sub_total_global + vat_global;
+    //                         document.getElementById('promotion-value').innerText = '';
+    //                         document.getElementById("total-amount").innerText = formatMoney(total_amount);
+    //                     } else {
+    //                         document.getElementById('promotion-title').innerText = '(chưa đủ điều kiện áp dụng)';
+    //                         document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promotion.giaTriDonHang - sub_total_global) +
+    //                             ' sẽ được giảm ' + formatMoney(promotion.giaTriGiam) + ' cho đơn hàng!)';
+    //                         total_amount = sub_total_global + vat_global;
+    //                         document.getElementById('promotion-value').innerText = '';
+    //                         document.getElementById("total-amount").innerText = formatMoney(total_amount);
+    //                     }
+    //                 }
+    //             } else {
+    //                 total_amount = sub_total_global + vat_global;
+    //                 document.getElementById('promotion-message').innerText = '';
+    //                 document.getElementById('promotion-title').innerText = '';
+    //                 document.getElementById('promotion-value').innerText = '- 0 %';
+    //                 document.getElementById("total-amount").innerText = formatMoney(total_amount);
+    //             }
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error('Error:', error);
+    //         }
+    //     });
+    // }
+
     async function getInformationPromotion() {
         $.ajax({
-            url: '/client/promotion/find-by-customer?id=' + userId,
+            url: '/public/promotion/find-by-date?type=all' + userId,
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
@@ -573,53 +636,39 @@
                 console.log(response);
                 let promotion = response[0];
                 let total_amount = 0;
+                let discounted_amount = sub_total_global; // Khởi tạo biến để lưu số tiền sau khi áp dụng giảm giá
+
                 if (promotion !== undefined) {
                     promotion_applies = promotion;
-                    if ((parseInt(sub_total_global) / 1000) >= parseInt(promotion.giaTriDonHangApDung)) {
+
+                    if (parseInt(sub_total_global) >= parseInt(promotion.giaTriDonHang)) {
                         document.getElementById('promotion-message').innerText = '';
-                        document.getElementById('promotion-title').innerText = '(' + promotion.tenKhuyenMai + ')';
-                        if (promotion.loaiKM === true) {
-                            total_amount = (sub_total_global + vat_global) -
-                                ((sub_total_global + vat_global) * (promotion.giaTriGiam / 100));
+                        document.getElementById('promotion-title').innerText = '(' + promotion.ten + ')';
+
+                        if (promotion.loaiGiamGia === true) { // Giảm giá theo phần trăm
+                            discounted_amount = sub_total_global - (sub_total_global * (promotion.giaTriGiam / 100));
                             document.getElementById('promotion-value').innerText = '- ' + promotion.giaTriGiam + ' %';
-                            document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                        } else {
-                            total_amount = (sub_total_global + vat_global) - promotion.giaTriGiam;
+                        } else { // Giảm giá theo số tiền cố định
+                            discounted_amount = sub_total_global - promotion.giaTriGiam;
                             document.getElementById('promotion-value').innerText = '- ' + formatMoney(promotion.giaTriGiam);
-                            document.getElementById("total-amount").innerText = formatMoney(total_amount);
                         }
+
+                        // Tính tổng số tiền sau khi đã giảm giá và cộng VAT
+                        total_amount = discounted_amount + vat_global;
+                        document.getElementById("total-amount").innerText = formatMoney(total_amount);
+
                     } else {
-                        let promitonValue = 0;
-                        if (promotion.giaTriDonHangApDung === 100) {
-                            promitonValue = 100000;
-                        } else if (promotion.giaTriDonHangApDung === 200) {
-                            promitonValue = 200000;
-                        } else if (promotion.giaTriDonHangApDung === 500) {
-                            promitonValue = 500000;
-                        } else if (promotion.giaTriDonHangApDung === 1000) {
-                            promitonValue = 1000000;
-                        } else if (promotion.giaTriDonHangApDung === 2000) {
-                            promitonValue = 2000000;
-                        } else {
-                            promitonValue = 5000000;
-                        }
-                        if (promotion.loaiKM === true) {
-                            document.getElementById('promotion-title').innerText = '';
-                            document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promitonValue - sub_total_global) +
-                                ' để nhận được khuyến mãi giảm ' + promotion.giaTriGiam + '% / Tổng giá trị đơn hàng)';
-                            total_amount = sub_total_global + vat_global;
-                            document.getElementById('promotion-value').innerText = '- 0 %';
-                            document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                        } else {
-                            document.getElementById('promotion-title').innerText = '';
-                            document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promitonValue - sub_total_global) +
-                                ' để nhận được khuyến mãi giảm ' + formatMoney(promotion.giaTriGiam) + ')';
-                            total_amount = sub_total_global + vat_global;
-                            document.getElementById('promotion-value').innerText = '- 0 %';
-                            document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                        }
+                        document.getElementById('promotion-title').innerText = '(chưa đủ điều kiện áp dụng)';
+                        document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promotion.giaTriDonHang - sub_total_global) +
+                            ' sẽ được giảm ' + (promotion.loaiGiamGia === true ? promotion.giaTriGiam + '%' : formatMoney(promotion.giaTriGiam)) + ' cho đơn hàng!)';
+
+                        // Không đủ điều kiện giảm giá, chỉ tính VAT
+                        total_amount = sub_total_global + vat_global;
+                        document.getElementById('promotion-value').innerText = '';
+                        document.getElementById("total-amount").innerText = formatMoney(total_amount);
                     }
                 } else {
+                    // Không có khuyến mãi, chỉ tính VAT
                     total_amount = sub_total_global + vat_global;
                     document.getElementById('promotion-message').innerText = '';
                     document.getElementById('promotion-title').innerText = '';
@@ -655,312 +704,225 @@
         document.getElementById('button-choose').innerHTML = button;
     }
 
-    function chooseAll() {
-        sub_total_global = 0;
-        vat_global = 0;
-        var cartId;
-        var product = {};
-        var arrCheckboxAll = document.querySelectorAll('.checkbox-single[type=checkbox]');
-        var arrCheckboxGroup = document.querySelectorAll('.checkbox-group[type=checkbox]');
-        arrCheckboxGroup.forEach(function (input) {
-            input.checked = true;
-            selectedProductGroup.push(parseInt(input.value));
-            saveStatusCheckGroup.push(input.id);
-        })
-        arrCheckboxAll.forEach(function (input) {
-            input.checked = true;
-            sub_total_global += parseInt(input.getAttribute('data-sub-total'));
-            vat_global += parseInt(input.getAttribute('data-vat'));
-            count = input.getAttribute('data-count');
-            cartId = input.getAttribute('data-id-cart');
-            product = {idGioHang: cartId, soLuong: count, idSanPhamChiTiet: input.value};
-            selectedProduct.push(input.value);
-            selectedCart.push(product);
-            saveStatusCheck.push(input.value);
-        })
-        handleInvoiceCalculation(sub_total_global, vat_global);
-        console.log(selectedProduct);
-        console.log("Cart choose all: ")
-        selectedCart.forEach(function (item) {
-            console.log(item);
-        })
-        console.log("Product group choose all: ")
-        selectedProductGroup.forEach(function (item) {
-            console.log(item);
-        })
-        var button = `<button class="btn btn-hover btn-info set-disabled" onclick="unchooseAll()">
+        function chooseAll() {
+            sub_total_global = 0;
+            vat_global = 0;
+            var cartId;
+            var product = {};
+            var arrCheckboxAll = document.querySelectorAll('.checkbox-single[type=checkbox]');
+            var arrCheckboxGroup = document.querySelectorAll('.checkbox-group[type=checkbox]');
+            arrCheckboxGroup.forEach(function (input) {
+                input.checked = true;
+                selectedProductGroup.push(parseInt(input.value));
+                saveStatusCheckGroup.push(input.id);
+            })
+            arrCheckboxAll.forEach(function (input) {
+                input.checked = true;
+                sub_total_global += parseInt(input.getAttribute('data-sub-total'));
+                vat_global += parseInt(input.getAttribute('data-vat'));
+                count = input.getAttribute('data-count');
+                cartId = input.getAttribute('data-id-cart');
+                product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
+                selectedProduct.push(input.value);
+                selectedCart.push(product);
+                saveStatusCheck.push(input.value);
+            })
+            handleInvoiceCalculation(sub_total_global, vat_global);
+            console.log(selectedProduct);
+            console.log("Cart choose all: ")
+            selectedCart.forEach(function (item) {
+                console.log(item);
+            })
+            console.log("Product group choose all: ")
+            selectedProductGroup.forEach(function (item) {
+                console.log(item);
+            })
+            var button = `<button class="btn btn-hover btn-info set-disabled" onclick="unchooseAll()">
                             Bỏ Chọn
                         </button>`;
-        document.getElementById('button-choose').innerHTML = button;
-    }
+            document.getElementById('button-choose').innerHTML = button;
+        }
 
-    function unchooseAll() {
-        let arrCheckboxAll = document.querySelectorAll('.form-check-input[type=checkbox]');
-        arrCheckboxAll.forEach(function (input) {
-            input.checked = false;
-        })
-        selectedProduct = [];
-        selectedProductGroup = [];
-        selectedCart = [];
-        saveStatusCheck = [];
-        saveStatusCheckGroup = [];
-        handleInvoiceCalculation(0, 0);
-        var button = `<button class="btn btn-hover btn-success set-disabled" onclick="chooseAll()">
+        function unchooseAll() {
+            let arrCheckboxAll = document.querySelectorAll('.form-check-input[type=checkbox]');
+            arrCheckboxAll.forEach(function (input) {
+                input.checked = false;
+            })
+            selectedProduct = [];
+            selectedProductGroup = [];
+            selectedCart = [];
+            saveStatusCheck = [];
+            saveStatusCheckGroup = [];
+            handleInvoiceCalculation(0, 0);
+            var button = `<button class="btn btn-hover btn-success set-disabled" onclick="chooseAll()">
                             Chọn Tất Cả
                         </button>`;
-        document.getElementById('button-choose').innerHTML = button;
-        sub_total_global = 0;
-        vat_global = 0;
-    }
+            document.getElementById('button-choose').innerHTML = button;
+            sub_total_global = 0;
+            vat_global = 0;
+        }
 
-    function deleteProduct(id) {
-        console.log(id);
-        swal.fire({
-            icon: 'question',
-            title: "Bạn Có Muốn Xoá?",
-            showCancelButton: true,
-            confirmButtonText: "Xoá",
-            cancelButtonText: `Không`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var url = '/api/client/cart_detail/delete/' + id;
-                const promise = fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-                    }
-                });
-                promise.then(response => {
-                    if (response.status === 200) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Xoá thành công!"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                loadPage();
-                                unchooseAll();
-                            }
-                        })
-                    }
-                })
-            }
-        });
-    }
-
-    function deleteALot() {
-        console.log(selectedProduct);
-        if (selectedProduct.length === 0) {
-            (async () => {
-                await Toast.fire({
-                    icon: "warning",
-                    title: "Bạn chưa chọn sản phẩm muốn xoá!",
-                });
-            })();
-        } else {
+        function deleteProduct(id) {
+            console.log(id);
             swal.fire({
                 icon: 'question',
                 title: "Bạn Có Muốn Xoá?",
                 showCancelButton: true,
                 confirmButtonText: "Xoá",
-                cancelButtonText: 'Không'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var url = '/api/client/cart_detail/delete-a-lot/' + userId;
-                    const promise = fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-
-                        },
-                        body: JSON.stringify(selectedProduct)
-                    });
-                    promise.then(response => {
-                        console.log(response);
-                        if (response.status === 200) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Xoá thành công!"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    loadPage();
-                                    unchooseAll();
-                                }
-                            })
-                        } else if (response.status === 403) {
-                            (async () => {
-                                await Toast.fire({
-                                    icon: "warning",
-                                    title: "Bạn chưa chọn sản phẩm muốn xoá!",
-                                });
-                            })();
-                        } else {
-                            (async () => {
-                                await Toast.fire({
-                                    icon: "warning",
-                                    title: "Lỗi không xác định!",
-                                });
-                            })();
-                        }
-                    })
-                }
-            });
-        }
-    }
-
-    function deleteGroup(productId) {
-        console.log(productId);
-        if (productId === undefined) {
-            (async () => {
-                await Toast.fire({
-                    icon: "warning",
-                    title: "Bạn chưa chọn sản phẩm muốn xoá!",
-                });
-            })();
-        } else {
-            swal.fire({
-                icon: 'question',
-                title: "Bạn Có Muốn Xoá?",
-                showCancelButton: true,
-                confirmButtonText: "Xoá",
-                cancelButtonText: "Không"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var className = 'checkbox-child-' + productId;
-                    var arrProduct = document.querySelectorAll('.' + className + '[type=checkbox]');
-                    var url = '/api/client/cart_detail/delete-a-lot/' + userId;
-                    const promise = fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-
-                        },
-                        body: JSON.stringify(arrProduct)
-                    });
-                    promise.then(response => {
-                        console.log(response);
-                        if (response.status === 200) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Xoá thành công!"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    loadPage();
-                                    unchooseAll();
-                                }
-                            })
-                        } else if (response.status === 403) {
-                            (async () => {
-                                await Toast.fire({
-                                    icon: "warning",
-                                    title: "Bạn chưa chọn sản phẩm muốn xoá!",
-                                });
-                            })();
-                        } else {
-                            (async () => {
-                                await Toast.fire({
-                                    icon: "warning",
-                                    title: "Lỗi không xác định!",
-                                });
-                            })();
-                        }
-                    })
-                }
-            });
-        }
-    }
-
-    function addQuantity(id, sport, price) {
-        $.ajax({
-            url: '/api/client/cart_detail/add-quantity/' + id,
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            },
-            success: function (response) {
-                console.log(response);
-                if (response.statusText === "success") {
-                    loadPage();
-                    handleInvoiceCalculation(sub_total_global + price, vat_global + (price * 0.1))
-                }
-                if (response.statusText === "failure") {
-                    if (response.message === "The product is out of stock") {
-                        swal.fire({
-                            title: 'Thông Báo',
-                            text: "Sản Phẩm Đã Hết Hàng!",
-                            icon: "warning",
-                            confirmButtonText: 'OK',
-                            showCancelButton: true,
-                            cancelButtonText: 'Xem Sản Phẩm Tương Tự'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                loadPage();
-                            }
-                            if (result.isDismissed && result.dismiss === swal.DismissReason.cancel) {
-                                window.location.href = '/client/product?sport=' + sport;
-                            }
-                            loadPage();
-                        })
-                    } else {
-                        swal.fire({
-                            title: 'Rất Xin Lỗi Quý Khách',
-                            text: response.message + '',
-                            icon: "warning",
-                            confirmButtonText: 'OK'
-                        })
-                        loadPage();
-                    }
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
-    function minusQuantity(id, index, price) {
-        let count = document.getElementById('product-quantity-' + id + '-' + index).value;
-        console.log(count);
-        if (parseInt(count) === 1) {
-            swal.fire({
-                icon: 'question',
-                title: 'Thông báo',
-                text: "Bạn chắc chắn muốn xoá sản phẩm này khỏi giỏ hàng?",
-                showCancelButton: true,
-                confirmButtonText: "Có",
                 cancelButtonText: `Không`
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/api/client/cart_detail/minus-quantity/' + id,
+                    var url = '/api/client/cart_detail/delete/' + id;
+                    const promise = fetch(url, {
                         method: 'GET',
                         headers: {
                             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-                        },
-                        success: function (response) {
-                            console.log(response);
-                            if (response.statusText === "success") {
-                                if (response.message === "The product has been removed from the cart!") {
-                                    swal.fire({
-                                        icon: "success",
-                                        title: "Xoá thành công!",
-                                        cancelButtonText: "OK"
-                                    })
+                        }
+                    });
+                    promise.then(response => {
+                        if (response.status === 200) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Xoá thành công!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
                                     loadPage();
                                     unchooseAll();
                                 }
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', error);
+                            })
                         }
-                    });
+                    })
                 }
             });
-        } else {
+        }
+
+        function deleteALot() {
+            console.log(selectedProduct);
+            if (selectedProduct.length === 0) {
+                (async () => {
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Bạn chưa chọn sản phẩm muốn xoá!",
+                    });
+                })();
+            } else {
+                swal.fire({
+                    icon: 'question',
+                    title: "Bạn Có Muốn Xoá?",
+                    showCancelButton: true,
+                    confirmButtonText: "Xoá",
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var url = '/api/client/cart_detail/delete-a-lot/' + userId;
+                        const promise = fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+
+                            },
+                            body: JSON.stringify(selectedProduct)
+                        });
+                        promise.then(response => {
+                            console.log(response);
+                            if (response.status === 200) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Xoá thành công!"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadPage();
+                                        unchooseAll();
+                                    }
+                                })
+                            } else if (response.status === 403) {
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "warning",
+                                        title: "Bạn chưa chọn sản phẩm muốn xoá!",
+                                    });
+                                })();
+                            } else {
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "warning",
+                                        title: "Lỗi không xác định!",
+                                    });
+                                })();
+                            }
+                        })
+                    }
+                });
+            }
+        }
+
+        function deleteGroup(productId) {
+            console.log(productId);
+            if (productId === undefined) {
+                (async () => {
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Bạn chưa chọn sản phẩm muốn xoá!",
+                    });
+                })();
+            } else {
+                swal.fire({
+                    icon: 'question',
+                    title: "Bạn Có Muốn Xoá?",
+                    showCancelButton: true,
+                    confirmButtonText: "Xoá",
+                    cancelButtonText: "Không"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var className = 'checkbox-child-' + productId;
+                        var arrProduct = document.querySelectorAll('.' + className + '[type=checkbox]');
+                        var url = '/api/client/cart_detail/delete-a-lot/' + userId;
+                        const promise = fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+
+                            },
+                            body: JSON.stringify(arrProduct)
+                        });
+                        promise.then(response => {
+                            console.log(response);
+                            if (response.status === 200) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Xoá thành công!"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        loadPage();
+                                        unchooseAll();
+                                    }
+                                })
+                            } else if (response.status === 403) {
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "warning",
+                                        title: "Bạn chưa chọn sản phẩm muốn xoá!",
+                                    });
+                                })();
+                            } else {
+                                (async () => {
+                                    await Toast.fire({
+                                        icon: "warning",
+                                        title: "Lỗi không xác định!",
+                                    });
+                                })();
+                            }
+                        })
+                    }
+                });
+            }
+        }
+
+        function addQuantity(id, category, price) {
             $.ajax({
-                url: '/api/client/cart_detail/minus-quantity/' + id,
+                url: '/api/client/cart_detail/add-quantity/' + id,
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("user_token")
@@ -968,9 +930,32 @@
                 success: function (response) {
                     console.log(response);
                     if (response.statusText === "success") {
-                        if (response.message === "success") {
+                        loadPage();
+                        handleInvoiceCalculation(sub_total_global + price, vat_global + (price * 0.1));
+                    } else if (response.statusText === "failure") {
+                        if (response.message === "The product is out of stock") {
+                            swal.fire({
+                                title: 'Thông Báo',
+                                text: "Sản Phẩm Đã Hết Hàng!",
+                                icon: "warning",
+                                confirmButtonText: 'OK',
+                                showCancelButton: true,
+                                cancelButtonText: 'Xem Sản Phẩm Tương Tự'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    loadPage();
+                                } else if (result.dismiss === swal.DismissReason.cancel) {
+                                    window.location.href = '/client/product?sport=' + category;
+                                }
+                            });
+                        } else {
+                            swal.fire({
+                                title: 'Rất Xin Lỗi Quý Khách',
+                                text: response.message,
+                                icon: "warning",
+                                confirmButtonText: 'OK'
+                            });
                             loadPage();
-                            handleInvoiceCalculation(sub_total_global - price, vat_global - (price * 0.1));
                         }
                     }
                 },
@@ -979,110 +964,163 @@
                 }
             });
         }
-    }
 
 
-    function editQuantity(id, index, sport) {
-        var count = document.getElementById('product-quantity-' + id + '-' + index).value;
-        console.log("So Luong : " + count);
-        $.ajax({
-            url: '/api/client/cart_detail/edit-quantity/' + id + '/' + count,
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            },
-            success: function (response) {
-                console.log(response);
-                if (response.statusText === "failure") {
-                    if (response.message === "Quantity must be greater than 0") {
-                        swal.fire({
-                            icon: "warning",
-                            text: "Số lượng sản phẩm phải lớn hơn 0!",
-                            cancelButtonText: "OK"
-                        })
-                        loadPage();
-                    } else if (response.message === "Format error") {
-                        swal.fire({
-                            icon: "warning",
-                            text: "Vui lòng nhập đúng số lượng!",
-                            cancelButtonText: "OK"
-                        })
-                        loadPage();
-
-                    } else if (response.message === "The product is out of stock") {
-                        swal.fire({
-                            title: 'Thông Báo',
-                            text: "Sản Phẩm Đã Hết Hàng!",
-                            icon: "warning",
-                            confirmButtonText: 'OK',
-                            showCancelButton: true,
-                            cancelButtonText: 'Xem Sản Phẩm Tương Tự'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                loadPage();
+        function minusQuantity(id, index, price) {
+            let count = document.getElementById('product-quantity-' + id + '-' + index).value;
+            console.log(count);
+            if (parseInt(count) === 1) {
+                swal.fire({
+                    icon: 'question',
+                    title: 'Thông báo',
+                    text: "Bạn chắc chắn muốn xoá sản phẩm này khỏi giỏ hàng?",
+                    showCancelButton: true,
+                    confirmButtonText: "Có",
+                    cancelButtonText: `Không`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/api/client/cart_detail/minus-quantity/' + id,
+                            method: 'GET',
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                            },
+                            success: function (response) {
+                                console.log(response);
+                                if (response.statusText === "success" && response.message === "The product has been removed from the cart!") {
+                                    swal.fire({
+                                        icon: "success",
+                                        title: "Xoá thành công!",
+                                        confirmButtonText: "OK"
+                                    });
+                                    loadPage();
+                                    unchooseAll();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error:', error);
                             }
-                            if (result.isDismissed && result.dismiss === swal.DismissReason.cancel) {
-                                window.location.href = '/client/product?sport=' + sport;
-                            }
-                            loadPage();
-                        })
-                    } else {
-                        swal.fire({
-                            icon: "warning",
-                            text: "Rất tiếc! Số lượng sản phẩm chỉ còn lại " + response.message + "!",
-                            cancelButtonText: "OK"
-                        })
-                        loadPage();
+                        });
                     }
-                } else {
-                    loadPage();
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
-    function handleOrder() {
-        if (selectedProduct.length === 0) {
-            (async () => {
-                await Toast.fire({
-                    icon: "warning",
-                    title: "Bạn chưa chọn sản phẩm!",
                 });
-            })();
-        } else {
+            } else {
+                $.ajax({
+                    url: '/api/client/cart_detail/minus-quantity/' + id,
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        if (response.statusText === "success" && response.message === "success") {
+                            loadPage();
+                            handleInvoiceCalculation(sub_total_global - price, vat_global - (price * 0.1));
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+
+
+        function editQuantity(id, index, category) {
+            var count = document.getElementById('product-quantity-' + id + '-' + index).value;
+            console.log("So Luong : " + count);
             $.ajax({
-                url: '/api/client/cart_detail/add-to-invoice/' + userId,
-                method: 'POST',
-                contentType: 'application/json',
+                url: '/api/client/cart_detail/edit-quantity/' + id + '/' + count,
+                method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 },
-                data: JSON.stringify(selectedProduct),
                 success: function (response) {
                     console.log(response);
-                    if (response === "max quantity") {
-                        swal.fire({
-                            icon: "warning",
-                            title: "Nhắc Nhỏ",
-                            text: 'Bạn chỉ có thể mua tối đa 20 sản phẩm cho mỗi sản phẩm trong 1 đơn hàng!',
-                            cancelButtonText: "OK"
-                        })
-                    } else if (response.listMessage.length === 0 && response.listCart.length > 0) {
-                        sessionStorage.removeItem("listCart");
-                        sessionStorage.removeItem("product_buy_now");
-                        localStorage.removeItem('invoice_repurchase');
-                        sessionStorage.setItem("listCart", JSON.stringify(response.listCart));
-                        console.log(promotion_applies);
-                        if (promotion_applies !== undefined) {
-                            sessionStorage.setItem("promotion", JSON.stringify(promotion_applies));
+                    if (response.statusText === "failure") {
+                        if (response.message === "Quantity must be greater than 0") {
+                            swal.fire({
+                                icon: "warning",
+                                text: "Số lượng sản phẩm phải lớn hơn 0!",
+                                confirmButtonText: "OK"
+                            });
+                        } else if (response.message === "Format error") {
+                            swal.fire({
+                                icon: "warning",
+                                text: "Vui lòng nhập đúng số lượng!",
+                                confirmButtonText: "OK"
+                            });
+                        } else if (response.message === "The product is out of stock") {
+                            swal.fire({
+                                title: 'Thông Báo',
+                                text: "Sản Phẩm Đã Hết Hàng!",
+                                icon: "warning",
+                                confirmButtonText: 'OK',
+                                showCancelButton: true,
+                                cancelButtonText: 'Xem Sản Phẩm Tương Tự'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    loadPage();
+                                } else if (result.dismiss === swal.DismissReason.cancel) {
+                                    window.location.href = '/client/product?sport=' + category;
+                                }
+                            });
+                        } else {
+                            swal.fire({
+                                icon: "warning",
+                                text: "Rất tiếc! Số lượng sản phẩm chỉ còn lại " + response.message + "!",
+                                confirmButtonText: "OK"
+                            });
                         }
-                        window.location.href = '/order';
-                    } else if (response.listMessage.length > 0 && response.listCart.length === 0) {
-                        const listMessage = response.listMessage;
-                        let message = `
+                    } else {
+                        loadPage();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+
+        function handleOrder() {
+            if (selectedProduct.length === 0) {
+                (async () => {
+                    await Toast.fire({
+                        icon: "warning",
+                        title: "Bạn chưa chọn sản phẩm!",
+                    });
+                })();
+            } else {
+                $.ajax({
+                    url: '/api/client/cart_detail/add-to-invoice/' + userId,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                    },
+                    data: JSON.stringify(selectedProduct),
+                    success: function (response) {
+                        console.log(response);
+                        if (response === "max quantity") {
+                            swal.fire({
+                                icon: "warning",
+                                title: "Nhắc Nhở",
+                                text: 'Bạn chỉ có thể mua tối đa 20 sản phẩm cho mỗi sản phẩm trong 1 đơn hàng!',
+                                cancelButtonText: "OK"
+                            })
+                        } else if (response.listMessage.length === 0 && response.listCart.length > 0) {
+                            sessionStorage.removeItem("listCart");
+                            sessionStorage.removeItem("product_buy_now");
+                            localStorage.removeItem('invoice_repurchase');
+                            sessionStorage.setItem("listCart", JSON.stringify(response.listCart));
+                            console.log(promotion_applies);
+                            if (promotion_applies !== undefined) {
+                                sessionStorage.setItem("promotion", JSON.stringify(promotion_applies));
+                            }
+                            window.location.href = '/order';
+                        } else if (response.listMessage.length > 0 && response.listCart.length === 0) {
+                            const listMessage = response.listMessage;
+                            let message = `
                                     <table class="table align-middle table-borderless table-nowrap text-center mb-0">
                                         <thead>
                                             <tr>
@@ -1092,96 +1130,40 @@
                                                 <th class="text-start">Action</th>
                                             </tr>
                                         </thead>`;
-                        listMessage.forEach(function (item) {
-                            if (item.trangThai === true) {
-                                message +=
-                                    `<tbody>
+                            listMessage.forEach(function (item) {
+                                if (item.trangThai === true) {
+                                    message +=
+                                        `<tbody>
                                         <td class="text-start"> ${item.ten}  </td>
                                         <td class="text-start"> ${item.ms_size} </td>
                                         <th class="text-center"> ${item.sl_ton} </th>
                                         <td class="text-start"> <a href="/client/product?sport=${item.sport}" class="link-effect link-primary">Sản Phẩm Tương Tự</a> </td>
                                     </tbody>`;
-                            } else {
-                                message +=
-                                    `<tbody>
+                                } else {
+                                    message +=
+                                        `<tbody>
                                         <td class="text-start"> ${item.ten}  </td>
                                         <td class="text-start"> ${item.ms_size} </td>
                                         <th class="text-start">Sản phẩm đã ngưng bán</th>
                                         <td class="text-start"> <a href="/client/product?sport=${item.sport}" class="link-effect link-primary">Sản Phẩm Tương Tự</a> </td>
                                     </tbody>`;
-                            }
-                        });
-                        message += `</table>`;
-                        swal.fire({
-                            title: 'Có 1 Vài Sản Phẩm Đã Hết Hoặc Ngưng Bán!',
-                            icon: 'warning',
-                            html: message,
-                            width: 900,
-                            confirmButtonText: "Tôi đã biết!",
-                        }).then(() => {
-                            loadPage();
-                        })
-                    } else {
-                        swal.fire({
-                            icon: "error",
-                            text: 'Lỗi hệ thống!',
-                            cancelButtonText: "OK"
-                        })
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                    swal.fire({
-                        icon: "error",
-                        text: "Lỗi không xác định!",
-                        cancelButtonText: "OK"
-                    })
-                }
-            });
-        }
-    }
-
-    async function deleteOne(id, product_Id) {
-        swal.fire({
-            icon: 'question',
-            title: "Bạn Có Muốn Xoá?",
-            showCancelButton: true,
-            confirmButtonText: "Xoá",
-            cancelButtonText: "Không"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/api/client/cart_detail/delete/' + id,
-                    method: 'GET',
-                    contentType: 'application/json',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-                    },
-                    success: function (response) {
-                        console.log(response);
-                        if (response === 'success') {
+                                }
+                            });
+                            message += `</table>`;
                             swal.fire({
-                                icon: "warning",
-                                text: 'Xoá thành công!',
-                                showConfirmButton: "OK"
+                                title: 'Có 1 Vài Sản Phẩm Đã Hết Hoặc Ngưng Bán!',
+                                icon: 'warning',
+                                html: message,
+                                width: 900,
+                                confirmButtonText: "Tôi đã biết!",
                             }).then(() => {
-                                saveStatusCheck.splice(saveStatusCheck.indexOf(product_Id), 1);
-                                selectedProduct.splice(selectedProduct.indexOf(product_Id), 1);
-                                let index = selectedCart.findIndex(item => JSON.stringify(item.idSanPhamChiTiet) === product_Id);
-                                selectedCart.splice(index, 1);
                                 loadPage();
                             })
                         } else {
                             swal.fire({
-                                icon: "warning",
-                                text: 'Sản phẩm đã được xoá trước đó!',
-                                showConfirmButton: "OK"
-                            }).then(() => {
-                                saveStatusCheck.splice(saveStatusCheck.indexOf(product_Id), 1);
-                                selectedProduct.splice(selectedProduct.indexOf(product_Id), 1);
-                                let index = selectedCart.findIndex(item => JSON.stringify(item.idSanPhamChiTiet) === product_Id);
-                                selectedCart.splice(index, 1);
-                                loadPage();
+                                icon: "error",
+                                text: 'Lỗi hệ thống!',
+                                cancelButtonText: "OK"
                             })
                         }
                     },
@@ -1190,14 +1172,69 @@
                         swal.fire({
                             icon: "error",
                             text: "Lỗi không xác định!",
-                            showConfirmButton: "OK"
+                            cancelButtonText: "OK"
                         })
                     }
                 });
             }
-        });
-    }
+        }
 
+        async function deleteOne(id, product_Id) {
+            swal.fire({
+                icon: 'question',
+                title: "Bạn Có Muốn Xoá?",
+                showCancelButton: true,
+                confirmButtonText: "Xoá",
+                cancelButtonText: "Không"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/client/cart_detail/delete/' + id,
+                        method: 'GET',
+                        contentType: 'application/json',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if (response === 'success') {
+                                swal.fire({
+                                    icon: "warning",
+                                    text: 'Xoá thành công!',
+                                    showConfirmButton: "OK"
+                                }).then(() => {
+                                    saveStatusCheck.splice(saveStatusCheck.indexOf(product_Id), 1);
+                                    selectedProduct.splice(selectedProduct.indexOf(product_Id), 1);
+                                    let index = selectedCart.findIndex(item => JSON.stringify(item.sanPhamChiTiet) === product_Id);
+                                    selectedCart.splice(index, 1);
+                                    loadPage();
+                                })
+                            } else {
+                                swal.fire({
+                                    icon: "warning",
+                                    text: 'Sản phẩm đã được xoá trước đó!',
+                                    showConfirmButton: "OK"
+                                }).then(() => {
+                                    saveStatusCheck.splice(saveStatusCheck.indexOf(product_Id), 1);
+                                    selectedProduct.splice(selectedProduct.indexOf(product_Id), 1);
+                                    let index = selectedCart.findIndex(item => JSON.stringify(item.sanPhamChiTiet) === product_Id);
+                                    selectedCart.splice(index, 1);
+                                    loadPage();
+                                })
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                            swal.fire({
+                                icon: "error",
+                                text: "Lỗi không xác định!",
+                                showConfirmButton: "OK"
+                            })
+                        }
+                    });
+                }
+            });
+        }
 </script>
 </body>
 </html>

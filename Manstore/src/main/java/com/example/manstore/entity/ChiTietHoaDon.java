@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -26,18 +28,25 @@ public class ChiTietHoaDon {
     @JoinColumn(name = "idChiTietSanPham", nullable = false, referencedColumnName = "id")
     private ChiTietSanPham idChiTietSanPham;
 
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idHoaDon", nullable = false, referencedColumnName = "id")
     private HoaDon idHoaDon;
 
+    @Column(name = "NgayTao")
+    private LocalDateTime ngayTao;
+
     @Column(name = "DonGia", precision = 18)
     private BigDecimal donGia;
+
+    @Column(name = "GiaThoiDiemMua", precision = 18)
+    private BigDecimal giaThoiDiemMua;
 
     @Column(name = "SoLuong")
     private Integer soLuong;
 
-    @Column(name = "TrangThai")
-    private Integer trangThai;
+    @Column(name = "TongTien", precision = 18)
+    private BigDecimal tongTien;
 
 }

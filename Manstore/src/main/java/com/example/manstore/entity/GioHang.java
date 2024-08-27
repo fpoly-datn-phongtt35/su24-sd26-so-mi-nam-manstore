@@ -1,15 +1,14 @@
 package com.example.manstore.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,25 +20,21 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "GioHang")
-public class GioHang {
+public class GioHang implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-
-    @Column(name = "Ma", length = 50)
-    private String ma;
-
     @Column(name = "NgayTao")
     private LocalDate ngayTao;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idKhachHang", nullable = false, referencedColumnName = "id")
     @JsonBackReference
     private KhachHang idKhachHang;
 
-    @OneToMany(mappedBy = "idGioHang", fetch = FetchType.LAZY)
-    private List<GioHangChiTiet> gioHangChiTiets;
+//    @OneToMany(mappedBy = "idGioHang", fetch = FetchType.LAZY)
+//    private List<GioHangChiTiet> gioHangChiTiets;
 
 }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "ChatLieu")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class ChatLieu {
+public class ChatLieu implements Serializable  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -37,8 +38,8 @@ public class ChatLieu {
     @Column(name = "MoTa", length = 500)
     private String moTa;
 
-    @OneToMany(mappedBy = "idChatLieu", fetch = FetchType.LAZY)
-    @JsonBackReference
-    private List<SanPham> sanPhams;
+//    @OneToMany(mappedBy = "idChatLieu", fetch = FetchType.LAZY)
+//    @JsonBackReference
+//    private List<SanPham> sanPhams;
 
 }

@@ -166,7 +166,7 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="row">
-                      <div class="col-lg-4">
+                      <div class="col-lg-6">
                         <div class="mb-3">
                           <label class="form-label" for="product-name-update-input">Tên Sản Phẩm</label>
                           <input type="text" class="form-control" id="product-name-update-input"
@@ -174,7 +174,7 @@
                         </div>
                         <span id="error-name-update" class="text-danger fw-bold"></span>
                       </div>
-                      <div class="col-lg-4 col-sm-6">
+                      <div class="col-lg-6 col-sm-6">
                         <div class="mb-3">
                           <label class="form-label" for="product-price-update-input">Giá</label>
                           <div class="input-group has-validation mb-3">
@@ -186,19 +186,19 @@
                         </div>
                         <span id="error-price-update" class="text-danger fw-bold"></span>
                       </div>
-                      <div class="col-lg-4 col-sm-6">
-                        <div class="mb-3">
-                          <label class="form-label" for="product-priceSale-update-input">Giá Sale</label>
-                          <div class="input-group has-validation mb-3">
-                            <span class="input-group-text" id="product-priceSale-addon">VND</span>
-                            <input type="number" class="form-control" id="product-priceSale-update-input"
-                                   placeholder="Nhập giá sale" aria-label="Price"
-                                   aria-describedby="product-priceSale-addon"
-                                   required onkeyup="validPriceSale()">
-                          </div>
-                        </div>
-                        <span id="error-priceSale-update" class="text-danger fw-bold"></span>
-                      </div>
+<!--                      <div class="col-lg-4 col-sm-6">-->
+<!--                        <div class="mb-3">-->
+<!--                          <label class="form-label" for="product-priceSale-update-input">Giá Sale</label>-->
+<!--                          <div class="input-group has-validation mb-3">-->
+<!--                            <span class="input-group-text" id="product-priceSale-addon">VND</span>-->
+<!--                            <input type="number" class="form-control" id="product-priceSale-update-input"-->
+<!--                                   placeholder="Nhập giá sale" aria-label="Price"-->
+<!--                                   aria-describedby="product-priceSale-addon"-->
+<!--                                   required onkeyup="validPriceSale()">-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                        <span id="error-priceSale-update" class="text-danger fw-bold"></span>-->
+<!--                      </div>-->
                       <!--                      <div class="col-lg-4 col-sm-6">-->
                       <!--                        <div class="mb-3">-->
                       <!--                          <label class="form-label" for="product-quantity-update-input">Số lượng</label>-->
@@ -916,7 +916,7 @@
 
             document.getElementById('product-name-update-input').value = data.ten;
             document.getElementById('product-price-update-input').value = data.gia;
-            document.getElementById('product-priceSale-update-input').value = data.giaSale;
+            // document.getElementById('product-priceSale-update-input').value = data.giaSale;
             // document.getElementById('product-quantity-update-input').value = data.soLuong;
             document.getElementById('product-description-update-input').value = data.moTa;
 
@@ -957,7 +957,7 @@
             document.getElementById('error-collar-update').innerText = '';
             document.getElementById('error-category-update').innerText = '';
             document.getElementById('error-price-update').innerText = '';
-            document.getElementById('error-priceSale-update').innerText = '';
+            // document.getElementById('error-priceSale-update').innerText = '';
             // document.getElementById('error-quantity-update').innerText = '';
             document.getElementById('error-description-update').innerText = '';
             $('#myModal').modal('show');
@@ -1202,7 +1202,7 @@
         var trangThai = document.querySelector('input[name="status-update"]:checked').value;
         var coAo = document.getElementById('product-collar-update-input').value;
         var gia = document.getElementById('product-price-update-input').value;
-        var giaSale = document.getElementById('product-priceSale-update-input').value;
+        // var giaSale = document.getElementById('product-priceSale-update-input').value;
         var duoiAo = document.getElementById('product-shirtTail-update-input').value;
         var kieuDang = document.getElementById('product-designs-update-input').value;
         var chatLieu = document.getElementById('product-material-update-input').value;
@@ -1216,7 +1216,7 @@
             trangThai: trangThai,
             coAo: coAo,
             gia: gia,
-            giaSale: giaSale,
+            // giaSale: giaSale,
             duoiAo: duoiAo,
             kieuDang: kieuDang,
             chatLieu: chatLieu,
@@ -2482,18 +2482,18 @@
 </script>
 <script th:inline="javascript">
 
-    function validPriceSale() {
-        var priceSaleInput = document.getElementById('product-priceSale-update-input');
-        var errorPriceSale = document.getElementById('error-priceSale-update');
-
-        priceSaleInput.addEventListener('input', function () {
-            if (priceSaleInput.value.trim() !== '') {
-                errorPriceSale.style.display = 'none';
-            } else {
-                errorPriceSale.style.display = 'block';
-            }
-        });
-    }
+    // function validPriceSale() {
+    //     var priceSaleInput = document.getElementById('product-priceSale-update-input');
+    //     var errorPriceSale = document.getElementById('error-priceSale-update');
+    //
+    //     priceSaleInput.addEventListener('input', function () {
+    //         if (priceSaleInput.value.trim() !== '') {
+    //             errorPriceSale.style.display = 'none';
+    //         } else {
+    //             errorPriceSale.style.display = 'block';
+    //         }
+    //     });
+    // }
 
     function validPrice() {
         var priceInput = document.getElementById('product-price-update-input');

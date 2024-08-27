@@ -62,7 +62,26 @@ public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham, 
     @Query("select spct.duongDan from ChiTietSanPham spct where spct.idSanPham.id = :id and spct.idMauSac.id = :color")
     List<String> getByIdProductAndColor(@Param("id") String id, @Param("color") String color);
 
+    @Query("select s from ChiTietSanPham s where s.idMauSac.id = ?1")
+    Page<ChiTietSanPham> FilterByColor(String color, Pageable pageable);
 
+    @Query("select s from ChiTietSanPham s where s.idSize.id = ?1")
+    Page<ChiTietSanPham> FilterBySize(String size, Pageable pageable);
+
+    @Query("select s from ChiTietSanPham s where s.idMauSac.id = ?1 and s.idSize.id = ?2 ")
+    Page<ChiTietSanPham> FilterByAll(String color, String size, Pageable pageable);
+
+    @Query("select s from ChiTietSanPham s where s.idSanPham.ten like ?1 and s.idMauSac.id = ?2 ")
+    Page<ChiTietSanPham> searchAndFilterByColor(String search, String ms, Pageable pageable);
+
+    @Query("select s from ChiTietSanPham s where s.idSanPham.ten like ?1 and s.idSize = ?2 ")
+    Page<ChiTietSanPham> searchAndFilterBySize(String search, String size, Pageable pageable);
+
+    @Query("select s from ChiTietSanPham s where s.idSanPham.ten like ?1 and s.idMauSac.id = ?2 and s.idSize = ?3")
+    Page<ChiTietSanPham> searchAndFilterAll(String search, String ms, String size, Pageable pageable);
+
+    @Query("select s from ChiTietSanPham s where s.idSanPham.ten like ?1")
+    Page<ChiTietSanPham> search(String search, Pageable pageable);
 
 
 }
