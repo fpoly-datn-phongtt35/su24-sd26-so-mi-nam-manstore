@@ -742,7 +742,7 @@
         var main = '';
         var img = '';
         for (let i = 0; i < list.length; i++) {
-            var url = '/api/admin/product_detail/picture/' + list[i].idSanPham.id + '/' + list[i].idMauSac.id;
+            var url = '/api/client/product_detail/picture-detail/' + list[i].idSanPham.id + '/' + list[i].idMauSac.id;
             const responsePicture = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -877,12 +877,14 @@
 
             let vat = total_amount * 0.1;
             let total_before_discount = total_amount + vat;
-            let total;
+            let total = total_before_discount; // Khởi tạo `total` với `total_before_discount`
             console.log("Phí Ship ", shipp_fee);
 
             if (shipp_fee !== undefined && shipp_fee !== null) {
                 total_before_discount += shipp_fee; // Cộng thêm phí ship nếu có
+                total = total_before_discount; // Cập nhật lại total sau khi thêm phí ship
             }
+
             let promotion_title = '(không có khuyến mãi)';
             let promotion_value = '- 0';
             let promotion = await getPromotionByDate(0);
@@ -895,6 +897,7 @@
                     id_promotion = null;
                     promotion_title = '(Không có khuyến mãi)';
                     promotion_value = '- 0';
+                    // total giữ nguyên giá trị `total_before_discount`
                 } else {
                     let obj_promotion = promotion[0];
                     id_promotion = obj_promotion.id;
@@ -925,6 +928,7 @@
                     total = total_before_discount - parseInt(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
                 }
             }
+
             sub_total = `
 <tr>
     <td>Tổng tiền <small class="text-muted">(Trước thuế)</small></td>

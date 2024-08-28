@@ -101,30 +101,30 @@ public class RestControllerHoaDon {
         return new ResponseEntity<>(listInvoiceDetail, HttpStatus.OK);
     }
 
-    @GetMapping("/calculate/{id}")
-    private ResponseEntity<?> calculate(@PathVariable("id") String id,
-                                        @RequestParam(value = "shipping_fee") String shippingFee,
-                                        @RequestParam(value = "shipping_fee_before") String shippingFee_Before) {
-        if (serviceInvoice.findById(Integer.parseInt(id)).isPresent()) {
-            HoaDon dh = serviceInvoice.findById(Integer.parseInt(id)).get();
-            String regex = "^(?:[1-9]\\d{3,5}|1000000|0)$";
-            if (!shippingFee.matches(regex)) {
-                return new ResponseEntity<>("failure", HttpStatus.OK);
-            }
-            BigDecimal ship = new BigDecimal(shippingFee);
-            dh.setPhiVanChuyen(ship);
-            if (shippingFee_Before.equalsIgnoreCase("null")) {
-                dh.setTongTien(dh.getTongTien().add(ship));
-            } else {
-                BigDecimal shippingFeeBefore = new BigDecimal(shippingFee_Before);
-                BigDecimal total = dh.getTongTien().add(ship);
-                dh.setTongTien(total.subtract(shippingFeeBefore));
-            }
-            donHangService.save(dh);
-            return new ResponseEntity<>("success", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("failure", HttpStatus.OK);
-    }
+//    @GetMapping("/calculate/{id}")
+//    private ResponseEntity<?> calculate(@PathVariable("id") String id,
+//                                        @RequestParam(value = "shipping_fee") String shippingFee,
+//                                        @RequestParam(value = "shipping_fee_before") String shippingFee_Before) {
+//        if (serviceInvoice.findById(Integer.parseInt(id)).isPresent()) {
+//            HoaDon dh = serviceInvoice.findById(Integer.parseInt(id)).get();
+//            String regex = "^(?:[1-9]\\d{3,5}|1000000|0)$";
+//            if (!shippingFee.matches(regex)) {
+//                return new ResponseEntity<>("failure", HttpStatus.OK);
+//            }
+//            BigDecimal ship = new BigDecimal(shippingFee);
+//            dh.setPhiVanChuyen(ship);
+//            if (shippingFee_Before.equalsIgnoreCase("null")) {
+//                dh.setTongTien(dh.getTongTien().add(ship));
+//            } else {
+//                BigDecimal shippingFeeBefore = new BigDecimal(shippingFee_Before);
+//                BigDecimal total = dh.getTongTien().add(ship);
+//                dh.setTongTien(total.subtract(shippingFeeBefore));
+//            }
+//            donHangService.save(dh);
+//            return new ResponseEntity<>("success", HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>("failure", HttpStatus.OK);
+//    }
 
     @GetMapping("/add-quantity/{id}")
     private ResponseEntity<?> addQuantity(@PathVariable("id") String id, @RequestParam(value = "promotion", required = false) Integer promotion) {
@@ -310,155 +310,155 @@ public class RestControllerHoaDon {
         }
     }
 
-    @GetMapping("/change-status/{id}")
-    private ResponseEntity<?> confirmOrder(@PathVariable("id") String id,
-                                           @RequestParam("status") int status,
-                                           @RequestParam("idStaff") Integer idStaff,
-                                           @RequestParam(value = "reason", required = false) String reason) {
-        NhanVien nv = nhanVienService.findById(idStaff).isPresent() ? nhanVienService.findById(idStaff).get() : null;
-        ResponseCustom responseCustom = new ResponseCustom();
-        List<ResponseMessage> listMessage = new ArrayList<>();
-        HoaDon dh = donHangService.findById(Integer.parseInt(id)).get();
-        ThongBao thongBao = new ThongBao();
-        List<ChiTietHoaDon> list = donHangCTService.findByIdHD(id);
-        if (status == dh.getTrangThai()) {
-            responseCustom.setStatusText("failure");
-            responseCustom.setMessage("The status has been switched before");
-            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-        }
-        if (dh.getTrangThai() == 1 && status == 2) {
-            for (ChiTietHoaDon dhct : list
-            ) {
-                for (ChiTietSanPham spct : spService.getAllCTSP()) {
-                    if (spct.getId() == dhct.getIdChiTietSanPham().getId()) {
-                        if (dhct.getSoLuong() > spct.getSoluong() || spct.getSoluong() <= 0) {
-                            ResponseMessage response = new ResponseMessage();
-                            response.setTen(spct.getIdSanPham().getTen());
-                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
-                            response.setSl_ton(spct.getSoluong() + "");
-                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
-                            listMessage.add(response);
-                        }
-                    }
-                }
-            }
-            if (listMessage.size() > 0) {
-                return new ResponseEntity<>(listMessage, HttpStatus.OK);
-            }
-            for (ChiTietHoaDon dhct : list
-            ) {
-                int count_of_product = dhct.getIdChiTietSanPham().getSoluong();
-                int count_of_invoice = dhct.getSoLuong();
-                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
-                spct.setSoluong(count_of_product - count_of_invoice);
-                spService.save(spct);
-            }
-            dh.setIdNhanVien(nv);
-            dh.setTrangThai(status);
-            thongBao.setIdKhachHang(dh.getIdKhachHang());
-            thongBao.setTrangThaiDonHang(status);
-            thongBao.setIdNhanVien(nv);
-            thongBao.setNgayGui(LocalDateTime.now());
-            thongBao.setIdHoaDon(dh);
-            thongBaoService.save(thongBao);
-            responseCustom.setStatusText("success");
-            responseCustom.setMessage("success");
-            donHangService.save(dh);
-            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-        }
-        if (dh.getTrangThai() == 2 && status == 3) {
-            if (dh.getPhiVanChuyen() == null) {
-                responseCustom.setStatusText("failure");
-                responseCustom.setMessage("Shipping fee is null");
-                return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-            }
-            dh.setTrangThai(status);
-            thongBao.setIdKhachHang(dh.getIdKhachHang());
-            thongBao.setTrangThaiDonHang(status);
-            thongBao.setIdNhanVien(nv);
-            thongBao.setNgayGui(LocalDateTime.now());
-            thongBao.setIdHoaDon(dh);
-            thongBaoService.save(thongBao);
-            responseCustom.setStatusText("success");
-            responseCustom.setMessage("success");
-            donHangService.save(dh);
-            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-        }
-        if (dh.getTrangThai() == 3 && status == 4) {
-            thongBao.setIdKhachHang(dh.getIdKhachHang());
-            thongBao.setTrangThaiDonHang(status);
-            thongBao.setIdNhanVien(nv);
-            thongBao.setNgayGui(LocalDateTime.now());
-            thongBao.setIdHoaDon(dh);;
-            thongBaoService.save(thongBao);
-            dh.setTrangThai(status);
-            dh.setTongTien(donHangService.calculateTotal(id));
-            responseCustom.setStatusText("success");
-            responseCustom.setMessage("success");
-            donHangService.save(dh);
-            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-        }
-        if (dh.getTrangThai() == 3 && status == 5) {
-            thongBao.setIdKhachHang(dh.getIdKhachHang());
-            thongBao.setTrangThaiDonHang(status);
-            thongBao.setIdNhanVien(nv);
-            thongBao.setNgayGui(LocalDateTime.now());
-            thongBao.setIdHoaDon(dh);
-            thongBao.setNoiDung(reason);
-            thongBaoService.save(thongBao);
-            dh.setTrangThai(status);
-            dh.setGhiChu(reason);
-            for (ChiTietHoaDon dhct : list
-            ) {
-                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
-                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
-                spService.save(spct);
-            }
-            responseCustom.setStatusText("success");
-            responseCustom.setMessage("success");
-            donHangService.save(dh);
-            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-        }
-        if (dh.getTrangThai() == 1 && status == 6) {
-            thongBao.setIdKhachHang(dh.getIdKhachHang());
-            thongBao.setTrangThaiDonHang(status);
-            thongBao.setIdNhanVien(nv);
-            thongBao.setNgayGui(LocalDateTime.now());
-            thongBao.setIdHoaDon(dh);
-            thongBao.setNoiDung(reason);
-            thongBaoService.save(thongBao);
-            dh.setTrangThai(status);
-            dh.setGhiChu(reason);
-            responseCustom.setStatusText("success");
-            responseCustom.setMessage("success");
-            donHangService.save(dh);
-            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-        }
-        if (dh.getTrangThai() == 2 && status == 6) {
-            thongBao.setIdKhachHang(dh.getIdKhachHang());
-            thongBao.setTrangThaiDonHang(status);
-            thongBao.setIdNhanVien(nv);
-            thongBao.setNgayGui(LocalDateTime.now());
-            thongBao.setIdHoaDon(dh);
-            thongBao.setNoiDung(reason);
-            thongBaoService.save(thongBao);
-            dh.setTrangThai(status);
-            dh.setGhiChu(reason);
-            for (ChiTietHoaDon dhct : list
-            ) {
-                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
-                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
-                spService.save(spct);
-            }
-            responseCustom.setStatusText("success");
-            responseCustom.setMessage("success");
-            donHangService.save(dh);
-            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-        }
-        responseCustom.setStatusText("failure");
-        responseCustom.setMessage("Cannot change status");
-        return new ResponseEntity<>(responseCustom, HttpStatus.OK);
-    }
+//    @GetMapping("/change-status/{id}")
+//    private ResponseEntity<?> confirmOrder(@PathVariable("id") String id,
+//                                           @RequestParam("status") int status,
+//                                           @RequestParam("idStaff") Integer idStaff,
+//                                           @RequestParam(value = "reason", required = false) String reason) {
+//        NhanVien nv = nhanVienService.findById(idStaff).isPresent() ? nhanVienService.findById(idStaff).get() : null;
+//        ResponseCustom responseCustom = new ResponseCustom();
+//        List<ResponseMessage> listMessage = new ArrayList<>();
+//        HoaDon dh = donHangService.findById(Integer.parseInt(id)).get();
+//        ThongBao thongBao = new ThongBao();
+//        List<ChiTietHoaDon> list = donHangCTService.findByIdHD(id);
+//        if (status == dh.getTrangThai()) {
+//            responseCustom.setStatusText("failure");
+//            responseCustom.setMessage("The status has been switched before");
+//            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//        }
+//        if (dh.getTrangThai() == 1 && status == 2) {
+//            for (ChiTietHoaDon dhct : list
+//            ) {
+//                for (ChiTietSanPham spct : spService.getAllCTSP()) {
+//                    if (spct.getId() == dhct.getIdChiTietSanPham().getId()) {
+//                        if (dhct.getSoLuong() > spct.getSoluong() || spct.getSoluong() <= 0) {
+//                            ResponseMessage response = new ResponseMessage();
+//                            response.setTen(spct.getIdSanPham().getTen());
+//                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
+//                            response.setSl_ton(spct.getSoluong() + "");
+//                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
+//                            listMessage.add(response);
+//                        }
+//                    }
+//                }
+//            }
+//            if (listMessage.size() > 0) {
+//                return new ResponseEntity<>(listMessage, HttpStatus.OK);
+//            }
+//            for (ChiTietHoaDon dhct : list
+//            ) {
+//                int count_of_product = dhct.getIdChiTietSanPham().getSoluong();
+//                int count_of_invoice = dhct.getSoLuong();
+//                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+//                spct.setSoluong(count_of_product - count_of_invoice);
+//                spService.save(spct);
+//            }
+//            dh.setIdNhanVien(nv);
+//            dh.setTrangThai(status);
+//            thongBao.setIdKhachHang(dh.getIdKhachHang());
+//            thongBao.setTrangThaiDonHang(status);
+//            thongBao.setIdNhanVien(nv);
+//            thongBao.setNgayGui(LocalDateTime.now());
+//            thongBao.setIdHoaDon(dh);
+//            thongBaoService.save(thongBao);
+//            responseCustom.setStatusText("success");
+//            responseCustom.setMessage("success");
+//            donHangService.save(dh);
+//            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//        }
+//        if (dh.getTrangThai() == 2 && status == 3) {
+//            if (dh.getPhiVanChuyen() == null) {
+//                responseCustom.setStatusText("failure");
+//                responseCustom.setMessage("Shipping fee is null");
+//                return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//            }
+//            dh.setTrangThai(status);
+//            thongBao.setIdKhachHang(dh.getIdKhachHang());
+//            thongBao.setTrangThaiDonHang(status);
+//            thongBao.setIdNhanVien(nv);
+//            thongBao.setNgayGui(LocalDateTime.now());
+//            thongBao.setIdHoaDon(dh);
+//            thongBaoService.save(thongBao);
+//            responseCustom.setStatusText("success");
+//            responseCustom.setMessage("success");
+//            donHangService.save(dh);
+//            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//        }
+//        if (dh.getTrangThai() == 3 && status == 4) {
+//            thongBao.setIdKhachHang(dh.getIdKhachHang());
+//            thongBao.setTrangThaiDonHang(status);
+//            thongBao.setIdNhanVien(nv);
+//            thongBao.setNgayGui(LocalDateTime.now());
+//            thongBao.setIdHoaDon(dh);;
+//            thongBaoService.save(thongBao);
+//            dh.setTrangThai(status);
+//            dh.setTongTien(donHangService.calculateTotal(id));
+//            responseCustom.setStatusText("success");
+//            responseCustom.setMessage("success");
+//            donHangService.save(dh);
+//            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//        }
+//        if (dh.getTrangThai() == 3 && status == 5) {
+//            thongBao.setIdKhachHang(dh.getIdKhachHang());
+//            thongBao.setTrangThaiDonHang(status);
+//            thongBao.setIdNhanVien(nv);
+//            thongBao.setNgayGui(LocalDateTime.now());
+//            thongBao.setIdHoaDon(dh);
+//            thongBao.setNoiDung(reason);
+//            thongBaoService.save(thongBao);
+//            dh.setTrangThai(status);
+//            dh.setGhiChu(reason);
+//            for (ChiTietHoaDon dhct : list
+//            ) {
+//                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+//                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+//                spService.save(spct);
+//            }
+//            responseCustom.setStatusText("success");
+//            responseCustom.setMessage("success");
+//            donHangService.save(dh);
+//            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//        }
+//        if (dh.getTrangThai() == 1 && status == 6) {
+//            thongBao.setIdKhachHang(dh.getIdKhachHang());
+//            thongBao.setTrangThaiDonHang(status);
+//            thongBao.setIdNhanVien(nv);
+//            thongBao.setNgayGui(LocalDateTime.now());
+//            thongBao.setIdHoaDon(dh);
+//            thongBao.setNoiDung(reason);
+//            thongBaoService.save(thongBao);
+//            dh.setTrangThai(status);
+//            dh.setGhiChu(reason);
+//            responseCustom.setStatusText("success");
+//            responseCustom.setMessage("success");
+//            donHangService.save(dh);
+//            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//        }
+//        if (dh.getTrangThai() == 2 && status == 6) {
+//            thongBao.setIdKhachHang(dh.getIdKhachHang());
+//            thongBao.setTrangThaiDonHang(status);
+//            thongBao.setIdNhanVien(nv);
+//            thongBao.setNgayGui(LocalDateTime.now());
+//            thongBao.setIdHoaDon(dh);
+//            thongBao.setNoiDung(reason);
+//            thongBaoService.save(thongBao);
+//            dh.setTrangThai(status);
+//            dh.setGhiChu(reason);
+//            for (ChiTietHoaDon dhct : list
+//            ) {
+//                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+//                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+//                spService.save(spct);
+//            }
+//            responseCustom.setStatusText("success");
+//            responseCustom.setMessage("success");
+//            donHangService.save(dh);
+//            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//        }
+//        responseCustom.setStatusText("failure");
+//        responseCustom.setMessage("Cannot change status");
+//        return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+//    }
 
     @GetMapping("/edit-quantity/{id}")
     private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
@@ -640,6 +640,186 @@ public class RestControllerHoaDon {
         }
     }
 
+    @GetMapping("/calculate/{id}")
+    private ResponseEntity<?> calculate(@PathVariable("id") String id,
+                                        @RequestParam(value = "shipping_fee") String shippingFee,
+                                        @RequestParam(value = "shipping_fee_before") String shippingFee_Before) {
+        if (serviceInvoice.findById(Integer.parseInt(id)).isPresent()) {
+            HoaDon dh = serviceInvoice.findById(Integer.parseInt(id)).get();
+            String regex = "^(?:[1-9]\\d{3,5}|1000000|0)$";
+            if (!shippingFee.matches(regex)) {
+                return new ResponseEntity<>("failure", HttpStatus.OK);
+            }
 
+            BigDecimal ship = new BigDecimal(shippingFee);
+            dh.setPhiVanChuyen(ship);
+
+            // Giữ nguyên tổng tiền mà không thay đổi
+            if (!shippingFee_Before.equalsIgnoreCase("null")) {
+                BigDecimal shippingFeeBefore = new BigDecimal(shippingFee_Before);
+                BigDecimal total = dh.getTongTien();
+                dh.setTongTien(total.add(ship).subtract(shippingFeeBefore));
+            }
+
+            donHangService.save(dh);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("failure", HttpStatus.OK);
+    }
+
+    @GetMapping("/change-status/{id}")
+    private ResponseEntity<?> confirmOrder(@PathVariable("id") String id,
+                                           @RequestParam("status") int status,
+                                           @RequestParam("idStaff") Integer idStaff,
+                                           @RequestParam(value = "reason", required = false) String reason) {
+        NhanVien nv = nhanVienService.findById(idStaff).isPresent() ? nhanVienService.findById(idStaff).get() : null;
+        ResponseCustom responseCustom = new ResponseCustom();
+        List<ResponseMessage> listMessage = new ArrayList<>();
+        HoaDon dh = donHangService.findById(Integer.parseInt(id)).get();
+        ThongBao thongBao = new ThongBao();
+        List<ChiTietHoaDon> list = donHangCTService.findByIdHD(id);
+
+        if (status == dh.getTrangThai()) {
+            responseCustom.setStatusText("failure");
+            responseCustom.setMessage("The status has been switched before");
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+
+        if (dh.getTrangThai() == 1 && status == 2) {
+            // Kiểm tra số lượng hàng hóa
+            for (ChiTietHoaDon dhct : list) {
+                for (ChiTietSanPham spct : spService.getAllCTSP()) {
+                    if (spct.getId() == dhct.getIdChiTietSanPham().getId()) {
+                        if (dhct.getSoLuong() > spct.getSoluong() || spct.getSoluong() <= 0) {
+                            ResponseMessage response = new ResponseMessage();
+                            response.setTen(spct.getIdSanPham().getTen());
+                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
+                            response.setSl_ton(spct.getSoluong() + "");
+                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
+                            listMessage.add(response);
+                        }
+                    }
+                }
+            }
+            if (listMessage.size() > 0) {
+                return new ResponseEntity<>(listMessage, HttpStatus.OK);
+            }
+            for (ChiTietHoaDon dhct : list) {
+                int count_of_product = dhct.getIdChiTietSanPham().getSoluong();
+                int count_of_invoice = dhct.getSoLuong();
+                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+                spct.setSoluong(count_of_product - count_of_invoice);
+                spService.save(spct);
+            }
+            dh.setIdNhanVien(nv);
+            dh.setTrangThai(status);
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBaoService.save(thongBao);
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+
+        if (dh.getTrangThai() == 2 && status == 3) {
+            if (dh.getPhiVanChuyen() == null) {
+                responseCustom.setStatusText("failure");
+                responseCustom.setMessage("Shipping fee is null");
+                return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+            }
+            dh.setTrangThai(status);
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBaoService.save(thongBao);
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+
+        if (dh.getTrangThai() == 3 && status == 4) {
+            dh.setTongTien(donHangService.calculateTotal(id)); // Cập nhật tổng tiền ở đây
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBaoService.save(thongBao);
+            dh.setTrangThai(status);
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+
+        if (dh.getTrangThai() == 3 && status == 5) {
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBao.setNoiDung(reason);
+            thongBaoService.save(thongBao);
+            dh.setTrangThai(status);
+            dh.setGhiChu(reason);
+            for (ChiTietHoaDon dhct : list) {
+                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+                spService.save(spct);
+            }
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+
+        if (dh.getTrangThai() == 1 && status == 6) {
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBao.setNoiDung(reason);
+            thongBaoService.save(thongBao);
+            dh.setTrangThai(status);
+            dh.setGhiChu(reason);
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+
+        if (dh.getTrangThai() == 2 && status == 6) {
+            thongBao.setIdKhachHang(dh.getIdKhachHang());
+            thongBao.setTrangThaiDonHang(status);
+            thongBao.setIdNhanVien(nv);
+            thongBao.setNgayGui(LocalDateTime.now());
+            thongBao.setIdHoaDon(dh);
+            thongBao.setNoiDung(reason);
+            thongBaoService.save(thongBao);
+            dh.setTrangThai(status);
+            dh.setGhiChu(reason);
+            for (ChiTietHoaDon dhct : list) {
+                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+                spService.save(spct);
+            }
+            responseCustom.setStatusText("success");
+            responseCustom.setMessage("success");
+            donHangService.save(dh);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }
+
+        responseCustom.setStatusText("failure");
+        responseCustom.setMessage("Cannot change status");
+        return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+    }
 
 }
