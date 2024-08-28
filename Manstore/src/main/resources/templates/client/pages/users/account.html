@@ -357,7 +357,7 @@
                                                 <th scope="col">Thời gian đặt</th>
                                                 <th scope="col">Tổng tiền</th>
                                                 <th scope="col">Trạng thái</th>
-                                                <th scope="col">Action</th>
+                                                <th scope="col">Hành Động</th>
                                             </tr>
                                             </thead>
                                             <tbody id="order-list">
@@ -927,9 +927,9 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td>Giảm giá <small class="text-muted" id="promotion-title">(-0%)</small>
+                                                        <td>Giảm giá <small class="text-muted" id="promotion-title"></small>
                                                         </td>
-                                                        <td class="text-end" id="promotion-value">0đ</td>
+                                                        <td class="text-end" id="promotion-value"></td>
                                                     </tr>
                                                     <tr id="hidden-shipping">
                                                         <td>Phí ship</td>
@@ -2377,7 +2377,7 @@
             document.getElementById('invoice-status').innerHTML = statusBadge;
             order += `<tr><td>${list[i].ma}</td>
                               <td><span class="text-muted fs-13">${formatDateTime(list[i].ngayTao)}</span></td>
-                              <td class="fw-medium fs-13">${formatMoney(list[i].tongTien + (list[i].tongTien / 10))}</td>
+                              <td class="fw-medium fs-13">${formatMoney(list[i].tongTien + (list[i].tongTien / 10) + list[i].phiVanChuyen)}</td>
                               <td class="fw-medium fs-13" >${statusBadge}</td>
                               <td><a href="#myModalTrackOrder" onclick="loadModalOrderDetails(${list[i].id})" data-bs-toggle="modal" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a></td>
                               </tr>`;
@@ -2589,6 +2589,28 @@
     //     //         document.getElementById('td-total-all').innerHTML = formatMoney(total);
     //     // }
     //
+    //     let vat = total * 0.1;
+    //     let totalBeforeDiscount = total + vat;
+    //     let discount = 0;
+    //
+    //     if (listOrderDetail[0].idHoaDon.idDotGiamGia) {
+    //         let promotion = listOrderDetail[0].idHoaDon.idDotGiamGia;
+    //         if (promotion.loaiGiamGia) {
+    //             discount = total * (promotion.giaTriGiam / 100);
+    //         } else {
+    //             discount = promotion.giaTriGiam;
+    //         }
+    //     }
+    //
+    //     let shippingFee = order.idThongTinVanChuyen ? order.phiVanChuyen : 0;
+    //     let finalTotal = totalBeforeDiscount - discount + shippingFee;
+    //
+    //     document.getElementById('td-total').innerText = formatMoney(totalBeforeDiscount);
+    //     document.getElementById('promotion-value').innerText = formatMoney(discount);
+    //     document.getElementById('td-shipping-fees').innerText = formatMoney(shippingFee);
+    //     document.getElementById('td-total-all').innerText = formatMoney(finalTotal);
+    //
+    //
     //
     //
     //     //Cancel order
@@ -2718,13 +2740,19 @@
         let vat = total * 0.1;
         let totalBeforeDiscount = total + vat;
         let discount = 0;
+        let value='';
+        let namepromotion = '';
 
         if (listOrderDetail[0].idHoaDon.idDotGiamGia) {
             let promotion = listOrderDetail[0].idHoaDon.idDotGiamGia;
-            if (promotion.loaiGiamGia) {
+            if (promotion.loaiGiamGia === true) {
                 discount = total * (promotion.giaTriGiam / 100);
+                value = '- ' + promotion.giaTriGiam + '%';
+                namepromotion = '(' + promotion.ten + ')';
             } else {
                 discount = promotion.giaTriGiam;
+                value = '- ' + formatmoney(promotion.giaTriGiam);
+                namepromotion = '(' + promotion.ten + ')';
             }
         }
 
@@ -2732,7 +2760,8 @@
         let finalTotal = totalBeforeDiscount - discount + shippingFee;
 
         document.getElementById('td-total').innerText = formatMoney(totalBeforeDiscount);
-        document.getElementById('promotion-value').innerText = formatMoney(discount);
+        document.getElementById('promotion-value').innerText = value;
+        document.getElementById('promotion-title').innerHTML = namepromotion;
         document.getElementById('td-shipping-fees').innerText = formatMoney(shippingFee);
         document.getElementById('td-total-all').innerText = formatMoney(finalTotal);
 
@@ -2750,8 +2779,6 @@
         document.getElementById('modalCancelOrder').setAttribute('data-value', order.id);
         document.getElementById("modal-CancelOrder-code").innerText = order.ma;
     }
-
-
 
 
     function showConfirmPopupProfile() {

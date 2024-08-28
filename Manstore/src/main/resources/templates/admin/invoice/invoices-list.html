@@ -119,9 +119,11 @@
                                                 <th>Khách Hàng</th>
                                                 <th>Nhân Viên</th>
                                                 <th>Ngày Tạo</th>
-                                                <th>Tổng Tiền<small class="text-muted">(Đã bao gồm VAT)</small></th>
+                                                <th>Tổng Tiền
+<!--                                                    <small class="text-muted">(Đã gồm VAT+Ship)</small>-->
+                                                </th>
                                                 <th>Trạng Thái</th>
-                                                <th class="text-center">Action</th>
+                                                <th class="text-center">Hành Động</th>
                                             </tr>
                                             </thead>
                                             <tbody
@@ -233,7 +235,7 @@
                                                     <th scope="col">Đơn Giá</th>
                                                     <th scope="col" style="width: 140px;">Số Lượng</th>
                                                     <th scope="col" class="text-center">Tổng Tiền</th>
-                                                    <th scope="col" class="text-center hidden-action">Action</th>
+                                                    <th scope="col" class="text-center hidden-action">Hành Động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody id="products-list">
@@ -395,7 +397,7 @@
                                                     <th class="text-start">Kích Thước</th>
                                                     <th class="text-start">Số Lượng</th>
                                                     <th class="text-start">Đơn Giá</th>
-                                                    <th class="text-start">Action</th>
+                                                    <th class="text-start">Hành Động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all"
@@ -604,7 +606,7 @@
             if (list[i].trangThai === 6) {
                 statusBadge = '<span class="badge bg-danger">Huỷ</span>'
             }
-            let formattedMoney = formatmoney(money + (money * 0.1));
+            let formattedMoney = formatmoney(money + (money * 0.1) + list[i].phiVanChuyen);
             main += `<tr >
                             <td scope="row">${list[i].ma}</td>
                             <td scope="row">${customerName}</td>
