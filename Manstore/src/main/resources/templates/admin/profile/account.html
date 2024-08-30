@@ -56,36 +56,37 @@
                                         <div class="profile-user-img position-relative"
                                              style="width: 300px;height: 300px">
                                            <span class="position-absolute translate-middle badge border border-3 border-white rounded-circle bg-primary p-1 mt-1 me-1">
-                                              <label class="mb-0" data-bs-placement="right" data-bs-toggle="tooltip"
-                                                     for="staff-image-input" title="Select Image">
-                                                    <div class="avatar-md-custom cursor-pointer">
-                                                        <div class="avatar-title bg-light border rounded-circle text-muted">
-                                                            <i class="ri-image-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                </label></span>
+<!--                                              <label class="mb-0" data-bs-placement="right" data-bs-toggle="tooltip"-->
+<!--                                                     for="staff-image-input" title="Select Image">-->
+<!--                                                    <div class="avatar-md-custom cursor-pointer">-->
+<!--                                                        <div class="avatar-title bg-light border rounded-circle text-muted">-->
+<!--                                                            <i class="ri-image-fill"></i>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </label>-->
+                                           </span>
                                             <div class="position-absolute bottom-0 end-0">
                                                 <form autocomplete="off" class="tablelist-form" id="update-form-img"
                                                       method="post" novalidate
                                                       th:object="${nhanVien}">
-                                                    <input class="form-control" id="src-img"
-                                                           type="hidden" th:name="anhNhanVien"/>
+<!--                                                    <input class="form-control" id="src-img"-->
+<!--                                                           type="hidden" th:name="anhNhanVien"/>-->
                                                 </form>
-                                                <input accept="image/png, image/gif, image/jpeg ,image/jpg"
-                                                       class="form-control d-none" id="staff-image-input"
-                                                       onchange="loadAvatar()"
-                                                       type="file"
-                                                       value=""/>
+<!--                                                <input accept="image/png, image/gif, image/jpeg ,image/jpg"-->
+<!--                                                       class="form-control d-none" id="staff-image-input"-->
+<!--                                                       onchange="loadAvatar()"-->
+<!--                                                       type="file"-->
+<!--                                                       value=""/>-->
                                             </div>
                                             <img class="rounded object-fit-cover" id="preview-avatar"
-                                                 th:src="${(profile.anhNhanVien != null && !#strings.isEmpty(profile.anhNhanVien)) ? profile.anhNhanVien : '/assets/images/users/user-dummy-img.jpg'}"
+                                                 src="/assets/images/users/avatar-8.jpg"
                                             />
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-lg-8">
                                         <div class="d-flex border-bottom border-bottom-dashed mt-4 mt-lg-0">
                                             <div class="flex-grow-1">
-                                                <h5 th:text="${profile.hoTen}"></h5>
+                                                <h5 th:text="${profile.ten}"></h5>
                                                 <!--                                                        <p class="text-muted mb-0">Sales & Marketing Manager</p>-->
                                             </div>
                                             <div class="flex-shrink-0">
@@ -114,7 +115,7 @@
                                                             <td>
                                                                 Email
                                                             </td>
-                                                            <td class="fw-medium" th:text="${profile.Email}">
+                                                            <td class="fw-medium" th:text="${profile.email}">
 
                                                             </td>
                                                         </tr>
@@ -453,50 +454,50 @@
             });
         }
         for (let i = 0; i < data.length; i++) {
-            var momentDate = moment(data[i].thoiGianGui);
+            var momentDate = moment(data[i].ngayGui);
             const formattedDate = momentDate.format('DD/MM/YYYY HH:mm');
             let message = '';
             let status_message = '';
             if (data[i].trangThaiDonHang === 1) {
-                message = `<span class="text-success">Khách Hàng ${data[i].kh.hoTen} đã đặt hàng</span>`;
-                status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' đang chờ xác nhận!';
+                message = `<span class="text-success">Khách Hàng ${data[i].idKhachHang.ten} đã đặt hàng</span>`;
+                status_message = 'Đơn hàng ' + data[i].idHoaDon.ma + ' đang chờ xác nhận!';
             }
             if (data[i].trangThaiDonHang === 2) {
                 message = `<span class="text-warning">Đơn hàng đã được xác nhận</span>`;
-                status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' đã được xác nhận bởi nhân viên ' + data[i].nv.hoTen + '!';
+                status_message = 'Đơn hàng ' + data[i].idHoaDon.ma + ' đã được xác nhận bởi nhân viên ' + data[i].idNhanVien.ten + '!';
             }
             if (data[i].trangThaiDonHang === 3) {
                 message = `<span class="text-primary">Đơn hàng đã được xử lý</span>`;
-                status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' đã được xử lý nhân viên ' + data[i].nv.hoTen + '!';
+                status_message = 'Đơn hàng ' + data[i].idHoaDon.ma + ' đã được xử lý nhân viên ' + data[i].idNhanVien.ten + '!';
             }
             if (data[i].trangThaiDonHang === 4) {
                 message = `<span class="text-success">Đơn hàng đã được giao thành công</span>`;
-                status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' đã được giao thành công, nhân viên thao tác : ' + data[i].nv.hoTen + '!';
+                status_message = 'Đơn hàng ' + data[i].idHoaDon.ma + ' đã được giao thành công, nhân viên thao tác : ' + data[i].idNhanVien.ten + '!';
             }
             if (data[i].trangThaiDonHang === 5) {
                 message = `<span class="text-danger">Đơn hàng không được giao thành công</span>`;
                 if (data[i].noiDung !== null) {
-                    status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' giao thất bại, nhân viên thao tác : ' + data[i].nv.hoTen + '!';
+                    status_message = 'Đơn hàng ' + data[i].idHoaDon.ma + ' giao thất bại, nhân viên thao tác : ' + data[i].idNhanVien.ten + '!';
                 } else {
-                    status_message = 'Đơn hàng ' + data[i].dh.maDonHang + ' giao thất bại, nhân viên thao tác : ' + data[i].nv.hoTen + '!';
+                    status_message = 'Đơn hàng ' + data[i].idHoaDon.ma + ' giao thất bại, nhân viên thao tác : ' + data[i].idNhanVien.ten + '!';
                 }
             }
             if (data[i].trangThaiDonHang === 6) {
                 message = `<span class="text-danger">Đơn hàng đã bị huỷ!</span>`;
                 if (data[i].noiDung !== null) {
-                    if (data[i].nv !== null)
-                        status_message = 'Nhân Viên ' + data[i].nv.hoTen +
-                            ' đã huỷ đơn' + ' hàng ' + data[i].dh.maDonHang + ' với lý do : ' + data[i].noiDung + '.';
+                    if (data[i].idNhanVien !== null)
+                        status_message = 'Nhân Viên ' + data[i].idNhanVien.ten +
+                            ' đã huỷ đơn' + ' hàng ' + data[i].idHoaDon.ma + ' với lý do : ' + data[i].noiDung + '.';
                     else
-                        status_message = 'Khách Hàng ' + data[i].kh.hoTen +
-                            ' đã huỷ đơn' + ' hàng ' + data[i].dh.maDonHang + ' với lý do : ' + data[i].noiDung + '.';
+                        status_message = 'Khách Hàng ' + data[i].idKhachHang.ten +
+                            ' đã huỷ đơn' + ' hàng ' + data[i].idHoaDon.ma + ' với lý do : ' + data[i].noiDung + '.';
                 } else {
-                    if (data[i].nv !== null)
-                        status_message = 'Nhân Viên ' + data[i].nv.hoTen +
-                            'huỷ đơn' + ' hàng ' + data[i].dh.maDonHang + ' với lý do : ' + data[i].noiDung + '.';
+                    if (data[i].idNhanVien !== null)
+                        status_message = 'Nhân Viên ' + data[i].idNhanVien.ten +
+                            'huỷ đơn' + ' hàng ' + data[i].idHoaDon.ma + ' với lý do : ' + data[i].noiDung + '.';
                     else
-                        status_message = 'Khách Hàng ' + data[i].kh.hoTen +
-                            'huỷ đơn' + ' hàng ' + data[i].dh.maDonHang + ' với lý do : ' + data[i].noiDung + '.';
+                        status_message = 'Khách Hàng ' + data[i].idKhachHang.ten +
+                            'huỷ đơn' + ' hàng ' + data[i].idHoaDon.ma + ' với lý do : ' + data[i].noiDung + '.';
                 }
             }
             history_element += `<div
@@ -537,12 +538,7 @@
                                         </div>
                                         <div class="px-2 fs-15">
                                             <div class="form-check notification-check">
-                                                <input
-                                                        class="form-check-input"
-                                                        id="all-notification-check04"
-                                                        type="checkbox"
-                                                        value=""
-                                                />
+
                                                 <label
                                                         class="form-check-label"
                                                         for="all-notification-check04"
