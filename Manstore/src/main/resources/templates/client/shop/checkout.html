@@ -1824,129 +1824,129 @@
         })
     }
 
-    function handlerRepurchase() {
-        if (listAddress.length === 0) {
-            swal.fire({
-                icon: 'warning',
-                title: 'Thông Báo',
-                text: 'Thêm địa chỉ để tiếp tục đặt hàng!',
-                confirmButtonText: 'OK'
-            })
-            return;
-        }
-        swal.fire({
-            icon: 'question',
-            title: 'Thông Báo',
-            text: 'Bạn có chắc muốn đặt hàng?',
-            confirmButtonText: 'Có',
-            showCancelButton: true,
-            cancelButtonText: 'Không'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                let url;
-                let arrInvoiceDetail = [];
-                console.log(listInvoiceRepurchase);
-                for (const item of listInvoiceRepurchase) {
-                    let invoiceDetail = {
-                        idDonHang: item.idDonHang.id,
-                        idSanPhamChiTiet: item.idSanPhamChiTiet.id,
-                        soLuong: item.soLuong
-                    }
-                    arrInvoiceDetail.push(invoiceDetail);
-                }
-                if (promotion_repurchase !== null)
-                    url = '/api/client/order/invoice/repurchase/' + userId + '/' + addressId + '?idPromotion=' + promotion_repurchase.id;
-                else
-                    url = '/api/client/order/invoice/repurchase/' + userId + '/' + addressId;
-                console.log(url);
-                console.log(arrInvoiceDetail);
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    contentType: 'application/json',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('user_token')
-                    },
-                    data: JSON.stringify(arrInvoiceDetail),
-                    success: function (response) {
-                        console.log(response);
-                        if (response === "success") {
-                            swal.fire({
-                                icon: 'success',
-                                title: 'Thông báo',
-                                text: 'Đặt hàng thành công!'
-                            }).then(() => {
-                                window.location.href = '/client/product';
-                            })
-                        } else if (Array.isArray(response)) {
-                            let message = `
-                                    <table class="table align-middle table-borderless table-nowrap text-center mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-start">Sản Phẩm</th>
-                                                <th class="text-start">Size & Màu Sắc</th>
-                                                <th class="text-start">Số Lượng Tồn</th>
-                                                <th class="text-start">Action</th>
-                                            </tr>
-                                        </thead>`;
-                            response.forEach(function (item) {
-                                if (item.trangThai === true) {
-                                    message +=
-                                        `<tbody>
-                                        <td class="text-start"> ${item.ten}  </td>
-                                        <td class="text-start"> ${item.ms_size} </td>
-                                        <th class="text-center"> ${item.sl_ton} </th>
-                                        <td class="text-start"> <a href="/client/product?category=${item.sport}" class="link-effect link-primary">Sản Phẩm Tương Tự</a> </td>
-                                    </tbody>`;
-                                } else {
-                                    message +=
-                                        `<tbody>
-                                        <td class="text-start"> ${item.ten}  </td>
-                                        <td class="text-start"> ${item.ms_size} </td>
-                                        <th class="text-start">Sản phẩm đã ngưng bán</th>
-                                        <td class="text-start"> <a href="/client/product?category=${item.sport}" class="link-effect link-primary">Sản Phẩm Tương Tự</a> </td>
-                                    </tbody>`;
-                                }
-                            });
-                            message += `</table>`;
-                            swal.fire({
-                                title: 'Có 1 Vài Sản Phẩm Đã Hết Hoặc Ngừng Bán!',
-                                icon: 'warning',
-                                html: message,
-                                width: 900,
-                                confirmButtonText: "Xem Sản Phẩm Khác",
-                                showCancelButton: true,
-                                cancelButtonText: "Quay về"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = '/client/product';
-                                } else {
-                                    let referrerURL = document.referrer;
-                                    if (referrerURL) {
-                                        window.location.href = referrerURL;
-                                    }
-                                }
-                            })
-                        } else {
-                            swal.fire({
-                                icon: "error",
-                                text: 'Không tìm thấy sản phẩm muốn mua!',
-                                cancelButtonText: "OK"
-                            })
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', error);
-                        swal.fire({
-                            icon: "error",
-                            text: 'Lỗi không xác định!',
-                            cancelButtonText: "OK"
-                        })
-                    }
-                });
-            }
-        })
-    }
+    // function handlerRepurchase() {
+    //     if (listAddress.length === 0) {
+    //         swal.fire({
+    //             icon: 'warning',
+    //             title: 'Thông Báo',
+    //             text: 'Thêm địa chỉ để tiếp tục đặt hàng!',
+    //             confirmButtonText: 'OK'
+    //         })
+    //         return;
+    //     }
+    //     swal.fire({
+    //         icon: 'question',
+    //         title: 'Thông Báo',
+    //         text: 'Bạn có chắc muốn đặt hàng?',
+    //         confirmButtonText: 'Có',
+    //         showCancelButton: true,
+    //         cancelButtonText: 'Không'
+    //     }).then(async (result) => {
+    //         if (result.isConfirmed) {
+    //             let url;
+    //             let arrInvoiceDetail = [];
+    //             console.log(listInvoiceRepurchase);
+    //             for (const item of listInvoiceRepurchase) {
+    //                 let invoiceDetail = {
+    //                     idDonHang: item.idDonHang.id,
+    //                     idSanPhamChiTiet: item.idSanPhamChiTiet.id,
+    //                     soLuong: item.soLuong
+    //                 }
+    //                 arrInvoiceDetail.push(invoiceDetail);
+    //             }
+    //             if (promotion_repurchase !== null)
+    //                 url = '/api/client/order/invoice/repurchase/' + userId + '/' + addressId + '?idPromotion=' + promotion_repurchase.id;
+    //             else
+    //                 url = '/api/client/order/invoice/repurchase/' + userId + '/' + addressId;
+    //             console.log(url);
+    //             console.log(arrInvoiceDetail);
+    //             $.ajax({
+    //                 url: url,
+    //                 method: 'POST',
+    //                 contentType: 'application/json',
+    //                 headers: {
+    //                     'Authorization': 'Bearer ' + localStorage.getItem('user_token')
+    //                 },
+    //                 data: JSON.stringify(arrInvoiceDetail),
+    //                 success: function (response) {
+    //                     console.log(response);
+    //                     if (response === "success") {
+    //                         swal.fire({
+    //                             icon: 'success',
+    //                             title: 'Thông báo',
+    //                             text: 'Đặt hàng thành công!'
+    //                         }).then(() => {
+    //                             window.location.href = '/client/product';
+    //                         })
+    //                     } else if (Array.isArray(response)) {
+    //                         let message = `
+    //                                 <table class="table align-middle table-borderless table-nowrap text-center mb-0">
+    //                                     <thead>
+    //                                         <tr>
+    //                                             <th class="text-start">Sản Phẩm</th>
+    //                                             <th class="text-start">Size & Màu Sắc</th>
+    //                                             <th class="text-start">Số Lượng Tồn</th>
+    //                                             <th class="text-start">Action</th>
+    //                                         </tr>
+    //                                     </thead>`;
+    //                         response.forEach(function (item) {
+    //                             if (item.trangThai === true) {
+    //                                 message +=
+    //                                     `<tbody>
+    //                                     <td class="text-start"> ${item.ten}  </td>
+    //                                     <td class="text-start"> ${item.ms_size} </td>
+    //                                     <th class="text-center"> ${item.sl_ton} </th>
+    //                                     <td class="text-start"> <a href="/client/product?category=${item.sport}" class="link-effect link-primary">Sản Phẩm Tương Tự</a> </td>
+    //                                 </tbody>`;
+    //                             } else {
+    //                                 message +=
+    //                                     `<tbody>
+    //                                     <td class="text-start"> ${item.ten}  </td>
+    //                                     <td class="text-start"> ${item.ms_size} </td>
+    //                                     <th class="text-start">Sản phẩm đã ngưng bán</th>
+    //                                     <td class="text-start"> <a href="/client/product?category=${item.sport}" class="link-effect link-primary">Sản Phẩm Tương Tự</a> </td>
+    //                                 </tbody>`;
+    //                             }
+    //                         });
+    //                         message += `</table>`;
+    //                         swal.fire({
+    //                             title: 'Có 1 Vài Sản Phẩm Đã Hết Hoặc Ngừng Bán!',
+    //                             icon: 'warning',
+    //                             html: message,
+    //                             width: 900,
+    //                             confirmButtonText: "Xem Sản Phẩm Khác",
+    //                             showCancelButton: true,
+    //                             cancelButtonText: "Quay về"
+    //                         }).then((result) => {
+    //                             if (result.isConfirmed) {
+    //                                 window.location.href = '/client/product';
+    //                             } else {
+    //                                 let referrerURL = document.referrer;
+    //                                 if (referrerURL) {
+    //                                     window.location.href = referrerURL;
+    //                                 }
+    //                             }
+    //                         })
+    //                     } else {
+    //                         swal.fire({
+    //                             icon: "error",
+    //                             text: 'Không tìm thấy sản phẩm muốn mua!',
+    //                             cancelButtonText: "OK"
+    //                         })
+    //                     }
+    //                 },
+    //                 error: function (xhr, status, error) {
+    //                     console.error('Error:', error);
+    //                     swal.fire({
+    //                         icon: "error",
+    //                         text: 'Lỗi không xác định!',
+    //                         cancelButtonText: "OK"
+    //                     })
+    //                 }
+    //             });
+    //         }
+    //     })
+    // }
 
     function handlerBuyNow() {
         swal.fire({

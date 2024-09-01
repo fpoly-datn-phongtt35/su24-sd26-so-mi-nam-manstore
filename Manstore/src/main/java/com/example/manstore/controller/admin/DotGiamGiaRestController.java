@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,5 +94,40 @@ public class DotGiamGiaRestController {
 
         return new ResponseEntity<>(promotions, HttpStatus.OK);
     }
+
+//@GetMapping("/public/promotion/find-by-date")
+//public ResponseEntity<?> findByDate(@RequestParam("orderValue") double orderValue) {
+//    LocalDate now = LocalDate.now();
+//    List<DotGiamGia> promotions = dotGiamGiaRepository.getPromotionAll(now, true);
+//
+//    // Lọc khuyến mãi hết hạn
+//    promotions.removeIf(km -> km.getNgayKetThuc().isBefore(now));
+//
+//    // Tính mức giảm cho từng khuyến mãi và chọn khuyến mãi có mức giảm cao nhất
+//    DotGiamGia bestPromotion = null;
+//    double maxDiscount = 0;
+//
+//    for (DotGiamGia promo : promotions) {
+//        double discount = 0;
+//
+//        if (promo.getLoaiGiamGia()) {
+//            // Giảm tiền
+//            discount = orderValue * (promo.getGiaTriGiam() / 100.0); // Giả sử có thuộc tính này
+//
+//        } else {
+//            // Giảm phần trăm
+//            discount = promo.getGiaTriGiam(); // Giả sử có thuộc tính này
+//        }
+//
+//        if (discount > maxDiscount) {
+//            maxDiscount = discount;
+//            bestPromotion = promo;
+//        }
+//    }
+//
+//    return new ResponseEntity<>(bestPromotion, HttpStatus.OK);
+//}
+
+
 
 }

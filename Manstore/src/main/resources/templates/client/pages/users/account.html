@@ -2884,31 +2884,31 @@
         }
     }
 
-    async function handleRepurchaseOrder() {
-        let promotion = await getInformationPromotion();
-        var id = document.getElementById("modalCancelOrder").getAttribute('data-value');
-        sessionStorage.removeItem("listCart");
-        sessionStorage.removeItem("product_buy_now");
-        localStorage.removeItem("promotion_repurchase");
-        if (promotion[0] !== undefined) {
-            localStorage.setItem("promotion_repurchase", JSON.stringify(promotion[0]));
-        }
-        localStorage.removeItem('invoice_repurchase');
-        localStorage.setItem('invoice_repurchase', id);
-        window.location.href = '/order';
-    }
-
-    async function getInformationPromotion() {
-        let url = '/public/promotion/find-by-date?type=all';
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            }
-        });
-        const data = await response.json();
-        return data;
-    }
+    // async function handleRepurchaseOrder() {
+    //     let promotion = await getInformationPromotion();
+    //     var id = document.getElementById("modalCancelOrder").getAttribute('data-value');
+    //     sessionStorage.removeItem("listCart");
+    //     sessionStorage.removeItem("product_buy_now");
+    //     localStorage.removeItem("promotion_repurchase");
+    //     if (promotion[0] !== undefined) {
+    //         localStorage.setItem("promotion_repurchase", JSON.stringify(promotion[0]));
+    //     }
+    //     localStorage.removeItem('invoice_repurchase');
+    //     localStorage.setItem('invoice_repurchase', id);
+    //     window.location.href = '/order';
+    // }
+    //
+    // async function getInformationPromotion() {
+    //     let url = '/public/promotion/find-by-date?type=all';
+    //     const response = await fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+    //         }
+    //     });
+    //     const data = await response.json();
+    //     return data;
+    // }
 
     function handleProduct() {
         window.location.href = '/client/product';
