@@ -91,10 +91,10 @@
                   <!--                                            </select>-->
                   <!--                                        </td>-->
                   <!--                                    </tr>-->
-                  <tr>
-                    <td>VAT<small>(10%)</small> :</td>
-                    <td class="text-end cart-tax" id="vat"></td>
-                  </tr>
+<!--                  <tr>-->
+<!--                    <td>VAT<small>(10%)</small> :</td>-->
+<!--                    <td class="text-end cart-tax" id="vat"></td>-->
+<!--                  </tr>-->
                   <tr class="table-active">
                     <th>Tổng thanh toán<small> (chưa tính phí ship)</small> :</th>
                     <td class="text-end">
@@ -360,14 +360,15 @@
                                 class="ri-arrow-right-line label-icon align-middle ms-1"></i></a>
                 <button class="btn btn-hover btn-primary w-100" onclick="handlerBuyNow()">Đặt Hàng</button>
             `;
-        } else {
-            loadRepurchase();
-            document.getElementById('change_button').innerHTML = `
-                <a class="btn btn-hover btn-soft-info w-100" onclick="handleBack()">Quay Lại <i
-                                class="ri-arrow-right-line label-icon align-middle ms-1"></i></a>
-                <button class="btn btn-hover btn-primary w-100" onclick="handlerRepurchase()">Đặt Hàng</button>
-            `;
         }
+        // else {
+        //     loadRepurchase();
+        //     document.getElementById('change_button').innerHTML = `
+        //         <a class="btn btn-hover btn-soft-info w-100" onclick="handleBack()">Quay Lại <i
+        //                         class="ri-arrow-right-line label-icon align-middle ms-1"></i></a>
+        //         <button class="btn btn-hover btn-primary w-100" onclick="handlerRepurchase()">Đặt Hàng</button>
+        //     `;
+        // }
         getAddressDefault();
     }
 
@@ -413,13 +414,13 @@
     async function loadCart() {
         console.log(listCart);
         let sub_total = 0;
-        let vat = 0;
+        // let vat = 0;
         let main = ``;
 
         for (let i = 0; i < listCart.length; i++) {
             let money = formatMoney(listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong);
             sub_total += listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong;
-            vat += (listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong) * 0.1;
+            // vat += (listCart[i].idSanPhamChiTiet.idSanPham.gia * listCart[i].soLuong) * 0.1;
 
             // Tạo URL để lấy hình ảnh sản phẩm
             let urlGetPicture = '/api/client/product_detail/picture-detail/' + listCart[i].idSanPhamChiTiet.idSanPham.id + '/' + listCart[i].idSanPhamChiTiet.idMauSac.id;
@@ -472,7 +473,7 @@
       let total_amount;
       console.log(promotion);
 
-      if (promotion !== null) {
+      if (promotion !== null  && promotion.trangThai === true) {
         if (sub_total >= promotion.giaTriDonHang) {
           // Tính giảm giá trước
           let discounted_amount;
@@ -485,18 +486,18 @@
           }
 
           // Cộng VAT vào số tiền đã giảm giá
-          total_amount = discounted_amount + vat;
+          total_amount = discounted_amount;
 
           // Cập nhật thông tin hiển thị
           document.getElementById("table-cart").innerHTML = main;
           document.getElementById("sub-total").innerText = formatMoney(sub_total);
-          document.getElementById("vat").innerText = formatMoney(vat);
+          // document.getElementById("vat").innerText = formatMoney(vat);
           document.getElementById("total_amount").innerText = formatMoney(total_amount);
           document.getElementById("promotion-title").innerText = '(' + promotion.ten + ')';
           document.getElementById("promotion-value").innerText = promotion.loaiGiamGia === true ?
                   '- ' + promotion.giaTriGiam + '%' : '- ' + formatMoney(promotion.giaTriGiam);
         } else {
-          total_amount = sub_total + vat;
+          total_amount = sub_total;
           let value_promotion;
           if (promotion.loaiGiamGia === true) {
             value_promotion = promotion.giaTriGiam + '%';
@@ -510,136 +511,136 @@
           // Cập nhật thông tin hiển thị khi không đủ điều kiện áp dụng khuyến mãi
           document.getElementById("table-cart").innerHTML = main;
           document.getElementById("sub-total").innerText = formatMoney(sub_total);
-          document.getElementById("vat").innerText = formatMoney(vat);
+          // document.getElementById("vat").innerText = formatMoney(vat);
           document.getElementById("total_amount").innerText = formatMoney(total_amount);
           document.getElementById("promotion-title").innerText = '(chưa đủ điều kiện áp dụng)';
           document.getElementById('important-note').innerText = important_note;
         }
       } else {
-        total_amount = sub_total + vat;
+        total_amount = sub_total;
         document.getElementById("table-cart").innerHTML = main;
         document.getElementById("sub-total").innerText = formatMoney(sub_total);
-        document.getElementById("vat").innerText = formatMoney(vat);
+        // document.getElementById("vat").innerText = formatMoney(vat);
         document.getElementById("total_amount").innerText = formatMoney(total_amount);
       }
 
     }
 
 
-    async function loadRepurchase() {
-        let sub_total = 0;
-        let vat = 0;
-        let main = ``;
-        let url = "/api/client/account/orderDetail/" + invoice_repurchase;
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('user_token')
-            }
-        });
-
-        let list = await response.json();
-        listInvoiceRepurchase = list;
-        for (i = 0; i < list.length; i++) {
-            let money = formatMoney(list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong);
-            sub_total += list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong;
-            vat += (list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong) * 0.1;
-            let urlGetPicture = '/api/client/product_detail/picture-detail/' + list[i].idSanPhamChiTiet.idSanPham.id + '/' + list[i].idSanPhamChiTiet.idMauSac.id;
-            const pictureResponse = await fetch(urlGetPicture, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-                }
-            });
-
-            let dataPicture = await pictureResponse.json();
-            console.log('Image data received LoadRepurchase:', dataPicture);
-
-            let img = '';
-
-            // Xử lý khi không có ảnh hoặc có lỗi
-            if (!pictureResponse.ok || !Array.isArray(dataPicture) || dataPicture.length === 0) {
-                img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-xs">`;
-                console.warn('Using fallback image due to missing or invalid image data');
-            } else {
-                let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
-                img = `<img src="${fullUrl}" alt="" class="avatar-xs">`;
-                console.log('Using fetched image:', fullUrl);
-            }
-            main += `
-                    <tr>
-                            <td class="text-start">
-                                 <div class="d-flex align-items-center gap-2">
-                                      <div class="avatar-sm flex-shrink-0">
-                                              <div class="avatar-title bg-success-subtle rounded-3">
-                                             ${img}
-                                              </div>
-                                      </div>
-                                      <div class="flex-grow-1">
-                                                  <h6>${list[i].idSanPhamChiTiet.idSanPham.ten}</h6>
-                                                  <p class="text-muted mb-0">${list[i].idSanPhamChiTiet.idMauSac.ten} & ${list[i].idSanPhamChiTiet.idSize.ten}</p>
-                                      </div>
-                                 </div>
-                            </td>
-                            <td>
-                                 ${formatMoney(list[i].idSanPhamChiTiet.idSanPham.gia)}
-                            </td>
-                            <td>
-                                 ${list[i].soLuong}
-                            </td>
-                            <td class="text-center">${money}</td>
-                    </tr>
-            `;
-        }
-        let total_amount;
-        if (promotion_repurchase !== null) {
-            console.log('Khuyến mãi hiện tại:', promotion_repurchase)
-            if (sub_total >= promotion_repurchase.giaTriDonHang) {
-                if (promotion_repurchase.loaiGiamGia === true)
-                    total_amount = (sub_total + vat) - ((sub_total + vat) * (promotion_repurchase.giaTriGiam / 100));
-                else
-                    total_amount = (sub_total + vat) - promotion_repurchase.giaTriGiam;
-                document.getElementById("table-cart").innerHTML = main;
-                document.getElementById("sub-total").innerText = formatMoney(sub_total);
-                document.getElementById("vat").innerText = formatMoney(vat);
-                document.getElementById("total_amount").innerText = formatMoney(total_amount);
-                document.getElementById("promotion-title").innerText = '(' + promotion_repurchase.ten + ')';
-                document.getElementById("promotion-value").innerText = promotion_repurchase.loaiGiamGia === true ?
-                    '- ' + promotion.giaTriGiam + '%' : '- ' + formatMoney(promotion_repurchase.giaTriGiam);
-            } else {
-                total_amount = sub_total + vat;
-                let value_promotion;
-                if (promotion_repurchase.loaiGiamGia === true)
-                    value_promotion = promotion_repurchase.giaTriGiam + '%';
-                else
-                    value_promotion = formatMoney(promotion.giaTriGiam);
-                let reference_value = (promotion_repurchase.giaTriDonHang - sub_total);
-                let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
-                    ' cho đơn hàng!)';
-                document.getElementById("table-cart").innerHTML = main;
-                document.getElementById("sub-total").innerText = formatMoney(sub_total);
-                document.getElementById("vat").innerText = formatMoney(vat);
-                document.getElementById("total_amount").innerText = formatMoney(total_amount);
-                document.getElementById("promotion-title").innerText = '(chưa đủ điều kiện áp dụng)';
-                document.getElementById('important-note').innerText = important_note;
-            }
-        } else {
-            total_amount = sub_total + vat;
-            document.getElementById("table-cart").innerHTML = main;
-            document.getElementById("sub-total").innerText = formatMoney(sub_total);
-            document.getElementById("vat").innerText = formatMoney(vat);
-            document.getElementById("total_amount").innerText = formatMoney(total_amount);
-        }
-    }
+    // async function loadRepurchase() {
+    //     let sub_total = 0;
+    //     let vat = 0;
+    //     let main = ``;
+    //     let url = "/api/client/account/orderDetail/" + invoice_repurchase;
+    //     const response = await fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + localStorage.getItem('user_token')
+    //         }
+    //     });
+    //
+    //     let list = await response.json();
+    //     listInvoiceRepurchase = list;
+    //     for (i = 0; i < list.length; i++) {
+    //         let money = formatMoney(list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong);
+    //         sub_total += list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong;
+    //         vat += (list[i].idSanPhamChiTiet.idSanPham.gia * list[i].soLuong) * 0.1;
+    //         let urlGetPicture = '/api/client/product_detail/picture-detail/' + list[i].idSanPhamChiTiet.idSanPham.id + '/' + list[i].idSanPhamChiTiet.idMauSac.id;
+    //         const pictureResponse = await fetch(urlGetPicture, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+    //             }
+    //         });
+    //
+    //         let dataPicture = await pictureResponse.json();
+    //         console.log('Image data received LoadRepurchase:', dataPicture);
+    //
+    //         let img = '';
+    //
+    //         // Xử lý khi không có ảnh hoặc có lỗi
+    //         if (!pictureResponse.ok || !Array.isArray(dataPicture) || dataPicture.length === 0) {
+    //             img = `<img src="../assets/images/products/img-8.png" alt="" class="avatar-xs">`;
+    //             console.warn('Using fallback image due to missing or invalid image data');
+    //         } else {
+    //             let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
+    //             img = `<img src="${fullUrl}" alt="" class="avatar-xs">`;
+    //             console.log('Using fetched image:', fullUrl);
+    //         }
+    //         main += `
+    //                 <tr>
+    //                         <td class="text-start">
+    //                              <div class="d-flex align-items-center gap-2">
+    //                                   <div class="avatar-sm flex-shrink-0">
+    //                                           <div class="avatar-title bg-success-subtle rounded-3">
+    //                                          ${img}
+    //                                           </div>
+    //                                   </div>
+    //                                   <div class="flex-grow-1">
+    //                                               <h6>${list[i].idSanPhamChiTiet.idSanPham.ten}</h6>
+    //                                               <p class="text-muted mb-0">${list[i].idSanPhamChiTiet.idMauSac.ten} & ${list[i].idSanPhamChiTiet.idSize.ten}</p>
+    //                                   </div>
+    //                              </div>
+    //                         </td>
+    //                         <td>
+    //                              ${formatMoney(list[i].idSanPhamChiTiet.idSanPham.gia)}
+    //                         </td>
+    //                         <td>
+    //                              ${list[i].soLuong}
+    //                         </td>
+    //                         <td class="text-center">${money}</td>
+    //                 </tr>
+    //         `;
+    //     }
+    //     let total_amount;
+    //     if (promotion_repurchase !== null) {
+    //         console.log('Khuyến mãi hiện tại:', promotion_repurchase)
+    //         if (sub_total >= promotion_repurchase.giaTriDonHang) {
+    //             if (promotion_repurchase.loaiGiamGia === true)
+    //                 total_amount = (sub_total + vat) - ((sub_total + vat) * (promotion_repurchase.giaTriGiam / 100));
+    //             else
+    //                 total_amount = (sub_total + vat) - promotion_repurchase.giaTriGiam;
+    //             document.getElementById("table-cart").innerHTML = main;
+    //             document.getElementById("sub-total").innerText = formatMoney(sub_total);
+    //             document.getElementById("vat").innerText = formatMoney(vat);
+    //             document.getElementById("total_amount").innerText = formatMoney(total_amount);
+    //             document.getElementById("promotion-title").innerText = '(' + promotion_repurchase.ten + ')';
+    //             document.getElementById("promotion-value").innerText = promotion_repurchase.loaiGiamGia === true ?
+    //                 '- ' + promotion.giaTriGiam + '%' : '- ' + formatMoney(promotion_repurchase.giaTriGiam);
+    //         } else {
+    //             total_amount = sub_total + vat;
+    //             let value_promotion;
+    //             if (promotion_repurchase.loaiGiamGia === true)
+    //                 value_promotion = promotion_repurchase.giaTriGiam + '%';
+    //             else
+    //                 value_promotion = formatMoney(promotion.giaTriGiam);
+    //             let reference_value = (promotion_repurchase.giaTriDonHang - sub_total);
+    //             let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
+    //                 ' cho đơn hàng!)';
+    //             document.getElementById("table-cart").innerHTML = main;
+    //             document.getElementById("sub-total").innerText = formatMoney(sub_total);
+    //             document.getElementById("vat").innerText = formatMoney(vat);
+    //             document.getElementById("total_amount").innerText = formatMoney(total_amount);
+    //             document.getElementById("promotion-title").innerText = '(chưa đủ điều kiện áp dụng)';
+    //             document.getElementById('important-note').innerText = important_note;
+    //         }
+    //     } else {
+    //         total_amount = sub_total + vat;
+    //         document.getElementById("table-cart").innerHTML = main;
+    //         document.getElementById("sub-total").innerText = formatMoney(sub_total);
+    //         document.getElementById("vat").innerText = formatMoney(vat);
+    //         document.getElementById("total_amount").innerText = formatMoney(total_amount);
+    //     }
+    // }
 
     async function loadBuyNow() {
         console.log(productBuyNow);
         let sub_total = 0;
-        let vat = 0;
+        // let vat = 0;
         let main = ``;
         let money = formatMoney(productBuyNow.donGia * productBuyNow.soLuong);
         sub_total += productBuyNow.donGia * productBuyNow.soLuong;
-        vat += (productBuyNow.donGia * productBuyNow.soLuong) * 0.1;
+        // vat += (productBuyNow.donGia * productBuyNow.soLuong) * 0.1;
         // Tạo URL để lấy hình ảnh sản phẩm
         let urlGetPicture = '/api/client/product_detail/picture-detail/' + productBuyNow.idSanPham + '/' + productBuyNow.idMauSac;
         console.log('Fetching image from URL:', urlGetPicture);
@@ -693,44 +694,7 @@
 
         let total_amount;
         let promotion = productBuyNow.khuyenMai[0];
-        // if (promotion !== undefined) {
-        //     console.log('Khuyến mãi hiện tại:', promotion);
-        //     if (sub_total >= promotion.giaTriDonHang) {
-        //         if (promotion.loaiGiamGia === true)
-        //             total_amount = (sub_total + vat) - ((sub_total + vat) * (promotion.giaTriGiam / 100));
-        //         else
-        //             total_amount = (sub_total + vat) - promotion.giaTriGiam;
-        //         document.getElementById("table-cart").innerHTML = main;
-        //         document.getElementById("sub-total").innerText = formatMoney(sub_total);
-        //         document.getElementById("vat").innerText = formatMoney(vat);
-        //         document.getElementById("total_amount").innerText = formatMoney(total_amount);
-        //         document.getElementById("promotion-title").innerText = '(' + promotion.ten + ')';
-        //         document.getElementById("promotion-value").innerText = promotion.loaiGiamGia === true ? '- ' +
-        //             promotion.giaTriGiam + '%' : '- ' + formatMoney(promotion.giaTriGiam);
-        //     } else {
-        //         total_amount = sub_total + vat;
-        //         let value_promotion;
-        //         if (promotion.loaiGiamGia === true)
-        //             value_promotion = promotion.giaTriGiam + '%';
-        //         else
-        //             value_promotion = formatMoney(promotion.giaTriGiam);
-        //         let reference_value = (promotion.giaTriDonHang - sub_total);
-        //         let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
-        //             ' cho đơn hàng!)';
-        //         document.getElementById("table-cart").innerHTML = main;
-        //         document.getElementById("sub-total").innerText = formatMoney(sub_total);
-        //         document.getElementById("vat").innerText = formatMoney(vat);
-        //         document.getElementById("total_amount").innerText = formatMoney(total_amount);
-        //         document.getElementById("promotion-title").innerText = '(chưa đủ điều kiện áp dụng)';
-        //         document.getElementById('important-note').innerText = important_note;
-        //     }
-        // } else {
-        //     total_amount = sub_total + vat;
-        //     document.getElementById("table-cart").innerHTML = main;
-        //     document.getElementById("sub-total").innerText = formatMoney(sub_total);
-        //     document.getElementById("vat").innerText = formatMoney(vat);
-        //     document.getElementById("total_amount").innerText = formatMoney(total_amount);
-        // }
+
       if (promotion !== undefined) {
         console.log('Khuyến mãi hiện tại:', promotion);
 
@@ -747,17 +711,17 @@
           }
 
           // Tính tổng số tiền sau khi cộng VAT
-          total_amount = discounted_amount + vat;
+          total_amount = discounted_amount;
 
           document.getElementById("table-cart").innerHTML = main;
           document.getElementById("sub-total").innerText = formatMoney(sub_total);
-          document.getElementById("vat").innerText = formatMoney(vat);
+          // document.getElementById("vat").innerText = formatMoney(vat);
           document.getElementById("total_amount").innerText = formatMoney(total_amount);
           document.getElementById("promotion-title").innerText = '(' + promotion.ten + ')';
           document.getElementById("promotion-value").innerText = promotion.loaiGiamGia === true ?
                   '- ' + promotion.giaTriGiam + '%' : '- ' + formatMoney(promotion.giaTriGiam);
         } else {
-          total_amount = sub_total + vat;
+          total_amount = sub_total;
           let value_promotion;
           if (promotion.loaiGiamGia === true) {
             value_promotion = promotion.giaTriGiam + '%';
@@ -770,16 +734,16 @@
 
           document.getElementById("table-cart").innerHTML = main;
           document.getElementById("sub-total").innerText = formatMoney(sub_total);
-          document.getElementById("vat").innerText = formatMoney(vat);
+          // document.getElementById("vat").innerText = formatMoney(vat);
           document.getElementById("total_amount").innerText = formatMoney(total_amount);
           document.getElementById("promotion-title").innerText = '(chưa đủ điều kiện)';
           document.getElementById('important-note').innerText = important_note;
         }
       } else {
-        total_amount = sub_total + vat;
+        total_amount = sub_total;
         document.getElementById("table-cart").innerHTML = main;
         document.getElementById("sub-total").innerText = formatMoney(sub_total);
-        document.getElementById("vat").innerText = formatMoney(vat);
+        // document.getElementById("vat").innerText = formatMoney(vat);
         document.getElementById("total_amount").innerText = formatMoney(total_amount);
       }
     }

@@ -85,10 +85,10 @@
                                     <!--                                            <option value="">Chọn khuyến mãi</option>-->
                                     <!--                                        </select></td>-->
                                     <!--                                    </tr>-->
-                                    <tr>
-                                        <td>VAT <span class="text-danger">(10%)</span> :</td>
-                                        <td class="text-end cart-tax" id="vat"></td>
-                                    </tr>
+<!--                                    <tr>-->
+<!--                                        <td>VAT <span class="text-danger">(10%)</span> :</td>-->
+<!--                                        <td class="text-end cart-tax" id="vat"></td>-->
+<!--                                    </tr>-->
                                     <tr class="table-active">
                                         <th>Tổng tiền <small>(chưa tính phí ship)</small> :</th>
                                         <td class="text-end">
@@ -131,7 +131,7 @@
     let productDataList = {};
     let selectedProductGroup = [];
     let sub_total_global = 0;
-    let vat_global = 0;
+    // let vat_global = 0;
     let promotion_applies;
 
     const Toast = swal.mixin({
@@ -155,7 +155,7 @@
         saveStatusCheckGroup = [];
         selectedProductGroup = [];
         sub_total_global = 0;
-        vat_global = 0;
+        // vat_global = 0;
         userId = localStorage.getItem("userId");
         loadPage();
     }
@@ -238,7 +238,7 @@
                 for (let j = 0; j < arrChild.length; j++) {
                     var count = arrChild[j].soLuong;
                     sub_total += arrChild[j].idSanPhamChiTiet.idSanPham.gia * count;
-                    vat += (arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1;
+                    // vat += (arrChild[j].idSanPhamChiTiet.idSanPham.gia * count) * 0.1;
 
                     // Tim anh theo id san pham chi tiet va id mau sac
                     var urlGetPicture = '/api/client/product_detail/picture-detail/' + arrChild[j].idSanPhamChiTiet.idSanPham.id + '/' + arrChild[j].idSanPhamChiTiet.idMauSac.id;
@@ -352,7 +352,7 @@
             }
             groupSP = '';
             sub_total = 0;
-            vat = 0;
+            // vat = 0;
         }
         document.getElementById("card-product").innerHTML = main;
         restoreCheckedState();
@@ -389,8 +389,8 @@
             nodeList.forEach(function (input) {
                 if (input.checked === true) {
                     sub_total_global += parseInt(input.getAttribute('data-sub-total'));
-                    vat_global += parseInt(input.getAttribute('data-vat'));
-                    console.log("after choose group if: " + sub_total_global, vat_global);
+                    // vat_global += parseInt(input.getAttribute('data-vat'));
+                    console.log("after choose group if: " + sub_total_global);
                     count = input.getAttribute('data-count');
                     cartId = input.getAttribute('data-id-cart');
                     product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
@@ -400,14 +400,14 @@
                     }
                 } else {
                     sub_total_global = sub_total_global - parseInt(input.getAttribute('data-sub-total'));
-                    vat_global = vat_global - parseInt(input.getAttribute('data-vat'));
+                    // vat_global = vat_global - parseInt(input.getAttribute('data-vat'));
                 }
             })
             console.log("cart : ")
             selectedCart.forEach(function (item) {
                 console.log(item);
             })
-            handleInvoiceCalculation(sub_total_global, vat_global);
+            handleInvoiceCalculation(sub_total_global);
         } else {
             selectedProductGroup.splice(check, 1);
             if (selectedProductGroup.length >= 0) {
@@ -421,8 +421,8 @@
                 nodeList.forEach(function (input) {
                     if (input.checked === false) {
                         sub_total_global = sub_total_global - parseInt(input.getAttribute('data-sub-total'));
-                        vat_global = vat_global - parseInt(input.getAttribute('data-vat'));
-                        console.log("after choose group: " + sub_total_global, vat_global);
+                        // vat_global = vat_global - parseInt(input.getAttribute('data-vat'));
+                        console.log("after choose group: " + sub_total_global);
                         count = input.getAttribute('data-count');
                         cartId = input.getAttribute('data-id-cart');
                         product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
@@ -437,7 +437,7 @@
                     console.log(item);
                 })
                 console.log(selectedProductGroup);
-                handleInvoiceCalculation(sub_total_global, vat_global);
+                handleInvoiceCalculation(sub_total_global);
             }
             if (selectedProductGroup.length === 0) {
                 unchooseAll();
@@ -515,7 +515,7 @@
             console.log(item);
         })
         var sub_total = 0;
-        var vat = 0;
+        // var vat = 0;
         var product = {};
         var cartId;
         var arrCheckboxAll = document.querySelectorAll('.checkbox-single[type=checkbox]');
@@ -526,8 +526,8 @@
             if (input.checked === true) {
                 console.log(input);
                 sub_total += parseInt(input.getAttribute('data-sub-total'));
-                vat += parseInt(input.getAttribute('data-vat'));
-                console.log("after choose product : " + sub_total, vat);
+                // vat += parseInt(input.getAttribute('data-vat'));
+                console.log("after choose product : " + sub_total);
 
                 console.log("cart choose product: ", JSON.stringify(product));
                 selectedCart.forEach(function (item) {
@@ -547,22 +547,22 @@
         selectedCart.forEach(function (item) {
             console.log(item);
         })
-        handleInvoiceCalculation(sub_total, vat);
+        handleInvoiceCalculation(sub_total);
         areAllChecked();
     }
 
     let promotions = [];
 
-    function handleInvoiceCalculation(sub_total, vat) {
+    function handleInvoiceCalculation(sub_total) {
         sub_total_global = sub_total;
-        vat_global = vat;
-        if (sub_total !== 0 && vat !== 0) {
+        // vat_global = vat;
+        if (sub_total !== 0) {
             document.getElementById("sub-total").innerText = formatMoney(sub_total);
-            document.getElementById("vat").innerText = formatMoney(vat);
+            // document.getElementById("vat").innerText = formatMoney(vat);
             getInformationPromotion();
         } else {
             document.getElementById("sub-total").innerText = "";
-            document.getElementById("vat").innerText = "";
+            // document.getElementById("vat").innerText = "";
             document.getElementById("total-amount").innerText = "";
             getInformationPromotion();
         }
@@ -581,7 +581,7 @@
                 let total_amount = 0;
                 let discounted_amount = sub_total_global; // Khởi tạo biến để lưu số tiền sau khi áp dụng giảm giá
 
-                if (promotion !== undefined) {
+                if (promotion !== undefined && promotion.trangThai === true) {
                     promotion_applies = promotion;
 
                     if (parseInt(sub_total_global) >= parseInt(promotion.giaTriDonHang)) {
@@ -597,7 +597,7 @@
                         }
 
                         // Tính tổng số tiền sau khi đã giảm giá và cộng VAT
-                        total_amount = discounted_amount + vat_global;
+                        total_amount = discounted_amount;
                         document.getElementById("total-amount").innerText = formatMoney(total_amount);
 
                     } else {
@@ -606,13 +606,13 @@
                             ' sẽ được giảm ' + (promotion.loaiGiamGia === true ? promotion.giaTriGiam + '%' : formatMoney(promotion.giaTriGiam)) + ' cho đơn hàng!)';
 
                         // Không đủ điều kiện giảm giá, chỉ tính VAT
-                        total_amount = sub_total_global + vat_global;
+                        total_amount = sub_total_global;
                         document.getElementById('promotion-value').innerText = '';
                         document.getElementById("total-amount").innerText = formatMoney(total_amount);
                     }
                 } else {
                     // Không có khuyến mãi, chỉ tính VAT
-                    total_amount = sub_total_global + vat_global;
+                    total_amount = sub_total_global;
                     document.getElementById('promotion-message').innerText = '';
                     document.getElementById('promotion-title').innerText = '';
                     document.getElementById('promotion-value').innerText = '- 0 %';
@@ -649,7 +649,7 @@
 
         function chooseAll() {
             sub_total_global = 0;
-            vat_global = 0;
+            // vat_global = 0;
             var cartId;
             var product = {};
             var arrCheckboxAll = document.querySelectorAll('.checkbox-single[type=checkbox]');
@@ -662,7 +662,7 @@
             arrCheckboxAll.forEach(function (input) {
                 input.checked = true;
                 sub_total_global += parseInt(input.getAttribute('data-sub-total'));
-                vat_global += parseInt(input.getAttribute('data-vat'));
+                // vat_global += parseInt(input.getAttribute('data-vat'));
                 count = input.getAttribute('data-count');
                 cartId = input.getAttribute('data-id-cart');
                 product = {gioHang: cartId, soLuong: count, sanPhamChiTiet: input.value};
@@ -670,7 +670,7 @@
                 selectedCart.push(product);
                 saveStatusCheck.push(input.value);
             })
-            handleInvoiceCalculation(sub_total_global, vat_global);
+            handleInvoiceCalculation(sub_total_global);
             console.log(selectedProduct);
             console.log("Cart choose all: ")
             selectedCart.forEach(function (item) {
@@ -702,7 +702,7 @@
                         </button>`;
             document.getElementById('button-choose').innerHTML = button;
             sub_total_global = 0;
-            vat_global = 0;
+            // vat_global = 0;
         }
 
         function deleteProduct(id) {
@@ -874,7 +874,7 @@
                     console.log(response);
                     if (response.statusText === "success") {
                         loadPage();
-                        handleInvoiceCalculation(sub_total_global + price, vat_global + (price * 0.1));
+                        handleInvoiceCalculation(sub_total_global + price);
                     } else if (response.statusText === "failure") {
                         if (response.message === "The product is out of stock") {
                             swal.fire({
@@ -957,7 +957,7 @@
                         console.log(response);
                         if (response.statusText === "success" && response.message === "success") {
                             loadPage();
-                            handleInvoiceCalculation(sub_total_global - price, vat_global - (price * 0.1));
+                            handleInvoiceCalculation(sub_total_global - price);
                         }
                     },
                     error: function (xhr, status, error) {

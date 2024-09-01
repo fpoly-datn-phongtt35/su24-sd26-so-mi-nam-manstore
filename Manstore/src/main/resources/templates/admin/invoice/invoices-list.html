@@ -606,7 +606,7 @@
             if (list[i].trangThai === 6) {
                 statusBadge = '<span class="badge bg-danger">Huỷ</span>'
             }
-            let formattedMoney = formatmoney(money + (money * 0.1) + list[i].phiVanChuyen);
+            let formattedMoney = formatmoney(money + list[i].phiVanChuyen);
             main += `<tr >
                             <td scope="row">${list[i].ma}</td>
                             <td scope="row">${customerName}</td>
@@ -875,8 +875,8 @@
                    </div>
             `;
 
-            let vat = total_amount * 0.1;
-            let total_before_discount = total_amount + vat;
+            // let vat = total_amount * 0.1;
+            let total_before_discount = total_amount;
             let total = total_before_discount; // Khởi tạo `total` với `total_before_discount`
             console.log("Phí Ship ", shipp_fee);
 
@@ -933,10 +933,6 @@
 <tr>
     <td>Tổng tiền <small class="text-muted">(Trước thuế)</small></td>
     <td class="text-end">${formatmoney(total_amount)}</td>
-</tr>
-<tr>
-    <td>VAT (10%)</td>
-    <td class="text-end">${formatmoney(vat)}</td>
 </tr>
 <tr>
     <td>Khuyến Mãi <small class="text-muted" id="promotion-title">${promotion_title}</small></td>
