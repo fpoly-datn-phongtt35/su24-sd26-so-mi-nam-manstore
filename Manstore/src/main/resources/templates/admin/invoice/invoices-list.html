@@ -1043,7 +1043,7 @@
                 document.getElementById('shipping-fee').style.paddingRight = '0';
                 document.getElementById('shipping-fee').classList.add('text-end');
             }
-            if (data[0].idHoaDon.trangThai === 3 || data[0].idHoaDon.trangThai === 4
+            if (data[0].idHoaDon.trangThai === 2 || data[0].idHoaDon.trangThai === 3 || data[0].idHoaDon.trangThai === 4
                 || data[0].idHoaDon.trangThai === 5 || data[0].idHoaDon.trangThai === 6) {
                 let arr_btn_plus = document.querySelectorAll('.plus');
                 arr_btn_plus.forEach(function (item) {
@@ -1311,7 +1311,7 @@
             showCancelButton: true,
             cancelButtonText: 'Không'
         }).then((result) => {
-            if (parseInt(status) === 3 && ship === '') {
+            if (parseInt(status) === 2 && ship === '') {
                 swal.fire({
                     icon: 'warning',
                     title: 'Thông báo',
