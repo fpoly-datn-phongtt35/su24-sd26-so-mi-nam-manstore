@@ -220,7 +220,7 @@
                                 <a aria-selected="false" class="nav-link fs-15" data-bs-toggle="tab"
                                    href="#custom-v-pills-order"
                                    role="tab" tabindex="-1"><i class="bi bi-bag align-middle me-1"></i>
-                                    <span>Đơn hàng</span>
+                                    <span>Hoá đơn</span>
                                 </a>
                             </li>
                             <li class="nav-item " role="presentation">
@@ -357,7 +357,7 @@
                                                 <th scope="col">Thời gian đặt</th>
                                                 <th scope="col">Tổng tiền</th>
                                                 <th scope="col">Trạng thái</th>
-                                                <th scope="col">Action</th>
+                                                <th scope="col">Hành Động</th>
                                             </tr>
                                             </thead>
                                             <tbody id="order-list">
@@ -835,8 +835,7 @@
                                     <div class="card-body p-4">
                                         <div class="row g-3">
                                             <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã đơn
-                                                    hàng</p>
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã hoá đơn</p>
                                                 <h5 class="fs-15 mb-0">#<span id="invoice-no"></span></h5>
                                             </div>
                                             <!--end col-->
@@ -855,7 +854,7 @@
                                             <!--end col-->
                                             <div class="col-lg-3 col-6">
                                                 <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Tổng
-                                                    tiền <span class="text-muted fs-12">(Đã bao gồm VAT)</span></p>
+                                                    tiền</p>
                                                 <h5 class="fs-15 mb-0"><span id="invoice-total"></span></h5>
                                             </div>
                                             <!--end col-->
@@ -921,16 +920,15 @@
                                                        style="width:25%">
                                                     <tbody>
                                                     <tr>
-                                                        <td>Tổng tiền (<span
-                                                                class="text-danger">Đã bao gồm VAT</span>)
+                                                        <td>Tổng tiền
                                                         </td>
                                                         <td class="text-end" id="td-total"></td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td>Giảm giá <small class="text-muted" id="promotion-title">(-0%)</small>
+                                                        <td>Giảm giá <small class="text-muted" id="promotion-title"></small>
                                                         </td>
-                                                        <td class="text-end" id="promotion-value">0đ</td>
+                                                        <td class="text-end" id="promotion-value"></td>
                                                     </tr>
                                                     <tr id="hidden-shipping">
                                                         <td>Phí ship</td>
@@ -1038,8 +1036,8 @@
     //     document.getElementById('users-img-field').src = account.anhKhachHang;
     //     document.getElementById('src-img').value = account.anhKhachHang;
     // } else {
-    document.getElementById('user-avatar').src = '/assets/images/users/user-dummy-img.jpg';
-    document.getElementById('users-img-field').src = '/assets/images/users/user-dummy-img.jpg';
+    document.getElementById('user-avatar').src = '/assets/images/users/avatar-3.jpg';
+    document.getElementById('users-img-field').src = '/assets/images/users/avatar-3.jpg';
     document.getElementById('src-img').value = null;
     // }
 </script>
@@ -2378,7 +2376,7 @@
             document.getElementById('invoice-status').innerHTML = statusBadge;
             order += `<tr><td>${list[i].ma}</td>
                               <td><span class="text-muted fs-13">${formatDateTime(list[i].ngayTao)}</span></td>
-                              <td class="fw-medium fs-13">${formatMoney(list[i].tongTien + (list[i].tongTien / 10))}</td>
+                              <td class="fw-medium fs-13">${formatMoney(list[i].tongTien + list[i].phiVanChuyen)}</td>
                               <td class="fw-medium fs-13" >${statusBadge}</td>
                               <td><a href="#myModalTrackOrder" onclick="loadModalOrderDetails(${list[i].id})" data-bs-toggle="modal" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a></td>
                               </tr>`;
@@ -2432,248 +2430,92 @@
         return formattedDateTime;
     }
 
-    // async function loadModalOrderDetails(id) {
-    //     var url = "/api/client/account/order/track-order/" + id;
-    //     const responseOrder = await fetch(url, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-    //         }
-    //     });
-    //     var order = await responseOrder.json();
-    //     //Order detail
-    //     //--1 Label
-    //     document.getElementById('modalLabel').innerHTML = 'Đơn hàng #' + order.ma;
-    //
-    //     //--2 Status date
-    //     var urlStatusDate = "/api/client/account/statusDate/" + id;
-    //     const responseStatusDate = await fetch(urlStatusDate, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-    //         }
-    //     });
-    //     var statusDate = await responseStatusDate.json();
-    //     for (let i = 0; i < statusDate.length; i++) {
-    //         if (statusDate[i].idHoaDon.id === id) {
-    //             if (statusDate[i].trangThaiDonHang === 1) {
-    //                 document.getElementById('date-tt1').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
-    //                 document.getElementById('date-span1').innerHTML = formatDateTime(statusDate[i].ngayGui);
-    //             } else if (statusDate[i].trangThaiDonHang === 2) {
-    //                 document.getElementById('date-tt2').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
-    //                 document.getElementById('date-span2').innerHTML = formatDateTime(statusDate[i].ngayGui);
-    //             } else if (statusDate[i].trangThaiDonHang === 3) {
-    //                 document.getElementById('date-tt3').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
-    //                 document.getElementById('date-span3').innerHTML = formatDateTime(statusDate[i].ngayGui);
-    //             } else if (statusDate[i].trangThaiDonHang === 4) {
-    //                 document.getElementById('date-tt4').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
-    //                 document.getElementById('date-span4').innerHTML = formatDateTime(statusDate[i].ngayGui);
-    //             } else if (statusDate[i].trangThaiDonHang === 5) {
-    //                 document.getElementById('date-tt5').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
-    //                 document.getElementById('date-span5').innerHTML = formatDateTime(statusDate[i].ngayGui);
-    //             } else if (statusDate[i].trangThaiDonHang === 6) {
-    //                 document.getElementById('date-tt6').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
-    //                 document.getElementById('date-span6').innerHTML = formatDateTime(statusDate[i].ngayGui);
-    //
-    //             }
-    //         }
-    //     }
-    //
-    //     //--3
-    //     document.getElementById('invoice-no').innerHTML = order.ma;
-    //     document.getElementById('invoice-date-time').innerHTML = formatDateTime(order.ngayTao);
-    //     document.getElementById('invoice-total').innerHTML = formatMoney(order.tongTien + (order.tongTien * 0.1));
-    //
-    //     //--4
-    //     if (order.idThongTinVanChuyen !== null) {
-    //         document.getElementById('shipping-name').innerHTML = order.idThongTinVanChuyen.tenNguoiNhan;
-    //         document.getElementById('shipping-address-line-1').innerHTML = order.idThongTinVanChuyen.diaChiCuThe + ', ' + order.idThongTinVanChuyen.xaPhuongThitran + ', ' + order.idThongTinVanChuyen.quanHuyen + ', ' + order.idThongTinVanChuyen.tinhThanhpho;
-    //         document.getElementById('shipping-phone-no').innerHTML = order.idThongTinVanChuyen.sdt;
-    //     }
-    //
-    //     //--5
-    //     var urlOrderDetail = "/api/client/account/orderDetail/" + id;
-    //     const responseOrderDetail = await fetch(urlOrderDetail, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-    //         }
-    //     });
-    //     var listOrderDetail = await responseOrderDetail.json();
-    //     var modalProductList = '';
-    //     var total = 0;
-    //     for (let i = 0; i < listOrderDetail.length; i++) {
-    //         var urlGetPicture = '/api/client/product_detail/picture-detail/' + listOrderDetail[i].idChiTietSanPham.idSanPham.id + '/' + listOrderDetail[i].idChiTietSanPham.idMauSac.id;
-    //         const pictureResponse = await fetch(urlGetPicture, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-    //             }
-    //         });
-    //
-    //
-    //         let dataPicture = await pictureResponse.json();
-    //         console.log('Image data received loadOderDetail:', dataPicture);
-    //
-    //         let img;
-    //
-    //         // Xử lý khi không có ảnh hoặc có lỗi
-    //         if (dataPicture.statusText === "failure" || !Array.isArray(dataPicture) || dataPicture.length === 0) {
-    //             img = `<img src="http://localhost:8080/assets/images/products/img-8.png" alt="" class="avatar-md">`;
-    //         } else {
-    //             let fullUrl = `http://localhost:8080/assets/images/products/${dataPicture[0]}`;
-    //             img = `<img src="${fullUrl}" alt="" class="avatar-md">`;
-    //         }
-    //
-    //
-    //         modalProductList += `<tr><th scope="row">${i + 1}</th><td class="text-start">
-    //         <div class="d-flex align-items-center gap-2">
-    //          <div class="avatar-md d-flex justify-content-center align-items-center">
-    //          <div class="image-container" style="width: 65px;height: 66px;">
-    //                 ${img}</div></div>
-    //                                                     <div class="flex-grow-1">
-    //                                                         <h6>${listOrderDetail[i].idChiTietSanPham.idSanPham.ten}</h6>
-    //                                                         <p class="text-muted mb-0">${listOrderDetail[i].idChiTietSanPham.idMauSac.ten} & ${listOrderDetail[i].idChiTietSanPham.idSize.ten}</p>
-    //                                                     </div>
-    //                                                 </div>
-    //                                             </td>
-    //                                             <td>${formatMoney(listOrderDetail[i].giaThoiDiemMua)}</td>
-    //                                             <td>${listOrderDetail[i].soLuong}</td>
-    //                                             <td class="">${formatMoney(listOrderDetail[i].giaThoiDiemMua * listOrderDetail[i].soLuong)}</td>
-    //                                         </tr>`;
-    //         total += listOrderDetail[i].giaThoiDiemMua * listOrderDetail[i].soLuong;
-    //     }
-    //     if (listOrderDetail[0].idHoaDon.trangThaiDonHang === 5 || listOrderDetail[0].idHoaDon.trangThaiDonHang === 6) {
-    //         document.getElementById('modal-repurchase').style.display = 'block';
-    //         var element = document.getElementById("table-reason");
-    //         element.classList.remove("d-none");
-    //         document.getElementById("reason-failure").innerText = listOrderDetail[0].idHoaDon.ghiChu;
-    //     } else {
-    //         document.getElementById('modal-repurchase').style.display = 'none';
-    //         var element = document.getElementById("table-reason");
-    //         element.classList.add("d-none");
-    //     }
-    //     document.getElementById('modal-products-list').innerHTML = modalProductList;
-    //
-    //     // //--6
-    //     // total = total + (total / 10);
-    //     // document.getElementById('td-total').innerHTML = formatMoney(total);
-    //     // if (order.idThongTinVanChuyen === null) {
-    //     //     document.getElementById("hidden-shipping").classList.add('d-none');
-    //     //     document.getElementById('information-invoice').style.display = 'none';
-    //     // } else {
-    //     //     document.getElementById("hidden-shipping").style.display = 'block';
-    //     //     document.getElementById("hidden-shipping").classList.remove('d-none');
-    //     //     document.getElementById('td-shipping-fees').innerHTML = formatMoney(order.phiVanChuyen);
-    //     // }
-    //     //
-    //     // if (listOrderDetail[0].idHoaDon.idDotGiamGia !== null) {
-    //     //     if (listOrderDetail[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
-    //     //         total = total - (total * (listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
-    //     //         document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].idHoaDon.idDotGiamGia.ten + ')';
-    //     //         document.getElementById('promotion-value').innerHTML = '- ' + listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
-    //     //     } else {
-    //     //         total = total - listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam;
-    //     //         document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].idHoaDon.idDotGiamGia.ten + ')';
-    //     //         document.getElementById('promotion-value').innerHTML = '- ' + formatMoney(listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam);
-    //     //     }
-    //     // }
-    //     // if (listOrderDetail[0].idHoaDon.idDotGiamGia !== null) {
-    //     //     if (order.phiVanChuyen !== null)
-    //     //         document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
-    //     //     else
-    //     //         document.getElementById('td-total-all').innerHTML = formatMoney(total);
-    //     // } else {
-    //     //     if (order.phiVanChuyen !== null)
-    //     //         document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
-    //     //     else
-    //     //         document.getElementById('td-total-all').innerHTML = formatMoney(total);
-    //     // }
-    //
-    //
-    //
-    //     //Cancel order
-    //     document.getElementById('modalCancelOrder').setAttribute('data-value', order.id);
-    //     document.getElementById("modal-CancelOrder-code").innerHTML = order.ma;
-    //
-    //     // //Repurchase order
-    //     // document.getElementById('modalRepurchaseOrder').setAttribute('data-value', order.id);
-    //     // document.getElementById("modal-RepurchaseOrder-code").innerHTML = order.maDonHang;
-    // }
-
     async function loadModalOrderDetails(id) {
-        // Fetch order details
-        const url = `/api/client/account/order/track-order/${id}`;
+        var url = "/api/client/account/order/track-order/" + id;
         const responseOrder = await fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             }
         });
-        const order = await responseOrder.json();
+        var order = await responseOrder.json();
+        //Order detail
+        //--1 Label
+        document.getElementById('modalLabel').innerHTML = 'Đơn hàng #' + order.ma;
 
-        // Update modal label
-        document.getElementById('modalLabel').innerText = `Đơn hàng #${order.ma}`;
-
-        // Fetch status dates
-        const urlStatusDate = `/api/client/account/statusDate/${id}`;
+        //--2 Status date
+        var urlStatusDate = "/api/client/account/statusDate/" + id;
         const responseStatusDate = await fetch(urlStatusDate, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             }
         });
-        const statusDate = await responseStatusDate.json();
+        var statusDate = await responseStatusDate.json();
+        for (let i = 0; i < statusDate.length; i++) {
+            if (statusDate[i].idHoaDon.id === id) {
+                if (statusDate[i].trangThaiDonHang === 1) {
+                    document.getElementById('date-tt1').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span1').innerHTML = formatDateTime(statusDate[i].ngayGui);
+                } else if (statusDate[i].trangThaiDonHang === 2) {
+                    document.getElementById('date-tt2').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span2').innerHTML = formatDateTime(statusDate[i].ngayGui);
+                } else if (statusDate[i].trangThaiDonHang === 3) {
+                    document.getElementById('date-tt3').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span3').innerHTML = formatDateTime(statusDate[i].ngayGui);
+                } else if (statusDate[i].trangThaiDonHang === 4) {
+                    document.getElementById('date-tt4').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span4').innerHTML = formatDateTime(statusDate[i].ngayGui);
+                } else if (statusDate[i].trangThaiDonHang === 5) {
+                    document.getElementById('date-tt5').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span5').innerHTML = formatDateTime(statusDate[i].ngayGui);
+                } else if (statusDate[i].trangThaiDonHang === 6) {
+                    document.getElementById('date-tt6').setAttribute('data-bs-original-title', formatDateTime(statusDate[i].ngayGui));
+                    document.getElementById('date-span6').innerHTML = formatDateTime(statusDate[i].ngayGui);
 
-        // Update status dates
-        statusDate.forEach(item => {
-            if (item.idHoaDon.id === id) {
-                const statusElement = document.getElementById(`date-tt${item.trangThaiDonHang}`);
-                const dateSpan = document.getElementById(`date-span${item.trangThaiDonHang}`);
-                if (statusElement && dateSpan) {
-                    statusElement.setAttribute('data-bs-original-title', formatDateTime(item.ngayGui));
-                    dateSpan.innerHTML = formatDateTime(item.ngayGui);
                 }
             }
-        });
-
-        // Update order information
-        document.getElementById('invoice-no').innerText = order.ma;
-        document.getElementById('invoice-date-time').innerText = formatDateTime(order.ngayTao);
-        document.getElementById('invoice-total').innerText = formatMoney(order.tongTien + (order.tongTien * 0.1));
-
-        // Update shipping information
-        if (order.idThongTinVanChuyen) {
-            document.getElementById('shipping-name').innerText = order.idThongTinVanChuyen.tenNguoiNhan;
-            document.getElementById('shipping-address-line-1').innerText = `${order.idThongTinVanChuyen.diaChiCuThe}, ${order.idThongTinVanChuyen.xaPhuongThitran}, ${order.idThongTinVanChuyen.quanHuyen}, ${order.idThongTinVanChuyen.tinhThanhpho}`;
-            document.getElementById('shipping-phone-no').innerText = order.idThongTinVanChuyen.sdt;
         }
 
-        // Fetch order details
-        const urlOrderDetail = `/api/client/account/orderDetail/${id}`;
+        //--3
+        document.getElementById('invoice-no').innerHTML = order.ma;
+        document.getElementById('invoice-date-time').innerHTML = formatDateTime(order.ngayTao);
+        document.getElementById('invoice-total').innerHTML = formatMoney(order.tongTien);
+
+        //--4
+        if (order.idThongTinVanChuyen !== null) {
+            document.getElementById('shipping-name').innerHTML = order.idThongTinVanChuyen.tenNguoiNhan;
+            document.getElementById('shipping-address-line-1').innerHTML = order.idThongTinVanChuyen.diaChiCuThe + ', ' + order.idThongTinVanChuyen.xaPhuongThitran + ', ' + order.idThongTinVanChuyen.quanHuyen + ', ' + order.idThongTinVanChuyen.tinhThanhpho;
+            document.getElementById('shipping-phone-no').innerHTML = order.idThongTinVanChuyen.sdt;
+        }
+
+        //--5
+        var urlOrderDetail = "/api/client/account/orderDetail/" + id;
         const responseOrderDetail = await fetch(urlOrderDetail, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             }
         });
-        const listOrderDetail = await responseOrderDetail.json();
-
-        let modalProductList = '';
-        let total = 0;
-
+        var listOrderDetail = await responseOrderDetail.json();
+        var modalProductList = '';
+        var total = 0;
         for (let i = 0; i < listOrderDetail.length; i++) {
-            const productDetail = listOrderDetail[i].idChiTietSanPham;
-            const urlGetPicture = `/api/client/product_detail/picture-detail/${productDetail.idSanPham.id}/${productDetail.idMauSac.id}`;
+            var urlGetPicture = '/api/client/product_detail/picture-detail/' + listOrderDetail[i].idChiTietSanPham.idSanPham.id + '/' + listOrderDetail[i].idChiTietSanPham.idMauSac.id;
             const pictureResponse = await fetch(urlGetPicture, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("user_token")
                 }
             });
-            const dataPicture = await pictureResponse.json();
+
+
+            let dataPicture = await pictureResponse.json();
+            console.log('Image data received loadOderDetail:', dataPicture);
 
             let img;
+
+            // Xử lý khi không có ảnh hoặc có lỗi
             if (dataPicture.statusText === "failure" || !Array.isArray(dataPicture) || dataPicture.length === 0) {
                 img = `<img src="http://localhost:8080/assets/images/products/img-8.png" alt="" class="avatar-md">`;
             } else {
@@ -2681,51 +2523,87 @@
                 img = `<img src="${fullUrl}" alt="" class="avatar-md">`;
             }
 
-            modalProductList += `<tr>
-            <th scope="row">${i + 1}</th>
-            <td class="text-start">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="avatar-md d-flex justify-content-center align-items-center">
-                        <div class="image-container" style="width: 65px;height: 66px;">
-                            ${img}
-                        </div>
-                    </div>
-                    <div class="flex-grow-1">
-                        <h6>${productDetail.idSanPham.ten}</h6>
-                        <p class="text-muted mb-0">${productDetail.idMauSac.ten} & ${productDetail.idSize.ten}</p>
-                    </div>
-                </div>
-            </td>
-            <td>${formatMoney(listOrderDetail[i].giaThoiDiemMua)}</td>
-            <td>${listOrderDetail[i].soLuong}</td>
-            <td class="">${formatMoney(listOrderDetail[i].giaThoiDiemMua * listOrderDetail[i].soLuong)}</td>
-        </tr>`;
+
+            modalProductList += `<tr><th scope="row">${i + 1}</th><td class="text-start">
+            <div class="d-flex align-items-center gap-2">
+             <div class="avatar-md d-flex justify-content-center align-items-center">
+             <div class="image-container" style="width: 65px;height: 66px;">
+                    ${img}</div></div>
+                                                        <div class="flex-grow-1">
+                                                            <h6>${listOrderDetail[i].idChiTietSanPham.idSanPham.ten}</h6>
+                                                            <p class="text-muted mb-0">${listOrderDetail[i].idChiTietSanPham.idMauSac.ten} & ${listOrderDetail[i].idChiTietSanPham.idSize.ten}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>${formatMoney(listOrderDetail[i].giaThoiDiemMua)}</td>
+                                                <td>${listOrderDetail[i].soLuong}</td>
+                                                <td class="">${formatMoney(listOrderDetail[i].giaThoiDiemMua * listOrderDetail[i].soLuong)}</td>
+                                            </tr>`;
             total += listOrderDetail[i].giaThoiDiemMua * listOrderDetail[i].soLuong;
         }
-
-        // Update total and other details
         if (listOrderDetail[0].idHoaDon.trangThaiDonHang === 5 || listOrderDetail[0].idHoaDon.trangThaiDonHang === 6) {
             document.getElementById('modal-repurchase').style.display = 'block';
-            document.getElementById("table-reason").classList.remove("d-none");
+            var element = document.getElementById("table-reason");
+            element.classList.remove("d-none");
             document.getElementById("reason-failure").innerText = listOrderDetail[0].idHoaDon.ghiChu;
         } else {
             document.getElementById('modal-repurchase').style.display = 'none';
-            document.getElementById("table-reason").classList.add("d-none");
+            var element = document.getElementById("table-reason");
+            element.classList.add("d-none");
         }
-
         document.getElementById('modal-products-list').innerHTML = modalProductList;
 
-        // Calculate and display totals
-        let vat = total * 0.1;
-        let totalBeforeDiscount = total + vat;
+        //--6
+        // total = total + (total / 10);
+        // document.getElementById('td-total').innerHTML = formatMoney(total);
+        // if (order.idThongTinVanChuyen === null) {
+        //     document.getElementById("hidden-shipping").classList.add('d-none');
+        //     document.getElementById('information-invoice').style.display = 'none';
+        // } else {
+        //     document.getElementById("hidden-shipping").style.display = 'block';
+        //     document.getElementById("hidden-shipping").classList.remove('d-none');
+        //     document.getElementById('td-shipping-fees').innerHTML = formatMoney(order.phiVanChuyen);
+        // }
+        //
+        // if (listOrderDetail[0].idHoaDon.idDotGiamGia !== null) {
+        //     if (listOrderDetail[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
+        //         total = total - (total * (listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
+        //         document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].idHoaDon.idDotGiamGia.ten + ')';
+        //         document.getElementById('promotion-value').innerHTML = '- ' + listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
+        //     } else {
+        //         total = total - listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam;
+        //         document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].idHoaDon.idDotGiamGia.ten + ')';
+        //         document.getElementById('promotion-value').innerHTML = '- ' + formatMoney(listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam);
+        //     }
+        // }
+        // if (listOrderDetail[0].idHoaDon.idDotGiamGia !== null) {
+        //     if (order.phiVanChuyen !== null)
+        //         document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
+        //     else
+        //         document.getElementById('td-total-all').innerHTML = formatMoney(total);
+        // } else {
+        //     if (order.phiVanChuyen !== null)
+        //         document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
+        //     else
+        //         document.getElementById('td-total-all').innerHTML = formatMoney(total);
+        // }
+
+        // let vat = total * 0.1;
+        let totalBeforeDiscount = total;
         let discount = 0;
+        let value='';
+        let namepromotion = '';
 
         if (listOrderDetail[0].idHoaDon.idDotGiamGia) {
             let promotion = listOrderDetail[0].idHoaDon.idDotGiamGia;
-            if (promotion.loaiGiamGia) {
+            if (promotion.loaiGiamGia === true) {
                 discount = total * (promotion.giaTriGiam / 100);
+                value = '- ' + promotion.giaTriGiam + '%';
+                namepromotion = '(' + promotion.ten + ')';
             } else {
                 discount = promotion.giaTriGiam;
+                value = '- ' + formatmoney(promotion.giaTriGiam);
+                namepromotion = '(' + promotion.ten + ')';
             }
         }
 
@@ -2733,27 +2611,19 @@
         let finalTotal = totalBeforeDiscount - discount + shippingFee;
 
         document.getElementById('td-total').innerText = formatMoney(totalBeforeDiscount);
-        document.getElementById('promotion-value').innerText = formatMoney(discount);
+        document.getElementById('promotion-value').innerText = value;
+        document.getElementById('promotion-title').innerHTML = namepromotion;
         document.getElementById('td-shipping-fees').innerText = formatMoney(shippingFee);
         document.getElementById('td-total-all').innerText = formatMoney(finalTotal);
 
-
-        // Handle cancel and repurchase visibility
-        if (order.trangThaiDonHang === 5 || order.trangThaiDonHang === 6) {
-            document.getElementById('modal-repurchase').style.display = 'block';
-            document.getElementById('modal-cancel').style.display = 'block';
-        } else {
-            document.getElementById('modal-repurchase').style.display = 'none';
-            document.getElementById('modal-cancel').style.display = 'none';
-        }
-
-        // Set up cancel order button
+        //Cancel order
         document.getElementById('modalCancelOrder').setAttribute('data-value', order.id);
-        document.getElementById("modal-CancelOrder-code").innerText = order.ma;
+        document.getElementById("modal-CancelOrder-code").innerHTML = order.ma;
+
+        // //Repurchase order
+        // document.getElementById('modalRepurchaseOrder').setAttribute('data-value', order.id);
+        // document.getElementById("modal-RepurchaseOrder-code").innerHTML = order.maDonHang;
     }
-
-
-
 
     function showConfirmPopupProfile() {
         swal.fire({
@@ -2881,7 +2751,7 @@
                                 swal.fire({
                                     icon: 'error',
                                     title: 'Thông Báo',
-                                    text: 'Không thể huỷ do đơn hàng đã được xác nhận!',
+                                    text: 'Không thể huỷ do hoá đơn đã được xác nhận!',
                                     confirmButtonText: 'OK',
                                 })
                             } else {
@@ -3014,31 +2884,31 @@
         }
     }
 
-    async function handleRepurchaseOrder() {
-        let promotion = await getInformationPromotion();
-        var id = document.getElementById("modalCancelOrder").getAttribute('data-value');
-        sessionStorage.removeItem("listCart");
-        sessionStorage.removeItem("product_buy_now");
-        localStorage.removeItem("promotion_repurchase");
-        if (promotion[0] !== undefined) {
-            localStorage.setItem("promotion_repurchase", JSON.stringify(promotion[0]));
-        }
-        localStorage.removeItem('invoice_repurchase');
-        localStorage.setItem('invoice_repurchase', id);
-        window.location.href = '/order';
-    }
-
-    async function getInformationPromotion() {
-        let url = '/public/promotion/find-by-date?type=all';
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            }
-        });
-        const data = await response.json();
-        return data;
-    }
+    // async function handleRepurchaseOrder() {
+    //     let promotion = await getInformationPromotion();
+    //     var id = document.getElementById("modalCancelOrder").getAttribute('data-value');
+    //     sessionStorage.removeItem("listCart");
+    //     sessionStorage.removeItem("product_buy_now");
+    //     localStorage.removeItem("promotion_repurchase");
+    //     if (promotion[0] !== undefined) {
+    //         localStorage.setItem("promotion_repurchase", JSON.stringify(promotion[0]));
+    //     }
+    //     localStorage.removeItem('invoice_repurchase');
+    //     localStorage.setItem('invoice_repurchase', id);
+    //     window.location.href = '/order';
+    // }
+    //
+    // async function getInformationPromotion() {
+    //     let url = '/public/promotion/find-by-date?type=all';
+    //     const response = await fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+    //         }
+    //     });
+    //     const data = await response.json();
+    //     return data;
+    // }
 
     function handleProduct() {
         window.location.href = '/client/product';

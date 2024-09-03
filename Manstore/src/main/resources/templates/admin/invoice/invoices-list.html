@@ -22,12 +22,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Đơn hàng</h4>
+                            <h4 class="mb-sm-0">Hoá Đơn</h4>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Đơn Hàng</a></li>
-                                    <li class="breadcrumb-item active">Danh Sách Đơn Hàng</li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Hoá Đơn</a></li>
+                                    <li class="breadcrumb-item active">Danh Sách Hoá Đơn</li>
                                 </ol>
                             </div>
 
@@ -41,7 +41,7 @@
                         <div class="card" id="invoiceList">
                             <div class="card-header border-0">
                                 <div class="d-flex align-items-center">
-                                    <h5 class="card-title mb-0 flex-grow-1">Danh Sách Đơn Hàng</h5>
+                                    <h5 class="card-title mb-0 flex-grow-1">Danh Sách Hoá Đơn</h5>
                                 </div>
                             </div>
                             <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
@@ -51,7 +51,7 @@
                                             <label class="form-label" for="search-input">Tìm Kiếm</label>
                                             <div class="search-box">
                                                 <input type="text" class="form-control search bg-light border-light"
-                                                       placeholder="Mã đơn hàng" id="search-input"
+                                                       placeholder="Mã hoá đơn" id="search-input"
                                                        onkeyup="loadPage()">
                                                 <i class="ri-search-line search-icon"></i>
                                             </div>
@@ -78,7 +78,7 @@
                                                 <select class="form-control bg-light border-light"
                                                         id="status-select"
                                                         onchange="loadPage()">
-                                                    <option value="-1" selected>Tất Cả</option>
+<!--                                                    <option value="-1" selected>Tất Cả</option>-->
                                                     <option value="1">Chờ Xác Nhận</option>
                                                     <option value="2">Đang Xử Lý</option>
                                                     <option value="3">Đang Giao Hàng</option>
@@ -115,13 +115,15 @@
                                         <table class="table align-middle table-nowrap" id="invoiceTable">
                                             <thead class="text-muted">
                                             <tr>
-                                                <th>Mã Đơn Hàng</th>
+                                                <th>Mã Hoá Đơn</th>
                                                 <th>Khách Hàng</th>
                                                 <th>Nhân Viên</th>
                                                 <th>Ngày Tạo</th>
-                                                <th>Tổng Tiền<small class="text-muted">(Đã bao gồm VAT)</small></th>
+                                                <th>Tổng Tiền
+<!--                                                    <small class="text-muted">(Đã gồm VAT+Ship)</small>-->
+                                                </th>
                                                 <th>Trạng Thái</th>
-                                                <th class="text-center">Action</th>
+                                                <th class="text-center">Hành Động</th>
                                             </tr>
                                             </thead>
                                             <tbody
@@ -182,7 +184,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Đơn Hàng Chi Tiết</h4>
+                <h4 class="modal-title">Hoá Đơn Chi Tiết</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
@@ -198,7 +200,7 @@
                                     <div class="card-body p-4">
                                         <div class="row g-3">
                                             <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Đơn Hàng</p>
+                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Hoá Đơn</p>
                                                 <h5 class="fs-15 mb-0">#<span id="invoice-no"></span></h5>
                                             </div>
                                             <!--end col-->
@@ -233,7 +235,7 @@
                                                     <th scope="col">Đơn Giá</th>
                                                     <th scope="col" style="width: 140px;">Số Lượng</th>
                                                     <th scope="col" class="text-center">Tổng Tiền</th>
-                                                    <th scope="col" class="text-center hidden-action">Action</th>
+                                                    <th scope="col" class="text-center hidden-action">Hành Động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody id="products-list">
@@ -395,7 +397,7 @@
                                                     <th class="text-start">Kích Thước</th>
                                                     <th class="text-start">Số Lượng</th>
                                                     <th class="text-start">Đơn Giá</th>
-                                                    <th class="text-start">Action</th>
+                                                    <th class="text-start">Hành Động</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all"
@@ -604,7 +606,7 @@
             if (list[i].trangThai === 6) {
                 statusBadge = '<span class="badge bg-danger">Huỷ</span>'
             }
-            let formattedMoney = formatmoney(money + (money * 0.1));
+            let formattedMoney = formatmoney(money + list[i].phiVanChuyen);
             main += `<tr >
                             <td scope="row">${list[i].ma}</td>
                             <td scope="row">${customerName}</td>
@@ -740,7 +742,7 @@
         var main = '';
         var img = '';
         for (let i = 0; i < list.length; i++) {
-            var url = '/api/admin/product_detail/picture/' + list[i].idSanPham.id + '/' + list[i].idMauSac.id;
+            var url = '/api/client/product_detail/picture-detail/' + list[i].idSanPham.id + '/' + list[i].idMauSac.id;
             const responsePicture = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -873,14 +875,16 @@
                    </div>
             `;
 
-            let vat = total_amount * 0.1;
-            let total_before_discount = total_amount + vat;
-            let total;
+            // let vat = total_amount * 0.1;
+            let total_before_discount = total_amount;
+            let total = total_before_discount; // Khởi tạo `total` với `total_before_discount`
             console.log("Phí Ship ", shipp_fee);
 
             if (shipp_fee !== undefined && shipp_fee !== null) {
                 total_before_discount += shipp_fee; // Cộng thêm phí ship nếu có
+                total = total_before_discount; // Cập nhật lại total sau khi thêm phí ship
             }
+
             let promotion_title = '(không có khuyến mãi)';
             let promotion_value = '- 0';
             let promotion = await getPromotionByDate(0);
@@ -893,6 +897,7 @@
                     id_promotion = null;
                     promotion_title = '(Không có khuyến mãi)';
                     promotion_value = '- 0';
+                    // total giữ nguyên giá trị `total_before_discount`
                 } else {
                     let obj_promotion = promotion[0];
                     id_promotion = obj_promotion.id;
@@ -908,7 +913,7 @@
                             reduce_value = formatmoney(obj_promotion.giaTriGiam);
                         add_product += `
              <div class="col-9 d-flex justify-content-center align-items-center">
-                    Mua thêm ${formatmoney(need_more_value)} sẽ được giảm ${reduce_value} cho đơn hàng!
+                    Mua thêm ${formatmoney(need_more_value)} sẽ được giảm ${reduce_value} cho hoá đơn!
              </div>`;
                     }
                 }
@@ -923,14 +928,11 @@
                     total = total_before_discount - parseInt(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
                 }
             }
+
             sub_total = `
 <tr>
     <td>Tổng tiền <small class="text-muted">(Trước thuế)</small></td>
     <td class="text-end">${formatmoney(total_amount)}</td>
-</tr>
-<tr>
-    <td>VAT (10%)</td>
-    <td class="text-end">${formatmoney(vat)}</td>
 </tr>
 <tr>
     <td>Khuyến Mãi <small class="text-muted" id="promotion-title">${promotion_title}</small></td>
@@ -1041,7 +1043,7 @@
                 document.getElementById('shipping-fee').style.paddingRight = '0';
                 document.getElementById('shipping-fee').classList.add('text-end');
             }
-            if (data[0].idHoaDon.trangThai === 3 || data[0].idHoaDon.trangThai === 4
+            if (data[0].idHoaDon.trangThai === 2 || data[0].idHoaDon.trangThai === 3 || data[0].idHoaDon.trangThai === 4
                 || data[0].idHoaDon.trangThai === 5 || data[0].idHoaDon.trangThai === 6) {
                 let arr_btn_plus = document.querySelectorAll('.plus');
                 arr_btn_plus.forEach(function (item) {
@@ -1190,9 +1192,7 @@
                 <button class="btn btn-success" onclick="handleInvoice(3,${id_order})"><i
                      class="ri-truck-fill align-bottom me-1"></i> Giao Hàng
                 </button>
-                <button class="btn btn-danger" onclick="handleInvoice(6,${id_order})"><i
-                     class="ri-close-line align-bottom me-1"></i> Huỷ
-                </button>
+
             `;
             document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
         } else if (status === 3) {
@@ -1248,7 +1248,7 @@
                             swal.fire({
                                 icon: 'warning',
                                 title: 'Thông Báo',
-                                text: 'Đơn Hàng Đã Được Chuyển Trạng Thái Trước Đó!'
+                                text: 'Hoá Đơn Đã Được Chuyển Trạng Thái Trước Đó!'
                             }).then(() => {
                                 $('#myModal').modal('hide');
                                 $('#modal-reason').modal('hide');
@@ -1264,7 +1264,7 @@
                             swal.fire({
                                 icon: 'warning',
                                 title: 'Thông Báo',
-                                text: 'Đơn Hàng Không Thể Chuyển Trạng Thái!'
+                                text: 'Hoá Đơn Không Thể Chuyển Trạng Thái!'
                             }).then(() => {
                                 $('#myModal').modal('hide');
                                 $('#modal-reason').modal('hide');
@@ -1297,9 +1297,9 @@
         let staff_id = localStorage.getItem("adminId");
         let alert_message = '';
         if (parseInt(status) === 2) {
-            alert_message = "Bạn Muốn Xác Nhận Đơn Hàng ?"
+            alert_message = "Bạn Muốn Xác Nhận Hoá Đơn ?"
         } else {
-            alert_message = "Bạn Muốn Chuyển Trạng Thái Đơn Hàng ?"
+            alert_message = "Bạn Muốn Chuyển Trạng Thái Hoá Đơn ?"
         }
         swal.fire({
             icon: 'question',
@@ -1309,7 +1309,7 @@
             showCancelButton: true,
             cancelButtonText: 'Không'
         }).then((result) => {
-            if (parseInt(status) === 3 && ship === '') {
+            if (parseInt(status) === 2 && ship === '') {
                 swal.fire({
                     icon: 'warning',
                     title: 'Thông báo',
@@ -1345,7 +1345,7 @@
                                     swal.fire({
                                         icon: 'warning',
                                         title: 'Thông Báo',
-                                        text: 'Đơn Hàng Đã Được Chuyển Trạng Thái Trước Đó!'
+                                        text: 'Hoá Đơn Đã Được Chuyển Trạng Thái Trước Đó!'
                                     }).then(() => {
                                         $('#myModal').modal('hide');
                                         loadPage();
@@ -1427,7 +1427,7 @@
                     swal.fire({
                         icon: "warning",
                         title: "Thông Báo",
-                        text: "Không thể thêm số lượng sản phẩm cho đơn hàng này!",
+                        text: "Không thể thêm số lượng sản phẩm cho hoá đơn này!",
                         confirmButtonText: "OK",
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -1440,7 +1440,7 @@
                     swal.fire({
                         icon: "warning",
                         title: "Thông Báo",
-                        text: "Số lượng của sản phẩm này trong đơn hàng đã bằng với số lượng trên hệ thống!",
+                        text: "Số lượng của sản phẩm này trong hoá đơn đã bằng với số lượng trên hệ thống!",
                         confirmButtonText: "OK",
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -1468,7 +1468,7 @@
             swal.fire({
                 icon: 'question',
                 title: "Thông Báo",
-                text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Đơn Hàng?",
+                text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Hoá Đơn?",
                 confirmButtonText: "Xoá",
                 showCancelButton: true,
                 cancelButtonText: 'Không'
@@ -1510,7 +1510,7 @@
                                 swal.fire({
                                     icon: "warning",
                                     title: "Thông Báo",
-                                    text: "Không thể giảm số lượng sản phẩm cho đơn hàng này!",
+                                    text: "Không thể giảm số lượng sản phẩm cho hoá đơn này!",
                                     confirmButtonText: "OK",
                                 }).then((result) => {
                                     if (result.isConfirmed) {
@@ -1523,7 +1523,7 @@
                                 swal.fire({
                                     icon: "warning",
                                     title: "Thông Báo",
-                                    text: "Không thể xoá sản phẩm này khỏi đơn hàng!",
+                                    text: "Không thể xoá sản phẩm này khỏi hoá đơn!",
                                     confirmButtonText: "OK",
                                 }).then((result) => {
                                     if (result.isConfirmed) {
@@ -1536,7 +1536,7 @@
                                 swal.fire({
                                     icon: "warning",
                                     title: "Thông Báo",
-                                    text: "Sản phẩm trong đơn hàng này đã có 1 nhân viên xoá trước đó!",
+                                    text: "Sản phẩm trong hoá đơn này đã có 1 nhân viên xoá trước đó!",
                                     confirmButtonText: "OK",
                                 }).then((result) => {
                                     if (result.isConfirmed) {
@@ -1569,7 +1569,7 @@
                         swal.fire({
                             icon: "warning",
                             title: "Thông Báo",
-                            text: "Không thể giảm số lượng sản phẩm cho đơn hàng này!",
+                            text: "Không thể giảm số lượng sản phẩm cho hoá đơn này!",
                             confirmButtonText: "OK",
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -1582,7 +1582,7 @@
                         swal.fire({
                             icon: "warning",
                             title: "Thông Báo",
-                            text: "Không thể xoá sản phẩm này khỏi đơn hàng!",
+                            text: "Không thể xoá sản phẩm này khỏi hoá đơn!",
                             confirmButtonText: "OK",
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -1595,7 +1595,7 @@
                         swal.fire({
                             icon: "warning",
                             title: "Thông Báo",
-                            text: "Có nhân viên đã giảm số lượng sản phẩm còn 1 trước đó. Nên sản phẩm đã bị xoá khỏi đơn hàng!",
+                            text: "Có nhân viên đã giảm số lượng sản phẩm còn 1 trước đó. Nên sản phẩm đã bị xoá khỏi hoá đơn!",
                             confirmButtonText: "OK",
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -1608,7 +1608,7 @@
                         swal.fire({
                             icon: "warning",
                             title: "Thông Báo",
-                            text: "Sản phẩm trong đơn hàng đã có 1 nhân viên xoá trước đó!",
+                            text: "Sản phẩm trong hoá đơn đã có 1 nhân viên xoá trước đó!",
                             confirmButtonText: "OK",
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -1674,7 +1674,7 @@
         swal.fire({
             title: "Thông Báo",
             icon: 'question',
-            text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Đơn Hàng?",
+            text: "Bạn Có Muốn Xoá Sản Phẩm Khỏi Hoá Đơn?",
             showCancelButton: true,
             confirmButtonText: "Xoá",
             cancelButtonText: 'Không'
@@ -1701,7 +1701,7 @@
                         } else if (response === "no-status") {
                             swal.fire({
                                 title: 'Thông Báo',
-                                text: 'Không thể xoá sản phẩm này khỏi đơn hàng!',
+                                text: 'Không thể xoá sản phẩm này khỏi hoá đơn!',
                                 icon: "warning",
                                 confirmButtonText: 'OK!'
                             }).then(() => {
@@ -1711,7 +1711,7 @@
                         } else if (response === "error") {
                             swal.fire({
                                 title: 'Thông Báo',
-                                text: 'Không thể xoá sản phẩm này khỏi đơn hàng!',
+                                text: 'Không thể xoá sản phẩm này khỏi hoá đơn!',
                                 icon: "warning",
                                 confirmButtonText: 'OK!'
                             }).then(() => {
@@ -1721,7 +1721,7 @@
                         } else {
                             swal.fire({
                                 title: 'Thông Báo',
-                                text: 'Sản Phẩm Đã Được Xoá Khỏi Đơn Hàng Trước Đó!',
+                                text: 'Sản Phẩm Đã Được Xoá Khỏi Hoá Đơn Trước Đó!',
                                 icon: "warning",
                                 confirmButtonText: 'OK!'
                             }).then(() => {
@@ -1769,7 +1769,7 @@
                     } else if (response === "failure") {
                         swal.fire({
                             title: "Thông Báo",
-                            text: "Đơn Hàng Không Tồn Tại!",
+                            text: "Hoá Đơn Không Tồn Tại!",
                             icon: "error",
                             showConfirmButton: true,
                             confirmButtonText: "OK",
@@ -1789,7 +1789,7 @@
                     } else if (response === "no-status") {
                         swal.fire({
                             title: "Thông Báo",
-                            text: "Không thể thêm sản phẩm cho đơn hàng!",
+                            text: "Không thể thêm sản phẩm cho hoá đơn!",
                             icon: "warning",
                             showConfirmButton: true,
                             confirmButtonText: "OK",
@@ -1799,7 +1799,7 @@
                     } else {
                         swal.fire({
                             title: "Thông Báp",
-                            text: "Sản Phẩm Đã Có Trong Đơn Hàng!",
+                            text: "Sản Phẩm Đã Có Trong Hoá Đơn!",
                             icon: "warning",
                             showConfirmButton: true,
                             confirmButtonText: "OK",

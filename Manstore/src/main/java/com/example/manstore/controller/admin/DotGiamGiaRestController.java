@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,23 +95,39 @@ public class DotGiamGiaRestController {
         return new ResponseEntity<>(promotions, HttpStatus.OK);
     }
 
-//    @GetMapping("/client/promotion/find-by-customer")
-//    public ResponseEntity<?> findByIdCustomer(@RequestParam("id") Integer id) {
-//        try {
-//            List<DotGiamGia> promotions = dotGiamGiaRepository.getByCustomer(id, LocalDate.now(), true);
-//            promotions.removeIf(promotion -> promotion.getNgayKetThuc().isBefore(LocalDate.now()));
+//@GetMapping("/public/promotion/find-by-date")
+//public ResponseEntity<?> findByDate(@RequestParam("orderValue") double orderValue) {
+//    LocalDate now = LocalDate.now();
+//    List<DotGiamGia> promotions = dotGiamGiaRepository.getPromotionAll(now, true);
 //
-//            if (promotions.isEmpty()) {
-//                List<DotGiamGia> allPromotions = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
-//                return new ResponseEntity<>(allPromotions, HttpStatus.OK);
-//            }
+//    // Lọc khuyến mãi hết hạn
+//    promotions.removeIf(km -> km.getNgayKetThuc().isBefore(now));
 //
-//            return new ResponseEntity<>(promotions, HttpStatus.OK);
-//        } catch (Exception e) {
-//            // Log lỗi và trả về mã lỗi phù hợp
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//    // Tính mức giảm cho từng khuyến mãi và chọn khuyến mãi có mức giảm cao nhất
+//    DotGiamGia bestPromotion = null;
+//    double maxDiscount = 0;
+//
+//    for (DotGiamGia promo : promotions) {
+//        double discount = 0;
+//
+//        if (promo.getLoaiGiamGia()) {
+//            // Giảm tiền
+//            discount = orderValue * (promo.getGiaTriGiam() / 100.0); // Giả sử có thuộc tính này
+//
+//        } else {
+//            // Giảm phần trăm
+//            discount = promo.getGiaTriGiam(); // Giả sử có thuộc tính này
+//        }
+//
+//        if (discount > maxDiscount) {
+//            maxDiscount = discount;
+//            bestPromotion = promo;
 //        }
 //    }
+//
+//    return new ResponseEntity<>(bestPromotion, HttpStatus.OK);
+//}
+
 
 
 }
