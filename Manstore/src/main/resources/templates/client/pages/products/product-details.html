@@ -725,17 +725,6 @@
         }
     }
 
-    async function getPromotion() {
-        const response = await fetch('/public/promotion/find-by-date?type=all', {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            }
-        });
-        var result = await response.json();
-        return result;
-    }
-
     async function checkStatus(productId) {
         var url = "/api/client/product_detail/check-status/" + productId;
         const response = await fetch(url, {
@@ -748,6 +737,116 @@
         return data;
     }
 
+    // async function getPromotion() {
+    //     const response = await fetch('/public/promotion/find-by-date?type=all', {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+    //         }
+    //     });
+    //     var result = await response.json();
+    //     return result;
+    // }
+    //
+    // async function handleBuyNow() {
+    //     var productIdInput = document.getElementById("productId");
+    //     let status = await checkStatus(productIdInput.value);
+    //     if (status === false) {
+    //         await Toast.fire({
+    //             icon: "warning",
+    //             title: "Sản phẩm đã ngừng bán!",
+    //         });
+    //         window.location.href = '/client/product';
+    //         return;
+    //     }
+    //     const checkboxes = document.querySelectorAll('input[type="radio"]');
+    //     if (productIdInput) {
+    //         var productId = productIdInput.value;
+    //         var input = document.getElementById('cart-quantity');
+    //         if (selectedProductDetailColor === undefined && selectedProductDetailSize === undefined) {
+    //             await Toast.fire({
+    //                 icon: "warning",
+    //                 title: "Chưa Chọn Màu Và Size !",
+    //             });
+    //
+    //         } else if (selectedProductDetailColor === undefined) {
+    //             await Toast.fire({
+    //                 icon: "warning",
+    //                 title: "Chưa Chọn Màu !",
+    //             });
+    //         } else if (selectedProductDetailSize === undefined) {
+    //             await Toast.fire({
+    //                 icon: "warning",
+    //                 title: "Chưa Chọn Size !",
+    //             });
+    //         } else {
+    //             if (localStorage.getItem("userId") === null || localStorage.getItem("userId") === undefined) {
+    //                 swal.fire({
+    //                     icon: 'warning',
+    //                     title: 'Thông Báo',
+    //                     text: 'Bạn phải đăng nhập để sử dụng chức năng này!'
+    //                 })
+    //             } else {
+    //                 var url = "/api/client/product_detail/detailSL/" + productId + "/" + selectedProductDetailColor + "/" + selectedProductDetailSize;
+    //                 const response = await fetch(url, {
+    //                     method: 'GET',
+    //                     headers: {
+    //                         'Authorization': 'Bearer ' + token
+    //                     }
+    //                 });
+    //                 var result = await response.json();
+    //                 let promtion = await getPromotion();
+    //                 let dto = {
+    //                     id: result.id,
+    //                     idSanPham: result.idSanPham.id,
+    //                     tenSanPham: result.idSanPham.ten,
+    //                     idMauSac: result.idMauSac.id,
+    //                     mauSac: result.idMauSac.ten,
+    //                     size: result.idSize.ten,
+    //                     donGia: result.idSanPham.gia,
+    //                     soLuong: parseInt(input.value),
+    //                     khuyenMai: promtion
+    //                 }
+    //
+    //                 if(dto.soLuong > 20){
+    //                     await Toast.fire({
+    //                         icon: "warning",
+    //                         text: "Bạn chỉ có thể mua tối đa 20 sản phẩm trong 1 lần !",
+    //                     });
+    //                     return;
+    //                 }
+    //
+    //                 sessionStorage.removeItem("listCart");
+    //                 sessionStorage.removeItem("product_buy_now");
+    //                 localStorage.removeItem('invoice_repurchase');
+    //                 sessionStorage.setItem('product_buy_now', JSON.stringify(dto));
+    //
+    //                 window.location.href = '/order';
+    //
+    //                 selectedProductDetailColor = undefined;
+    //                 selectedProductDetailSize = undefined;
+    //                 checkboxes.forEach(function (item) {
+    //                     item.checked = false;
+    //                 })
+    //                 quantityAddToCart = 1;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // Lấy khuyến mãi từ server với giá trị đơn hàng
+    async function getPromotion(orderValue) {
+        const response = await fetch(`/public/promotion/find-by-date?orderValue=${orderValue}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+            }
+        });
+        var result = await response.json();
+        return result;
+    }
+
+    // Xử lý khi nhấn nút "Mua Ngay"
     async function handleBuyNow() {
         var productIdInput = document.getElementById("productId");
         let status = await checkStatus(productIdInput.value);
@@ -759,10 +858,12 @@
             window.location.href = '/client/product';
             return;
         }
+
         const checkboxes = document.querySelectorAll('input[type="radio"]');
         if (productIdInput) {
             var productId = productIdInput.value;
             var input = document.getElementById('cart-quantity');
+
             if (selectedProductDetailColor === undefined && selectedProductDetailSize === undefined) {
                 await Toast.fire({
                     icon: "warning",
@@ -795,7 +896,11 @@
                         }
                     });
                     var result = await response.json();
-                    let promtion = await getPromotion();
+
+                    // Lấy khuyến mãi với giá trị đơn hàng
+                    let orderValue = result.idSanPham.gia * parseInt(input.value); // Tính giá trị đơn hàng
+                    let promotion = await getPromotion(orderValue);
+
                     let dto = {
                         id: result.id,
                         idSanPham: result.idSanPham.id,
@@ -805,7 +910,7 @@
                         size: result.idSize.ten,
                         donGia: result.idSanPham.gia,
                         soLuong: parseInt(input.value),
-                        khuyenMai: promtion
+                        khuyenMai: promotion // Cập nhật khuyến mãi
                     }
 
                     if(dto.soLuong > 20){
@@ -833,6 +938,8 @@
             }
         }
     }
+
+
 
     function handleBack() {
         window.location.href = '/client/product';

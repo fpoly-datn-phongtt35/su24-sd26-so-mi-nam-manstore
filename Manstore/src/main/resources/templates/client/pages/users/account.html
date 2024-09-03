@@ -945,7 +945,7 @@
                                                        style="width:50%;">
                                                     <tbody>
                                                     <tr>
-                                                        <td class="text-danger">Lý do huỷ/giao thất bại</td>
+                                                        <td class="text-danger">Lý do huỷ đơn/giao thất bại</td>
                                                     </tr>
                                                     <tr>
                                                         <td><textarea class="form-control text-danger"
@@ -2336,7 +2336,7 @@
             if (list[i].trangThai === 6) {
                 document.getElementById("modal-cancel").style.display = 'none';
                 document.getElementById('modal-repurchase').style.display = 'block';
-                statusBadge = '<span class="badge bg-danger">Huỷ</span>';
+                statusBadge = '<span class="badge bg-danger">Huỷ Đơn</span>';
 
                 //current
                 document.getElementById("st1").classList.remove('current');
@@ -2552,41 +2552,6 @@
             element.classList.add("d-none");
         }
         document.getElementById('modal-products-list').innerHTML = modalProductList;
-
-        //--6
-        // total = total + (total / 10);
-        // document.getElementById('td-total').innerHTML = formatMoney(total);
-        // if (order.idThongTinVanChuyen === null) {
-        //     document.getElementById("hidden-shipping").classList.add('d-none');
-        //     document.getElementById('information-invoice').style.display = 'none';
-        // } else {
-        //     document.getElementById("hidden-shipping").style.display = 'block';
-        //     document.getElementById("hidden-shipping").classList.remove('d-none');
-        //     document.getElementById('td-shipping-fees').innerHTML = formatMoney(order.phiVanChuyen);
-        // }
-        //
-        // if (listOrderDetail[0].idHoaDon.idDotGiamGia !== null) {
-        //     if (listOrderDetail[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
-        //         total = total - (total * (listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
-        //         document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].idHoaDon.idDotGiamGia.ten + ')';
-        //         document.getElementById('promotion-value').innerHTML = '- ' + listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
-        //     } else {
-        //         total = total - listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam;
-        //         document.getElementById('promotion-title').innerHTML = '(' + listOrderDetail[0].idHoaDon.idDotGiamGia.ten + ')';
-        //         document.getElementById('promotion-value').innerHTML = '- ' + formatMoney(listOrderDetail[0].idHoaDon.idDotGiamGia.giaTriGiam);
-        //     }
-        // }
-        // if (listOrderDetail[0].idHoaDon.idDotGiamGia !== null) {
-        //     if (order.phiVanChuyen !== null)
-        //         document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
-        //     else
-        //         document.getElementById('td-total-all').innerHTML = formatMoney(total);
-        // } else {
-        //     if (order.phiVanChuyen !== null)
-        //         document.getElementById('td-total-all').innerHTML = formatMoney(total + order.phiVanChuyen);
-        //     else
-        //         document.getElementById('td-total-all').innerHTML = formatMoney(total);
-        // }
 
         // let vat = total * 0.1;
         let totalBeforeDiscount = total;

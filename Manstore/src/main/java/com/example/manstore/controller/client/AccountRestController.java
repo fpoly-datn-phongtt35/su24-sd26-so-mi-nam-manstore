@@ -78,7 +78,7 @@ public class AccountRestController {
         if (userId != null) {
             HoaDon updateHoaDon = donHangService.findById(Integer.parseInt(invoice_Id)).isPresent()
                     ? donHangService.findById(Integer.parseInt(invoice_Id)).get() : null;
-            if (updateHoaDon != null && updateHoaDon.getTrangThai() == 1) {
+            if (updateHoaDon != null && updateHoaDon.getTrangThai() == 1 || updateHoaDon.getTrangThai() == 2) {
                 updateHoaDon.setGhiChu(reason);
                 updateHoaDon.setTrangThai(6);
                 donHangService.save(updateHoaDon);
