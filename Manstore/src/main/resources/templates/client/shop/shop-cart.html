@@ -568,89 +568,32 @@
         }
     }
 
-    async function getInformationPromotion() {
-        $.ajax({
-            url: '/public/promotion/find-by-date?type=all' + userId,
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("user_token")
-            },
-            success: function (response) {
-                console.log(response);
-                let promotion = response[0];
-                let total_amount = 0;
-                let discounted_amount = sub_total_global; // Khởi tạo biến để lưu số tiền sau khi áp dụng giảm giá
-
-                if (promotion !== undefined && promotion.trangThai === true) {
-                    promotion_applies = promotion;
-
-                    if (parseInt(sub_total_global) >= parseInt(promotion.giaTriDonHang)) {
-                        document.getElementById('promotion-message').innerText = '';
-                        document.getElementById('promotion-title').innerText = '(' + promotion.ten + ')';
-
-                        if (promotion.loaiGiamGia === true) { // Giảm giá theo phần trăm
-                            discounted_amount = sub_total_global - (sub_total_global * (promotion.giaTriGiam / 100));
-                            document.getElementById('promotion-value').innerText = '- ' + promotion.giaTriGiam + ' %';
-                        } else { // Giảm giá theo số tiền cố định
-                            discounted_amount = sub_total_global - promotion.giaTriGiam;
-                            document.getElementById('promotion-value').innerText = '- ' + formatMoney(promotion.giaTriGiam);
-                        }
-
-                        // Tính tổng số tiền sau khi đã giảm giá và cộng VAT
-                        total_amount = discounted_amount;
-                        document.getElementById("total-amount").innerText = formatMoney(total_amount);
-
-                    } else {
-                        document.getElementById('promotion-title').innerText = '(chưa đủ điều kiện áp dụng)';
-                        document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promotion.giaTriDonHang - sub_total_global) +
-                            ' sẽ được giảm ' + (promotion.loaiGiamGia === true ? promotion.giaTriGiam + '%' : formatMoney(promotion.giaTriGiam)) + ' cho đơn hàng!)';
-
-                        // Không đủ điều kiện giảm giá, chỉ tính VAT
-                        total_amount = sub_total_global;
-                        document.getElementById('promotion-value').innerText = '';
-                        document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                    }
-                } else {
-                    // Không có khuyến mãi, chỉ tính VAT
-                    total_amount = sub_total_global;
-                    document.getElementById('promotion-message').innerText = '';
-                    document.getElementById('promotion-title').innerText = '';
-                    document.getElementById('promotion-value').innerText = '- 0 %';
-                    document.getElementById("total-amount").innerText = formatMoney(total_amount);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
     // async function getInformationPromotion() {
     //     $.ajax({
-    //         url: `/public/promotion/find-by-date?orderValue=${sub_total_global}`,
+    //         url: '/public/promotion/find-by-date?type=all' + userId,
     //         method: 'GET',
     //         headers: {
-    //             'Authorization': `Bearer ${localStorage.getItem("user_token")}`
+    //             'Authorization': 'Bearer ' + localStorage.getItem("user_token")
     //         },
     //         success: function (response) {
     //             console.log(response);
-    //             let promotion = response; // Giả sử response trả về một đối tượng khuyến mãi
+    //             let promotion = response[0];
     //             let total_amount = 0;
     //             let discounted_amount = sub_total_global; // Khởi tạo biến để lưu số tiền sau khi áp dụng giảm giá
     //
-    //             if (promotion && promotion.trangThai === true) {
+    //             if (promotion !== undefined && promotion.trangThai === true) {
     //                 promotion_applies = promotion;
     //
     //                 if (parseInt(sub_total_global) >= parseInt(promotion.giaTriDonHang)) {
     //                     document.getElementById('promotion-message').innerText = '';
-    //                     document.getElementById('promotion-title').innerText = `(${promotion.ten})`;
+    //                     document.getElementById('promotion-title').innerText = '(' + promotion.ten + ')';
     //
     //                     if (promotion.loaiGiamGia === true) { // Giảm giá theo phần trăm
     //                         discounted_amount = sub_total_global - (sub_total_global * (promotion.giaTriGiam / 100));
-    //                         document.getElementById('promotion-value').innerText = `- ${promotion.giaTriGiam} %`;
+    //                         document.getElementById('promotion-value').innerText = '- ' + promotion.giaTriGiam + ' %';
     //                     } else { // Giảm giá theo số tiền cố định
     //                         discounted_amount = sub_total_global - promotion.giaTriGiam;
-    //                         document.getElementById('promotion-value').innerText = `- ${formatMoney(promotion.giaTriGiam)}`;
+    //                         document.getElementById('promotion-value').innerText = '- ' + formatMoney(promotion.giaTriGiam);
     //                     }
     //
     //                     // Tính tổng số tiền sau khi đã giảm giá và cộng VAT
@@ -659,7 +602,8 @@
     //
     //                 } else {
     //                     document.getElementById('promotion-title').innerText = '(chưa đủ điều kiện áp dụng)';
-    //                     document.getElementById('promotion-message').innerText = `(Mua thêm ${formatMoney(promotion.giaTriDonHang - sub_total_global)} sẽ được giảm ${promotion.loaiGiamGia === true ? promotion.giaTriGiam + '%' : formatMoney(promotion.giaTriGiam)} cho đơn hàng!)`;
+    //                     document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(promotion.giaTriDonHang - sub_total_global) +
+    //                         ' sẽ được giảm ' + (promotion.loaiGiamGia === true ? promotion.giaTriGiam + '%' : formatMoney(promotion.giaTriGiam)) + ' cho đơn hàng!)';
     //
     //                     // Không đủ điều kiện giảm giá, chỉ tính VAT
     //                     total_amount = sub_total_global;
@@ -680,6 +624,62 @@
     //         }
     //     });
     // }
+
+    async function getInformationPromotion() {
+        $.ajax({
+            url: `/public/promotion/find-by-date?orderValue=${sub_total_global}`,
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("user_token")}`
+            },
+            success: function (response) {
+                console.log(response);
+                let promotion = response; // Giả sử response trả về một đối tượng khuyến mãi
+                let total_amount = 0;
+                let discounted_amount = sub_total_global; // Khởi tạo biến để lưu số tiền sau khi áp dụng giảm giá
+
+                if (promotion && promotion.trangThai === true) {
+                    promotion_applies = promotion;
+
+                    if (parseInt(sub_total_global) >= parseInt(promotion.giaTriDonHang)) {
+                        document.getElementById('promotion-message').innerText = '';
+                        document.getElementById('promotion-title').innerText = `(${promotion.ten})`;
+
+                        if (promotion.loaiGiamGia === true) { // Giảm giá theo phần trăm
+                            discounted_amount = sub_total_global - (sub_total_global * (promotion.giaTriGiam / 100));
+                            document.getElementById('promotion-value').innerText = `- ${promotion.giaTriGiam} %`;
+                        } else { // Giảm giá theo số tiền cố định
+                            discounted_amount = sub_total_global - promotion.giaTriGiam;
+                            document.getElementById('promotion-value').innerText = `- ${formatMoney(promotion.giaTriGiam)}`;
+                        }
+
+                        // Tính tổng số tiền sau khi đã giảm giá và cộng VAT
+                        total_amount = discounted_amount;
+                        document.getElementById("total-amount").innerText = formatMoney(total_amount);
+
+                    } else {
+                        document.getElementById('promotion-title').innerText = '(chưa đủ điều kiện áp dụng)';
+                        document.getElementById('promotion-message').innerText = `(Mua thêm ${formatMoney(promotion.giaTriDonHang - sub_total_global)} sẽ được giảm ${promotion.loaiGiamGia === true ? promotion.giaTriGiam + '%' : formatMoney(promotion.giaTriGiam)} cho đơn hàng!)`;
+
+                        // Không đủ điều kiện giảm giá, chỉ tính VAT
+                        total_amount = sub_total_global;
+                        document.getElementById('promotion-value').innerText = '';
+                        document.getElementById("total-amount").innerText = formatMoney(total_amount);
+                    }
+                } else {
+                    // Không có khuyến mãi, chỉ tính VAT
+                    total_amount = sub_total_global;
+                    document.getElementById('promotion-message').innerText = '';
+                    document.getElementById('promotion-title').innerText = '';
+                    document.getElementById('promotion-value').innerText = '- 0 %';
+                    document.getElementById("total-amount").innerText = formatMoney(total_amount);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
 
 
     function areAllChecked() {

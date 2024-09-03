@@ -84,7 +84,7 @@
                                                     <option value="3">Đang Giao Hàng</option>
                                                     <option value="4">Hoàn Thành</option>
                                                     <option value="5">Giao Hàng Thất Bại</option>
-                                                    <option value="6">Huỷ</option>
+                                                    <option value="6">Huỷ Đơn</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -285,7 +285,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="text-danger">Lý Do Huỷ/Giao Thất Bại</h5>
+                <h5 class="text-danger">Lý Do Huỷ Đơn/Giao Thất Bại</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
@@ -604,7 +604,7 @@
                 statusBadge = '<span class="badge bg-danger">Giao Hàng Thất Bại</span>'
             }
             if (list[i].trangThai === 6) {
-                statusBadge = '<span class="badge bg-danger">Huỷ</span>'
+                statusBadge = '<span class="badge bg-danger">Huỷ Đơn</span>'
             }
             let formattedMoney = formatmoney(money + list[i].phiVanChuyen);
             main += `<tr >
@@ -791,16 +791,51 @@
         $('#myModal').modal('hide');
     }
 
-    async function getPromotionByDate(type) {
-        const response = await fetch('/public/promotion/find-by-date?type=all', {
+    async function getPromotionByDate(orderValue) {
+        const response = await fetch(`/public/promotion/find-by-date?orderValue=${orderValue}`, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
             }
         });
-        var result = await response.json();
-        return result;
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        } else {
+            console.error('Failed to fetch best promotion');
+            return null;
+        }
     }
+
+    // async function getPromotionByDate(orderValue) {
+    //     try {
+    //         const response = await fetch(`/public/promotion/find-by-date?orderValue=${orderValue}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + localStorage.getItem("user_token")
+    //             }
+    //         });
+    //
+    //         if (response.ok) {
+    //             const text = await response.text(); // Lấy phản hồi dưới dạng chuỗi
+    //             if (text) { // Kiểm tra nếu phản hồi không trống
+    //                 const result = JSON.parse(text); // Phân tích cú pháp JSON
+    //                 return result;
+    //             } else {
+    //                 console.error('Empty response');
+    //                 return null;
+    //             }
+    //         } else {
+    //             console.error('Failed to fetch best promotion');
+    //             return null;
+    //         }
+    //     } catch (error) {
+    //         console.error('Error parsing or fetching data:', error);
+    //         return null;
+    //     }
+    // }
+
+
 
     async function detailInvoice(id) {
         let url = '/api/admin/invoice/invoice-detail/' + id;
@@ -887,46 +922,53 @@
 
             let promotion_title = '(không có khuyến mãi)';
             let promotion_value = '- 0';
-            let promotion = await getPromotionByDate(0);
+            let promotion = await getPromotionByDate(total_amount);
 
             console.log(promotion);
             console.log(data[0].idHoaDon.idDotGiamGia);
 
-            if (data[0].idHoaDon.idDotGiamGia === null) {
-                if (promotion === null || promotion.length === 0) {
-                    id_promotion = null;
-                    promotion_title = '(Không có khuyến mãi)';
-                    promotion_value = '- 0';
-                    // total giữ nguyên giá trị `total_before_discount`
-                } else {
-                    let obj_promotion = promotion[0];
+            if (promotion) {
+                if (data[0].idHoaDon.idDotGiamGia === null) {
+                    let obj_promotion = promotion;
                     id_promotion = obj_promotion.id;
                     let reference_value = total_amount;
+
                     if (reference_value < obj_promotion.giaTriDonHang) {
                         promotion_title = '(chưa đủ điều kiện)';
                         promotion_value = '- 0';
                         let need_more_value = (obj_promotion.giaTriDonHang - reference_value);
-                        let reduce_value;
-                        if (obj_promotion.loaiGiamGia === true)
-                            reduce_value = '- ' + obj_promotion.giaTriGiam + '%';
-                        else
-                            reduce_value = formatmoney(obj_promotion.giaTriGiam);
+                        let reduce_value = obj_promotion.loaiGiamGia ?
+                            '- ' + obj_promotion.giaTriGiam + '%' :
+                            formatmoney(obj_promotion.giaTriGiam);
+
                         add_product += `
-             <div class="col-9 d-flex justify-content-center align-items-center">
-                    Mua thêm ${formatmoney(need_more_value)} sẽ được giảm ${reduce_value} cho hoá đơn!
-             </div>`;
+                    <div class="col-9 d-flex justify-content-center align-items-center">
+                        Mua thêm ${formatmoney(need_more_value)} sẽ được giảm ${reduce_value} cho hoá đơn!
+                    </div>`;
+                    } else {
+                        if (obj_promotion.loaiGiamGia) {
+                            promotion_value = '- ' + obj_promotion.giaTriGiam + '%';
+                            total = total_before_discount - (total_amount * (obj_promotion.giaTriGiam / 100));
+                        } else {
+                            promotion_value = '- ' + formatmoney(obj_promotion.giaTriGiam);
+                            total = total_before_discount - obj_promotion.giaTriGiam;
+                        }
+                    }
+                } else {
+                    id_promotion = data[0].idHoaDon.idDotGiamGia.id;
+                    promotion_title = '(' + data[0].idHoaDon.idDotGiamGia.ten + ')';
+                    if (data[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
+                        promotion_value = '- ' + data[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
+                        total = total_before_discount - (total_amount * (data[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
+                    } else {
+                        promotion_value = '- ' + formatmoney(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
+                        total = total_before_discount - parseInt(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
                     }
                 }
             } else {
-                id_promotion = data[0].idHoaDon.idDotGiamGia.id;
-                promotion_title = '(' + data[0].idHoaDon.idDotGiamGia.ten + ')';
-                if (data[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
-                    promotion_value = '- ' + data[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
-                    total = total_before_discount - (total_amount * (data[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
-                } else {
-                    promotion_value = '- ' + formatmoney(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
-                    total = total_before_discount - parseInt(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
-                }
+                id_promotion = null;
+                promotion_title = '(Không có khuyến mãi)';
+                promotion_value = '- 0';
             }
 
             sub_total = `
@@ -969,14 +1011,14 @@
             if (data[0].idHoaDon.trangThai === 6) {
                 status = `
                  <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
-                            <span class="badge bg-success-subtle text-danger"
-                                                      >Huỷ</span>
+                            <span class="badge bg-danger-subtle text-danger"
+                                                      >Huỷ Đơn</span>
                 `;
             }
             if (data[0].idHoaDon.trangThai === 5) {
                 status = `
                  <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Trạng Thái</p>
-                            <span class="badge bg-success-subtle text-danger"
+                            <span class="badge bg-danger-subtle text-danger"
                                                       >Giao hàng thất bại</span>
                 `;
             }
@@ -991,7 +1033,7 @@
                     <br disabled>
                     <div class="row" id="reason-label">
                            <div class="col-md-9"><span class="mb-3 text-uppercase fw-semibold d-block text-danger">
-                                Lý do huỷ/giao thất bại :</span>
+                                Lý do huỷ đơn/giao thất bại :</span>
                            </div>
                     </div>
                     <div class="form-floating mb-3" id="reason-text" style="padding-left: 0px">
@@ -1183,7 +1225,7 @@
                      class="ri-check-line align-bottom me-1"></i> Xác Nhận
                 </button>
                 <button class="btn btn-danger" onclick="handleInvoice(6,${id_order})"><i
-                     class="ri-close-line align-bottom me-1"></i> Huỷ
+                     class="ri-close-line align-bottom me-1"></i> Huỷ Đơn
                 </button>
             `;
             document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
@@ -1192,7 +1234,9 @@
                 <button class="btn btn-success" onclick="handleInvoice(3,${id_order})"><i
                      class="ri-truck-fill align-bottom me-1"></i> Giao Hàng
                 </button>
-
+                <button class="btn btn-danger" onclick="handleInvoice(6,${id_order})"><i
+                     class="ri-close-line align-bottom me-1"></i> Huỷ Đơn
+                </button>
             `;
             document.getElementById('statusButtonGroup').innerHTML = buttonGroup;
         } else if (status === 3) {
@@ -1394,7 +1438,6 @@
             }
         })
     }
-
 
     function addQuantity(id) {
         let url = '';
