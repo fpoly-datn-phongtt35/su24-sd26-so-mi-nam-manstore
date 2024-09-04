@@ -106,404 +106,397 @@
 <div th:replace="client/fragments/search::search"></div>
 <!--<div th:replace="client/fragments/subscribe::subscribe"></div>-->
 <section class="section pb-0 mt-4">
-  <div class="container">
-    <div class="row g-2">
-      <div class="col-lg-12">
-        <a
-                class="product-banner-1 mt-4 mt-lg-0 rounded overflow-hidden d-block"
-                href="#!"
-        >
-          <img
-                  alt=""
-                  class="w-50 rounded object-fit-cover"
-                  src="../assets/images/ecommerce/features/img-6.jpg"
-                  style="max-height: 450px"
-          />
-        </a>
-      </div>
-      <!--end col-->
+    <div class="container">
+        <div class="row g-2">
+            <div class="col-lg-12">
+                <a class="product-banner-1 mt-4 mt-lg-0 rounded overflow-hidden d-block" href="#!">
+                    <img alt="" class="w-50 rounded object-fit-cover"
+                         src="../assets/images/933pIkbEsT7AG.jpg!w700wp" style="max-height: 450px"/>
+                </a>
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
     </div>
-    <!--end row-->
-  </div>
-  <!--end container-->
+    <!--end container-->
 </section>
 <div id="sport-param" style="display: none;" th:text="${sport_param}"></div>
 <div class="position-relative section">
-  <div class="container">
-    <div class="ecommerce-product gap-4">
-      <div class="sidebar small-sidebar flex-shrink-0">
-        <div class="card overflow-hidden">
-          <div class="card-header">
-            <div class="d-flex mb-3">
-              <div class="flex-grow-1">
-                <h5 class="fs-16">Filters</h5>
-              </div>
-              <div class="flex-shrink-3">
-                <button class="btn btn-sm btn-info btn-hover"
-                        id="clearall" onclick="ClearAll()"
-                >Clear All
-                </button>
-              </div>
-            </div>
-          </div>
+    <div class="container">
+        <div class="ecommerce-product gap-4">
+            <div class="sidebar small-sidebar flex-shrink-0">
+                <div class="card overflow-hidden">
+                    <div class="card-header">
+                        <div class="d-flex mb-3">
+                            <div class="flex-grow-1">
+                                <h5 class="fs-16">Filters</h5>
+                            </div>
+                            <div class="flex-shrink-3">
+                                <button class="btn btn-sm btn-info btn-hover"
+                                        id="clearall" onclick="ClearAll()"
+                                >Clear All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="accordion accordion-flush filter-accordion">
-            <div class="card-body border-bottom">
-              <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
-                Price
-              </p>
-              <div class="slider">
-                <div class="progress"></div>
-              </div>
-              <div class="range-input">
-                <input class="range-min" onchange="loadPage(0)" step="10000"
-                       type="range">
-                <input class="range-max" onchange="loadPage(0)" step="10000"
-                       type="range">
-              </div>
-              <div class="price-input formCost d-flex gap-2 align-items-center mt-3">
-                <input
-                        class="form-control form-control-sm"
-                        disabled
-                        id="minCost"
-                        type="text"
-                />
-                <span class="fw-semibold text-muted">to</span>
-                <input
-                        class="form-control form-control-sm"
-                        disabled
-                        id="maxCost"
-                        type="text"
-                />
-              </div>
-            </div>
+                    <div class="accordion accordion-flush filter-accordion">
+                        <div class="card-body border-bottom">
+                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                                Price
+                            </p>
+                            <div class="slider">
+                                <div class="progress"></div>
+                            </div>
+                            <div class="range-input">
+                                <input class="range-min" onchange="loadPage(0)" step="10000"
+                                       type="range">
+                                <input class="range-max" onchange="loadPage(0)" step="10000"
+                                       type="range">
+                            </div>
+                            <div class="price-input formCost d-flex gap-2 align-items-center mt-3">
+                                <input
+                                        class="form-control form-control-sm"
+                                        disabled
+                                        id="minCost"
+                                        type="text"
+                                />
+                                <span class="fw-semibold text-muted">to</span>
+                                <input
+                                        class="form-control form-control-sm"
+                                        disabled
+                                        id="maxCost"
+                                        type="text"
+                                />
+                            </div>
+                        </div>
 
-            <div class="card-body border-bottom">
-              <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
-                Thương Hiệu
-              </p>
-              <select class="form-control bg-light border-light"
-                      id="filter-trademark" name="choices-single-default" onchange="loadPage(0)">
+                        <div class="card-body border-bottom">
+                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                                Thương Hiệu
+                            </p>
+                            <select class="form-control bg-light border-light"
+                                    id="filter-trademark" name="choices-single-default" onchange="loadPage(0)">
 
-              </select>
+                            </select>
 
-            </div>
+                        </div>
 
-            <div class="card-body border-bottom">
-              <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
-                Danh Mục
-              </p>
-              <select class="form-control bg-light border-light"
-                      id="filter-category" name="choices-single-default" onchange="loadPage(0)">
+                        <div class="card-body border-bottom">
+                            <p class="text-muted text-uppercase fs-13 fw-medium mb-4">
+                                Danh Mục
+                            </p>
+                            <select class="form-control bg-light border-light"
+                                    id="filter-category" name="choices-single-default" onchange="loadPage(0)">
 
-              </select>
-            </div>
+                            </select>
+                        </div>
 
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingColors">
-                <button
-                        aria-controls="flush-collapseColors"
-                        aria-expanded="true"
-                        class="accordion-button bg-transparent shadow-none"
-                        data-bs-target="#flush-collapseColors"
-                        data-bs-toggle="collapse"
-                        type="button"
-                >
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingColors">
+                                <button
+                                        aria-controls="flush-collapseColors"
+                                        aria-expanded="true"
+                                        class="accordion-button bg-transparent shadow-none"
+                                        data-bs-target="#flush-collapseColors"
+                                        data-bs-toggle="collapse"
+                                        type="button"
+                                >
                       <span class="text-muted text-uppercase fs-13 fw-medium"
                       >Colors</span
                       >
-                  <span
-                          class="badge bg-success rounded-pill align-middle ms-1 filter-badge"
-                  ></span>
-                </button>
-              </h2>
+                                    <span
+                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"
+                                    ></span>
+                                </button>
+                            </h2>
 
-              <div
-                      aria-labelledby="flush-headingColors"
-                      class="accordion-collapse collapse show"
-                      id="flush-collapseColors"
-              >
-                <div class="accordion-body text-body pt-0">
-                  <ul
-                          class="clothe-colors list-unstyled hstack gap-3 mb-0 flex-wrap"
-                          id="color-filter"
-                  >
-                    <li>
-                      <input
-                              id="color-7"
-                              name="colors"
-                              onclick="chooseFilterColor(1)"
-                              type="checkbox"
-                              value="1"
-                      />
-                      <label
-                              class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="color-7"
-                      ></label>
-                    </li>
-                    <li>
-                      <input
-                              id="color-8"
-                              name="colors"
-                              onclick="chooseFilterColor(2)"
-                              type="checkbox"
-                              value="2"
-                      />
-                      <label
-                              class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="color-8"
-                      ></label>
-                    </li>
-                    <li>
-                      <input
-                              id="color-4"
-                              name="colors"
-                              onclick="chooseFilterColor(3)"
-                              type="checkbox"
-                              value="3"
-                      />
-                      <label
-                              class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="color-4"
-                      ></label>
-                    </li>
-                    <li>
-                      <input
-                              id="color-2"
-                              name="colors"
-                              onclick="chooseFilterColor(4)"
-                              type="checkbox"
-                              value="4"
-                      />
-                      <label
-                              class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="color-2"
-                              style="background-color: rgb(169,169,169); border: none;"
-                      ></label>
-                    </li>
-                    <li>
-                      <input
-                              id="color-1"
-                              name="colors"
-                              onclick="chooseFilterColor(5)"
-                              type="checkbox"
-                              value="5"
-                      />
-                      <label
-                              class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="color-1"
-                      ></label>
-                    </li>
-                    <li>
-                      <input
-                              id="color-6"
-                              name="colors"
-                              onclick="chooseFilterColor(6)"
-                              type="checkbox"
-                              value="6"
-                      />
-                      <label
-                              class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="color-6"
-                      ></label>
-                    </li>
-                    <li>
-                      <input
-                              id="color-5"
-                              name="colors"
-                              onclick="chooseFilterColor(7)"
-                              type="checkbox"
-                              value="7"
-                      />
-                      <label
-                              class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="color-5"
-                      ></label>
-                    </li>
-                    <li>
-                      <input
-                              id="color-3"
-                              name="colors"
-                              onclick="chooseFilterColor(8)"
-                              type="checkbox"
-                              value="8"
-                      />
-                      <label
-                              class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="color-3"
-                      ></label>
-                    </li>
-                  </ul>
+                            <div
+                                    aria-labelledby="flush-headingColors"
+                                    class="accordion-collapse collapse show"
+                                    id="flush-collapseColors"
+                            >
+                                <div class="accordion-body text-body pt-0">
+                                    <ul
+                                            class="clothe-colors list-unstyled hstack gap-3 mb-0 flex-wrap"
+                                            id="color-filter"
+                                    >
+                                        <li>
+                                            <input
+                                                    id="color-7"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(1)"
+                                                    type="checkbox"
+                                                    value="1"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-dark p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-7"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-8"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(2)"
+                                                    type="checkbox"
+                                                    value="2"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-light p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-8"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-4"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(3)"
+                                                    type="checkbox"
+                                                    value="3"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-danger p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-4"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-2"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(4)"
+                                                    type="checkbox"
+                                                    value="4"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-info p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-2"
+                                                    style="background-color: rgb(169,169,169); border: none;"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-1"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(5)"
+                                                    type="checkbox"
+                                                    value="5"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-success p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-1"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-6"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(6)"
+                                                    type="checkbox"
+                                                    value="6"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-secondary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-6"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-5"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(7)"
+                                                    type="checkbox"
+                                                    value="7"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-5"
+                                            ></label>
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="color-3"
+                                                    name="colors"
+                                                    onclick="chooseFilterColor(8)"
+                                                    type="checkbox"
+                                                    value="8"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-warning p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="color-3"
+                                            ></label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end accordion-item -->
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingSize">
+                                <button
+                                        aria-controls="flush-collapseSize"
+                                        aria-expanded="true"
+                                        class="accordion-button bg-transparent shadow-none"
+                                        data-bs-target="#flush-collapseSize"
+                                        data-bs-toggle="collapse"
+                                        type="button">
+                                    <span class="text-muted text-uppercase fs-13 fw-medium">Sizes</span>
+                                    <span
+                                            class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
+                                </button>
+                            </h2>
+
+                            <div
+                                    aria-labelledby="flush-headingSize"
+                                    class="accordion-collapse collapse show"
+                                    id="flush-collapseSize">
+                                <div class="accordion-body text-body pt-0">
+                                    <ul
+                                            class="clothe-size list-unstyled hstack gap-3 mb-0 flex-wrap"
+                                            id="size-filter"
+                                    >
+                                        <li>
+                                            <input
+                                                    id="size1"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(1)"
+                                                    type="checkbox"
+                                                    value="s"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size1"
+                                            >S</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size2"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(2)"
+                                                    type="checkbox"
+                                                    value="m"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size2"
+                                            >M</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size3"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(3)"
+                                                    type="checkbox"
+                                                    value="l"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size3"
+                                            >L</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size4"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(4)"
+                                                    type="checkbox"
+                                                    value="xl"
+
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size4"
+                                            >XL</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size5"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(5)"
+                                                    type="checkbox"
+                                                    value="xxl"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size5"
+                                            >XXL</label
+                                            >
+                                        </li>
+                                        <li>
+                                            <input
+                                                    id="size6"
+                                                    name="sizes"
+                                                    onclick="chooseFilterSize(6)"
+                                                    type="checkbox"
+                                                    value="2xl"
+                                            />
+                                            <label
+                                                    class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+                                                    for="size6"
+                                            >2XL</label
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                <!-- end card -->
             </div>
-            <!-- end accordion-item -->
-
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingSize">
-                <button
-                        aria-controls="flush-collapseSize"
-                        aria-expanded="true"
-                        class="accordion-button bg-transparent shadow-none"
-                        data-bs-target="#flush-collapseSize"
-                        data-bs-toggle="collapse"
-                        type="button">
-                  <span class="text-muted text-uppercase fs-13 fw-medium">Sizes</span>
-                  <span
-                          class="badge bg-success rounded-pill align-middle ms-1 filter-badge"></span>
-                </button>
-              </h2>
-
-              <div
-                      aria-labelledby="flush-headingSize"
-                      class="accordion-collapse collapse show"
-                      id="flush-collapseSize">
-                <div class="accordion-body text-body pt-0">
-                  <ul
-                          class="clothe-size list-unstyled hstack gap-3 mb-0 flex-wrap"
-                          id="size-filter"
-                  >
-                    <li>
-                      <input
-                              id="size1"
-                              name="sizes"
-                              onclick="chooseFilterSize(1)"
-                              type="checkbox"
-                              value="s"
-                      />
-                      <label
-                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="size1"
-                      >S</label
-                      >
-                    </li>
-                    <li>
-                      <input
-                              id="size2"
-                              name="sizes"
-                              onclick="chooseFilterSize(2)"
-                              type="checkbox"
-                              value="m"
-                      />
-                      <label
-                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="size2"
-                      >M</label
-                      >
-                    </li>
-                    <li>
-                      <input
-                              id="size3"
-                              name="sizes"
-                              onclick="chooseFilterSize(3)"
-                              type="checkbox"
-                              value="l"
-                      />
-                      <label
-                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="size3"
-                      >L</label
-                      >
-                    </li>
-                    <li>
-                      <input
-                              id="size4"
-                              name="sizes"
-                              onclick="chooseFilterSize(4)"
-                              type="checkbox"
-                              value="xl"
-
-                      />
-                      <label
-                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="size4"
-                      >XL</label
-                      >
-                    </li>
-                    <li>
-                      <input
-                              id="size5"
-                              name="sizes"
-                              onclick="chooseFilterSize(5)"
-                              type="checkbox"
-                              value="xxl"
-                      />
-                      <label
-                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="size5"
-                      >XXL</label
-                      >
-                    </li>
-                    <li>
-                      <input
-                              id="size6"
-                              name="sizes"
-                              onclick="chooseFilterSize(6)"
-                              type="checkbox"
-                              value="2xl"
-                      />
-                      <label
-                              class="avatar-xs btn btn-soft-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
-                              for="size6"
-                      >2XL</label
-                      >
-                    </li>
-                  </ul>
+            <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <p class="text-muted flex-grow-1 mb-0">
+                        Hiển thị 8 sản phẩm / 1 trang
+                    </p>
+                    <div class="flex-shrink-0">
+                        <div class="d-flex gap-2">
+                            <div class="flex-shrink-0">
+                                <label class="col-form-label" for="sort-elem"
+                                >Sắp Xếp:</label
+                                >
+                            </div>
+                            <div class="flex-shrink-0">
+                                <select class="form-select w-md" id="sort-elem" onchange="loadPage(page)">
+                                    <option value="0">Tất Cả</option>
+                                    <option value="1">A-Z</option>
+                                    <option value="2">Z-A</option>
+                                    <option value="3">Giá Tăng Dần</option>
+                                    <option value="4">Giá Giảm Dần</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- end card -->
-      </div>
-      <div class="flex-grow-1">
-        <div class="d-flex align-items-center gap-2 mb-4">
-          <p class="text-muted flex-grow-1 mb-0">
-            Hiển thị 8 sản phẩm / 1 trang
-          </p>
-          <div class="flex-shrink-0">
-            <div class="d-flex gap-2">
-              <div class="flex-shrink-0">
-                <label class="col-form-label" for="sort-elem"
-                >Sắp Xếp:</label
-                >
-              </div>
-              <div class="flex-shrink-0">
-                <select class="form-select w-md" id="sort-elem" onchange="loadPage(page)">
-                  <option value="0">Tất Cả</option>
-                  <option value="1">A-Z</option>
-                  <option value="2">Z-A</option>
-                  <option value="3">Giá Tăng Dần</option>
-                  <option value="4">Giá Giảm Dần</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row" id="product-grid">
-        </div>
-        <div class="row" id="pagination-element">
-        </div>
-
-        <div class="row d-none" id="search-result-elem">
-          <div class="col-lg-12">
-            <div class="text-center py-5">
-              <div class="avatar-lg mx-auto mb-4">
-                <div
-                        class="avatar-title bg-primary-subtle text-primary rounded-circle fs-24"
-                >
-                  <i class="bi bi-search"></i>
+                <div class="row" id="product-grid">
                 </div>
-              </div>
+                <div class="row" id="pagination-element">
+                </div>
 
-              <h5>No matching records found</h5>
+                <div class="row d-none" id="search-result-elem">
+                    <div class="col-lg-12">
+                        <div class="text-center py-5">
+                            <div class="avatar-lg mx-auto mb-4">
+                                <div
+                                        class="avatar-title bg-primary-subtle text-primary rounded-circle fs-24"
+                                >
+                                    <i class="bi bi-search"></i>
+                                </div>
+                            </div>
+
+                            <h5>No matching records found</h5>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!--end container-->
+    <!--end container-->
 </div>
 
 <div th:replace="client/fragments/footer::footer"></div>
@@ -687,9 +680,9 @@
             }
 
             let resultDetailColor = data.filter((product, index, self) =>
-                    index === self.findIndex((p) => (
-                        p.idMauSac.id === product.idMauSac.id
-                    ))
+                index === self.findIndex((p) => (
+                    p.idMauSac.id === product.idMauSac.id
+                ))
             );
             // Sort colors based on idMauSac.id
             resultDetailColor.sort((a, b) => a.idMauSac.id - b.idMauSac.id);
@@ -726,9 +719,9 @@
                 }
             }
             let resultDetailSize = data.filter((product, index, self) =>
-                    index === self.findIndex((p) => (
-                        p.idSize.id === product.idSize.id
-                    ))
+                index === self.findIndex((p) => (
+                    p.idSize.id === product.idSize.id
+                ))
             );
             // Sort sizes based on idSize.id
             resultDetailSize.sort((a, b) => a.idSize.id.toString().localeCompare(b.idSize.id.toString()));

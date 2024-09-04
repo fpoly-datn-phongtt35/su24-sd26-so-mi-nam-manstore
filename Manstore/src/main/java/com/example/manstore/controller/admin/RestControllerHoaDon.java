@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin/invoice")
@@ -107,21 +108,16 @@ public class RestControllerHoaDon {
         ChiTietSanPham spct = dhct.getIdChiTietSanPham();
         HoaDon dh = dhct.getIdHoaDon();
 
-        if (dh.getTrangThai() == 1 || dh.getTrangThai() == 2) {
+        if (dh.getTrangThai() == 1) {
             if (spct.getSoluong() >= 1) {
                 if (dhct.getSoLuong() < spct.getSoluong()) {
                     dhct.setSoLuong(dhct.getSoLuong() + 1);
                     donHangCTService.save(dhct);
                     dh.setTongTien(dh.getTongTien().add(dhct.getGiaThoiDiemMua()));
-
-                    if (dh.getTrangThai() == 2) {
-                        spct.setSoluong(spct.getSoluong() - 1);
-                        spService.save(spct);
-                    }
-
+                    spct.setSoluong(spct.getSoluong() - 1);
+                    spService.save(spct);
                     // Cập nhật khuyến mãi
                     updatePromotion(dh);
-
                     donHangService.save(dh);
                     return new ResponseEntity<>("success", HttpStatus.OK);
                 } else {
@@ -146,15 +142,13 @@ public class RestControllerHoaDon {
         List<ChiTietHoaDon> list = donHangCTService.findByIdHD(String.valueOf(dh.getId()));
 
         if (dhct.getSoLuong() == 1) {
-            if (dhct.getIdHoaDon().getTrangThai() == 1 || dhct.getIdHoaDon().getTrangThai() == 2) {
+            if (dhct.getIdHoaDon().getTrangThai() == 1) {
                 if (list.size() <= 1) {
                     return new ResponseEntity<>("cannot be deleted", HttpStatus.OK);
                 }
                 donHangCTService.deleteById(String.valueOf(dhct.getId()));
-                if (dhct.getIdHoaDon().getTrangThai() == 2) {
                     spct.setSoluong(spct.getSoluong() + 1);
                     spService.save(spct);
-                }
                 dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua()));
 
                 // Cập nhật khuyến mãi
@@ -164,13 +158,12 @@ public class RestControllerHoaDon {
                 return new ResponseEntity<>("deletion all success", HttpStatus.OK);
             }
         }
-        if (dhct.getIdHoaDon().getTrangThai() == 1 || dhct.getIdHoaDon().getTrangThai() == 2) {
+        if (dhct.getIdHoaDon().getTrangThai() == 1) {
             dhct.setSoLuong(dhct.getSoLuong() - 1);
             donHangCTService.save(dhct);
-            if (dhct.getIdHoaDon().getTrangThai() == 2) {
                 spct.setSoluong(spct.getSoluong() + 1);
                 spService.save(spct);
-            }
+
             dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua()));
 
             // Cập nhật khuyến mãi
@@ -184,42 +177,61 @@ public class RestControllerHoaDon {
     }
 
 
-    @GetMapping("/edit-quantity/{id}")
-    private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
-                                           @RequestParam("quantity") int count) {
+@GetMapping("/edit-quantity/{id}")
+private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
+                                       @RequestParam("quantity") int count) {
 
-        ChiTietHoaDon dhct = donHangCTService.getById2(id);
-        ChiTietSanPham spct = dhct.getIdChiTietSanPham();
-        HoaDon dh = dhct.getIdHoaDon();
-        if (count < 1) {
-            return new ResponseEntity<>("Số lượng phải lớn hơn 0!", HttpStatus.OK);
-        } else {
-            if (dhct.getIdHoaDon().getTrangThai() == 1) {
-                if (count <= spct.getSoluong()) {
-                    int quantity = dhct.getSoLuong() - count;
-                    dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(quantity))));
+    ChiTietHoaDon dhct = donHangCTService.getById2(id);
+    ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+    HoaDon dh = dhct.getIdHoaDon();
 
-                    // Kiểm tra và cập nhật khuyến mãi
-                    if (dh.getIdDotGiamGia() != null) {
-                        int total = dh.getTongTien().intValue();
-                        if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
-                            dh.setIdDotGiamGia(null);
-                        }
-                    }
-                    updatePromotion(dh);
-                    donHangService.save(dh);
-                    dhct.setSoLuong(count);
-                    donHangCTService.save(dhct);
-                    return new ResponseEntity<>("success", HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>("Sản phẩm này chỉ còn lại " + spct.getSoluong() + "!", HttpStatus.OK);
-                }
-            } else {
-                return new ResponseEntity<>("Không thể thay đổi số lượng sản phẩm cho đơn hàng này!", HttpStatus.OK);
-            }
-        }
+    // Kiểm tra số lượng nhập vào
+    if (count < 1) {
+        return new ResponseEntity<>("Số lượng phải lớn hơn 0!", HttpStatus.OK);
     }
 
+    // Kiểm tra trạng thái hóa đơn
+    if (dh.getTrangThai() != 1) {
+        return new ResponseEntity<>("Không thể thay đổi số lượng sản phẩm cho đơn hàng này!", HttpStatus.OK);
+    }
+
+    // Xử lý số lượng thay đổi
+    int currentQuantity = dhct.getSoLuong();
+    int availableQuantity = spct.getSoluong();
+    int quantityDifference = count - currentQuantity;
+
+    // Kiểm tra số lượng sản phẩm có đủ không
+    if (quantityDifference > availableQuantity) {
+        return new ResponseEntity<>("Sản phẩm này chỉ còn lại " + availableQuantity + "!", HttpStatus.OK);
+    }
+
+    // Cập nhật số lượng sản phẩm và tổng tiền
+    dhct.setSoLuong(count);
+    donHangCTService.save(dhct);
+
+    // Cập nhật số lượng sản phẩm trong kho
+    spct.setSoluong(availableQuantity - quantityDifference);
+    spService.save(spct);
+
+    // Cập nhật tổng tiền của hóa đơn
+    BigDecimal itemPrice = dhct.getGiaThoiDiemMua();
+    BigDecimal oldTotal = dh.getTongTien();
+    BigDecimal totalChange = itemPrice.multiply(new BigDecimal(quantityDifference));
+    BigDecimal newTotal = oldTotal.add(totalChange);
+    dh.setTongTien(newTotal);
+
+    // Kiểm tra và cập nhật khuyến mãi
+    if (dh.getIdDotGiamGia() != null) {
+        int total = dh.getTongTien().intValue();
+        if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+            dh.setIdDotGiamGia(null);
+        }
+    }
+    updatePromotion(dh);
+    donHangService.save(dh);
+
+    return new ResponseEntity<>("success", HttpStatus.OK);
+}
 
     private void updatePromotion(HoaDon dh) {
         // Lấy danh sách các khuyến mãi còn hiệu lực
@@ -309,13 +321,9 @@ public class RestControllerHoaDon {
                 }
             }
 
-            if (dhct.getIdHoaDon().getTrangThai() == 1 || dhct.getIdHoaDon().getTrangThai() == 2) {
-                if (dhct.getIdHoaDon().getTrangThai() == 2) {
+            if (dhct.getIdHoaDon().getTrangThai() == 1 ) {
                     spct.setSoluong(spct.getSoluong() - 1);
                     spService.save(spct);
-                } else {
-                    System.out.println("Chờ Xác Nhận!");
-                }
             } else {
                 return new ResponseEntity<>("no-status", HttpStatus.OK);
             }
@@ -327,6 +335,7 @@ public class RestControllerHoaDon {
             return new ResponseEntity<>("failure", HttpStatus.OK);
         }
     }
+
 
     @GetMapping("/delete-invoice-detail/{id}")
     private ResponseEntity<?> deleteInvoiceDetailById(@PathVariable("id") String id) {
@@ -354,28 +363,9 @@ public class RestControllerHoaDon {
                     updatePromotion(dh);
                     donHangService.save(dh);
                     donHangCTService.deleteById(id);
+                    spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+                    spService.save(spct);
                 }
-//                else if (dhct.getIdHoaDon().getTrangThai() == 2) {
-//                    if (list.size() <= 1) {
-//                        return new ResponseEntity<>("error", HttpStatus.OK);
-//                    }
-//                    if (dh.getIdDotGiamGia() != null) {
-//                        dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(dhct.getSoLuong()))));
-//                        int total = dh.getTongTien().intValue();
-//                        System.out.println("Total " + total);
-//                        if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
-//                            dh.setIdDotGiamGia(null);
-//                        }
-//
-//                    }
-//                    BigDecimal total_before = dh.getTongTien().subtract(dhct.getGiaThoiDiemMua().multiply(new BigDecimal(dhct.getSoLuong())));
-//                    dh.setTongTien(total_before);
-//                    updatePromotion(dh);
-//                    donHangService.save(dh);
-//                    donHangCTService.deleteById(id);
-//                    spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
-//                    spService.save(spct);
-//                }
             } else {
                 return new ResponseEntity<>("no-status", HttpStatus.OK);
             }
@@ -432,30 +422,30 @@ public class RestControllerHoaDon {
 
         if (dh.getTrangThai() == 1 && status == 2) {
             // Kiểm tra số lượng hàng hóa
-            for (ChiTietHoaDon dhct : list) {
-                for (ChiTietSanPham spct : spService.getAllCTSP()) {
-                    if (spct.getId() == dhct.getIdChiTietSanPham().getId()) {
-                        if (dhct.getSoLuong() > spct.getSoluong() || spct.getSoluong() <= 0) {
-                            ResponseMessage response = new ResponseMessage();
-                            response.setTen(spct.getIdSanPham().getTen());
-                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
-                            response.setSl_ton(spct.getSoluong() + "");
-                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
-                            listMessage.add(response);
-                        }
-                    }
-                }
-            }
-            if (listMessage.size() > 0) {
-                return new ResponseEntity<>(listMessage, HttpStatus.OK);
-            }
-            for (ChiTietHoaDon dhct : list) {
-                int count_of_product = dhct.getIdChiTietSanPham().getSoluong();
-                int count_of_invoice = dhct.getSoLuong();
-                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
-                spct.setSoluong(count_of_product - count_of_invoice);
-                spService.save(spct);
-            }
+//            for (ChiTietHoaDon dhct : list) {
+//                for (ChiTietSanPham spct : spService.getAllCTSP()) {
+//                    if (spct.getId() == dhct.getIdChiTietSanPham().getId()) {
+//                        if (dhct.getSoLuong() > spct.getSoluong() || spct.getSoluong() <= 0) {
+//                            ResponseMessage response = new ResponseMessage();
+//                            response.setTen(spct.getIdSanPham().getTen());
+//                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
+//                            response.setSl_ton(spct.getSoluong() + "");
+//                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
+//                            listMessage.add(response);
+//                        }
+//                    }
+//                }
+//            }
+//            if (listMessage.size() > 0) {
+//                return new ResponseEntity<>(listMessage, HttpStatus.OK);
+//            }
+//            for (ChiTietHoaDon dhct : list) {
+//                int count_of_product = dhct.getIdChiTietSanPham().getSoluong();
+//                int count_of_invoice = dhct.getSoLuong();
+//                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+//                spct.setSoluong(count_of_product - count_of_invoice);
+//                spService.save(spct);
+//            }
             dh.setIdNhanVien(nv);
             dh.setTrangThai(status);
             thongBao.setIdKhachHang(dh.getIdKhachHang());
@@ -516,7 +506,6 @@ public class RestControllerHoaDon {
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }
 
-
         if (dh.getTrangThai() == 3 && status == 5) {
             thongBao.setIdKhachHang(dh.getIdKhachHang());
             thongBao.setTrangThaiDonHang(status);
@@ -549,6 +538,11 @@ public class RestControllerHoaDon {
             thongBaoService.save(thongBao);
             dh.setTrangThai(status);
             dh.setGhiChu(reason);
+            for (ChiTietHoaDon dhct : list) {
+                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+                spct.setSoluong(spct.getSoluong() + dhct.getSoLuong());
+                spService.save(spct);
+            }
             responseCustom.setStatusText("success");
             responseCustom.setMessage("success");
             updatePromotion(dh);
