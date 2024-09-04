@@ -53,6 +53,17 @@ public class RestControllerHoaDon {
     @Autowired
     private DotGiamGiaRepository dotGiamGiaRepository;
 
+
+    @GetMapping("/get-infoCustomer/{id}")
+    private ResponseEntity<?> getInfoCustomer(@PathVariable("id") String id) {
+        Optional<ChiTietHoaDon> dh = serviceDetailInvoce.findByIdHD(id).stream().findFirst();
+        if (dh.isPresent()) {
+            return new ResponseEntity<>(dh.get().getIdHoaDon().getIdKhachHang(), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("failure", HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/index/{pageNumber}")
     private ResponseEntity<?> index(@PathVariable("pageNumber") int pageNumber,
                                     @RequestParam(value = "status", required = false) String status,
@@ -147,8 +158,8 @@ public class RestControllerHoaDon {
                     return new ResponseEntity<>("cannot be deleted", HttpStatus.OK);
                 }
                 donHangCTService.deleteById(String.valueOf(dhct.getId()));
-                    spct.setSoluong(spct.getSoluong() + 1);
-                    spService.save(spct);
+                spct.setSoluong(spct.getSoluong() + 1);
+                spService.save(spct);
                 dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua()));
 
                 // Cập nhật khuyến mãi
@@ -161,8 +172,8 @@ public class RestControllerHoaDon {
         if (dhct.getIdHoaDon().getTrangThai() == 1) {
             dhct.setSoLuong(dhct.getSoLuong() - 1);
             donHangCTService.save(dhct);
-                spct.setSoluong(spct.getSoluong() + 1);
-                spService.save(spct);
+            spct.setSoluong(spct.getSoluong() + 1);
+            spService.save(spct);
 
             dh.setTongTien(dh.getTongTien().subtract(dhct.getGiaThoiDiemMua()));
 
@@ -177,61 +188,61 @@ public class RestControllerHoaDon {
     }
 
 
-@GetMapping("/edit-quantity/{id}")
-private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
-                                       @RequestParam("quantity") int count) {
+    @GetMapping("/edit-quantity/{id}")
+    private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
+                                           @RequestParam("quantity") int count) {
 
-    ChiTietHoaDon dhct = donHangCTService.getById2(id);
-    ChiTietSanPham spct = dhct.getIdChiTietSanPham();
-    HoaDon dh = dhct.getIdHoaDon();
+        ChiTietHoaDon dhct = donHangCTService.getById2(id);
+        ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+        HoaDon dh = dhct.getIdHoaDon();
 
-    // Kiểm tra số lượng nhập vào
-    if (count < 1) {
-        return new ResponseEntity<>("Số lượng phải lớn hơn 0!", HttpStatus.OK);
-    }
-
-    // Kiểm tra trạng thái hóa đơn
-    if (dh.getTrangThai() != 1) {
-        return new ResponseEntity<>("Không thể thay đổi số lượng sản phẩm cho đơn hàng này!", HttpStatus.OK);
-    }
-
-    // Xử lý số lượng thay đổi
-    int currentQuantity = dhct.getSoLuong();
-    int availableQuantity = spct.getSoluong();
-    int quantityDifference = count - currentQuantity;
-
-    // Kiểm tra số lượng sản phẩm có đủ không
-    if (quantityDifference > availableQuantity) {
-        return new ResponseEntity<>("Sản phẩm này chỉ còn lại " + availableQuantity + "!", HttpStatus.OK);
-    }
-
-    // Cập nhật số lượng sản phẩm và tổng tiền
-    dhct.setSoLuong(count);
-    donHangCTService.save(dhct);
-
-    // Cập nhật số lượng sản phẩm trong kho
-    spct.setSoluong(availableQuantity - quantityDifference);
-    spService.save(spct);
-
-    // Cập nhật tổng tiền của hóa đơn
-    BigDecimal itemPrice = dhct.getGiaThoiDiemMua();
-    BigDecimal oldTotal = dh.getTongTien();
-    BigDecimal totalChange = itemPrice.multiply(new BigDecimal(quantityDifference));
-    BigDecimal newTotal = oldTotal.add(totalChange);
-    dh.setTongTien(newTotal);
-
-    // Kiểm tra và cập nhật khuyến mãi
-    if (dh.getIdDotGiamGia() != null) {
-        int total = dh.getTongTien().intValue();
-        if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
-            dh.setIdDotGiamGia(null);
+        // Kiểm tra số lượng nhập vào
+        if (count < 1) {
+            return new ResponseEntity<>("Số lượng phải lớn hơn 0!", HttpStatus.OK);
         }
-    }
-    updatePromotion(dh);
-    donHangService.save(dh);
 
-    return new ResponseEntity<>("success", HttpStatus.OK);
-}
+        // Kiểm tra trạng thái hóa đơn
+        if (dh.getTrangThai() != 1) {
+            return new ResponseEntity<>("Không thể thay đổi số lượng sản phẩm cho đơn hàng này!", HttpStatus.OK);
+        }
+
+        // Xử lý số lượng thay đổi
+        int currentQuantity = dhct.getSoLuong();
+        int availableQuantity = spct.getSoluong();
+        int quantityDifference = count - currentQuantity;
+
+        // Kiểm tra số lượng sản phẩm có đủ không
+        if (quantityDifference > availableQuantity) {
+            return new ResponseEntity<>("Sản phẩm này chỉ còn lại " + availableQuantity + "!", HttpStatus.OK);
+        }
+
+        // Cập nhật số lượng sản phẩm và tổng tiền
+        dhct.setSoLuong(count);
+        donHangCTService.save(dhct);
+
+        // Cập nhật số lượng sản phẩm trong kho
+        spct.setSoluong(availableQuantity - quantityDifference);
+        spService.save(spct);
+
+        // Cập nhật tổng tiền của hóa đơn
+        BigDecimal itemPrice = dhct.getGiaThoiDiemMua();
+        BigDecimal oldTotal = dh.getTongTien();
+        BigDecimal totalChange = itemPrice.multiply(new BigDecimal(quantityDifference));
+        BigDecimal newTotal = oldTotal.add(totalChange);
+        dh.setTongTien(newTotal);
+
+        // Kiểm tra và cập nhật khuyến mãi
+        if (dh.getIdDotGiamGia() != null) {
+            int total = dh.getTongTien().intValue();
+            if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+                dh.setIdDotGiamGia(null);
+            }
+        }
+        updatePromotion(dh);
+        donHangService.save(dh);
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 
     private void updatePromotion(HoaDon dh) {
         // Lấy danh sách các khuyến mãi còn hiệu lực
@@ -321,9 +332,9 @@ private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
                 }
             }
 
-            if (dhct.getIdHoaDon().getTrangThai() == 1 ) {
-                    spct.setSoluong(spct.getSoluong() - 1);
-                    spService.save(spct);
+            if (dhct.getIdHoaDon().getTrangThai() == 1) {
+                spct.setSoluong(spct.getSoluong() - 1);
+                spService.save(spct);
             } else {
                 return new ResponseEntity<>("no-status", HttpStatus.OK);
             }
@@ -576,5 +587,6 @@ private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
         responseCustom.setMessage("Cannot change status");
         return new ResponseEntity<>(responseCustom, HttpStatus.OK);
     }
+
 
 }

@@ -4,309 +4,322 @@
 <head th:replace="admin/fragments/head::head">
 </head>
 <body>
+<style>
+  #address_customer{
+      border-top: none!important;
+  }
+  #sub-total td {
+      padding: 0 !important;
+      height: 70px;
+  }
+  #address{
+      border-top-width: 0px!important;
+  }
+</style>
 <!-- Begin page -->
 <div id="layout-wrapper">
-    <div th:replace="admin/fragments/header::header"></div>
-    <!-- ========== App Menu ========== -->
-    <div th:replace="admin/fragments/sidebar::sidebar"></div>
-    <!-- Left Sidebar End -->
-    <!-- ============================================================== -->
-    <!-- Start right Content here -->
-    <!-- ============================================================== -->
-    <div class="main-content">
+  <div th:replace="admin/fragments/header::header"></div>
+  <!-- ========== App Menu ========== -->
+  <div th:replace="admin/fragments/sidebar::sidebar"></div>
+  <!-- Left Sidebar End -->
+  <!-- ============================================================== -->
+  <!-- Start right Content here -->
+  <!-- ============================================================== -->
+  <div class="main-content">
 
-        <div class="page-content">
-            <div class="container-fluid">
+    <div class="page-content">
+      <div class="container-fluid">
 
-                <!-- start page title -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Hoá Đơn</h4>
+        <!-- start page title -->
+        <div class="row">
+          <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+              <h4 class="mb-sm-0">Hoá Đơn</h4>
 
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Hoá Đơn</a></li>
-                                    <li class="breadcrumb-item active">Danh Sách Hoá Đơn</li>
-                                </ol>
-                            </div>
+              <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                  <li class="breadcrumb-item"><a href="javascript: void(0);">Hoá Đơn</a></li>
+                  <li class="breadcrumb-item active">Danh Sách Hoá Đơn</li>
+                </ol>
+              </div>
 
-                        </div>
-                    </div>
+            </div>
+          </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card" id="invoiceList">
+              <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                  <h5 class="card-title mb-0 flex-grow-1">Danh Sách Hoá Đơn</h5>
                 </div>
-                <!-- end page title -->
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card" id="invoiceList">
-                            <div class="card-header border-0">
-                                <div class="d-flex align-items-center">
-                                    <h5 class="card-title mb-0 flex-grow-1">Danh Sách Hoá Đơn</h5>
-                                </div>
-                            </div>
-                            <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-xxl-3 col-sm-12">
-                                            <label class="form-label" for="search-input">Tìm Kiếm</label>
-                                            <div class="search-box">
-                                                <input type="text" class="form-control search bg-light border-light"
-                                                       placeholder="Mã hoá đơn" id="search-input"
-                                                       onkeyup="loadPage()">
-                                                <i class="ri-search-line search-icon"></i>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-xxl-5 col-sm-4">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <label class="form-label" for="start-date">Ngày Bắt Đầu</label>
-                                                    <input type="date" class="form-control bg-light border-light"
-                                                           id="start-date">
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label class="form-label" for="end-date">Ngày Kết Thúc</label>
-                                                    <input type="date" class="form-control bg-light border-light"
-                                                           id="end-date">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-xxl-2 col-sm-4">
-                                            <div class="input-light">
-                                                <label class="form-label" for="status-select">Trạng Thái</label>
-                                                <select class="form-control bg-light border-light"
-                                                        id="status-select"
-                                                        onchange="loadPage()">
-<!--                                                    <option value="-1" selected>Tất Cả</option>-->
-                                                    <option value="1">Chờ Xác Nhận</option>
-                                                    <option value="2">Đang Xử Lý</option>
-                                                    <option value="3">Đang Giao Hàng</option>
-                                                    <option value="4">Hoàn Thành</option>
-                                                    <option value="5">Giao Hàng Thất Bại</option>
-                                                    <option value="6">Huỷ Đơn</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-
-                                        <div class="col-xxl-1 col-sm-4" style="padding: 0 1px;">
-                                            <br>
-                                            <button type="button" class="btn btn-info w-100" style="margin-top: 10px;"
-                                                    onclick="loadPage()">
-                                                <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
-                                            </button>
-                                        </div>
-                                        <div class="col-xxl-1 col-sm-12" style="padding: 0 0;">
-                                            <br>
-                                            <button type="button" class="btn btn-info w-100" style="margin-top: 10px;"
-                                                    onclick="handleResetFilter()">
-                                                <i class="ri-restart-fill me-1 align-bottom"></i>Reset
-                                            </button>
-                                        </div>
-                                        <!--end col-->
-                                    </div>
-                                    <!--end row-->
-                                </form>
-                            </div>
-                            <div class="card-body">
-                                <div>
-                                    <div class="table-responsive table-card">
-                                        <table class="table align-middle table-nowrap" id="invoiceTable">
-                                            <thead class="text-muted">
-                                            <tr>
-                                                <th>Mã Hoá Đơn</th>
-                                                <th>Khách Hàng</th>
-                                                <th>Nhân Viên</th>
-                                                <th>Ngày Tạo</th>
-                                                <th>Tổng Tiền
-<!--                                                    <small class="text-muted">(Đã gồm VAT+Ship)</small>-->
-                                                </th>
-                                                <th>Trạng Thái</th>
-                                                <th class="text-center">Hành Động</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody
-                                                    class="list form-check-all"
-                                                    id="invoice-list-data">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="d-flex justify-content-center align-items-center mt-3">
-                                        <div class="pagination-wrap hstack gap-2 flex-wrap" id="pagination-element">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Modal -->
-                                <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-body p-5 text-center">
-                                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
-                                                           colors="primary:#405189,secondary:#f06548"
-                                                           style="width:90px;height:90px"></lord-icon>
-                                                <div class="mt-4 text-center">
-                                                    <h4>You are about to delete a order ?</h4>
-                                                    <p class="text-muted fs-15 mb-4">Deleting your order will remove all
-                                                        of your information from our database.</p>
-                                                    <div class="hstack gap-2 justify-content-center remove">
-                                                        <button class="btn btn-link link-success fw-medium text-decoration-none"
-                                                                id="deleteRecord-close" data-bs-dismiss="modal"><i
-                                                                class="ri-close-line me-1 align-middle"></i> Close
-                                                        </button>
-                                                        <button class="btn btn-danger" id="delete-record">Yes, Delete
-                                                            It
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end modal -->
-                            </div>
-                        </div>
-
+              </div>
+              <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+                <form>
+                  <div class="row g-3">
+                    <div class="col-xxl-3 col-sm-12">
+                      <label class="form-label" for="search-input">Tìm Kiếm</label>
+                      <div class="search-box">
+                        <input type="text" class="form-control search bg-light border-light"
+                               placeholder="Mã hoá đơn" id="search-input"
+                               onkeyup="loadPage()">
+                        <i class="ri-search-line search-icon"></i>
+                      </div>
                     </div>
                     <!--end col-->
-                </div>
-                <!--end row-->
+                    <div class="col-xxl-5 col-sm-4">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <label class="form-label" for="start-date">Ngày Bắt Đầu</label>
+                          <input type="date" class="form-control bg-light border-light"
+                                 id="start-date">
+                        </div>
+                        <div class="col-sm-6">
+                          <label class="form-label" for="end-date">Ngày Kết Thúc</label>
+                          <input type="date" class="form-control bg-light border-light"
+                                 id="end-date">
+                        </div>
+                      </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xxl-2 col-sm-4">
+                      <div class="input-light">
+                        <label class="form-label" for="status-select">Trạng Thái</label>
+                        <select class="form-control bg-light border-light"
+                                id="status-select"
+                                onchange="loadPage()">
+                          <!--                                                    <option value="-1" selected>Tất Cả</option>-->
+                          <option value="1">Chờ Xác Nhận</option>
+                          <option value="2">Đang Xử Lý</option>
+                          <option value="3">Đang Giao Hàng</option>
+                          <option value="4">Hoàn Thành</option>
+                          <option value="5">Giao Hàng Thất Bại</option>
+                          <option value="6">Huỷ Đơn</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!--end col-->
 
-            </div><!-- container-fluid -->
+                    <div class="col-xxl-1 col-sm-4" style="padding: 0 1px;">
+                      <br>
+                      <button type="button" class="btn btn-info w-100" style="margin-top: 10px;"
+                              onclick="loadPage()">
+                        <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
+                      </button>
+                    </div>
+                    <div class="col-xxl-1 col-sm-12" style="padding: 0 0;">
+                      <br>
+                      <button type="button" class="btn btn-info w-100" style="margin-top: 10px;"
+                              onclick="handleResetFilter()">
+                        <i class="ri-restart-fill me-1 align-bottom"></i>Reset
+                      </button>
+                    </div>
+                    <!--end col-->
+                  </div>
+                  <!--end row-->
+                </form>
+              </div>
+              <div class="card-body">
+                <div>
+                  <div class="table-responsive table-card">
+                    <table class="table align-middle table-nowrap" id="invoiceTable">
+                      <thead class="text-muted">
+                      <tr>
+                        <th>Mã Hoá Đơn</th>
+                        <th>Khách Hàng</th>
+                        <th>Nhân Viên</th>
+                        <th>Ngày Tạo</th>
+                        <th>Tổng Tiền
+                          <!--                                                    <small class="text-muted">(Đã gồm VAT+Ship)</small>-->
+                        </th>
+                        <th>Trạng Thái</th>
+                        <th class="text-center">Hành Động</th>
+                      </tr>
+                      </thead>
+                      <tbody
+                              class="list form-check-all"
+                              id="invoice-list-data">
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="d-flex justify-content-center align-items-center mt-3">
+                    <div class="pagination-wrap hstack gap-2 flex-wrap" id="pagination-element">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-body p-5 text-center">
+                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                   colors="primary:#405189,secondary:#f06548"
+                                   style="width:90px;height:90px"></lord-icon>
+                        <div class="mt-4 text-center">
+                          <h4>You are about to delete a order ?</h4>
+                          <p class="text-muted fs-15 mb-4">Deleting your order will remove all
+                            of your information from our database.</p>
+                          <div class="hstack gap-2 justify-content-center remove">
+                            <button class="btn btn-link link-success fw-medium text-decoration-none"
+                                    id="deleteRecord-close" data-bs-dismiss="modal"><i
+                                    class="ri-close-line me-1 align-middle"></i> Close
+                            </button>
+                            <button class="btn btn-danger" id="delete-record">Yes, Delete
+                              It
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--end modal -->
+              </div>
+            </div>
+
+          </div>
+          <!--end col-->
         </div>
-        <!-- End Page-content -->
+        <!--end row-->
+
+      </div><!-- container-fluid -->
     </div>
-    <!-- end main content-->
+    <!-- End Page-content -->
+  </div>
+  <!-- end main content-->
 </div>
 <!-- END layout-wrapper -->
 <div class="modal fade" id="myModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Hoá Đơn Chi Tiết</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="margin-bottom: 20px;">
-                <div class="row justify-content-center">
-                    <div class="col-xxl-12">
-                        <div class="card" id="demo">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <!--end card-header-->
-                                </div><!--end col-->
-                                <div class="col-lg-12">
-                                    <div class="card-body p-4">
-                                        <div class="row g-3">
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Hoá Đơn</p>
-                                                <h5 class="fs-15 mb-0">#<span id="invoice-no"></span></h5>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Ngày Tạo</p>
-                                                <h5 class="fs-15 mb-0"><span id="invoice-date"></span></h5>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-6" id="payment-status">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Hoá Đơn Chi Tiết</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="margin-bottom: 20px;">
+        <div class="row justify-content-center">
+          <div class="col-xxl-12">
+            <div class="card" id="demo">
+              <div class="row">
+                <div class="col-lg-12">
+                  <!--end card-header-->
+                </div><!--end col-->
+                <div class="col-lg-12">
+                  <div class="card-body p-4">
+                    <div class="row g-3">
+                      <div class="col-lg-3 col-6">
+                        <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Mã Hoá Đơn</p>
+                        <h5 class="fs-15 mb-0">#<span id="invoice-no"></span></h5>
+                      </div>
+                      <!--end col-->
+                      <div class="col-lg-3 col-6">
+                        <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Ngày Tạo</p>
+                        <h5 class="fs-15 mb-0"><span id="invoice-date"></span></h5>
+                      </div>
+                      <!--end col-->
+                      <div class="col-lg-3 col-6" id="payment-status">
 
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-3 col-6">
-                                                <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Tổng
-                                                    Tiền<small class="text-muted">(Trước thuế)</small></p>
-                                                <h5 class="fs-15 mb-0"><span id="total-amount"></span></h5>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                    </div>
-                                    <!--end card-body-->
-                                </div><!--end col-->
-                                <div class="col-lg-12">
-                                    <div class="card-body p-4">
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless text-center table-nowrap align-middle mb-0">
-                                                <thead>
-                                                <tr class="table-active">
-                                                    <th scope="col" style="width: 50px;">#</th>
-                                                    <th scope="col" class="text-start">Sản Phẩm</th>
-                                                    <th scope="col">Đơn Giá</th>
-                                                    <th scope="col" style="width: 140px;">Số Lượng</th>
-                                                    <th scope="col" class="text-center">Tổng Tiền</th>
-                                                    <th scope="col" class="text-center hidden-action">Hành Động</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="products-list">
-                                                </tbody>
-                                            </table><!--end table-->
-                                        </div>
-                                        <div class="row p-1 fw-bold text-danger" id="add-product"></div>
-                                        <div class="border-top border-top-dashed mt-2 d-flex justify-content-between">
-                                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
-                                                   style="width:100%">
-                                                <tbody id="address">
-                                                </tbody>
-                                            </table>
-
-                                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
-                                                   style="width:250px">
-                                                <tbody id="sub-total">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="hstack gap-2 justify-content-between d-print-none mt-4">
-                                            <div class="justify-content-start" id="statusButtonGroup">
-                                            </div>
-                                            <div class="justify-content-end">
-                                                <button class="btn btn-success" onclick="printModal()" id="printButton">
-                                                    <i class="ri-printer-line align-bottom me-1"></i> In Hoá Đơn
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end card-body-->
-                                </div><!--end col-->
-                            </div><!--end row-->
-                        </div>
-                        <!--end card-->
+                      </div>
+                      <!--end col-->
+                      <div class="col-lg-3 col-6">
+                        <p class="text-muted mb-2 text-uppercase fw-semibold fs-14">Tổng
+                          Tiền<small class="text-muted">(Trước thuế)</small></p>
+                        <h5 class="fs-15 mb-0"><span id="total-amount"></span></h5>
+                      </div>
+                      <!--end col-->
                     </div>
-                    <!--end col-->
-                </div>
+                    <!--end row-->
+                  </div>
+                  <!--end card-body-->
+                </div><!--end col-->
+                <div class="col-lg-12">
+                  <div class="card-body p-4">
+                    <div class="table-responsive">
+                      <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                        <thead>
+                        <tr class="table-active">
+                          <th scope="col" style="width: 50px;">#</th>
+                          <th scope="col" class="text-start">Sản Phẩm</th>
+                          <th scope="col">Đơn Giá</th>
+                          <th scope="col" style="width: 140px;">Số Lượng</th>
+                          <th scope="col" class="text-center">Tổng Tiền</th>
+                          <th scope="col" class="text-center hidden-action">Hành Động</th>
+                        </tr>
+                        </thead>
+                        <tbody id="products-list">
+                        </tbody>
+                      </table><!--end table-->
+                    </div>
+                    <div class="row p-1 fw-bold text-danger" id="add-product"></div>
+                    <div class="border-top border-top-dashed mt-2 d-flex justify-content-between">
+                      <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
+                             style="width:100%">
+                        <tbody id="address_customer"></tbody>
+                        <tbody id="address">
+                        </tbody>
+                      </table>
+
+                      <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto"
+                             style="width:250px">
+                        <tbody id="sub-total">
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="hstack gap-2 justify-content-between d-print-none mt-4">
+                      <div class="justify-content-start" id="statusButtonGroup">
+                      </div>
+                      <div class="justify-content-end">
+                        <button class="btn btn-success" onclick="printModal()" id="printButton">
+                          <i class="ri-printer-line align-bottom me-1"></i> In Hoá Đơn
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end card-body-->
+                </div><!--end col-->
+              </div><!--end row-->
             </div>
-            <!-- end col -->
+            <!--end card-->
+          </div>
+          <!--end col-->
         </div>
-        <!-- end row -->
+      </div>
+      <!-- end col -->
     </div>
+    <!-- end row -->
+  </div>
 </div>
 
 <div class="modal fade" id="modal-reason" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="text-danger">Lý Do Huỷ Đơn/Giao Thất Bại</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="margin-bottom: 20px;">
-                <input type="text" class="form-control" id="status-input" hidden/>
-                <input type="text" class="form-control" id="id-input" hidden=""/>
-                <div class="form-floating mb-3">
-                    <textarea class="form-control" placeholder="Lí do" id="reason-input"></textarea>
-                    <span class="text-danger" id="valid-reason"></span>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-end">
-                <button type="button" class="btn btn-success" onclick="handleCancelInvoice()">Xác Nhận</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                        aria-label="Close">Huỷ Bỏ
-                </button>
-            </div>
-            <!-- end col -->
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="text-danger">Lý Do Huỷ Đơn/Giao Thất Bại</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="margin-bottom: 20px;">
+        <input type="text" class="form-control" id="status-input" hidden/>
+        <input type="text" class="form-control" id="id-input" hidden=""/>
+        <div class="form-floating mb-3">
+          <textarea class="form-control" placeholder="Lí do" id="reason-input"></textarea>
+          <span class="text-danger" id="valid-reason"></span>
         </div>
-        <!-- end row -->
+      </div>
+      <div class="modal-footer d-flex justify-content-end">
+        <button type="button" class="btn btn-success" onclick="handleCancelInvoice()">Xác Nhận</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                aria-label="Close">Huỷ Bỏ
+        </button>
+      </div>
+      <!-- end col -->
     </div>
+    <!-- end row -->
+  </div>
 </div>
 
 <div
@@ -314,121 +327,121 @@
         id="modal_product"
         tabindex="-1"
 >
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Sản Phẩm</h4>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
-                        type="button"></button>
-            </div>
-            <div class="modal-body">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Sản Phẩm</h4>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body">
+            <div class="row" id="cart-list">
+              <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="row" id="cart-list">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row g-lg-2 g-4">
-                                            <div class="col-lg-3">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <label class="form-label">Tìm Kiếm</label>
-                                                        <div class="search-box">
-                                                            <input class="form-control search" id="search-product-input"
-                                                                   onkeyup="loadProductDetail(0)" placeholder="..."
-                                                                   type="text">
-                                                            <i class="ri-search-line search-icon"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-9">
-                                                <div class="row" style="padding-bottom: 10px">
-                                                    <div class="col-md-4">
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="form-label">Màu Sắc</label>
-                                                        <select aria-label=".form-select-lg example"
-                                                                class="form-select mb-3"
-                                                                id="filter-color"
-                                                                onchange="loadProductDetail(undefined)">
-                                                            <option selected value="0">Tất Cả</option>
-                                                            <option value="1">Đen</option>
-                                                            <option value="2">Trắng</option>
-                                                            <option value="3">Đỏ</option>
-                                                            <option value="4">Xám</option>
-                                                            <option value="5">Xanh Lục</option>
-                                                            <option value="6">Tím Xanh</option>
-                                                            <option value="7">Xanh Da Trời</option>
-                                                            <option value="8">Vàng</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="form-label">Size</label>
-                                                        <select aria-label=".form-select-lg example"
-                                                                class="form-select mb-3"
-                                                                id="filter-size" onchange="loadProductDetail(undefined)"
-                                                        >
-                                                            <option selected value="0">Tất Cả</option>
-                                                            <option value="s">S</option>
-                                                            <option value="m">M</option>
-                                                            <option value="l">L</option>
-                                                            <option value="xl">XL</option>
-                                                            <option value="xxl">XXL</option>
-                                                            <option value="2xl">2XL</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="table-responsive table-card mb-1">
-                                            <table class="table align-middle table-nowrap"
-                                                   id="customerTable3">
-                                                <thead class="table-light">
-                                                <tr>
-                                                    <th class="text-start">STT</th>
-                                                    <th class="text-start">Tên</th>
-                                                    <th class="text-start">Ảnh</th>
-                                                    <th class="text-start">Màu Sắc</th>
-                                                    <th class="text-start">Kích Thước</th>
-                                                    <th class="text-start">Số Lượng</th>
-                                                    <th class="text-start">Đơn Giá</th>
-                                                    <th class="text-start">Hành Động</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody class="list form-check-all"
-                                                       id="list_product_detail">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row p-2">
-                                    <div class="col-lg-12">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <nav aria-label="Page navigation example">
-                                                    <ul class="pagination d-flex justify-content-center align-items-center"
-                                                        id="pagination_product_detail">
-                                                    </ul>
-                                                </nav>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                  <div class="card-body">
+                    <div class="row g-lg-2 g-4">
+                      <div class="col-lg-3">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <label class="form-label">Tìm Kiếm</label>
+                            <div class="search-box">
+                              <input class="form-control search" id="search-product-input"
+                                     onkeyup="loadProductDetail(0)" placeholder="..."
+                                     type="text">
+                              <i class="ri-search-line search-icon"></i>
                             </div>
+                          </div>
                         </div>
+                      </div>
+                      <div class="col-lg-9">
+                        <div class="row" style="padding-bottom: 10px">
+                          <div class="col-md-4">
+                          </div>
+                          <div class="col-md-4">
+                            <label class="form-label">Màu Sắc</label>
+                            <select aria-label=".form-select-lg example"
+                                    class="form-select mb-3"
+                                    id="filter-color"
+                                    onchange="loadProductDetail(undefined)">
+                              <option selected value="0">Tất Cả</option>
+                              <option value="1">Đen</option>
+                              <option value="2">Trắng</option>
+                              <option value="3">Đỏ</option>
+                              <option value="4">Xám</option>
+                              <option value="5">Xanh Lục</option>
+                              <option value="6">Tím Xanh</option>
+                              <option value="7">Xanh Da Trời</option>
+                              <option value="8">Vàng</option>
+                            </select>
+                          </div>
+                          <div class="col-md-4">
+                            <label class="form-label">Size</label>
+                            <select aria-label=".form-select-lg example"
+                                    class="form-select mb-3"
+                                    id="filter-size" onchange="loadProductDetail(undefined)"
+                            >
+                              <option selected value="0">Tất Cả</option>
+                              <option value="s">S</option>
+                              <option value="m">M</option>
+                              <option value="l">L</option>
+                              <option value="xl">XL</option>
+                              <option value="xxl">XXL</option>
+                              <option value="2xl">2XL</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="table-responsive table-card mb-1">
+                      <table class="table align-middle table-nowrap"
+                             id="customerTable3">
+                        <thead class="table-light">
+                        <tr>
+                          <th class="text-start">STT</th>
+                          <th class="text-start">Tên</th>
+                          <th class="text-start">Ảnh</th>
+                          <th class="text-start">Màu Sắc</th>
+                          <th class="text-start">Kích Thước</th>
+                          <th class="text-start">Số Lượng</th>
+                          <th class="text-start">Đơn Giá</th>
+                          <th class="text-start">Hành Động</th>
+                        </tr>
+                        </thead>
+                        <tbody class="list form-check-all"
+                               id="list_product_detail">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="row p-2">
+                  <div class="col-lg-12">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination d-flex justify-content-center align-items-center"
+                              id="pagination_product_detail">
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <!-- end col -->
+          </div>
         </div>
-        <!-- end row -->
+      </div>
+      <!-- end col -->
     </div>
+    <!-- end row -->
+  </div>
 </div>
 <div th:replace="admin/fragments/themeSettings::themeSettings"></div>
 <div th:replace="admin/fragments/script::script"></div>
@@ -836,7 +849,6 @@
     // }
 
 
-
     async function detailInvoice(id) {
         let url = '/api/admin/invoice/invoice-detail/' + id;
         const response = await fetch(url, {
@@ -1153,6 +1165,35 @@
             }
             $('#myModal').modal('show');
         }
+        // load info cus
+        $.ajax({
+            url: `http://localhost:8080/api/admin/invoice/get-infoCustomer/${idInvoice}`,
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            },
+            success: function (res) {
+                console.log(res, 'test cus');
+                if (res !== null) {
+                    let html = `
+                        <div class="col-lg-12">
+                            <div class="card border-0">
+                                <br>
+                                <label class="form-label">
+                                    <div class="row">
+                                        <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block">Thông tin khách hàng</span></div>
+                                    </div>
+                                    <span class="fs-14 mb-2 d-block fw-semibold">${res.ten}</span>
+                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${res.email}</span>
+                                    <span class="text-muted fw-normal d-block">${res.sdt}</span>
+                                </label>
+                            </div>
+                        </div>
+                        `;
+                    document.getElementById('address_customer').innerHTML = html;
+                }
+            }
+        });
     }
 
     function handleShippingFee(id_order, shipping_fee) {
