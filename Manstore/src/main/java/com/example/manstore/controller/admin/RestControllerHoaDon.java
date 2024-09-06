@@ -2,6 +2,7 @@ package com.example.manstore.controller.admin;
 
 import com.example.manstore.CustomModel.ResponseCustom;
 import com.example.manstore.CustomModel.ResponseMessage;
+import com.example.manstore.dto.request.ThongTinVanChuyenRequest;
 import com.example.manstore.entity.*;
 import com.example.manstore.repository.DotGiamGiaRepository;
 import com.example.manstore.service.HoaDonChiTietService;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.security.PublicKey;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,6 +47,9 @@ public class RestControllerHoaDon {
     private HoaDonChiTietService donHangCTService;
 
     @Autowired
+    private TTVCServiceImpl thongTinVanChuyenService;
+
+    @Autowired
     private ThongBaoServiceImpl thongBaoService;
 
     @Autowired
@@ -62,6 +67,58 @@ public class RestControllerHoaDon {
         }else {
             return new ResponseEntity<>("failure", HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getInvoiceById(@PathVariable("id") Integer id) {
+        // Tìm kiếm hóa đơn theo ID
+        Optional<HoaDon> hoaDonOptional = donHangService.findById(id);
+
+        // Nếu không tìm thấy hóa đơn, trả về mã lỗi 404
+        if (!hoaDonOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn không tồn tại");
+        }
+
+        // Nếu tìm thấy hóa đơn, trả về thông tin hóa đơn
+        HoaDon hoaDon = hoaDonOptional.get();
+
+        // Trả về thông tin hóa đơn dưới dạng JSON
+        return ResponseEntity.ok(hoaDon);
+    }
+
+
+    @PostMapping("/update-address/{invoiceId}")
+    public ResponseEntity<?> updateTTVC(@PathVariable("invoiceId") Integer invoiceId,
+                                        @RequestBody ThongTinVanChuyenRequest addressRequest) {
+        // Tìm hóa đơn theo ID
+        Optional<HoaDon> hoaDonOptional = donHangService.findById(invoiceId);
+
+        if (!hoaDonOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn không tồn tại");
+        }
+
+        HoaDon hoaDon = hoaDonOptional.get();
+
+        // Lấy thông tin vận chuyển hiện tại từ hóa đơn
+        ThongTinVanChuyen thongTinVanChuyen = hoaDon.getIdThongTinVanChuyen();
+
+        // Cập nhật các trường thông tin vận chuyển
+        thongTinVanChuyen.setSdt(addressRequest.getSdt());
+        thongTinVanChuyen.setTenNguoiNhan(addressRequest.getTenNguoiNhan());
+        thongTinVanChuyen.setQuanHuyen(addressRequest.getQuanHuyen());
+        thongTinVanChuyen.setTinhThanhpho(addressRequest.getTinhThanhpho());
+        thongTinVanChuyen.setXaPhuongThitran(addressRequest.getXaPhuongThitran());
+        thongTinVanChuyen.setDiaChiCuThe(addressRequest.getDiaChiCuThe());
+
+
+        // Lưu thông tin vận chuyển
+        thongTinVanChuyenService.update(thongTinVanChuyen);
+
+        // Cập nhật hóa đơn với thông tin vận chuyển mới
+        hoaDon.setIdThongTinVanChuyen(thongTinVanChuyen);
+        donHangService.save(hoaDon);
+
+        return ResponseEntity.ok("Cập nhật địa chỉ thành công");
     }
 
     @GetMapping("/index/{pageNumber}")

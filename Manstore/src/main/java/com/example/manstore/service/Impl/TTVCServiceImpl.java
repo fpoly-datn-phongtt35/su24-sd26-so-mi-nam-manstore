@@ -20,6 +20,11 @@ public class TTVCServiceImpl implements TTVCService {
     }
 
     @Override
+    public ThongTinVanChuyen update(ThongTinVanChuyen ttvc) {
+        return rp.save(ttvc);
+    }
+
+    @Override
     public List<ThongTinVanChuyen> findAll(Sort sort) {
         return rp.findAll(sort);
     }

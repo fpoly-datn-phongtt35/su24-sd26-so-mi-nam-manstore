@@ -5,16 +5,18 @@
 </head>
 <body>
 <style>
-  #address_customer{
-      border-top: none!important;
-  }
-  #sub-total td {
-      padding: 0 !important;
-      height: 70px;
-  }
-  #address{
-      border-top-width: 0px!important;
-  }
+    #address_customer {
+        border-top: none !important;
+    }
+
+    #sub-total td {
+        padding: 0 !important;
+        height: 70px;
+    }
+
+    #address {
+        border-top-width: 0px !important;
+    }
 </style>
 <!-- Begin page -->
 <div id="layout-wrapper">
@@ -468,7 +470,7 @@
 
     function handleResetFilter() {
 
-        document.getElementById('status-select').value = '-1';
+        document.getElementById('status-select').value = '1';
 
         document.getElementById('search-input').value = '';
 
@@ -1064,22 +1066,40 @@
                 } else {
                     name = address.tenNguoiNhan;
                 }
+                // document.getElementById('address').innerHTML = `
+                //         <div class="col-lg-12">
+                //             <div class="card border-0">
+                //                 <br>
+                //                 <label class="form-label">
+                //                     <div class="row">
+                //                         <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block">Địa chỉ nhận hàng</span></div>
+                //                     </div>
+                //                     <span class="fs-14 mb-2 d-block fw-semibold">${name}</span>
+                //                     <span class="text-muted fw-normal text-wrap mb-1 d-block">${address.tinhThanhpho + ', ' + address.quanHuyen + ', ' + address.xaPhuongThitran + '.'}</span>
+                //                     <span class="text-muted fw-normal text-wrap mb-1 d-block">${addressDetail + '.'}</span>
+                //                     <span class="text-muted fw-normal d-block">${address.sdt}</span>
+                //                     ${reason}
+                //                 </label>
+                //             </div>
+                //         </div>`;
+
                 document.getElementById('address').innerHTML = `
-                        <div class="col-lg-12">
-                            <div class="card border-0">
-                                <br>
-                                <label class="form-label">
-                                    <div class="row">
-                                        <div class="col-md-6"><span class="mb-3 text-uppercase fw-semibold d-block">Địa chỉ nhận hàng</span></div>
-                                    </div>
-                                    <span class="fs-14 mb-2 d-block fw-semibold">${name}</span>
-                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${address.tinhThanhpho + ', ' + address.quanHuyen + ', ' + address.xaPhuongThitran + '.'}</span>
-                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">${addressDetail + '.'}</span>
-                                    <span class="text-muted fw-normal d-block">${address.sdt}</span>
-                                    ${reason}
-                                </label>
-                            </div>
-                        </div>`;
+    <div class="col-lg-12">
+<div class="card border-0">
+    <br>
+    <label class="form-label">
+        <div class="row">
+            <div class="col-md-6">
+                <span class="mb-3 text-uppercase fw-semibold d-block">Địa chỉ nhận hàng</span>
+            </div>
+        </div>
+        <textarea id="fullAddress" class="form-control mb-2" rows="5" style="white-space: pre-line;" ${data[0].idHoaDon.trangThai !== 1 ? 'disabled' : ''}>
+${name}\n${address.sdt}\n${address.tinhThanhpho}, ${address.quanHuyen}, ${address.xaPhuongThitran}\n${addressDetail}</textarea>
+        ${reason}
+    </label>
+</div>
+
+    </div>`;
             }
 
             handleStatusInvoice(order_status, order_id);
@@ -1377,15 +1397,134 @@
         document.getElementById('id-input').value = id;
     }
 
+    // async function handleInvoice(status, id) {
+    //     let ship = document.getElementById('shipping-fee').value;
+    //     let staff_id = localStorage.getItem("adminId");
+    //     let alert_message = '';
+    //     if (parseInt(status) === 2) {
+    //         alert_message = "Bạn Muốn Xác Nhận Hoá Đơn ?"
+    //     } else {
+    //         alert_message = "Bạn Muốn Chuyển Trạng Thái Hoá Đơn ?"
+    //     }
+    //     swal.fire({
+    //         icon: 'question',
+    //         title: 'Thông báo',
+    //         text: alert_message,
+    //         confirmButtonText: 'Có',
+    //         showCancelButton: true,
+    //         cancelButtonText: 'Không'
+    //     }).then((result) => {
+    //         if (parseInt(status) === 2 && ship === '') {
+    //             swal.fire({
+    //                 icon: 'warning',
+    //                 title: 'Thông báo',
+    //                 text: 'Bạn chưa nhập phí ship!',
+    //                 confirmButtonText: 'OK'
+    //             })
+    //             return;
+    //         }
+    //         if (result.isConfirmed) {
+    //             if (parseInt(status) === 6 || parseInt(status) === 5) {
+    //                 showModalReason(status, id);
+    //             } else {
+    //                 $.ajax({
+    //                     url: '/api/admin/invoice/change-status/' +
+    //                         id + '?status=' + status + '&idStaff=' + staff_id,
+    //                     method: 'GET',
+    //                     headers: {
+    //                         'Authorization': 'Bearer ' + localStorage.getItem('token')
+    //                     },
+    //                     success: function (response) {
+    //                         console.log(response)
+    //                         if (response.statusText === 'success') {
+    //                             swal.fire({
+    //                                 icon: 'success',
+    //                                 title: 'Thông Báo',
+    //                                 text: 'Chuyển Trạng Thái Thành Công!'
+    //                             }).then(() => {
+    //                                 $('#myModal').modal('hide');
+    //                                 loadPage();
+    //                             })
+    //                         } else if (response.statusText === 'failure') {
+    //                             if (response.message === 'The status has been switched before') {
+    //                                 swal.fire({
+    //                                     icon: 'warning',
+    //                                     title: 'Thông Báo',
+    //                                     text: 'Hoá Đơn Đã Được Chuyển Trạng Thái Trước Đó!'
+    //                                 }).then(() => {
+    //                                     $('#myModal').modal('hide');
+    //                                     loadPage();
+    //                                 })
+    //                             }
+    //                             if (response.message === 'Shipping fee is null') {
+    //                                 swal.fire({
+    //                                     icon: 'warning',
+    //                                     title: 'Thông Báo',
+    //                                     text: 'Vui Lòng Nhập Phí Vận Chuyển!'
+    //                                 })
+    //                             }
+    //                         } else {
+    //                             let message = `
+    //                                 <table class="table align-middle table-borderless table-nowrap text-center mb-0">
+    //                                     <thead>
+    //                                         <tr>
+    //                                             <th class="text-start">Sản Phẩm</th>
+    //                                             <th class="text-start">Size & Màu Sắc</th>
+    //                                             <th class="text-start">Số Lượng Tồn</th>
+    //                                         </tr>
+    //                                     </thead>`;
+    //                             response.forEach(function (item) {
+    //                                 message +=
+    //                                     `<tbody>
+    //                                     <td class="text-start"> ${item.ten}  </td>
+    //                                     <td class="text-start"> ${item.ms_size} </td>
+    //                                     <td class="text-start"> ${item.sl_ton} Sản Phẩm </td>
+    //                                 </tbody>`;
+    //                             });
+    //                             message += `</table>`;
+    //                             swal.fire({
+    //                                 title: 'Có 1 Vài Sản Phẩm Đã Hết Hoặc Đạt Giới Hạn Mua!',
+    //                                 icon: 'warning',
+    //                                 html: message,
+    //                                 width: 700,
+    //                                 confirmButtonText: "Tôi đã biết!",
+    //                             })
+    //                         }
+    //                     },
+    //                     error: function (xhr, status, error) {
+    //                         console.error('Error:', error);
+    //                     }
+    //                 })
+    //             }
+    //         }
+    //     })
+    // }
+
+    function toggleAddressTextArea(disable) {
+        const addressTextArea = document.getElementById('fullAddress');
+        addressTextArea.disabled = disable;
+    }
+
+    // Ví dụ: Vô hiệu hóa textarea khi trạng thái lớn hơn 1
+    if (data[0].idHoaDon.trangThai > 1) {
+        toggleAddressTextArea(true);
+    } else {
+        toggleAddressTextArea(false);
+    }
+
+
     async function handleInvoice(status, id) {
         let ship = document.getElementById('shipping-fee').value;
         let staff_id = localStorage.getItem("adminId");
         let alert_message = '';
+
+        // Xác nhận chuyển trạng thái dựa trên giá trị status
         if (parseInt(status) === 2) {
-            alert_message = "Bạn Muốn Xác Nhận Hoá Đơn ?"
+            alert_message = "Bạn Muốn Xác Nhận Hoá Đơn ?";
         } else {
-            alert_message = "Bạn Muốn Chuyển Trạng Thái Hoá Đơn ?"
+            alert_message = "Bạn Muốn Chuyển Trạng Thái Hoá Đơn ?";
         }
+
         swal.fire({
             icon: 'question',
             title: 'Thông báo',
@@ -1393,92 +1532,134 @@
             confirmButtonText: 'Có',
             showCancelButton: true,
             cancelButtonText: 'Không'
-        }).then((result) => {
+        }).then(async (result) => {
             if (parseInt(status) === 2 && ship === '') {
                 swal.fire({
                     icon: 'warning',
                     title: 'Thông báo',
                     text: 'Bạn chưa nhập phí ship!',
                     confirmButtonText: 'OK'
-                })
+                });
                 return;
             }
+
             if (result.isConfirmed) {
-                if (parseInt(status) === 6 || parseInt(status) === 5) {
-                    showModalReason(status, id);
-                } else {
-                    $.ajax({
-                        url: '/api/admin/invoice/change-status/' +
-                            id + '?status=' + status + '&idStaff=' + staff_id,
-                        method: 'GET',
+                // Lấy dữ liệu từ textarea địa chỉ đầy đủ
+                const fullAddressText = document.getElementById('fullAddress').value.split('\n');
+
+                // if (fullAddressText.length < 4) {
+                //     swal.fire({
+                //         icon: 'warning',
+                //         title: 'Thông báo',
+                //         text: 'Vui lòng nhập đầy đủ thông tin địa chỉ!'
+                //     });
+                //     return;
+                // }
+
+                // Tách các phần của địa chỉ từ fullAddress
+                const tenNguoiNhan = fullAddressText[0];
+                const sdt = fullAddressText[1];
+                const diaChi = fullAddressText[2].split(', ');
+                const diaChiCuThe = fullAddressText[3];
+
+                const tinhThanhpho = diaChi[0];
+                const quanHuyen = diaChi[1];
+                const xaPhuongThitran = diaChi[2];
+
+                // Tạo đối tượng request để gửi đi
+                const addressRequest = {
+                    sdt,
+                    tenNguoiNhan,
+                    tinhThanhpho,
+                    quanHuyen,
+                    xaPhuongThitran,
+                    diaChiCuThe
+                };
+
+                try {
+                    // Gửi yêu cầu cập nhật địa chỉ lên server
+                    const response = await fetch(`/api/admin/invoice/update-address/${id}`, {
+                        method: 'POST',
                         headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                            'Content-Type': 'application/json'
                         },
-                        success: function (response) {
-                            console.log(response)
-                            if (response.statusText === 'success') {
-                                swal.fire({
-                                    icon: 'success',
-                                    title: 'Thông Báo',
-                                    text: 'Chuyển Trạng Thái Thành Công!'
-                                }).then(() => {
-                                    $('#myModal').modal('hide');
-                                    loadPage();
-                                })
-                            } else if (response.statusText === 'failure') {
-                                if (response.message === 'The status has been switched before') {
+                        body: JSON.stringify(addressRequest)
+                    });
+
+                    // Kiểm tra nếu phản hồi không phải là JSON
+                    const contentType = response.headers.get('content-type');
+                    let data;
+                    if (contentType && contentType.indexOf('application/json') !== -1) {
+                        data = await response.json();
+                    } else {
+                        data = await response.text();
+                    }
+
+                    if (response.ok) {
+                        console.log("Cập nhật địa chỉ thành công:", data);
+                    } else {
+                        console.error("Lỗi khi cập nhật địa chỉ:", data);
+                        swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: data.message || 'Đã xảy ra lỗi khi cập nhật địa chỉ'
+                        });
+                        return; // Dừng lại nếu có lỗi cập nhật địa chỉ
+                    }
+
+
+                    if (parseInt(status) === 6 || parseInt(status) === 5) {
+                        showModalReason(status, id);
+                    } else {
+                        await $.ajax({
+                            url: `/api/admin/invoice/change-status/${id}?status=${status}&idStaff=${staff_id}`,
+                            method: 'GET',
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                            },
+                            success: async function (response) {
+                                console.log(response);
+                                if (response.statusText === 'success') {
                                     swal.fire({
-                                        icon: 'warning',
+                                        icon: 'success',
                                         title: 'Thông Báo',
-                                        text: 'Hoá Đơn Đã Được Chuyển Trạng Thái Trước Đó!'
-                                    }).then(() => {
+                                        text: 'Chuyển Trạng Thái Thành Công!'
+                                    }).then(async () => {
                                         $('#myModal').modal('hide');
                                         loadPage();
-                                    })
-                                }
-                                if (response.message === 'Shipping fee is null') {
+
+                                    });
+                                } else {
                                     swal.fire({
                                         icon: 'warning',
                                         title: 'Thông Báo',
-                                        text: 'Vui Lòng Nhập Phí Vận Chuyển!'
-                                    })
+                                        text: 'Có lỗi xảy ra khi chuyển trạng thái!'
+                                    });
                                 }
-                            } else {
-                                let message = `
-                                    <table class="table align-middle table-borderless table-nowrap text-center mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-start">Sản Phẩm</th>
-                                                <th class="text-start">Size & Màu Sắc</th>
-                                                <th class="text-start">Số Lượng Tồn</th>
-                                            </tr>
-                                        </thead>`;
-                                response.forEach(function (item) {
-                                    message +=
-                                        `<tbody>
-                                        <td class="text-start"> ${item.ten}  </td>
-                                        <td class="text-start"> ${item.ms_size} </td>
-                                        <td class="text-start"> ${item.sl_ton} Sản Phẩm </td>
-                                    </tbody>`;
-                                });
-                                message += `</table>`;
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error:', error);
                                 swal.fire({
-                                    title: 'Có 1 Vài Sản Phẩm Đã Hết Hoặc Đạt Giới Hạn Mua!',
-                                    icon: 'warning',
-                                    html: message,
-                                    width: 700,
-                                    confirmButtonText: "Tôi đã biết!",
-                                })
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: 'Đã xảy ra lỗi khi chuyển trạng thái đơn hàng'
+                                });
                             }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', error);
-                        }
-                    })
+                        });
+                    }
+
+                } catch (error) {
+                    console.error("Error:", error);
+                    swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Đã xảy ra lỗi khi cập nhật địa chỉ'
+                    });
                 }
             }
-        })
+        });
     }
+
 
     function addQuantity(id) {
         let url = '';

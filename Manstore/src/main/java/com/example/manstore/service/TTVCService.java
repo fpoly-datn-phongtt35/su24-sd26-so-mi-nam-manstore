@@ -9,6 +9,8 @@ public interface TTVCService {
 
     void save (ThongTinVanChuyen ttvc);
 
+    ThongTinVanChuyen update(ThongTinVanChuyen ttvc);
+
     List<ThongTinVanChuyen> findAll(Sort sort);
 
     void deleteById(String id);
