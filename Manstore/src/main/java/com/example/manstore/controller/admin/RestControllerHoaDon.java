@@ -69,23 +69,6 @@ public class RestControllerHoaDon {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getInvoiceById(@PathVariable("id") Integer id) {
-        // Tìm kiếm hóa đơn theo ID
-        Optional<HoaDon> hoaDonOptional = donHangService.findById(id);
-
-        // Nếu không tìm thấy hóa đơn, trả về mã lỗi 404
-        if (!hoaDonOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn không tồn tại");
-        }
-
-        // Nếu tìm thấy hóa đơn, trả về thông tin hóa đơn
-        HoaDon hoaDon = hoaDonOptional.get();
-
-        // Trả về thông tin hóa đơn dưới dạng JSON
-        return ResponseEntity.ok(hoaDon);
-    }
-
 
     @PostMapping("/update-address/{invoiceId}")
     public ResponseEntity<?> updateTTVC(@PathVariable("invoiceId") Integer invoiceId,
