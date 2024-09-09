@@ -111,7 +111,7 @@ public class RestControllerHoaDon {
                                     @RequestParam(value = "startDate", required = false) String startDate,
                                     @RequestParam(value = "endDate", required = false) String endDate
     ) {
-        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(pageNumber, 10, Sort.by("id").ascending());
         Page<HoaDon> page = serviceInvoice.page(pageable);
         if (status != null && keyword == null && startDate == null & endDate == null) {
             page = serviceInvoice.filterByStatus(pageable, Integer.parseInt(status));
@@ -472,31 +472,6 @@ public class RestControllerHoaDon {
         }
 
         if (dh.getTrangThai() == 1 && status == 2) {
-            // Kiểm tra số lượng hàng hóa
-//            for (ChiTietHoaDon dhct : list) {
-//                for (ChiTietSanPham spct : spService.getAllCTSP()) {
-//                    if (spct.getId() == dhct.getIdChiTietSanPham().getId()) {
-//                        if (dhct.getSoLuong() > spct.getSoluong() || spct.getSoluong() <= 0) {
-//                            ResponseMessage response = new ResponseMessage();
-//                            response.setTen(spct.getIdSanPham().getTen());
-//                            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
-//                            response.setSl_ton(spct.getSoluong() + "");
-//                            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
-//                            listMessage.add(response);
-//                        }
-//                    }
-//                }
-//            }
-//            if (listMessage.size() > 0) {
-//                return new ResponseEntity<>(listMessage, HttpStatus.OK);
-//            }
-//            for (ChiTietHoaDon dhct : list) {
-//                int count_of_product = dhct.getIdChiTietSanPham().getSoluong();
-//                int count_of_invoice = dhct.getSoLuong();
-//                ChiTietSanPham spct = dhct.getIdChiTietSanPham();
-//                spct.setSoluong(count_of_product - count_of_invoice);
-//                spService.save(spct);
-//            }
             dh.setIdNhanVien(nv);
             dh.setTrangThai(status);
             thongBao.setIdKhachHang(dh.getIdKhachHang());

@@ -2142,7 +2142,7 @@
             if (list[i].trangThai === 1) {
                 document.getElementById("modal-cancel").style.display = 'block';
                 document.getElementById('modal-repurchase').style.display = 'none';
-                statusBadge = '<span class="badge bg-success">Chờ Xác Nhận</span>';
+                statusBadge = '<span class="badge bg-primary">Chờ Xác Nhận</span>';
 
                 //current
                 document.getElementById("st1").classList.add('current');
@@ -2185,7 +2185,7 @@
             if (list[i].trangThai === 2) {
                 document.getElementById("modal-cancel").style.display = 'none';
                 document.getElementById('modal-repurchase').style.display = 'none';
-                statusBadge = '<span class="badge bg-success">Đang Xử Lý</span>';
+                statusBadge = '<span class="badge bg-warning">Đang Xử Lý</span>';
 
                 //current
                 document.getElementById("st1").classList.remove('current');
@@ -2225,7 +2225,7 @@
             if (list[i].trangThai === 3) {
                 document.getElementById("modal-cancel").style.display = 'none';
                 document.getElementById('modal-repurchase').style.display = 'none';
-                statusBadge = '<span class="badge bg-success">Đang Giao Hàng</span>';
+                statusBadge = '<span class="badge" style="background-color: rgba(106,185,0,0.99)">Đang Giao Hàng</span>';
 
                 //current
                 document.getElementById("st1").classList.remove('current');
