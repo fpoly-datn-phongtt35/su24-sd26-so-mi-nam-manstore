@@ -71,13 +71,13 @@ public class DotGiamGiaRestController {
                 return ResponseEntity.status(HttpStatus.OK).body("out of date");
             }
 
-            if (count.size() > 0) {
-                return ResponseEntity.status(HttpStatus.OK).body("failure");
-            } else {
+//            if (count.size() > 0) {
+//                return ResponseEntity.status(HttpStatus.OK).body("failure");
+//            } else {
                 dotGiamGia.setTrangThai(status == 1);
                 dotGiamGiaService.create(dotGiamGia);
                 return ResponseEntity.status(HttpStatus.OK).body("success");
-            }
+//            }
         } else {
             return ResponseEntity.status(HttpStatus.OK).body("promotion not exists");
         }

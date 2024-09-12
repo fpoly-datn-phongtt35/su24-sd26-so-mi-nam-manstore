@@ -986,19 +986,19 @@
 
             sub_total = `
 <tr>
-    <td>Tổng tiền <small class="text-muted">(Trước thuế)</small></td>
+    <td>Tổng tiền :<small class="text-muted"></small></td>
     <td class="text-end">${formatmoney(total_amount)}</td>
 </tr>
 <tr>
-    <td>Khuyến Mãi <small class="text-muted" id="promotion-title">${promotion_title}</small></td>
+    <td>Giảm giá :<small class="text-muted" id="promotion-title">${promotion_title}</small></td>
     <td class="text-end" id="promotion-value">${promotion_value}</td>
 </tr>
 <tr id="money-ship">
-    <td>Phí Ship</td>
+    <td>Phí Ship :</td>
     <td><input style="width: 100px;" type="text" class="form-control" id="shipping-fee" onblur="handleShippingFee(${order_id},${shipp_fee})"/></td>
 </tr>
 <tr class="border-top border-top-dashed fs-15">
-    <th scope="row">Tổng số tiền</th>
+    <th scope="row">Tổng thanh toán :</th>
     <th class="text-end">${formatmoney(total)}</th>
 </tr>
 `;

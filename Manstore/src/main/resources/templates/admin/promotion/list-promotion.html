@@ -485,15 +485,15 @@
                                     title: "Thay đổi trạng thái thành công!",
                                 });
                             })();
-                        } else if (response === "failure") {
-                            swal.fire({
-                                icon: 'error',
-                                title: 'Thông Báo',
-                                text: 'Không thể thay đổi trạng thái do khuyến mãi đã được áp dụng!',
-                                confirmButtonText: 'OK',
-                            }).then(() => {
-                                document.getElementById("input-status-" + id).checked = status !== 1;
-                            })
+                        // } else if (response === "failure") {
+                        //     swal.fire({
+                        //         icon: 'error',
+                        //         title: 'Thông Báo',
+                        //         text: 'Không thể thay đổi trạng thái do khuyến mãi đã được áp dụng!',
+                        //         confirmButtonText: 'OK',
+                        //     }).then(() => {
+                        //         document.getElementById("input-status-" + id).checked = status !== 1;
+                        //     })
                         } else if (response === "out of date") {
                             swal.fire({
                                 icon: 'error',
