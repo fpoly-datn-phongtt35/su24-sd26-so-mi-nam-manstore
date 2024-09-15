@@ -52,5 +52,13 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Integer> {
     @Query("SELECT dh FROM HoaDon dh WHERE dh.idKhachHang.id = :idkh AND dh.trangThai=:status")
     Page<HoaDon> findByIdKHAndStatus(Pageable pageable, @Param("idkh") String idkh, @Param("status") String status);
 
+    @Query(value = "select sum(i.TongTien) from HoaDon i " +
+            "where Month(i.NgayTao) = ?1 and Year(i.NgayTao) = ?2 and i.TrangThai = 4", nativeQuery = true)
+    Double calDt(int i, Integer year);
 
+    @Query(value = "select sum(i.TongTien) from HoaDon i where i.TrangThai = 4", nativeQuery = true)
+    Double tongDoanhThu();
+
+    @Query(value = "select sum(i.TongTien) from HoaDon i where i.NgayTao >= ?1 and i.NgayTao <= ?2 and i.TrangThai = 4", nativeQuery = true)
+    Double tongDoanhThu(LocalDateTime start,LocalDateTime end);
 }

@@ -74,42 +74,46 @@ public class DotGiamGiaRestController {
 //            if (count.size() > 0) {
 //                return ResponseEntity.status(HttpStatus.OK).body("failure");
 //            } else {
-                dotGiamGia.setTrangThai(status == 1);
-                dotGiamGiaService.create(dotGiamGia);
-                return ResponseEntity.status(HttpStatus.OK).body("success");
+            dotGiamGia.setTrangThai(status == 1);
+            dotGiamGiaService.create(dotGiamGia);
+            return ResponseEntity.status(HttpStatus.OK).body("success");
 //            }
         } else {
             return ResponseEntity.status(HttpStatus.OK).body("promotion not exists");
         }
     }
 
+
 //    @GetMapping("/public/promotion/find-by-date")
 //    public ResponseEntity<?> findByDate(@RequestParam("orderValue") double orderValue) {
 //        LocalDate now = LocalDate.now();
 //        List<DotGiamGia> promotions = dotGiamGiaRepository.getPromotionAll(now, true);
 //
-//        // Lọc khuyến mãi hết hạn
+//        // Lọc khuyến mãi hết hạn hoặc không có trạng thái là true
 //        promotions.removeIf(km -> km.getNgayKetThuc().isBefore(now) || !km.getTrangThai());
 //
-//        // Tính mức giảm cho từng khuyến mãi và chọn khuyến mãi có mức giảm cao nhất
+//        // Tìm khuyến mãi phù hợp với đơn hàng
 //        DotGiamGia bestPromotion = null;
 //        double maxDiscount = 0;
 //
 //        for (DotGiamGia promo : promotions) {
 //            double discount = 0;
 //
-//            if (promo.getLoaiGiamGia()) {
-//                // Giảm theo phần trăm
-//                discount = orderValue * (promo.getGiaTriGiam() / 100.0);
-//            } else {
-//                // Giảm theo số tiền cố định
-//                discount = promo.getGiaTriGiam();
-//            }
+//            // Kiểm tra điều kiện áp dụng khuyến mãi
+//            if (orderValue >= promo.getGiaTriDonHang()) {
+//                if (promo.getLoaiGiamGia()) {
+//                    // Giảm theo phần trăm
+//                    discount = orderValue * (promo.getGiaTriGiam() / 100.0); // Giả sử có thuộc tính này
+//                } else {
+//                    // Giảm theo số tiền cố định
+//                    discount = promo.getGiaTriGiam(); // Giả sử có thuộc tính này
+//                }
 //
-//            // Cập nhật khuyến mãi tốt nhất nếu mức giảm hiện tại cao hơn mức giảm cao nhất
-//            if (discount > maxDiscount) {
-//                maxDiscount = discount;
-//                bestPromotion = promo;
+//                // Chọn khuyến mãi có mức giảm cao nhất
+//                if (discount > maxDiscount) {
+//                    maxDiscount = discount;
+//                    bestPromotion = promo;
+//                }
 //            }
 //        }
 //
@@ -134,10 +138,10 @@ public ResponseEntity<?> findByDate(@RequestParam("orderValue") double orderValu
         if (orderValue >= promo.getGiaTriDonHang()) {
             if (promo.getLoaiGiamGia()) {
                 // Giảm theo phần trăm
-                discount = orderValue * (promo.getGiaTriGiam() / 100.0); // Giả sử có thuộc tính này
+                discount = orderValue * (promo.getGiaTriGiam() / 100.0);
             } else {
                 // Giảm theo số tiền cố định
-                discount = promo.getGiaTriGiam(); // Giả sử có thuộc tính này
+                discount = promo.getGiaTriGiam();
             }
 
             // Chọn khuyến mãi có mức giảm cao nhất
@@ -148,7 +152,7 @@ public ResponseEntity<?> findByDate(@RequestParam("orderValue") double orderValu
         }
     }
 
-    return new ResponseEntity<>(bestPromotion, HttpStatus.OK);
+    return new ResponseEntity<>(bestPromotion != null ? bestPromotion : new DotGiamGia(), HttpStatus.OK);
 }
 
 }

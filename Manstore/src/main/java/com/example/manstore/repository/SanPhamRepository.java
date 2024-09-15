@@ -191,6 +191,21 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
                                                      @Param("size") List<String> size,
                                                      @Param("trademark") String trademark, @Param("category") String category);
 
+    @Query(value = "select top 1000 sp.*, \n" +
+            "            (select sum(ctdhsl.SoLuong) from ChiTietHoaDon ctdhsl inner join ChiTietSanPham spctsl on spctsl.id = ctdhsl.idChiTietSanPham \n" +
+            "            inner join HoaDon dhsl on dhsl.id = ctdhsl.idHoaDon\n" +
+            "            where spctsl.idSanPham = sp.id and dhsl.NgayTao >= ?1 and dhsl.NgayTao <= ?2 and dhsl.TrangThai = 4) \n" +
+            "            as Soluong\n" +
+            "            from ChiTietHoaDon ctdh inner join ChiTietSanPham spct on spct.id = ctdh.idChiTietSanPham\n" +
+            "            inner join HoaDon dh on dh.id = ctdh.idHoaDon\n" +
+            "            inner join SanPham sp on sp.id = spct.idSanPham where dh.NgayTao >= ?1 and dh.NgayTao <= ?2 and dh.TrangThai = 4\n" +
+            "            group by sp.id, sp.Ma, sp.Ten, sp.SoLuong, sp.NgayTao, sp.Gia, sp.MoTa\n" +
+            "            ,sp.TrangThai, sp.idThuongHieu, sp.idDanhMuc, sp.idCoAo, sp.idDuoiAo, sp.idKieuDang, sp.idChatLieu, sp.DuongDan", nativeQuery = true)
+    List<SanPham> sanPhamBanChayByDate(String from, String to);
 
+    @Query(value = "select sum(ctdhsl.SoLuong) from ChiTietHoaDon ctdhsl inner join ChiTietSanPham spctsl on spctsl.id = ctdhsl.idChiTietSanPham \n" +
+            "inner join HoaDon dhsl on dhsl.id = ctdhsl.idHoaDon and dhsl.TrangThai = 4 \n" +
+            "where spctsl.idSanPham = ?1 and dhsl.NgayTao >= ?2 and dhsl.NgayTao <= ?3", nativeQuery = true)
+    Integer soLuongBan(Integer idSp, String from, String to);
 
 }

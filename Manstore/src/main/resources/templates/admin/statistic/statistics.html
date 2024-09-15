@@ -134,10 +134,11 @@
                         <thead class="table-light">
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Tên</th>
-                            <th scope="col">Giá</th>
-                            <th scope="col">Môn thể thao</th>
-                            <th scope="col">Số lượng bán</th>
+                            <th scope="col">Tên Sản Phẩm</th>
+                            <th scope="col">Đơn Giá</th>
+<!--                            <th>Hình Ảnh</th>-->
+                            <th scope="col">Danh Mục</th>
+                            <th scope="col">Số Lượng Bán</th>
                         </tr>
                         </thead>
                         <tbody style="font-weight: normal" id="listproduct">
@@ -246,9 +247,9 @@
         for (i = 0; i < list.length; i++) {
             main += `<tr>
                     <td>${list[i].id}</td>
-                    <td>${list[i].tenSP}</td>
-                    <td>${formatmoney(list[i].donGia)}</td>
-                    <td>${list[i].tl.ten}</td>
+                    <td>${list[i].ten}</td>
+                    <td>${formatmoney(list[i].gia)}</td>
+                    <td>${list[i].idDanhMuc.ten}</td>
                     <td>${list[i].soLuong}</td>
                 </tr>`
         }
