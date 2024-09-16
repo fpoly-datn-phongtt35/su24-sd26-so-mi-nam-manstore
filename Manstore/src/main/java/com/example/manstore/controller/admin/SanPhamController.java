@@ -321,7 +321,7 @@ public class SanPhamController {
             listResponse.add(responseCustom);
         } else {
             BigDecimal gia = new BigDecimal(String.valueOf(dto.getGia()));
-            if (gia.compareTo(new BigDecimal("70000")) < 0) {
+            if (gia.compareTo(BigDecimal.ZERO) < 0) {
                 isValid = false;
                 ResponseCustom responseCustom = new ResponseCustom();
                 responseCustom.setStatusText("failure");
@@ -424,7 +424,7 @@ public class SanPhamController {
             listResponse.add(responseCustom);
         } else {
             BigDecimal gia = new BigDecimal(String.valueOf(dto.getGia()));
-            if (gia.compareTo(new BigDecimal("70000")) < 0) {
+            if (gia.compareTo(BigDecimal.ZERO) < 0) {
                 isValid = false;
                 ResponseCustom responseCustom = new ResponseCustom();
                 responseCustom.setStatusText("failure");
