@@ -284,12 +284,37 @@ public class RestControllerHoaDon {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
+//    private void updatePromotion(HoaDon dh) {
+//        // Lấy danh sách các khuyến mãi còn hiệu lực
+//        List<DotGiamGia> promotions = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
+//        promotions.removeIf(promo -> promo.getNgayKetThuc().isBefore(LocalDate.now()));
+//
+//        int total = dh.getTongTien().intValue();
+//        DotGiamGia bestPromotion = null;
+//        BigDecimal bestDiscount = BigDecimal.ZERO;
+//
+//        // Tìm khuyến mãi tốt nhất dựa trên giá trị giảm
+//        for (DotGiamGia promo : promotions) {
+//            if (total >= promo.getGiaTriDonHang()) {
+//                BigDecimal discount = calculateDiscount(dh.getTongTien(), promo);
+//                if (discount.compareTo(bestDiscount) > 0) {
+//                    bestDiscount = discount;
+//                    bestPromotion = promo;
+//                }
+//            }
+//        }
+//
+//        // Cập nhật khuyến mãi cho đơn hàng
+//        dh.setIdDotGiamGia(bestPromotion);
+//    }
+
     private void updatePromotion(HoaDon dh) {
         // Lấy danh sách các khuyến mãi còn hiệu lực
         List<DotGiamGia> promotions = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
         promotions.removeIf(promo -> promo.getNgayKetThuc().isBefore(LocalDate.now()));
 
         int total = dh.getTongTien().intValue();
+        DotGiamGia currentPromotion = dh.getIdDotGiamGia(); // Lấy khuyến mãi hiện tại của đơn hàng
         DotGiamGia bestPromotion = null;
         BigDecimal bestDiscount = BigDecimal.ZERO;
 
@@ -304,9 +329,15 @@ public class RestControllerHoaDon {
             }
         }
 
-        // Cập nhật khuyến mãi cho đơn hàng
-        dh.setIdDotGiamGia(bestPromotion);
+        // Nếu tìm được khuyến mãi tốt hơn, cập nhật; nếu không, giữ khuyến mãi hiện tại
+        if (bestPromotion != null) {
+            dh.setIdDotGiamGia(bestPromotion);
+        } else if (currentPromotion != null) {
+            // Không xóa khuyến mãi nếu đã lưu từ trước và không có khuyến mãi mới tốt hơn
+            dh.setIdDotGiamGia(currentPromotion);
+        }
     }
+
 
     private BigDecimal calculateDiscount(BigDecimal total, DotGiamGia promo) {
         // Chuyển đổi gia trị khuyến mãi sang BigDecimal
@@ -482,7 +513,6 @@ public class RestControllerHoaDon {
             thongBaoService.save(thongBao);
             responseCustom.setStatusText("success");
             responseCustom.setMessage("success");
-            updatePromotion(dh);
             donHangService.save(dh);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }
@@ -502,7 +532,6 @@ public class RestControllerHoaDon {
             thongBaoService.save(thongBao);
             responseCustom.setStatusText("success");
             responseCustom.setMessage("success");
-            updatePromotion(dh);
             donHangService.save(dh);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }
@@ -527,7 +556,6 @@ public class RestControllerHoaDon {
             dh.setTrangThai(status);
             responseCustom.setStatusText("success");
             responseCustom.setMessage("success");
-            updatePromotion(dh);
             donHangService.save(dh);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }
@@ -549,7 +577,6 @@ public class RestControllerHoaDon {
             }
             responseCustom.setStatusText("success");
             responseCustom.setMessage("success");
-            updatePromotion(dh);
             donHangService.save(dh);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }
@@ -571,7 +598,6 @@ public class RestControllerHoaDon {
             }
             responseCustom.setStatusText("success");
             responseCustom.setMessage("success");
-            updatePromotion(dh);
             donHangService.save(dh);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }
@@ -593,7 +619,6 @@ public class RestControllerHoaDon {
             }
             responseCustom.setStatusText("success");
             responseCustom.setMessage("success");
-            updatePromotion(dh);
             donHangService.save(dh);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }

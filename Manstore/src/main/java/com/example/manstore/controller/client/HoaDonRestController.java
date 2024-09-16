@@ -145,10 +145,9 @@ public class HoaDonRestController {
         dh.setIdPhuongThucThanhToan(ptttService.getById("1"));
         dh.setTrangThai(1);
         dh.setNgayTao(LocalDateTime.now());
-        if (idPromotion != null) {
-            DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).isPresent()
-                    ? dotGiamGiaService.findById(Integer.parseInt(idPromotion)).get() : null;
-            if (km != null && km.getTrangThai() == true) {
+        if (idPromotion != null && !idPromotion.equals("null")) {
+            DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).orElse(null);
+            if (km != null) {
                 dh.setIdDotGiamGia(km);
             }
         }
@@ -204,101 +203,6 @@ public class HoaDonRestController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-//    @PostMapping("/invoice/buy-now/{id}/{idAddress}")
-//    private ResponseEntity<?> saveInvoiceBuyNow(@RequestBody SPDTO dtoSP,
-//                                                @PathVariable("id") String id,
-//                                                @PathVariable("idAddress") String idAddress,
-//                                                @RequestParam(value = "idPromotion", required = false) String idPromotion) {
-//
-//        System.out.println("Received SPDTO: " + dtoSP);
-//        ResponseMessage response = new ResponseMessage();
-//        ChiTietSanPham spct = spService.getCTSPById(Integer.valueOf(dtoSP.getId()));
-//        if (spct.getSoluong() <= 0 || spct.getSoluong() < dtoSP.getSoLuong() || spct.getIdSanPham().getTrangThai() == 0) {
-//            response.setTen(spct.getIdSanPham().getTen());
-//            response.setMs_size(spct.getIdSize().getTen() + " & " + spct.getIdMauSac().getTen());
-//            response.setSl_ton(spct.getSoluong() + "");
-//            response.setSport(spct.getIdSanPham().getIdDanhMuc().getId() + "");
-//            response.setTrangThai(spct.getIdSanPham().getTrangThai() != 0);
-//
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-//
-//        ThongTinVanChuyen ttvc = new ThongTinVanChuyen();
-//        DiaChi diaChi = diaChiService.getById(idAddress);
-//        ttvc.setTinhThanhpho(diaChi.getTinhTp());
-//        ttvc.setQuanHuyen(diaChi.getQuanHuyen());
-//        ttvc.setXaPhuongThitran(diaChi.getXaPhuongThitran());
-//        ttvc.setDiaChiCuThe(diaChi.getDiaChiCuThe());
-//        ttvc.setSdt(diaChi.getSdt());
-//        ttvc.setTenNguoiNhan(diaChi.getIdKhachHang().getTen());
-//        ttvcService.save(ttvc);
-//
-//        // tạo đơn hàng
-//        HoaDon dh = new HoaDon();
-//        dh.setIdThongTinVanChuyen(ttvc);
-//        List<HoaDon> listAll = donHangService.getAll();
-//        List<Integer> listId = new ArrayList<>();
-//        if (listAll.size() == 0) {
-//            dh.setMa("DH1");
-//        } else {
-//            for (HoaDon donHang : listAll) {
-//                int index = Integer.parseInt(donHang.getMa().substring(2));
-//                listId.add(index);
-//            }
-//            Optional<Integer> maxNumber = listId.stream().max(Integer::compareTo);
-//            maxNumber.ifPresent(integer -> dh.setMa("DH" + (integer + 1)));
-//        }
-//        dh.setIdKhachHang(khachHangService.getByID(Integer.parseInt(id)));
-//        dh.setIdPhuongThucThanhToan(ptttService.getById("1"));
-//        dh.setTrangThai(1);
-//        dh.setNgayTao(LocalDateTime.now());
-//        if (idPromotion != null) {
-//            DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).isPresent()
-//                    ? dotGiamGiaService.findById(Integer.parseInt(idPromotion)).get() : null;
-//            if (km != null) {
-//                dh.setIdDotGiamGia(km);
-//            }
-//        }
-//        donHangService.save(dh);
-//
-//        HoaDon donHangNew = donHangService.findByHD(dh.getMa());
-//
-//        ThongBao thongBao = new ThongBao();
-//
-//        thongBao.setIdHoaDon(donHangNew);
-//
-//        thongBao.setTrangThaiDonHang(1);
-//
-//        thongBao.setNoiDung("Đặt Hàng Thành Công");
-//
-//        thongBao.setNgayGui(LocalDateTime.now());
-//
-//        thongBao.setIdKhachHang(khachHangService.getByID(Integer.valueOf(id)));
-//
-//        thongBaoService.save(thongBao);
-//
-//        //tạo hoá đơn chi tiết
-//       try {
-//           ChiTietHoaDon dhct = new ChiTietHoaDon();
-//           BigDecimal donGia = new BigDecimal(dtoSP.getDonGia());
-//           dhct.setIdChiTietSanPham(spService.getCTSPById(Integer.valueOf(dtoSP.getId())));
-//           dhct.setSoLuong(dtoSP.getSoLuong());
-//           dhct.setIdHoaDon(donHangNew);
-//           dhct.setNgayTao(LocalDateTime.now());
-//           dhct.setDonGia(donGia);
-//           dhct.setGiaThoiDiemMua(donGia);
-//           BigDecimal tongTien = BigDecimal.valueOf(dtoSP.getSoLuong()).multiply(donGia);
-//           dhct.setTongTien(tongTien);
-//           donHangCTService.save(dhct);
-//           donHangNew.setTongTien(tongTien);
-//           donHangService.save(donHangNew);
-//
-//       }catch (Exception e){
-//           e.printStackTrace();
-//       }
-//        return new ResponseEntity<>("success", HttpStatus.OK);
-//    }
-
     @PostMapping("/invoice/buy-now/{id}/{idAddress}")
     private ResponseEntity<?> saveInvoiceBuyNow(@RequestBody SPDTO dtoSP,
                                                 @PathVariable("id") String id,
@@ -351,7 +255,13 @@ public class HoaDonRestController {
         dh.setIdPhuongThucThanhToan(ptttService.getById("1"));
         dh.setTrangThai(1);
         dh.setNgayTao(LocalDateTime.now());
-        if (idPromotion != null) {
+//        if (idPromotion != null) {
+//            DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).orElse(null);
+//            if (km != null) {
+//                dh.setIdDotGiamGia(km);
+//            }
+//        }
+        if (idPromotion != null && !idPromotion.equals("null")) {
             DotGiamGia km = dotGiamGiaService.findById(Integer.parseInt(idPromotion)).orElse(null);
             if (km != null) {
                 dh.setIdDotGiamGia(km);
