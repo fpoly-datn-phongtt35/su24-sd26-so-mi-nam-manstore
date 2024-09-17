@@ -83,17 +83,6 @@
                     </td>
                     <td class="text-end cart-discount text-danger" id="promotion-value"></td>
                   </tr>
-                  <!--                                    <tr>-->
-                  <!--                                        <td>-->
-                  <!--                                            <select id="promotion-select" onchange="applySelectedPromotion()">-->
-                  <!--                                                <option value="">Chọn khuyến mãi</option>-->
-                  <!--                                            </select>-->
-                  <!--                                        </td>-->
-                  <!--                                    </tr>-->
-<!--                  <tr>-->
-<!--                    <td>VAT<small>(10%)</small> :</td>-->
-<!--                    <td class="text-end cart-tax" id="vat"></td>-->
-<!--                  </tr>-->
                   <tr class="table-active">
                     <th>Tổng thanh toán<small> (chưa tính ship)</small> :</th>
                     <td class="text-end">
@@ -585,61 +574,7 @@
     </tr>
     `;
 
-      // let total_amount;
-      // let promotion = productBuyNow.khuyenMai; // Giả sử đây là một đối tượng khuyến mãi duy nhất
-      //
-      // if (promotion !== undefined) {
-      //   console.log('Khuyến mãi hiện tại:', promotion);
-      //
-      //   if (sub_total >= promotion.giaTriDonHang) {
-      //     let discounted_amount;
-      //
-      //     // Tính số tiền sau khi áp dụng giảm giá
-      //     if (promotion.loaiGiamGia === true) {
-      //       // Giảm giá theo phần trăm
-      //       discounted_amount = sub_total * (1 - promotion.giaTriGiam / 100);
-      //     } else {
-      //       // Giảm giá theo số tiền cố định
-      //       discounted_amount = sub_total - promotion.giaTriGiam;
-      //     }
-      //
-      //     // Tính tổng số tiền sau khi cộng VAT
-      //     total_amount = discounted_amount;
-      //
-      //     document.getElementById("table-cart").innerHTML = main;
-      //     document.getElementById("sub-total").innerText = formatMoney(sub_total);
-      //     // document.getElementById("vat").innerText = formatMoney(vat);
-      //     document.getElementById("total_amount").innerText = formatMoney(total_amount);
-      //     document.getElementById("promotion-title").innerText = '(' + promotion.ten + ')';
-      //     document.getElementById("promotion-value").innerText = promotion.loaiGiamGia === true ?
-      //             '- ' + promotion.giaTriGiam + '%' : '- ' + formatMoney(promotion.giaTriGiam);
-      //   } else {
-      //     total_amount = sub_total;
-      //     let value_promotion;
-      //     if (promotion.loaiGiamGia === true) {
-      //       value_promotion = promotion.giaTriGiam + '%';
-      //     } else {
-      //       value_promotion = formatMoney(promotion.giaTriGiam);
-      //     }
-      //     let reference_value = promotion.giaTriDonHang - sub_total;
-      //     let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
-      //             ' cho đơn hàng!)';
-      //
-      //     document.getElementById("table-cart").innerHTML = main;
-      //     document.getElementById("sub-total").innerText = formatMoney(sub_total);
-      //     // document.getElementById("vat").innerText = formatMoney(vat);
-      //     document.getElementById("total_amount").innerText = formatMoney(total_amount);
-      //     document.getElementById("promotion-title").innerText = '(chưa đủ điều kiện)';
-      //     document.getElementById('important-note').innerText = important_note;
-      //   }
-      // } else {
-      //   total_amount = sub_total;
-      //   document.getElementById("table-cart").innerHTML = main;
-      //   document.getElementById("sub-total").innerText = formatMoney(sub_total);
-      //   // document.getElementById("promotion-title").innerText = '(Không có khuyến mãi)';
-      //   // document.getElementById("vat").innerText = formatMoney(vat);
-      //   document.getElementById("total_amount").innerText = formatMoney(total_amount);
-      // }
+
 
       let total_amount;
       let promotion = productBuyNow.khuyenMai; // Giả sử đây là một đối tượng khuyến mãi duy nhất
@@ -672,22 +607,22 @@
         }
         else {
           total_amount = sub_total;
-          let value_promotion;
+          let value_promotion1;
           if (promotion.loaiGiamGia === true) {
-            value_promotion = promotion.giaTriGiam + '%';
+            value_promotion1 = promotion.giaTriGiam + '%';
           } else {
-            value_promotion = formatMoney(promotion.giaTriGiam);
+            value_promotion1 = formatMoney(promotion.giaTriGiam);
           }
-          let reference_value = promotion.giaTriDonHang - sub_total;
-          // let important_note = '(Mua thêm ' + formatMoney(reference_value) + ' sẽ được giảm ' + value_promotion +
+          let reference_value1 = promotion.giaTriDonHang - sub_total;
+          // let important_note = '(Mua thêm ' + formatMoney(reference_value1) + ' sẽ được giảm ' + value_promotion1 +
           //         ' cho đơn hàng!)';
 
           document.getElementById("table-cart").innerHTML = main;
           document.getElementById("sub-total").innerText = formatMoney(sub_total);
           // document.getElementById("vat").innerText = formatMoney(vat);
           document.getElementById("total_amount").innerText = formatMoney(total_amount);
-          document.getElementById("promotion-title").innerText = '(Không có khuyến mãi)';
-          // document.getElementById('important-note').innerText = important_note;
+          document.getElementById("promotion-title").innerText = '(chưa đủ điều kiện)';
+          document.getElementById('important-note').innerText = important_note;
         }
       } else {
         // Không có khuyến mãi

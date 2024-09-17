@@ -74,8 +74,7 @@
                                         <td class="text-end cart-subtotal" id="sub-total"></td>
                                     </tr>
                                     <tr>
-                                        <td>Giảm giá<small class="text-muted" id="promotion-title" disabled>(Không có
-                                            khuyến mãi)</small> :
+                                        <td>Giảm giá<small class="text-muted" id="promotion-title" disabled></small> :
                                         </td>
                                         <td class="text-end cart-discount text-danger" id="promotion-value"></td>
                                     </tr>
@@ -578,14 +577,15 @@
             },
             success: function (response) {
                 console.log(response);
-                let promotion = response; // Giả sử response trả về một đối tượng khuyến mãi
+                let promotion = response; // Đối tượng khuyến mãi trả về từ server
                 let total_amount = 0;
-                let discounted_amount = sub_total_global; // Khởi tạo biến để lưu số tiền sau khi áp dụng giảm giá
+                let discounted_amount = sub_total_global; // Số tiền ban đầu trước khi áp dụng khuyến mãi
 
-                if (promotion) {
+                if (promotion && promotion.giaTriDonHang) { // Kiểm tra nếu có khuyến mãi
                     promotion_applies = promotion;
 
                     if (parseInt(sub_total_global) >= parseInt(promotion.giaTriDonHang)) {
+                        // Đủ điều kiện áp dụng khuyến mãi
                         document.getElementById('promotion-message').innerText = '';
                         document.getElementById('promotion-title').innerText = `(${promotion.ten})`;
 
@@ -601,10 +601,13 @@
                         total_amount = discounted_amount;
                         document.getElementById("total-amount").innerText = formatMoney(total_amount);
 
-                    }
-                    else {
-                        // document.getElementById('promotion-title').innerText = '(chưa đủ điều kiện áp dụng)';
-                        // document.getElementById('promotion-message').innerText = `(Mua thêm ${formatMoney(promotion.giaTriDonHang - sub_total_global)} sẽ được giảm ${promotion.loaiGiamGia === true ? promotion.giaTriGiam + '%' : formatMoney(promotion.giaTriGiam)} cho đơn hàng!)`;
+                    } else {
+                        // Không đủ điều kiện áp dụng khuyến mãi
+                        let remainingAmount = promotion.giaTriDonHang - sub_total_global;
+
+                        // Hiển thị thông báo nếu không đủ điều kiện
+                        document.getElementById('promotion-title').innerText = '(chưa đủ điều kiện)';
+                        document.getElementById('promotion-message').innerText = '(Mua thêm ' + formatMoney(remainingAmount) + ' sẽ được giảm ' + (promotion.loaiGiamGia === true ? promotion.giaTriGiam + '%' : formatMoney(promotion.giaTriGiam)) + ' cho đơn hàng!)';
 
                         // Không đủ điều kiện giảm giá, chỉ tính VAT
                         total_amount = sub_total_global;
@@ -615,8 +618,8 @@
                     // Không có khuyến mãi, chỉ tính VAT
                     total_amount = sub_total_global;
                     document.getElementById('promotion-message').innerText = '';
-                    document.getElementById('promotion-title').innerText = '';
-                    document.getElementById('promotion-value').innerText = '- 0 %';
+                    document.getElementById('promotion-title').innerText = '(Không có khuyến mãi)';
+                    document.getElementById('promotion-value').innerText = '- 0';
                     document.getElementById("total-amount").innerText = formatMoney(total_amount);
                 }
             },
