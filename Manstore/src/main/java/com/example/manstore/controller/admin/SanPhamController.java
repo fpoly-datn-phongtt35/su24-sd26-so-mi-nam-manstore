@@ -146,15 +146,25 @@ public class SanPhamController {
     }
 
 
+    //    @GetMapping("/list")
+//    @ResponseBody
+//    public ResponseEntity<?> getAllSP(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+//
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<SanPhanResponse> pageResult = sanPhamRepository.findAllSP(pageable);
+//
+//        return new ResponseEntity<>(pageResult, HttpStatus.OK);
+//    }
     @GetMapping("/list")
     @ResponseBody
     public ResponseEntity<?> getAllSP(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        Sort sort = Sort.by(Sort.Direction.DESC, "ngayTao");
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<SanPhanResponse> pageResult = sanPhamRepository.findAllSP(pageable);
-
         return new ResponseEntity<>(pageResult, HttpStatus.OK);
     }
+
 
     @GetMapping(value = "/page/search/{pageNumber}/{keyWord}")
     public ResponseEntity<?> searchSPByNameOrCode(
@@ -163,7 +173,7 @@ public class SanPhamController {
         Pageable pageable = PageRequest.of(pageNumber, 3, Sort.by("id").descending());
         Page<SanPham> page;
 
-        if (keyWord.equalsIgnoreCase("null")){
+        if (keyWord.equalsIgnoreCase("null")) {
             page = sanPhamService.pageOfSP(pageable);
         } else {
             page = sanPhamService.SearchSPByNameOrCode(keyWord, pageable);
@@ -321,7 +331,7 @@ public class SanPhamController {
             listResponse.add(responseCustom);
         } else {
             BigDecimal gia = new BigDecimal(String.valueOf(dto.getGia()));
-            if (gia.compareTo(new BigDecimal("70000")) < 0) {
+            if (gia.compareTo(BigDecimal.ZERO) < 0) {
                 isValid = false;
                 ResponseCustom responseCustom = new ResponseCustom();
                 responseCustom.setStatusText("failure");
@@ -424,7 +434,7 @@ public class SanPhamController {
             listResponse.add(responseCustom);
         } else {
             BigDecimal gia = new BigDecimal(String.valueOf(dto.getGia()));
-            if (gia.compareTo(new BigDecimal("70000")) < 0) {
+            if (gia.compareTo(BigDecimal.ZERO) < 0) {
                 isValid = false;
                 ResponseCustom responseCustom = new ResponseCustom();
                 responseCustom.setStatusText("failure");
