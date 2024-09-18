@@ -5,6 +5,7 @@ import com.example.manstore.CustomModel.ResponseMessage;
 import com.example.manstore.dto.request.ThongTinVanChuyenRequest;
 import com.example.manstore.entity.*;
 import com.example.manstore.repository.DotGiamGiaRepository;
+import com.example.manstore.service.ChiTietSanPhamService;
 import com.example.manstore.service.HoaDonChiTietService;
 import com.example.manstore.service.HoaDonService;
 import com.example.manstore.service.Impl.*;
@@ -152,35 +153,66 @@ public class RestControllerHoaDon {
 
         return new ResponseEntity<>(listInvoiceDetail, HttpStatus.OK);
     }
+//
+//    @GetMapping("/add-quantity/{id}")
+//    private ResponseEntity<?> addQuantity(@PathVariable("id") String id, @RequestParam(value = "promotion", required = false) Integer promotion) {
+//        ChiTietHoaDon dhct = donHangCTService.getById2(id);
+//        ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+//        HoaDon dh = dhct.getIdHoaDon();
+//
+//        if (dh.getTrangThai() == 1) {
+//            if (spct.getSoluong() >= 1) {
+//                if (dhct.getSoLuong() < spct.getSoluong()) {
+//                    dhct.setSoLuong(dhct.getSoLuong() + 1);
+//                    donHangCTService.save(dhct);
+//                    dh.setTongTien(dh.getTongTien().add(dhct.getGiaThoiDiemMua()));
+//                    spct.setSoluong(spct.getSoluong() - 1);
+//                    spService.save(spct);
+//                    // Cập nhật khuyến mãi
+//                    updatePromotion(dh);
+//                    donHangService.save(dh);
+//                    return new ResponseEntity<>("success", HttpStatus.OK);
+//                } else {
+//                    return new ResponseEntity<>("out of quantity", HttpStatus.OK);
+//                }
+//            } else {
+//                return new ResponseEntity<>("failure", HttpStatus.OK);
+//            }
+//        } else {
+//            return new ResponseEntity<>("no-status", HttpStatus.OK);
+//        }
+//    }
+@GetMapping("/add-quantity/{id}")
+private ResponseEntity<?> addQuantity(@PathVariable("id") String id, @RequestParam(value = "promotion", required = false) Integer promotion) {
+    ChiTietHoaDon dhct = donHangCTService.getById2(id);
+    ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+    HoaDon dh = dhct.getIdHoaDon();
 
-    @GetMapping("/add-quantity/{id}")
-    private ResponseEntity<?> addQuantity(@PathVariable("id") String id, @RequestParam(value = "promotion", required = false) Integer promotion) {
-        ChiTietHoaDon dhct = donHangCTService.getById2(id);
-        ChiTietSanPham spct = dhct.getIdChiTietSanPham();
-        HoaDon dh = dhct.getIdHoaDon();
-
-        if (dh.getTrangThai() == 1) {
-            if (spct.getSoluong() >= 1) {
-                if (dhct.getSoLuong() < spct.getSoluong()) {
-                    dhct.setSoLuong(dhct.getSoLuong() + 1);
-                    donHangCTService.save(dhct);
-                    dh.setTongTien(dh.getTongTien().add(dhct.getGiaThoiDiemMua()));
-                    spct.setSoluong(spct.getSoluong() - 1);
-                    spService.save(spct);
-                    // Cập nhật khuyến mãi
-                    updatePromotion(dh);
-                    donHangService.save(dh);
-                    return new ResponseEntity<>("success", HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>("out of quantity", HttpStatus.OK);
+    if (dh.getTrangThai() == 1) {
+        if (spct.getSoluong() >= 1) {
+            if (dhct.getSoLuong() < spct.getSoluong()) {
+                if (dhct.getSoLuong() >= 20) { // Kiểm tra số lượng không vượt quá 20
+                    return new ResponseEntity<>("quantity limit reached", HttpStatus.OK);
                 }
+                dhct.setSoLuong(dhct.getSoLuong() + 1);
+                donHangCTService.save(dhct);
+                dh.setTongTien(dh.getTongTien().add(dhct.getGiaThoiDiemMua()));
+                spct.setSoluong(spct.getSoluong() - 1);
+                spService.save(spct);
+                // Cập nhật khuyến mãi
+                updatePromotion(dh);
+                donHangService.save(dh);
+                return new ResponseEntity<>("success", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("failure", HttpStatus.OK);
+                return new ResponseEntity<>("out of quantity", HttpStatus.OK);
             }
         } else {
-            return new ResponseEntity<>("no-status", HttpStatus.OK);
+            return new ResponseEntity<>("failure", HttpStatus.OK);
         }
+    } else {
+        return new ResponseEntity<>("no-status", HttpStatus.OK);
     }
+}
 
     @GetMapping("/minus-quantity/{id}")
     private ResponseEntity<?> minusQuantity(@PathVariable("id") String id, @RequestParam(value = "promotion", required = false) Integer promotion) {
@@ -228,6 +260,62 @@ public class RestControllerHoaDon {
     }
 
 
+//    @GetMapping("/edit-quantity/{id}")
+//    private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
+//                                           @RequestParam("quantity") int count) {
+//
+//        ChiTietHoaDon dhct = donHangCTService.getById2(id);
+//        ChiTietSanPham spct = dhct.getIdChiTietSanPham();
+//        HoaDon dh = dhct.getIdHoaDon();
+//
+//        // Kiểm tra số lượng nhập vào
+//        if (count < 1) {
+//            return new ResponseEntity<>("Số lượng phải lớn hơn 0!", HttpStatus.OK);
+//        }
+//
+//        // Kiểm tra trạng thái hóa đơn
+//        if (dh.getTrangThai() != 1) {
+//            return new ResponseEntity<>("Không thể thay đổi số lượng sản phẩm cho đơn hàng này!", HttpStatus.OK);
+//        }
+//
+//        // Xử lý số lượng thay đổi
+//        int currentQuantity = dhct.getSoLuong();
+//        int availableQuantity = spct.getSoluong();
+//        int quantityDifference = count - currentQuantity;
+//
+//        // Kiểm tra số lượng sản phẩm có đủ không
+//        if (quantityDifference > availableQuantity) {
+//            return new ResponseEntity<>("Sản phẩm này chỉ còn lại " + availableQuantity + "!", HttpStatus.OK);
+//        }
+//
+//        // Cập nhật số lượng sản phẩm và tổng tiền
+//        dhct.setSoLuong(count);
+//        donHangCTService.save(dhct);
+//
+//        // Cập nhật số lượng sản phẩm trong kho
+//        spct.setSoluong(availableQuantity - quantityDifference);
+//        spService.save(spct);
+//
+//        // Cập nhật tổng tiền của hóa đơn
+//        BigDecimal itemPrice = dhct.getGiaThoiDiemMua();
+//        BigDecimal oldTotal = dh.getTongTien();
+//        BigDecimal totalChange = itemPrice.multiply(new BigDecimal(quantityDifference));
+//        BigDecimal newTotal = oldTotal.add(totalChange);
+//        dh.setTongTien(newTotal);
+//
+//        // Kiểm tra và cập nhật khuyến mãi
+//        if (dh.getIdDotGiamGia() != null) {
+//            int total = dh.getTongTien().intValue();
+//            if (total < dh.getIdDotGiamGia().getGiaTriDonHang()) {
+//                dh.setIdDotGiamGia(null);
+//            }
+//        }
+//        updatePromotion(dh);
+//        donHangService.save(dh);
+//
+//        return new ResponseEntity<>("success", HttpStatus.OK);
+//    }
+
     @GetMapping("/edit-quantity/{id}")
     private ResponseEntity<?> editQuantity(@PathVariable("id") String id,
                                            @RequestParam("quantity") int count) {
@@ -238,7 +326,12 @@ public class RestControllerHoaDon {
 
         // Kiểm tra số lượng nhập vào
         if (count < 1) {
-            return new ResponseEntity<>("Số lượng phải lớn hơn 0!", HttpStatus.OK);
+            return new ResponseEntity<>("Số lượng của sản phẩm phải lớn hơn 0!", HttpStatus.OK);
+        }
+
+        // Kiểm tra số lượng không vượt quá 20
+        if (count > 20) {
+            return new ResponseEntity<>("Số lượng tối đa của sản phẩm trong hóa đơn là 20!", HttpStatus.OK);
         }
 
         // Kiểm tra trạng thái hóa đơn
@@ -284,29 +377,7 @@ public class RestControllerHoaDon {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-//    private void updatePromotion(HoaDon dh) {
-//        // Lấy danh sách các khuyến mãi còn hiệu lực
-//        List<DotGiamGia> promotions = dotGiamGiaRepository.getPromotionAll(LocalDate.now(), true);
-//        promotions.removeIf(promo -> promo.getNgayKetThuc().isBefore(LocalDate.now()));
-//
-//        int total = dh.getTongTien().intValue();
-//        DotGiamGia bestPromotion = null;
-//        BigDecimal bestDiscount = BigDecimal.ZERO;
-//
-//        // Tìm khuyến mãi tốt nhất dựa trên giá trị giảm
-//        for (DotGiamGia promo : promotions) {
-//            if (total >= promo.getGiaTriDonHang()) {
-//                BigDecimal discount = calculateDiscount(dh.getTongTien(), promo);
-//                if (discount.compareTo(bestDiscount) > 0) {
-//                    bestDiscount = discount;
-//                    bestPromotion = promo;
-//                }
-//            }
-//        }
-//
-//        // Cập nhật khuyến mãi cho đơn hàng
-//        dh.setIdDotGiamGia(bestPromotion);
-//    }
+
 
     private void updatePromotion(HoaDon dh) {
         // Lấy danh sách các khuyến mãi còn hiệu lực

@@ -951,65 +951,96 @@
             `;
 
             // let vat = total_amount * 0.1;
-            let total_before_discount = total_amount;
-            let total = total_before_discount; // Khởi tạo `total` với `total_before_discount`
-            console.log("Phí Ship ", shipp_fee);
+            // let total_before_discount = total_amount;
+            // let total = total_before_discount; // Khởi tạo `total` với `total_before_discount`
+            // console.log("Phí Ship ", shipp_fee);
+            //
+            // if (shipp_fee !== undefined && shipp_fee !== null) {
+            //     total_before_discount += shipp_fee; // Cộng thêm phí ship nếu có
+            //     total = total_before_discount; // Cập nhật lại total sau khi thêm phí ship
+            // }
+            //
+            // let promotion_title = '(không có khuyến mãi)';
+            // let promotion_value = '- 0';
+            // let promotion = await getPromotionByDate(total_amount);
+            //
+            // console.log(promotion);
+            // console.log(data[0].idHoaDon.idDotGiamGia);
+            //
+            // if (promotion) {
+            //     if (data[0].idHoaDon.idDotGiamGia === null) {
+            //         let obj_promotion = promotion;
+            //         id_promotion = obj_promotion.id;
+            //         let reference_value = total_amount;
+            //
+            //         if (reference_value < obj_promotion.giaTriDonHang) {
+            //             promotion_title = '(chưa đủ điều kiện)';
+            //             promotion_value = '- 0';
+            //             let need_more_value = (obj_promotion.giaTriDonHang - reference_value);
+            //             let reduce_value = obj_promotion.loaiGiamGia ? '- ' + obj_promotion.giaTriGiam + '%' : formatmoney(obj_promotion.giaTriGiam);
+            //
+            //             add_product += `
+            //         <div class="col-9 d-flex justify-content-center align-items-center">
+            //             Mua thêm ${formatmoney(need_more_value)} sẽ được giảm ${reduce_value} cho hoá đơn!
+            //         </div>`;
+            //         } else {
+            //             if (obj_promotion.loaiGiamGia) {
+            //                 promotion_value = '- ' + obj_promotion.giaTriGiam + '%';
+            //                 total = total_before_discount - (total_amount * (obj_promotion.giaTriGiam / 100));
+            //             } else {
+            //                 promotion_value = '- ' + formatmoney(obj_promotion.giaTriGiam);
+            //                 total = total_before_discount - obj_promotion.giaTriGiam;
+            //             }
+            //         }
+            //     } else {
+            //         id_promotion = data[0].idHoaDon.idDotGiamGia.id;
+            //         promotion_title = '(' + data[0].idHoaDon.idDotGiamGia.ten + ')';
+            //         if (data[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
+            //             promotion_value = '- ' + data[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
+            //             total = total_before_discount - (total_amount * (data[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
+            //         } else {
+            //             promotion_value = '- ' + formatmoney(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
+            //             total = total_before_discount - parseInt(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
+            //         }
+            //     }
+            // } else {
+            //     id_promotion = null;
+            //     promotion_title = '(Không có khuyến mãi)';
+            //     promotion_value = '- 0';
+            // }
+          let promotion = data[0].idHoaDon.idDotGiamGia; // Lấy khuyến mãi từ hóa đơn
+          let total_before_discount = total_amount;
+          let total = total_before_discount; // Khởi tạo `total` với `total_before_discount`
 
-            if (shipp_fee !== undefined && shipp_fee !== null) {
-                total_before_discount += shipp_fee; // Cộng thêm phí ship nếu có
-                total = total_before_discount; // Cập nhật lại total sau khi thêm phí ship
-            }
+          console.log("Phí Ship ", shipp_fee);
 
-            let promotion_title = '(không có khuyến mãi)';
-            let promotion_value = '- 0';
-            let promotion = await getPromotionByDate(total_amount);
+          if (shipp_fee !== undefined && shipp_fee !== null) {
+            total_before_discount += shipp_fee; // Cộng thêm phí ship nếu có
+            total = total_before_discount; // Cập nhật lại total sau khi thêm phí ship
+          }
 
-            console.log(promotion);
-            console.log(data[0].idHoaDon.idDotGiamGia);
+          let promotion_title = '(không có khuyến mãi)';
+          let promotion_value = '- 0';
 
-            if (promotion) {
-                if (data[0].idHoaDon.idDotGiamGia === null) {
-                    let obj_promotion = promotion;
-                    id_promotion = obj_promotion.id;
-                    let reference_value = total_amount;
+// Kiểm tra xem hóa đơn có khuyến mãi hay không
+          if (promotion !== null) {
+            // Áp dụng khuyến mãi đã lưu trong hóa đơn, bất kể trạng thái của nó
+            id_promotion = promotion.id;
+            promotion_title = '(' + promotion.ten + ')';
 
-                    if (reference_value < obj_promotion.giaTriDonHang) {
-                        promotion_title = '(chưa đủ điều kiện)';
-                        promotion_value = '- 0';
-                        let need_more_value = (obj_promotion.giaTriDonHang - reference_value);
-                        let reduce_value = obj_promotion.loaiGiamGia ?
-                            '- ' + obj_promotion.giaTriGiam + '%' :
-                            formatmoney(obj_promotion.giaTriGiam);
-
-                        add_product += `
-                    <div class="col-9 d-flex justify-content-center align-items-center">
-                        Mua thêm ${formatmoney(need_more_value)} sẽ được giảm ${reduce_value} cho hoá đơn!
-                    </div>`;
-                    } else {
-                        if (obj_promotion.loaiGiamGia) {
-                            promotion_value = '- ' + obj_promotion.giaTriGiam + '%';
-                            total = total_before_discount - (total_amount * (obj_promotion.giaTriGiam / 100));
-                        } else {
-                            promotion_value = '- ' + formatmoney(obj_promotion.giaTriGiam);
-                            total = total_before_discount - obj_promotion.giaTriGiam;
-                        }
-                    }
-                } else {
-                    id_promotion = data[0].idHoaDon.idDotGiamGia.id;
-                    promotion_title = '(' + data[0].idHoaDon.idDotGiamGia.ten + ')';
-                    if (data[0].idHoaDon.idDotGiamGia.loaiGiamGia === true) {
-                        promotion_value = '- ' + data[0].idHoaDon.idDotGiamGia.giaTriGiam + '%';
-                        total = total_before_discount - (total_amount * (data[0].idHoaDon.idDotGiamGia.giaTriGiam / 100));
-                    } else {
-                        promotion_value = '- ' + formatmoney(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
-                        total = total_before_discount - parseInt(data[0].idHoaDon.idDotGiamGia.giaTriGiam);
-                    }
-                }
+            if (promotion.loaiGiamGia) {
+              promotion_value = '- ' + promotion.giaTriGiam + '%';
+              total = total_before_discount - (total_amount * (promotion.giaTriGiam / 100));
             } else {
-                id_promotion = null;
-                promotion_title = '(Không có khuyến mãi)';
-                promotion_value = '- 0';
+              promotion_value = '- ' + formatmoney(promotion.giaTriGiam);
+              total = total_before_discount - promotion.giaTriGiam;
             }
+          } else {
+            // Không có khuyến mãi trong hóa đơn, không tìm thêm khuyến mãi
+            id_promotion = null;
+            promotion_title = '(Không có khuyến mãi)';
+            promotion_value = '- 0';
+          }
 
             sub_total = `
 <tr>
@@ -1593,64 +1624,136 @@ ${name}\n${address.sdt}\n${address.tinhThanhpho}, ${address.quanHuyen}, ${addres
         })
     }
 
+    // function addQuantity(id) {
+    //     let url = '';
+    //     if (id_promotion === null) {
+    //         url = '/api/admin/invoice/add-quantity/' + id;
+    //     } else {
+    //         url = '/api/admin/invoice/add-quantity/' + id + '?promotion=' + id_promotion;
+    //     }
+    //     $.ajax({
+    //         url: url === '' ? '/api/admin/invoice/add-quantity/' + id : url,
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': 'Bearer ' + localStorage.getItem('token')
+    //         },
+    //         success: function (response) {
+    //             console.log('response add ' + response);
+    //             if (response === "success") {
+    //                 loadPage(indexCurrentPage);
+    //                 detailInvoice(idInvoice);
+    //             }
+    //             if (response === "failure") {
+    //                 swal.fire({
+    //                     icon: "warning",
+    //                     title: "Thông Báo",
+    //                     text: "Sản phẩm đã hết hàng!",
+    //                     confirmButtonText: "OK",
+    //                 })
+    //             }
+    //             if (response === "no-status") {
+    //                 swal.fire({
+    //                     icon: "warning",
+    //                     title: "Thông Báo",
+    //                     text: "Không thể thêm số lượng sản phẩm cho hoá đơn này!",
+    //                     confirmButtonText: "OK",
+    //                 }).then((result) => {
+    //                     if (result.isConfirmed) {
+    //                         loadPage(indexCurrentPage);
+    //                         detailInvoice(idInvoice);
+    //                     }
+    //                 });
+    //             }
+    //             if (response === "out of quantity") {
+    //                 swal.fire({
+    //                     icon: "warning",
+    //                     title: "Thông Báo",
+    //                     text: "Số lượng của sản phẩm này trong hoá đơn đã bằng với số lượng trên hệ thống!",
+    //                     confirmButtonText: "OK",
+    //                 }).then((result) => {
+    //                     if (result.isConfirmed) {
+    //                         loadPage(indexCurrentPage);
+    //                         detailInvoice(idInvoice);
+    //                     }
+    //                 });
+    //             }
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error('Error:', error);
+    //         }
+    //     });
+    // }
     function addQuantity(id) {
-        let url = '';
-        if (id_promotion === null) {
-            url = '/api/admin/invoice/add-quantity/' + id;
-        } else {
-            url = '/api/admin/invoice/add-quantity/' + id + '?promotion=' + id_promotion;
+      let url = '';
+      if (id_promotion === null) {
+        url = '/api/admin/invoice/add-quantity/' + id;
+      } else {
+        url = '/api/admin/invoice/add-quantity/' + id + '?promotion=' + id_promotion;
+      }
+      $.ajax({
+        url: url === '' ? '/api/admin/invoice/add-quantity/' + id : url,
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        success: function (response) {
+          console.log('response add ' + response);
+          if (response === "success") {
+            loadPage(indexCurrentPage);
+            detailInvoice(idInvoice);
+          }
+          if (response === "failure") {
+            swal.fire({
+              icon: "warning",
+              title: "Thông Báo",
+              text: "Sản phẩm đã hết hàng!",
+              confirmButtonText: "OK",
+            });
+          }
+          if (response === "no-status") {
+            swal.fire({
+              icon: "warning",
+              title: "Thông Báo",
+              text: "Không thể thêm số lượng sản phẩm cho hoá đơn này!",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                loadPage(indexCurrentPage);
+                detailInvoice(idInvoice);
+              }
+            });
+          }
+          if (response === "out of quantity") {
+            swal.fire({
+              icon: "warning",
+              title: "Thông Báo",
+              text: "Số lượng của sản phẩm này trong hoá đơn đã bằng với số lượng trên hệ thống!",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                loadPage(indexCurrentPage);
+                detailInvoice(idInvoice);
+              }
+            });
+          }
+          if (response === "quantity limit reached") {
+            swal.fire({
+              icon: "warning",
+              title: "Thông Báo",
+              text: "Số lượng tối đa của sản phẩm trong hóa đơn là 20!",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                loadPage(indexCurrentPage);
+                detailInvoice(idInvoice);
+              }
+            });
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('Error:', error);
         }
-        $.ajax({
-            url: url === '' ? '/api/admin/invoice/add-quantity/' + id : url,
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            },
-            success: function (response) {
-                console.log('response add ' + response);
-                if (response === "success") {
-                    loadPage(indexCurrentPage);
-                    detailInvoice(idInvoice);
-                }
-                if (response === "failure") {
-                    swal.fire({
-                        icon: "warning",
-                        title: "Thông Báo",
-                        text: "Sản phẩm đã hết hàng!",
-                        confirmButtonText: "OK",
-                    })
-                }
-                if (response === "no-status") {
-                    swal.fire({
-                        icon: "warning",
-                        title: "Thông Báo",
-                        text: "Không thể thêm số lượng sản phẩm cho hoá đơn này!",
-                        confirmButtonText: "OK",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            loadPage(indexCurrentPage);
-                            detailInvoice(idInvoice);
-                        }
-                    });
-                }
-                if (response === "out of quantity") {
-                    swal.fire({
-                        icon: "warning",
-                        title: "Thông Báo",
-                        text: "Số lượng của sản phẩm này trong hoá đơn đã bằng với số lượng trên hệ thống!",
-                        confirmButtonText: "OK",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            loadPage(indexCurrentPage);
-                            detailInvoice(idInvoice);
-                        }
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
+      });
     }
 
     function minusQuantity(id, count) {
@@ -1822,50 +1925,98 @@ ${name}\n${address.sdt}\n${address.tinhThanhpho}, ${address.quanHuyen}, ${addres
         }
     }
 
+    // function handleExitInput(id, index, quantity) {
+    //     const regex = /^-?\d+$/;
+    //     var count = document.getElementById('input-count-' + index).value;
+    //     if (regex.test(count)) {
+    //         if (parseInt(count) === parseInt(quantity)) {
+    //             return;
+    //         }
+    //         $.ajax({
+    //             url: '/api/admin/invoice/edit-quantity/' + id + '?quantity=' + count,
+    //             method: 'GET',
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + localStorage.getItem('token')
+    //             },
+    //             success: function (response) {
+    //                 console.log(response);
+    //                 if (response !== "success") {
+    //                     swal.fire({
+    //                         text: response,
+    //                         icon: "warning",
+    //                         confirmButtonText: 'OK!'
+    //                     }).then(() => {
+    //                         loadPage(indexCurrentPage);
+    //                         detailInvoice(idInvoice);
+    //                     })
+    //                 }
+    //                 loadPage(indexCurrentPage);
+    //                 detailInvoice(idInvoice);
+    //             },
+    //             error: function (xhr, status, error) {
+    //                 console.error('Error:', error);
+    //             }
+    //         });
+    //     } else {
+    //         swal.fire({
+    //             title: "Hãy nhập số!",
+    //             icon: "warning",
+    //             confirmButtonText: 'OK'
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 document.getElementById('input-count-' + index).value = quantity;
+    //             }
+    //         })
+    //     }
+    // }
+
     function handleExitInput(id, index, quantity) {
-        const regex = /^-?\d+$/;
-        var count = document.getElementById('input-count-' + index).value;
-        if (regex.test(count)) {
-            if (parseInt(count) === parseInt(quantity)) {
-                return;
-            }
-            $.ajax({
-                url: '/api/admin/invoice/edit-quantity/' + id + '?quantity=' + count,
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                success: function (response) {
-                    console.log(response);
-                    if (response !== "success") {
-                        swal.fire({
-                            text: response,
-                            icon: "warning",
-                            confirmButtonText: 'OK!'
-                        }).then(() => {
-                            loadPage(indexCurrentPage);
-                            detailInvoice(idInvoice);
-                        })
-                    }
-                    loadPage(indexCurrentPage);
-                    detailInvoice(idInvoice);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        } else {
-            swal.fire({
-                title: "Hãy nhập số!",
-                icon: "warning",
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('input-count-' + index).value = quantity;
-                }
-            })
+      const regex = /^-?\d+$/;
+      var count = document.getElementById('input-count-' + index).value;
+      if (regex.test(count)) {
+        count = parseInt(count); // Chuyển đổi giá trị count thành số nguyên
+        if (count === parseInt(quantity)) {
+          return;
         }
+        $.ajax({
+          url: '/api/admin/invoice/edit-quantity/' + id + '?quantity=' + count,
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
+          success: function (response) {
+            console.log(response);
+            if (response !== "success") {
+              swal.fire({
+                text: response,
+                icon: "warning",
+                confirmButtonText: 'OK!'
+              }).then(() => {
+                loadPage(indexCurrentPage);
+                detailInvoice(idInvoice);
+              });
+            } else {
+              loadPage(indexCurrentPage);
+              detailInvoice(idInvoice);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('Error:', error);
+          }
+        });
+      } else {
+        swal.fire({
+          title: "Hãy nhập số!",
+          icon: "warning",
+          confirmButtonText: 'OK'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById('input-count-' + index).value = quantity;
+          }
+        });
+      }
     }
+
 
     function deleteInvoiceDetail(id) {
         swal.fire({
