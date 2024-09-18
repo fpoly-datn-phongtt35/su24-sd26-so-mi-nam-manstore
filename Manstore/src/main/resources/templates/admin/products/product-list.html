@@ -52,8 +52,8 @@
                                 aria-label=".form-select-lg example"
                                 id="sort"
                                 onchange="sorted(0)">
-                          <option value="ngayTao,asc" selected>Cũ nhất</option>
-                          <option value="ngayTao,desc">Mới nhất</option>
+                          <option value="ngayTao,desc" selected>Mới nhất</option>
+                          <option value="ngayTao,asc">Cũ nhất</option>
                           <option value="gia,desc">Giá giảm dần</option>
                           <option value="gia,asc">Giá tăng dần</option>
                         </select>
@@ -661,7 +661,7 @@
 
 
     function resetFilter() {
-        document.getElementById('sort').value = 'ngayTao,asc';
+        document.getElementById('sort').value = 'ngayTao,desc';
         document.getElementById('filter-status').value = '-1';
         document.getElementById('filter-category').value = '-1';
         document.getElementById('filter-trademark').value = '-1';
@@ -1293,12 +1293,6 @@
                                             Toast.fire({
                                                 icon: "error",
                                                 title: "Đơn giá không dưới 0!",
-                                            });
-                                        }
-                                        if (item.message === 'errorFormatSalePrice') {
-                                            Toast.fire({
-                                                icon: "error",
-                                                title: "Giá sale phải < đơn giá!",
                                             });
                                         }
                                     }

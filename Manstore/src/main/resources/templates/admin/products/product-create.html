@@ -609,15 +609,7 @@
                                             (async () => {
                                                 await Toast.fire({
                                                     icon: "error",
-                                                    title: "Đơn giá không dưới 0",
-                                                });
-                                            })();
-                                        }
-                                        if (response[i].message === 'errorFormatSalePrice') {
-                                            (async () => {
-                                                await Toast.fire({
-                                                    icon: "error",
-                                                    title: "Giá Sale phải nhỏ hơn đơn giá!",
+                                                    title: "Đơn giá không dưới 0!",
                                                 });
                                             })();
                                         }
